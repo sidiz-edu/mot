@@ -58,31 +58,51 @@ def read_contact_cost():
         name = str(row[0])
         counts  = [row[4], row[6], row[8], row[10]]
         amounts = [row[5], row[7], row[9], row[11]]
+        def _int(v):
+            try:
+                return int(float(v)) if pd.notna(v) else 0
+            except (ValueError, TypeError):
+                return 0
         items.append({
             "name": name,
-            "counts":  [int(v)   if pd.notna(v) else 0 for v in counts],
-            "amounts": [int(v)   if pd.notna(v) else 0 for v in amounts],
+            "counts":  [_int(v) for v in counts],
+            "amounts": [_int(v) for v in amounts],
         })
     return {"months": months, "items": items}
 
 
 def read_funnel():
     df = pd.read_excel(EXCEL_PATH, sheet_name="AS 페이지, 컨택센터", header=None)
-    periods = [str(v) for v in df.iloc[14, 1:9].tolist() if pd.notna(v)]
-    rows = {
-        "제품등록수":  [v for v in df.iloc[15, 1:9].tolist() if pd.notna(v)],
-        "메인조회":    [v for v in df.iloc[16, 1:9].tolist() if pd.notna(v)],
-        "신청클릭":    [v for v in df.iloc[17, 1:9].tolist() if pd.notna(v)],
-        "제품선택":    [v for v in df.iloc[18, 1:9].tolist() if pd.notna(v)],
-        "증상입력":    [v for v in df.iloc[19, 1:9].tolist() if pd.notna(v)],
-        "고객정보입력":[v for v in df.iloc[20, 1:9].tolist() if pd.notna(v)],
-        "AS신청완료":  [v for v in df.iloc[21, 1:9].tolist() if pd.notna(v)],
-        "1→2유입률":  [round(v * 100, 1) for v in df.iloc[22, 1:9].tolist() if pd.notna(v)],
-        "3→4유입률":  [round(v * 100, 1) for v in df.iloc[23, 1:9].tolist() if pd.notna(v)],
-        "4→5유입률":  [round(v * 100, 1) for v in df.iloc[24, 1:9].tolist() if pd.notna(v)],
+    # 전체 열에서 기간 행을 읽어 데이터 범위 자동 파악
+    periods_row = df.iloc[14, 1:].tolist()
+    periods = [str(v) for v in periods_row if pd.notna(v)]
+    n = len(periods)
+    if n == 0:
+        return {"periods": [], "제품등록수": [], "메인조회": [], "신청클릭": [],
+                "제품선택": [], "증상입력": [], "고객정보입력": [], "AS신청완료": [],
+                "1→2유입률": [], "3→4유입률": [], "4→5유입률": []}
+
+    def _ints(row_idx):
+        return [int(v) if pd.notna(v) else 0 for v in df.iloc[row_idx, 1:n+1].tolist()]
+
+    reg    = _ints(15)
+    view   = _ints(16)
+    click  = _ints(17)
+    select = _ints(18)
+    sym    = _ints(19)
+    info   = _ints(20)
+    done   = _ints(21)
+
+    # 유입률은 건수로 직접 계산 (Excel 유입률 행 무시 → 과거 데이터 호환)
+    conv12 = [round(click[i] / view[i]   * 100, 1) if view[i]   else 0 for i in range(n)]
+    conv34 = [round(sym[i]   / select[i] * 100, 1) if select[i] else 0 for i in range(n)]
+    conv45 = [round(info[i]  / sym[i]    * 100, 1) if sym[i]    else 0 for i in range(n)]
+
+    return {
+        "periods": periods, "제품등록수": reg, "메인조회": view, "신청클릭": click,
+        "제품선택": select, "증상입력": sym, "고객정보입력": info, "AS신청완료": done,
+        "1→2유입률": conv12, "3→4유입률": conv34, "4→5유입률": conv45,
     }
-    min_len = min(len(periods), min(len(v) for v in rows.values()))
-    return {"periods": periods[:min_len], **{k: v[:min_len] for k, v in rows.items()}}
 
 
 def read_cs_cost():
