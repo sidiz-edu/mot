@@ -1715,7 +1715,7 @@ table.mtx {
         <div id="cost-sub-0">
           <div class="grid-2">
             <div class="card">
-              <div class="card-head"><div><div class="card-title">월별 항목별 건수</div><div class="card-sub">AS 관련 4개 항목 · 누적 막대 (합계 표시)</div></div></div>
+              <div class="card-head"><div><div class="card-title">월별 항목별 건수 비율</div><div class="card-sub">AS 관련 4개 항목 · 월별 구성 비율 비교 (100% 기준)</div></div></div>
               <div id="lg-contact-count" class="lg-row"></div>
               <div class="chart-box h-220"><canvas id="c_contact_count"></canvas></div>
             </div>
@@ -2871,12 +2871,12 @@ function makeMultiBar(id, datasets, labels, stacked=false, pctY=false, valueLabe
       layout: { padding: { top: 18 } },
       scales: {
         x: { stacked, grid: { display: false, drawBorder: false }, border: {display:false}, ticks: { color: COLORS.tick, font:{size:11} } },
-        y: { stacked, grid: { color: COLORS.grid, drawBorder: false }, border: {display:false}, ticks: { color: COLORS.tick, font:{size:11}, callback: v => pctY ? v+'%' : v.toLocaleString(), padding: 8 } },
+        y: { stacked, max: pctY ? 100 : undefined, grid: { color: COLORS.grid, drawBorder: false }, border: {display:false}, ticks: { color: COLORS.tick, font:{size:11}, callback: v => pctY ? v+'%' : v.toLocaleString(), padding: 8 } },
       },
       plugins: {
         valueLabels: valueLabels || { enabled: false },
         tooltip: {
-          callbacks: { label: c => ` ${c.dataset.label}: ${pctY ? c.parsed.y+'%' : c.parsed.y.toLocaleString()}` }
+          callbacks: { label: c => ` ${c.dataset.label}: ${pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString()}` }
         }
       }
     }
@@ -3029,10 +3029,16 @@ function renderSec3() {
   renderLegend('lg-contact-count-2');
   renderLegend('lg-contact-amount-2');
 
-  // view 0 — stacked bars (각 월의 총합만 상단에 표시 · 항목 상세는 hover/click tooltip)
-  makeMultiBar('c_contact_count',
-    DATA.contact.map((it, i) => ({label: it.name, data: it.counts, color: CONTACT_PALETTE[i]})),
-    DATA.contactMonths, true, false,
+  // view 0 — 100% 누적 비율 막대 (월별 항목 구성 비율 비교)
+  const _totals = DATA.contactMonths.map((_, mi) =>
+    DATA.contact.reduce((s, it) => s + (it.counts[mi] || 0), 0)
+  );
+  const _pctSets = DATA.contact.map((it, i) => ({
+    label: it.name,
+    data: it.counts.map((v, mi) => _totals[mi] ? Math.round(v / _totals[mi] * 1000) / 10 : 0),
+    color: CONTACT_PALETTE[i],
+  }));
+  makeMultiBar('c_contact_count', _pctSets, DATA.contactMonths, true, true,
     { enabled: true, mode: 'stackTotal' }
   );
   makeMultiBar('c_contact_amount',
