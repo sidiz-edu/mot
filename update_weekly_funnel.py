@@ -15,7 +15,7 @@ from datetime import date
 from pathlib import Path
 from openpyxl import load_workbook
 
-BASE_DIR = Path(r"H:\내 드라이브\4. MOT 문제해결\2. AS 데이터 관리")
+BASE_DIR = Path(r"H:\내 드라이브\2. YES AI CAN\MOT")
 NOTIFICATIONS_PATH = BASE_DIR / "notifications.json"
 EXCEL_PATH = BASE_DIR / "AS 현황_시디즈.xlsx"
 SHEET_NAME = "AS 페이지, 컨택센터"
