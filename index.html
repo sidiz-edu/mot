@@ -1734,6 +1734,20 @@ table.mtx {
               <div class="chart-box"><canvas id="c_cs_daily"></canvas></div>
             </div>
           </div>
+          <div class="grid-3 mt-16">
+            <div class="card">
+              <div class="card-head"><div><div class="card-title">월별 AS 건수</div><div class="card-sub">AS 관련 월별 총 접수 건수</div></div></div>
+              <div class="chart-box"><canvas id="c_as_count"></canvas></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div><div class="card-title">하루 평균 AS 건수</div><div class="card-sub">AS 건수 ÷ 영업일 수</div></div></div>
+              <div class="chart-box"><canvas id="c_as_count_daily"></canvas></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div><div class="card-title">하루 평균 AS 비용</div><div class="card-sub">단위: 만원 · AS 비용 ÷ 영업일 수</div></div></div>
+              <div class="chart-box"><canvas id="c_as_amount_daily"></canvas></div>
+            </div>
+          </div>
         </div>
 
         <!-- sub 1: 항목별 추이 -->
@@ -2116,6 +2130,9 @@ const DATA = {
   "csMonths": ["25.1월", "25.2월", "25.3월", "25.4월", "25.5월", "25.6월", "25.7월", "25.8월", "25.9월", "25.10월", "25.11월", "25.12월", "26.2월", "26.3월", "26.4월"],
   "csTotals": [99123500, 137973800, 125952800, 99388200, 84581100, 87479900, 107566700, 107956400, 107500300, 89680900, 88568100, 94133900, 79067100, 98908400, 73883300],
   "csDaily": [5506861, 6898690, 6297640, 4517645, 4229055, 4604205, 4676813, 5397820, 4886377, 4982272, 4428405, 4278814, 4651005.882352941, 3804169.230769231, 3694165.0],
+  "asCount": [10458,13508,13229,10111,8433,8695,10343,10551,9876,8649,8340,8510,9303,8447,10996,7850],
+  "asCountDaily": [581,675,661,460,422,458,450,528,449,480,417,387,443,497,524,392],
+  "asAmountDaily": [396.8,466.8,461.7,337.0,313.3,347.9,356.9,412.8,358.8,375.0,319.2,296.8,307.1,326.8,338.1,265.4],
   "cs": [
     {
         "name": "유선AS",
@@ -3361,6 +3378,12 @@ function renderSec3() {
 
   makeBar('c_cs_total', COLORS.ink,    DATA.csTotals.map(v=>Math.round(v/10000)), DATA.csMonths, false, '총 용역료 (만원)');
   makeBar('c_cs_daily', COLORS.accent, DATA.csDaily.map(v=>Math.round(v/10000)),  DATA.csMonths, false, '일평균 (만원)');
+
+  if (DATA.asCount) {
+    makeBar('c_as_count',        COLORS.ink,    DATA.asCount,        DATA.contactMonths, false, 'AS 건수 (건)');
+    makeBar('c_as_count_daily',  COLORS.accent, DATA.asCountDaily,   DATA.contactMonths, false, '하루 평균 (건)');
+    makeBar('c_as_amount_daily', COLORS.pos,    DATA.asAmountDaily,  DATA.contactMonths, false, '하루 평균 (만원)');
+  }
 
   // table
   const tbody = document.getElementById('cs_table');
