@@ -26,6 +26,8 @@
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 
 <style>
@@ -4133,6 +4135,310 @@ document.getElementById('search-input').addEventListener('input', function() {
     </div>`
   ).join('');
 });
+</script>
+
+<!-- =====================================================
+     MEMO PANEL
+     ===================================================== -->
+<style>
+/* 플로팅 버튼 */
+.memo-fab {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 800;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(45,91,227,0.38);
+  transition: transform .15s, box-shadow .15s;
+}
+.memo-fab:hover { transform: scale(1.08); box-shadow: 0 6px 22px rgba(45,91,227,0.48); }
+.memo-fab.has-memo::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F5A623;
+  border: 2px solid var(--accent);
+}
+
+/* 슬라이드 패널 */
+.memo-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 850;
+  pointer-events: none;
+}
+.memo-drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(26,25,22,0.35);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity .2s;
+}
+.memo-drawer-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 360px;
+  max-width: 90vw;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  box-shadow: -8px 0 40px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .22s cubic-bezier(.4,0,.2,1);
+}
+.memo-drawer.open { pointer-events: all; }
+.memo-drawer.open .memo-drawer-backdrop { opacity: 1; }
+.memo-drawer.open .memo-drawer-panel { transform: translateX(0); }
+
+.memo-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.memo-drawer-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.memo-drawer-title .memo-tab-label {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+  background: var(--surface-3);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.memo-close-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink-3);
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.memo-close-btn:hover { background: var(--surface-3); color: var(--ink); }
+
+.memo-drawer-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px;
+  gap: 12px;
+  overflow-y: auto;
+}
+.memo-textarea {
+  flex: 1;
+  min-height: 200px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.65;
+  padding: 14px 16px;
+  resize: none;
+  outline: none;
+  transition: border-color .15s;
+}
+.memo-textarea:focus { border-color: var(--accent); }
+.memo-textarea::placeholder { color: var(--ink-4); }
+
+.memo-footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px 20px;
+  border-top: 1px solid var(--border-soft);
+}
+.memo-status {
+  font-size: 11.5px;
+  color: var(--ink-4);
+  transition: color .2s;
+}
+.memo-status.saving { color: var(--warn); }
+.memo-status.saved  { color: var(--pos); }
+.memo-save-btn {
+  appearance: none;
+  border: 0;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .12s;
+}
+.memo-save-btn:hover { background: var(--accent-2); }
+.memo-save-btn:disabled { opacity: .5; cursor: default; }
+</style>
+
+<!-- 플로팅 버튼 -->
+<button class="memo-fab" id="memo-fab" title="메모">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+  </svg>
+</button>
+
+<!-- 메모 드로어 -->
+<div class="memo-drawer" id="memo-drawer">
+  <div class="memo-drawer-backdrop" id="memo-backdrop"></div>
+  <div class="memo-drawer-panel">
+    <div class="memo-drawer-head">
+      <span class="memo-drawer-title">
+        메모
+        <span class="memo-tab-label" id="memo-tab-label">Overview</span>
+      </span>
+      <button class="memo-close-btn" id="memo-close">✕</button>
+    </div>
+    <div class="memo-drawer-body">
+      <textarea class="memo-textarea" id="memo-textarea" placeholder="이 페이지에 대한 메모를 남겨보세요...&#10;&#10;예) 이번 주 이슈, 공유 사항, 다음 액션 등"></textarea>
+    </div>
+    <div class="memo-footer">
+      <span class="memo-status" id="memo-status"></span>
+      <button class="memo-save-btn" id="memo-save-btn">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Supabase Memo ──────────────────────────────────────────
+const _SB = supabase.createClient(
+  'https://dvlrzbckneucpvlacdll.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2bHJ6YmNrbmV1Y3B2bGFjZGxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5ODE0OTUsImV4cCI6MjA5MDU1NzQ5NX0.ofzGfyjndiT-FAIcG9TCFtUSXsagTBYOnhsP91vx0sE'
+);
+
+const MEMO_TAB_KEYS  = ['overview', 'as', 'funnel', 'cost'];
+const MEMO_TAB_NAMES = ['Overview', 'AS 조치 현황', '신청 페이지 퍼널', '컨택센터 용역료'];
+
+let _memoCurrentTab = 0;
+let _memoCache = {};   // { [section]: content }
+let _memoSaveTimer = null;
+
+const memoFab      = document.getElementById('memo-fab');
+const memoDrawer   = document.getElementById('memo-drawer');
+const memoBackdrop = document.getElementById('memo-backdrop');
+const memoClose    = document.getElementById('memo-close');
+const memoTabLabel = document.getElementById('memo-tab-label');
+const memoTextarea = document.getElementById('memo-textarea');
+const memoStatus   = document.getElementById('memo-status');
+const memoSaveBtn  = document.getElementById('memo-save-btn');
+
+// 현재 탭 인덱스 추적 (gotoTab 패치)
+const _origGotoTab = gotoTab;
+window.gotoTab = function(idx) {
+  _origGotoTab(idx);
+  _memoCurrentTab = idx;
+  _updateFabIndicator();
+};
+
+function _updateFabIndicator() {
+  const key = MEMO_TAB_KEYS[_memoCurrentTab];
+  memoFab.classList.toggle('has-memo', !!(_memoCache[key] && _memoCache[key].trim()));
+}
+
+async function _loadAllMemos() {
+  const { data, error } = await _SB.from('memos').select('section, content');
+  if (!error && data) {
+    data.forEach(row => { _memoCache[row.section] = row.content; });
+    _updateFabIndicator();
+  }
+}
+
+async function _openMemo() {
+  const key  = MEMO_TAB_KEYS[_memoCurrentTab];
+  const name = MEMO_TAB_NAMES[_memoCurrentTab];
+  memoTabLabel.textContent = name;
+  memoTextarea.value = _memoCache[key] ?? '';
+  memoStatus.textContent = '';
+  memoStatus.className = 'memo-status';
+  memoDrawer.classList.add('open');
+  setTimeout(() => memoTextarea.focus(), 250);
+}
+
+function _closeMemo() {
+  memoDrawer.classList.remove('open');
+}
+
+async function _saveMemo() {
+  const key     = MEMO_TAB_KEYS[_memoCurrentTab];
+  const content = memoTextarea.value;
+  memoStatus.textContent = '저장 중...';
+  memoStatus.className   = 'memo-status saving';
+  memoSaveBtn.disabled   = true;
+
+  const { error } = await _SB.from('memos').upsert(
+    { section: key, content, updated_at: new Date().toISOString() },
+    { onConflict: 'section' }
+  );
+
+  if (error) {
+    memoStatus.textContent = '저장 실패 ✕';
+    memoStatus.className   = 'memo-status';
+    memoStatus.style.color = 'var(--neg)';
+  } else {
+    _memoCache[key]        = content;
+    memoStatus.textContent = '저장됨 ✓';
+    memoStatus.className   = 'memo-status saved';
+    _updateFabIndicator();
+    setTimeout(() => {
+      memoStatus.textContent = '';
+      memoStatus.className   = 'memo-status';
+    }, 2000);
+  }
+  memoSaveBtn.disabled = false;
+}
+
+// 자동 저장 (2초 디바운스)
+memoTextarea.addEventListener('input', () => {
+  memoStatus.textContent = '입력 중...';
+  memoStatus.className   = 'memo-status';
+  clearTimeout(_memoSaveTimer);
+  _memoSaveTimer = setTimeout(_saveMemo, 2000);
+});
+
+memoFab.addEventListener('click', _openMemo);
+memoClose.addEventListener('click', _closeMemo);
+memoBackdrop.addEventListener('click', _closeMemo);
+memoSaveBtn.addEventListener('click', _saveMemo);
+
+// Cmd/Ctrl+S로 저장
+memoTextarea.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); _saveMemo(); }
+});
+
+// 최초 로드
+_loadAllMemos();
 </script>
 
 </body>
