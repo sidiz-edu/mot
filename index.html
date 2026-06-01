@@ -1590,6 +1590,30 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   display: flex; align-items: center; gap: 4px;
 }
 
+/* 통합 시스템 바 */
+.mot-sys-bar {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 0 10px;
+  padding: 0 0 20px;
+}
+.mot-sys-bar-label {
+  grid-column: 1 / -1;
+  font-size: 9px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--ink-4);
+  padding: 10px 0 6px;
+}
+.mot-sys-bar-col {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  justify-content: center; align-items: flex-start;
+  padding: 8px 4px 0;
+  border-top: 2px solid var(--border);
+}
+.mot-sys-bar-col.c-pre     { border-color: var(--ink-4); }
+.mot-sys-bar-col.c-funnel  { border-color: var(--accent); }
+.mot-sys-bar-col.c-contact { border-color: var(--warn); }
+.mot-sys-bar-col.c-as      { border-color: var(--pos); }
+.mot-sys-bar-col.c-done    { border-color: var(--ink-3); }
+
 /* Phase bar */
 .mot-phase-bar { display: flex; gap: 2px; background: var(--surface-3); padding: 2px; }
 .mot-phase-seg {
@@ -1843,24 +1867,12 @@ table.t               { font-size: 14px; }
               </div>
               <div class="mot-sc-conn"></div>
               <div class="mot-sc-bottom">
-                <div class="mot-lower-col c-pre" style="border-top:2.5px solid var(--ink-4)">
-                  <div class="mot-lower-label">시스템</div>
-                  <div class="mot-lower-sys"><span class="mot-sys-chip">없음</span></div>
-                  <div class="mot-lower-kpi">별도 시스템 미사용</div>
-                </div>
               </div>
             </div>
 
             <!-- 2 AS 신청 페이지 (짝수: 정보위 카드아래) -->
             <div class="mot-sc-col mot-sc-col-flip">
               <div class="mot-sc-top">
-                <div class="mot-lower-col c-funnel" style="border-top:none;border-bottom:2.5px solid var(--accent)">
-                  <div class="mot-lower-label">시스템</div>
-                  <div class="mot-lower-sys">
-                    <span class="mot-sys-chip">웹 로그</span>
-                    <span class="mot-sys-chip is-looker">Looker Studio</span>
-                  </div>
-                </div>
               </div>
               <div class="mot-sc-conn"></div>
               <div class="mot-sc-node-wrap">
@@ -1915,13 +1927,6 @@ table.t               { font-size: 14px; }
               <div class="mot-sc-conn"></div>
               <div class="mot-sc-bottom">
                 <div class="mot-lower-col c-contact" style="border-top:2.5px solid var(--warn)">
-                  <div class="mot-lower-label">시스템</div>
-                  <div class="mot-lower-sys">
-                    <span class="mot-sys-chip is-cti">CTI</span>
-                    <span class="mot-sys-chip is-happy">해피톡</span>
-                    <span class="mot-sys-chip is-board">게시판</span>
-                    <span class="mot-sys-chip is-erp">ERP</span>
-                  </div>
                   <div class="mot-lower-cost">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
                     CS 용역료 <strong>7,388만원/월</strong>
@@ -1933,13 +1938,6 @@ table.t               { font-size: 14px; }
             <!-- 4 현장 조치 (짝수: 정보위 카드아래) -->
             <div class="mot-sc-col mot-sc-col-flip">
               <div class="mot-sc-top">
-                <div class="mot-lower-col c-as" style="border-top:none;border-bottom:2.5px solid var(--pos)">
-                  <div class="mot-lower-label">시스템</div>
-                  <div class="mot-lower-sys">
-                    <span class="mot-sys-chip is-erp">ERP</span>
-                    <span class="mot-sys-chip">AS현황확인</span>
-                  </div>
-                </div>
               </div>
               <div class="mot-sc-conn"></div>
               <div class="mot-sc-node-wrap">
@@ -1992,10 +1990,6 @@ table.t               { font-size: 14px; }
               <div class="mot-sc-conn"></div>
               <div class="mot-sc-bottom">
                 <div class="mot-lower-col c-done" style="border-top:2.5px solid var(--ink-3)">
-                  <div class="mot-lower-label">시스템</div>
-                  <div class="mot-lower-sys">
-                    <span class="mot-sys-chip is-erp">ERP 종결처리</span>
-                  </div>
                   <div class="mot-loop-note">
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
                     N차 발생 시 → 현장조치 재배정
@@ -2005,6 +1999,32 @@ table.t               { font-size: 14px; }
             </div>
 
           </div><!-- /mot-stagger-grid -->
+
+          <!-- 통합 시스템 바 -->
+          <div class="mot-sys-bar">
+            <div class="mot-sys-bar-label" style="grid-column:1/-1">사용 시스템</div>
+            <div class="mot-sys-bar-col c-pre">
+              <span class="mot-sys-chip" style="color:var(--ink-4)">없음</span>
+            </div>
+            <div class="mot-sys-bar-col c-funnel">
+              <span class="mot-sys-chip">웹 로그</span>
+              <span class="mot-sys-chip is-looker">Looker Studio</span>
+            </div>
+            <div class="mot-sys-bar-col c-contact">
+              <span class="mot-sys-chip is-cti">CTI</span>
+              <span class="mot-sys-chip is-happy">해피톡</span>
+              <span class="mot-sys-chip is-board">게시판</span>
+              <span class="mot-sys-chip is-erp">ERP</span>
+            </div>
+            <div class="mot-sys-bar-col c-as">
+              <span class="mot-sys-chip is-erp">ERP</span>
+              <span class="mot-sys-chip">AS현황확인</span>
+            </div>
+            <div class="mot-sys-bar-col c-done">
+              <span class="mot-sys-chip is-erp">ERP 종결처리</span>
+            </div>
+          </div>
+
         </div><!-- /mot-jny-canvas -->
 
 
