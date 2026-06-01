@@ -4544,17 +4544,17 @@ function renderSec3() {
   const asRelDaily  = asRelTotals.map((v, i) => v / DATA.workingDays[i]);
   const csT = yoy_c(asRelTotals.map(v => Math.round(v / 10000)));
   const csD = yoy_c(asRelDaily.map(v => Math.round(v / 10000)));
-  makeYoYBar('c_cs_total', csT.y25, csT.y26, COLORS.ink,    '만원');
-  makeYoYBar('c_cs_daily', csD.y25, csD.y26, COLORS.accent, '만원');
+  makeYoYBar('c_cs_total', csT.y25, csT.y26, '#CC5500', '만원');
+  makeYoYBar('c_cs_daily', csD.y25, csD.y26, '#FF8000', '만원');
 
   // AS 통계 YoY 막대
   if (DATA.asCount) {
     const aC  = yoy_c(DATA.asCount);
     const aCD = yoy_c(DATA.asCountDaily);
     const aAD = yoy_c(DATA.asAmountDaily);
-    makeYoYBar('c_as_count',        aC.y25,  aC.y26,  COLORS.ink,    '건');
-    makeYoYBar('c_as_count_daily',  aCD.y25, aCD.y26, COLORS.accent, '건');
-    makeYoYBar('c_as_amount_daily', aAD.y25, aAD.y26, COLORS.pos,    '만원');
+    makeYoYBar('c_as_count',        aC.y25,  aC.y26,  '#CC5500', '건');
+    makeYoYBar('c_as_count_daily',  aCD.y25, aCD.y26, '#FF8000', '건');
+    makeYoYBar('c_as_amount_daily', aAD.y25, aAD.y26, '#FFB347', '만원');
   }
 
   // ── [항목별 추이] tab ─────────────────────────────────────
