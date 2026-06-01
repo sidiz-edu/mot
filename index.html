@@ -475,6 +475,8 @@ button { font-family: inherit; cursor: pointer; }
 .unit-price-tbl thead th:nth-child(6) { color: var(--accent); }
 .unit-price-tbl tbody td { text-align: right; }
 .unit-price-tbl tbody td:nth-child(3) { text-align: left; color: var(--ink); font-weight: 500; }
+.unit-price-tbl tr.is-as-row td { background: rgba(45, 91, 227, 0.045); }
+.unit-price-tbl tr.is-as-row td:nth-child(3) { color: var(--accent-ink); font-weight: 600; }
 table.t {
   width: 100%; border-collapse: collapse;
   font-size: 13px;
@@ -2495,7 +2497,7 @@ table.mtx {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr class="is-as-row">
                     <td rowspan="5" class="cat-cell">상담</td>
                     <td rowspan="4" class="part-cell">상담 Part</td>
                     <td>유선 (AS)</td><td class="unit-desc">인바운드 (콜/월)</td>
@@ -2507,17 +2509,17 @@ table.mtx {
                     <td class="num">13,500</td><td class="num">13,500</td>
                     <td class="change-same">—</td>
                   </tr>
-                  <tr>
+                  <tr class="is-as-row">
                     <td>모바일 (AS+ON)</td><td class="unit-desc">해피톡 채팅 (건/월)</td>
                     <td class="num">5,500</td><td class="num">5,500</td>
                     <td class="change-same">—</td>
                   </tr>
-                  <tr>
+                  <tr class="is-as-row">
                     <td>게시판 (AS+ON)</td><td class="unit-desc">게시글 처리 (건/월)</td>
                     <td class="num">5,000</td><td class="num price-down">3,000</td>
                     <td class="change-down">▼ 2,000</td>
                   </tr>
-                  <tr>
+                  <tr class="is-as-row">
                     <td class="part-cell">접수 Part</td>
                     <td>접수 (AS)</td><td class="unit-desc">유상/무상 (건/월)</td>
                     <td class="num">6,700</td><td class="num">6,700</td>
