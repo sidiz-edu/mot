@@ -1313,6 +1313,159 @@ table.mtx {
   .ov-hs-val { font-size: 32px; }
 }
 
+/* =====================================================
+   MOT JOURNEY MAP — Smithsonian Style
+   ===================================================== */
+.mot-jny-outer { border-bottom: 1px solid var(--border); }
+.mot-jny-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 28px 40px 22px; gap: 16px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.mot-jny-title {
+  font-size: 22px; font-weight: 800; color: var(--ink);
+  letter-spacing: -.02em; margin: 6px 0 4px;
+}
+.mot-jny-sub { font-size: 12.5px; color: var(--ink-3); line-height: 1.5; }
+
+.mot-jny-canvas {
+  padding: 24px 36px 16px 52px;
+  background: var(--bg); position: relative;
+}
+.mot-jny-yaxis-label {
+  position: absolute; left: 8px; top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  font-size: 8px; font-weight: 700; letter-spacing: .22em;
+  color: var(--ink-4); text-transform: uppercase; white-space: nowrap; user-select: none;
+}
+
+/* Upper touchpoint row */
+.mot-upper-row {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 0 8px;
+}
+.mot-upper-col { display: flex; flex-direction: column; align-items: center; padding: 0 4px; }
+.mot-tp-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--r-lg); padding: 10px 12px; width: 100%;
+  box-shadow: var(--shadow-1);
+}
+.mot-tp-card-title {
+  font-size: 11px; font-weight: 700; color: var(--ink);
+  margin-bottom: 6px; display: flex; align-items: center; gap: 5px;
+}
+.mot-tp-items {
+  font-size: 10.5px; color: var(--ink-3); line-height: 1.75;
+  padding: 0; margin: 0; list-style: none;
+}
+.mot-tp-items li { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
+.mot-tp-items li::before { content: '—'; color: var(--ink-4); font-size: 9px; flex-shrink: 0; margin-right: 2px; }
+.mot-stat-pill {
+  font-size: 9px; font-weight: 600; padding: 1px 5px; border-radius: 3px;
+  background: var(--surface-3); color: var(--ink-2); flex-shrink: 0; white-space: nowrap;
+}
+.mot-tp-conn {
+  width: 1.5px; height: 16px; margin: 0 auto;
+  background: repeating-linear-gradient(to bottom, var(--border-strong) 0, var(--border-strong) 4px, transparent 4px, transparent 8px);
+}
+
+/* Stage nodes row */
+.mot-nodes-row {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  height: 100px; position: relative; align-items: center;
+}
+.mot-nodes-row::before {
+  content: ''; position: absolute;
+  top: 50%; left: 10%; right: 10%;
+  border-top: 2px dashed var(--border-strong); z-index: 0;
+}
+.mot-node-col {
+  display: flex; flex-direction: column; align-items: center;
+  position: relative; z-index: 1;
+  transform: translateY(var(--node-y, 0px));
+}
+.mot-node {
+  width: 50px; height: 50px; border-radius: 50%;
+  display: grid; place-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15); cursor: pointer;
+  transition: transform .14s, box-shadow .14s;
+  border: 2.5px solid rgba(255,255,255,0.25);
+}
+.mot-node:hover { transform: scale(1.1); box-shadow: 0 4px 18px rgba(0,0,0,0.22); }
+.mot-node-pre     { background: var(--ink-3); color: white; cursor: default; }
+.mot-node-funnel  { background: var(--accent); color: white; }
+.mot-node-contact { background: var(--warn); color: white; }
+.mot-node-as      { background: var(--pos); color: white; }
+.mot-node-done    { background: #3D3930; color: #F4EFE3; cursor: default; }
+.mot-node-label {
+  font-size: 10px; font-weight: 700; color: var(--ink);
+  margin-top: 6px; text-align: center; line-height: 1.3; max-width: 76px;
+}
+
+/* Lower info row */
+.mot-lower-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0 8px; }
+.mot-lower-col { padding: 10px 6px 6px; border-top: 2.5px solid var(--border); }
+.mot-lower-col.c-pre     { border-color: var(--ink-4); }
+.mot-lower-col.c-funnel  { border-color: var(--accent); }
+.mot-lower-col.c-contact { border-color: var(--warn); }
+.mot-lower-col.c-as      { border-color: var(--pos); }
+.mot-lower-col.c-done    { border-color: var(--ink-3); }
+.mot-lower-label {
+  font-size: 8.5px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-4); margin-bottom: 5px;
+}
+.mot-lower-sys { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 6px; }
+.mot-sys-chip {
+  font-size: 9px; padding: 1px 5px; border-radius: 3px;
+  background: var(--surface); color: var(--ink-2); border: 1px solid var(--border); font-weight: 500;
+}
+.mot-sys-chip.is-cti    { background: #EFE9DC; color: #6B5430; border-color: #DECCAB; }
+.mot-sys-chip.is-happy  { background: #E6EDF4; color: #355478; border-color: #C6D4E4; }
+.mot-sys-chip.is-board  { background: #ECECEC; color: #3F3F3F; border-color: #D2D2D2; }
+.mot-sys-chip.is-erp    { background: var(--accent-soft); color: var(--accent-ink); border-color: rgba(45,91,227,0.25); }
+.mot-sys-chip.is-looker { background: #F0EBF8; color: #5E3D8A; border-color: #D9C6F0; }
+.mot-lower-kpi { font-size: 10.5px; color: var(--ink-3); line-height: 1.4; margin-bottom: 3px; }
+.mot-lower-kpi strong { font-size: 14px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; display: block; }
+.mot-lower-cost {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px;
+  margin-top: 6px; padding: 5px 7px;
+  background: var(--warn-soft); border: 1px solid rgba(197,138,26,.2);
+  border-radius: var(--r-sm); font-size: 9.5px; color: var(--warn); font-weight: 600;
+}
+.mot-lower-cost strong { font-size: 12px; font-weight: 700; color: var(--warn); display: inline; margin: 0; }
+.mot-loop-note {
+  margin-top: 5px; padding: 4px 7px;
+  background: var(--surface-2); border: 1px dashed var(--border-strong);
+  border-radius: var(--r-sm); font-size: 9.5px; color: var(--ink-3);
+  display: flex; align-items: center; gap: 4px;
+}
+
+/* Phase bar */
+.mot-phase-bar { display: flex; gap: 2px; background: var(--surface-3); padding: 2px; }
+.mot-phase-seg {
+  flex: 1; padding: 7px 4px; text-align: center;
+  font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: white; display: flex; align-items: center; justify-content: center; gap: 5px;
+  border-radius: 3px;
+}
+.ph-pre     { background: #6E6A60; }
+.ph-funnel  { background: var(--accent); }
+.ph-contact { background: #C58A1A; }
+.ph-as      { background: var(--pos); }
+.ph-done    { background: #3D3930; }
+
+@media (max-width: 1200px) {
+  .mot-upper-row, .mot-nodes-row, .mot-lower-row { grid-template-columns: repeat(3, 1fr); }
+  .mot-nodes-row { height: auto; padding: 12px 0; }
+  .mot-node-col { transform: none !important; padding: 6px 0; }
+  .mot-phase-bar { flex-wrap: wrap; }
+  .mot-phase-seg { flex: 0 0 calc(33% - 2px); }
+}
+@media (max-width: 800px) {
+  .mot-upper-row, .mot-nodes-row, .mot-lower-row { grid-template-columns: 1fr; }
+  .mot-jny-canvas { padding-left: 16px; }
+  .mot-jny-yaxis-label { display: none; }
+}
+
 </style>
 </head>
 
@@ -1410,18 +1563,228 @@ table.mtx {
     <!-- =================== SECTION 0 : OVERVIEW =================== -->
     <section class="page section ov-page active" data-screen-label="00 Overview">
 
-      <!-- ── 헤더 ── -->
-      <div class="jny-hd">
-        <div class="jny-hd-left">
-          <span class="ov-eyebrow">Overview · April 2026</span>
-          <h1 class="jny-title">고객 AS 여정 &amp; 비용 흐름</h1>
-          <p class="jny-sub">AS 신청 → 상담·접수 → 현장 조치 → 완료 — 각 단계의 핵심 지표와 발생 비용</p>
-        </div>
-        <span class="ov-period-tag">2026.04 기준</span>
-      </div>
+      <!-- ── MOT 여정 맵 (Smithsonian Style) ── -->
+      <div class="mot-jny-outer">
 
-      <!-- ── 여정 맵 ── -->
-      <div class="jny-map">
+        <div class="mot-jny-header">
+          <div>
+            <span class="ov-eyebrow">Customer Journey Map · April 2026</span>
+            <h1 class="mot-jny-title">고객 AS 여정 — 터치포인트 맵</h1>
+            <p class="mot-jny-sub">AS 인지 → 온라인 신청 → CS 상담·접수 → 현장 조치 → 완료 — 각 단계의 채널·시스템·비용을 한눈에</p>
+          </div>
+          <span class="ov-period-tag">2026.04 기준</span>
+        </div>
+
+        <div class="mot-jny-canvas">
+          <div class="mot-jny-yaxis-label">TOUCHPOINTS</div>
+
+          <!-- ① 상단 터치포인트 카드 -->
+          <div class="mot-upper-row">
+
+            <!-- 01 인지 -->
+            <div class="mot-upper-col">
+              <div class="mot-tp-card">
+                <div class="mot-tp-card-title">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.65" y2="16.65"/></svg>
+                  인지 경로
+                </div>
+                <ul class="mot-tp-items">
+                  <li>Google · Naver 검색</li>
+                  <li>주변 지인 추천</li>
+                  <li>구매처 안내</li>
+                  <li>SNS · 커뮤니티</li>
+                </ul>
+              </div>
+              <div class="mot-tp-conn"></div>
+            </div>
+
+            <!-- 02 온라인 신청 -->
+            <div class="mot-upper-col">
+              <div class="mot-tp-card" style="border-top:3px solid var(--accent)">
+                <div class="mot-tp-card-title" style="color:var(--accent)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                  신청 페이지 퍼널
+                </div>
+                <ul class="mot-tp-items">
+                  <li>① 메인 조회 <span class="mot-stat-pill">1,390회/주</span></li>
+                  <li>② AS신청 클릭 <span class="mot-stat-pill">29.5%</span></li>
+                  <li>③ 제품 선택</li>
+                  <li>④ 증상 입력</li>
+                  <li>⑤ 고객정보 입력 <span class="mot-stat-pill">86.2%</span></li>
+                  <li>⑥ 신청 완료 <span class="mot-stat-pill" style="background:var(--accent-soft);color:var(--accent-ink)">112건/주</span></li>
+                </ul>
+              </div>
+              <div class="mot-tp-conn"></div>
+            </div>
+
+            <!-- 03 CS 상담·접수 -->
+            <div class="mot-upper-col">
+              <div class="mot-tp-card" style="border-top:3px solid var(--warn)">
+                <div class="mot-tp-card-title" style="color:var(--warn)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.9 8.6a16 16 0 0 0 6 6l.97-.95a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  상담 채널 (컨택센터)
+                </div>
+                <ul class="mot-tp-items">
+                  <li>유선 전화 (인바운드) <span class="mot-stat-pill" style="background:var(--warn-soft);color:var(--warn)">1,833건</span></li>
+                  <li>해피톡 채팅 (모바일)</li>
+                  <li>게시판 (이메일)</li>
+                  <li>타부서 이관</li>
+                  <li>접수 처리 <span class="mot-stat-pill" style="background:var(--warn-soft);color:var(--warn)">2,126건</span></li>
+                </ul>
+              </div>
+              <div class="mot-tp-conn"></div>
+            </div>
+
+            <!-- 04 현장 조치 -->
+            <div class="mot-upper-col">
+              <div class="mot-tp-card" style="border-top:3px solid var(--pos)">
+                <div class="mot-tp-card-title" style="color:var(--pos)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                  조치 유형
+                </div>
+                <ul class="mot-tp-items">
+                  <li>엔지니어 현장 수리 <span class="mot-stat-pill" style="background:var(--pos-soft);color:var(--pos)">서울경인 736건</span></li>
+                  <li>시공팀 배정</li>
+                  <li>N차 재방문 <span class="mot-stat-pill">25.5%</span></li>
+                  <li>전국 조치 건수 <span class="mot-stat-pill" style="background:var(--pos-soft);color:var(--pos)">1,464건</span></li>
+                  <li>평균 조치기간 <span class="mot-stat-pill">5.9일</span></li>
+                </ul>
+              </div>
+              <div class="mot-tp-conn"></div>
+            </div>
+
+            <!-- 05 완료 -->
+            <div class="mot-upper-col">
+              <div class="mot-tp-card">
+                <div class="mot-tp-card-title">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  결과 분기
+                </div>
+                <ul class="mot-tp-items">
+                  <li>1차 종결 <span class="mot-stat-pill" style="background:var(--pos-soft);color:var(--pos)">74.5%</span></li>
+                  <li>N차 재배정 <span class="mot-stat-pill">25.5%</span></li>
+                  <li>서울경인 N차 <span class="mot-stat-pill">21.1%</span></li>
+                  <li>고객 만족 확인</li>
+                </ul>
+              </div>
+              <div class="mot-tp-conn"></div>
+            </div>
+
+          </div><!-- /mot-upper-row -->
+
+          <!-- ② 여정 노드 행 -->
+          <div class="mot-nodes-row">
+
+            <div class="mot-node-col" style="--node-y: 4px">
+              <div class="mot-node mot-node-pre" title="AS 인지 단계">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              </div>
+              <div class="mot-node-label">AS 인지</div>
+            </div>
+
+            <div class="mot-node-col" style="--node-y: -14px">
+              <div class="mot-node mot-node-funnel" onclick="gotoTab(2)" title="신청 페이지 퍼널 보기">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              </div>
+              <div class="mot-node-label">온라인 신청</div>
+            </div>
+
+            <div class="mot-node-col" style="--node-y: 14px">
+              <div class="mot-node mot-node-contact" onclick="gotoTab(3)" title="컨택센터 용역료 보기">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.9 8.6a16 16 0 0 0 6 6l.97-.95a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <div class="mot-node-label">CS 상담<br>&amp; 접수</div>
+            </div>
+
+            <div class="mot-node-col" style="--node-y: -4px">
+              <div class="mot-node mot-node-as" onclick="gotoTab(1)" title="AS 조치 현황 보기">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </div>
+              <div class="mot-node-label">현장 AS 조치</div>
+            </div>
+
+            <div class="mot-node-col" style="--node-y: -12px">
+              <div class="mot-node mot-node-done" title="AS 완료">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="mot-node-label">AS 완료</div>
+            </div>
+
+          </div><!-- /mot-nodes-row -->
+
+          <!-- ③ 하단 시스템·지표 -->
+          <div class="mot-lower-row">
+
+            <div class="mot-lower-col c-pre">
+              <div class="mot-lower-label">시스템</div>
+              <div class="mot-lower-sys"><span class="mot-sys-chip">없음</span></div>
+              <div class="mot-lower-kpi">별도 시스템 미사용</div>
+            </div>
+
+            <div class="mot-lower-col c-funnel">
+              <div class="mot-lower-label">시스템</div>
+              <div class="mot-lower-sys">
+                <span class="mot-sys-chip">웹 로그</span>
+                <span class="mot-sys-chip is-looker">Looker Studio</span>
+              </div>
+              <div class="mot-lower-kpi">1→2 전환율<strong>29.5%</strong></div>
+              <div class="mot-lower-kpi">주 신청 완료<strong>112건</strong></div>
+            </div>
+
+            <div class="mot-lower-col c-contact">
+              <div class="mot-lower-label">시스템</div>
+              <div class="mot-lower-sys">
+                <span class="mot-sys-chip is-cti">CTI</span>
+                <span class="mot-sys-chip is-happy">해피톡</span>
+                <span class="mot-sys-chip is-board">게시판</span>
+                <span class="mot-sys-chip is-erp">ERP</span>
+              </div>
+              <div class="mot-lower-kpi">월 AS 건수<strong>7,850건</strong></div>
+              <div class="mot-lower-kpi">일 평균<strong>392건</strong></div>
+              <div class="mot-lower-cost">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+                CS 용역료 <strong>7,388만원/월</strong>
+              </div>
+            </div>
+
+            <div class="mot-lower-col c-as">
+              <div class="mot-lower-label">시스템</div>
+              <div class="mot-lower-sys">
+                <span class="mot-sys-chip is-erp">ERP</span>
+                <span class="mot-sys-chip">AS현황확인</span>
+              </div>
+              <div class="mot-lower-kpi">전국 조치<strong>1,464건/월</strong></div>
+              <div class="mot-lower-kpi">평균 조치기간<strong>5.95일</strong></div>
+            </div>
+
+            <div class="mot-lower-col c-done">
+              <div class="mot-lower-label">시스템</div>
+              <div class="mot-lower-sys">
+                <span class="mot-sys-chip is-erp">ERP 종결처리</span>
+              </div>
+              <div class="mot-lower-kpi">1차 종결<strong>74.5%</strong></div>
+              <div class="mot-loop-note">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+                N차 발생 시 → 현장조치 재배정
+              </div>
+            </div>
+
+          </div><!-- /mot-lower-row -->
+        </div><!-- /mot-jny-canvas -->
+
+        <!-- 페이즈 바 -->
+        <div class="mot-phase-bar">
+          <div class="mot-phase-seg ph-pre">AS 인지</div>
+          <div class="mot-phase-seg ph-funnel">온라인 신청 (퍼널)</div>
+          <div class="mot-phase-seg ph-contact">CS 상담 · 접수</div>
+          <div class="mot-phase-seg ph-as">현장 AS 조치</div>
+          <div class="mot-phase-seg ph-done">AS 완료</div>
+        </div>
+
+      </div><!-- /mot-jny-outer -->
+
+      <!-- ── [구버전 여정 맵 그리드 자리] ── -->
+      <div class="jny-map" style="display:none">
 
         <!-- Stage 1 : 온라인 AS 신청 -->
         <div class="jny-stage" data-c="funnel">
@@ -1586,8 +1949,8 @@ table.mtx {
 
       </div><!-- /jny-map -->
 
-      <!-- ── 비용 발생 구간 ── -->
-      <div class="jny-cost-bar-wrap">
+      <!-- ── 비용 발생 구간 (신 디자인에 통합) ── -->
+      <div class="jny-cost-bar-wrap" style="display:none">
         <div class="jny-cost-bar-label">비용 발생 구간</div>
         <div class="jny-cost-bar">
           <div class="jny-cost-seg jny-cost-seg-empty" style="flex:1">—</div>
@@ -2006,20 +2369,20 @@ table.mtx {
 
         <!-- sub 0: 건수/금액 + 총비용 -->
         <div id="cost-sub-0">
-          <!-- 항목별 건수 YoY 비교 -->
+          <!-- 항목별 건수 비율 YoY 비교 -->
           <div class="card">
             <div class="card-head">
-              <div><div class="card-title">항목별 건수 — 전년 동월 비교</div><div class="card-sub">AS 관련 4개 항목 · 1~12월 기준 매칭</div></div>
+              <div><div class="card-title">항목별 건수 비율 — 전년 동월 비교</div><div class="card-sub">전체 AS 건수 대비 항목별 비율 (%) · 25년/26년 비교</div></div>
               <div class="yoy-legend">
                 <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
                 <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
               </div>
             </div>
             <div class="grid-2">
-              <div class="chart-inner"><div class="chart-inner-title">상담 (유선)_AS</div><div class="chart-box h-160"><canvas id="c_cc_yoy_0"></canvas></div></div>
-              <div class="chart-inner"><div class="chart-inner-title">상담 (모바일)</div><div class="chart-box h-160"><canvas id="c_cc_yoy_1"></canvas></div></div>
-              <div class="chart-inner"><div class="chart-inner-title">상담 (게시판)</div><div class="chart-box h-160"><canvas id="c_cc_yoy_2"></canvas></div></div>
-              <div class="chart-inner"><div class="chart-inner-title">접수 (AS)</div><div class="chart-box h-160"><canvas id="c_cc_yoy_3"></canvas></div></div>
+              <div class="chart-inner"><div class="chart-inner-title">상담 (유선)_AS 비율</div><div class="chart-box h-160"><canvas id="c_cc_yoy_0"></canvas></div></div>
+              <div class="chart-inner"><div class="chart-inner-title">상담 (모바일) 비율</div><div class="chart-box h-160"><canvas id="c_cc_yoy_1"></canvas></div></div>
+              <div class="chart-inner"><div class="chart-inner-title">상담 (게시판) 비율</div><div class="chart-box h-160"><canvas id="c_cc_yoy_2"></canvas></div></div>
+              <div class="chart-inner"><div class="chart-inner-title">접수 (AS) 비율</div><div class="chart-box h-160"><canvas id="c_cc_yoy_3"></canvas></div></div>
             </div>
           </div>
           <!-- CS 용역료 YoY -->
@@ -2720,7 +3083,8 @@ const DATA = {
       "04.27 ~ 05.03",
       "5. 4. - 5. 10.",
       "5.11~5.17",
-      "5.18~5.24"
+      "5.18~5.24",
+      "5.25~5.31"
     ],
     "productReg": [
       2938,
@@ -2732,7 +3096,8 @@ const DATA = {
       2482,
       2330,
       2969,
-      2272
+      2272,
+      2176
     ],
     "main": [
       892,
@@ -2744,7 +3109,8 @@ const DATA = {
       1326,
       1233,
       1334,
-      1390
+      1390,
+      1610
     ],
     "click": [
       194,
@@ -2756,7 +3122,8 @@ const DATA = {
       394,
       364,
       401,
-      375
+      375,
+      460
     ],
     "pick": [
       214,
@@ -2768,7 +3135,8 @@ const DATA = {
       301,
       283,
       299,
-      325
+      325,
+      335
     ],
     "sym": [
       135,
@@ -2780,7 +3148,8 @@ const DATA = {
       212,
       182,
       190,
-      196
+      196,
+      214
     ],
     "info": [
       98,
@@ -2792,7 +3161,8 @@ const DATA = {
       182,
       175,
       182,
-      169
+      169,
+      198
     ],
     "done": [
       98,
@@ -2804,7 +3174,8 @@ const DATA = {
       119,
       114,
       123,
-      112
+      112,
+      137
     ],
     "conv12": [
       21.7,
@@ -2816,7 +3187,8 @@ const DATA = {
       29.7,
       29.5,
       30.1,
-      27.0
+      27.0,
+      28.6
     ],
     "conv34": [
       63.1,
@@ -2828,7 +3200,8 @@ const DATA = {
       70.4,
       64.3,
       63.5,
-      60.3
+      60.3,
+      63.9
     ],
     "conv45": [
       72.6,
@@ -2840,7 +3213,8 @@ const DATA = {
       85.8,
       96.2,
       95.8,
-      86.2
+      86.2,
+      92.5
     ]
   },
   "yoyMonths": [
@@ -3448,7 +3822,7 @@ function yoy_cs(arr) {
 }
 
 // YoY 라인 차트 (단일 항목, 25년 점선 / 26년 실선)
-function makeYoYLine(id, y25, y26, color) {
+function makeYoYLine(id, y25, y26, color, isPct=false) {
   const el = document.getElementById(id);
   if (!el) return;
   const ctx = el.getContext('2d');
@@ -3477,13 +3851,13 @@ function makeYoYLine(id, y25, y26, color) {
       responsive: true, maintainAspectRatio: false,
       interaction: { intersect: false, mode: 'index' },
       layout: { padding: { top: 8 } },
-      scales: baseScales(false),
+      scales: baseScales(isPct),
       plugins: {
         valueLabels: { enabled: false },
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: c => ` ${c.dataset.label}: ${c.parsed.y != null ? c.parsed.y.toLocaleString() : '-'}`
+            label: c => ` ${c.dataset.label}: ${c.parsed.y != null ? c.parsed.y.toLocaleString() + (isPct ? '%' : '') : '-'}`
           }
         }
       }
@@ -3880,12 +4254,22 @@ function renderSec3() {
 
   // ── [건수/금액] tab ───────────────────────────────────────
 
-  // 항목별 건수 YoY 라인 (4개 미니차트)
+  // 항목별 건수 비율 YoY 라인 (4개 미니차트) — 전체 합 대비 %
   const CC_IDS = ['c_cc_yoy_0','c_cc_yoy_1','c_cc_yoy_2','c_cc_yoy_3'];
-  DATA.contact.forEach((it, i) => {
-    const { y25, y26 } = yoy_c(it.counts);
-    makeYoYLine(CC_IDS[i], y25, y26, CONTACT_PALETTE[i]);
-  });
+  {
+    const t25 = Array(12).fill(0), t26 = Array(12).fill(0);
+    DATA.contact.forEach(it => {
+      const { y25, y26 } = yoy_c(it.counts);
+      y25.forEach((v, mi) => { t25[mi] += (v || 0); });
+      y26.forEach((v, mi) => { if (v != null) t26[mi] += v; });
+    });
+    DATA.contact.forEach((it, i) => {
+      const { y25, y26 } = yoy_c(it.counts);
+      const r25 = y25.map((v, mi) => t25[mi] ? Math.round(v / t25[mi] * 1000) / 10 : 0);
+      const r26 = y26.map((v, mi) => (v != null && t26[mi]) ? Math.round(v / t26[mi] * 1000) / 10 : null);
+      makeYoYLine(CC_IDS[i], r25, r26, CONTACT_PALETTE[i], true);
+    });
+  }
 
   // CS 용역료 YoY 막대
   const csT = yoy_cs(DATA.csTotals.map(v => Math.round(v / 10000)));
