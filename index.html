@@ -672,6 +672,176 @@ table.t {
 .ov-hs-comp { color: rgba(244, 239, 227, 0.45); }
 
 /* Body section under hero */
+/* ── 고객 여정 맵 ─────────────────────────────────── */
+.jny-hd {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 36px 40px 28px; gap: 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.jny-title {
+  font-size: 26px; font-weight: 800; color: var(--ink); letter-spacing: -.02em;
+  margin: 4px 0 6px;
+}
+.jny-sub { font-size: 13.5px; color: var(--ink-3); line-height: 1.5; }
+
+.jny-map {
+  display: grid;
+  grid-template-columns: 1fr 36px 1fr 36px 1fr 36px 1fr;
+  gap: 0;
+  padding: 28px 40px;
+  background: var(--bg);
+  align-items: stretch;
+}
+
+/* Stage card */
+.jny-stage {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px 18px 16px;
+  display: flex; flex-direction: column; gap: 10px;
+  position: relative;
+  transition: box-shadow .18s, border-color .18s;
+}
+.jny-stage:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.09); }
+
+.jny-stage[data-c="funnel"]  { border-top: 3px solid var(--accent); }
+.jny-stage[data-c="contact"] { border-top: 3px solid var(--warn); }
+.jny-stage[data-c="as"]      { border-top: 3px solid var(--pos); }
+.jny-stage[data-c="done"]    { border-top: 3px solid var(--ink-4); }
+
+.jny-stage-top { display: flex; align-items: center; gap: 10px; }
+.jny-num {
+  font-size: 11px; font-weight: 700; color: var(--ink-4);
+  letter-spacing: .06em; font-family: 'JetBrains Mono', monospace;
+}
+.jny-icon { color: var(--ink-3); display: flex; }
+.jny-stage[data-c="funnel"]  .jny-icon { color: var(--accent); }
+.jny-stage[data-c="contact"] .jny-icon { color: var(--warn); }
+.jny-stage[data-c="as"]      .jny-icon { color: var(--pos); }
+.jny-stage[data-c="done"]    .jny-icon { color: var(--ink-4); }
+
+.jny-name { font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+
+/* 섹션 뱃지 */
+.jny-badge {
+  display: inline-flex; align-items: center;
+  font-size: 10.5px; font-weight: 600; padding: 3px 9px;
+  border-radius: 20px; width: fit-content; letter-spacing: .02em;
+}
+.jny-badge-funnel  { background: var(--accent-soft); color: var(--accent-ink); }
+.jny-badge-contact { background: var(--warn-soft);   color: var(--warn); }
+.jny-badge-as      { background: var(--pos-soft);    color: var(--pos); }
+.jny-badge-done    { background: var(--surface-3);   color: var(--ink-3); }
+
+.jny-desc { font-size: 12px; color: var(--ink-3); line-height: 1.55; }
+
+/* 지표 그리드 */
+.jny-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 2px; }
+.jny-metric {
+  background: var(--surface-2); border: 1px solid var(--border-soft);
+  border-radius: var(--r-sm); padding: 8px 10px;
+}
+.jny-m-label { font-size: 10.5px; color: var(--ink-3); margin-bottom: 2px; }
+.jny-m-val {
+  font-size: 16px; font-weight: 700; color: var(--ink);
+  font-family: 'JetBrains Mono', monospace; line-height: 1.2;
+}
+.jny-m-u { font-size: 10px; font-weight: 400; color: var(--ink-3); margin-left: 2px; font-family: inherit; }
+
+/* 비용 표시 */
+.jny-cost {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11.5px; padding: 7px 10px;
+  border-radius: var(--r-sm); margin-top: 2px;
+}
+.jny-cost svg { flex-shrink: 0; }
+.jny-cost-none {
+  background: var(--surface-2); color: var(--ink-4);
+  border: 1px dashed var(--border);
+}
+.jny-cost-active {
+  background: var(--warn-soft); color: var(--warn);
+  border: 1px solid rgba(197,138,26,.25);
+  font-weight: 600; justify-content: space-between;
+}
+.jny-cost-active strong { font-size: 15px; font-family: 'JetBrains Mono', monospace; }
+
+.jny-n-loop {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--ink-4);
+  background: var(--surface-2); border: 1px dashed var(--border);
+  border-radius: var(--r-sm); padding: 6px 10px;
+}
+
+/* 이동 버튼 */
+.jny-go {
+  appearance: none; border: 1.5px solid var(--border); background: transparent;
+  color: var(--ink-2); font: inherit; font-size: 12px; font-weight: 600;
+  padding: 7px 12px; border-radius: var(--r-sm); cursor: pointer;
+  text-align: left; transition: all .14s; margin-top: auto;
+}
+.jny-go:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+/* 화살표 */
+.jny-arrow {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 4px; color: var(--ink-4);
+}
+.jny-arrow-line {
+  width: 2px; flex: 1; max-height: 60px;
+  background: repeating-linear-gradient(to bottom, var(--border) 0, var(--border) 4px, transparent 4px, transparent 8px);
+}
+.jny-arrow-label { font-size: 10px; color: var(--ink-4); font-weight: 500; letter-spacing: .04em; white-space: nowrap; }
+.jny-arrow-head { color: var(--ink-4); }
+
+/* 비용 발생 구간 바 */
+.jny-cost-bar-wrap {
+  padding: 0 40px 28px;
+  background: var(--bg);
+}
+.jny-cost-bar-label {
+  font-size: 11px; font-weight: 700; color: var(--ink-4);
+  letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px;
+}
+.jny-cost-bar {
+  display: flex; height: 32px; border-radius: 8px; overflow: hidden;
+  border: 1px solid var(--border); gap: 1px;
+}
+.jny-cost-seg {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; font-size: 11.5px; transition: all .2s;
+}
+.jny-cost-seg-empty {
+  background: var(--surface-2); color: var(--ink-4);
+}
+.jny-cost-seg-fill {
+  background: linear-gradient(90deg, rgba(197,138,26,.18), rgba(197,138,26,.28));
+  border: 1px solid rgba(197,138,26,.3);
+  color: var(--warn);
+}
+.jny-cost-seg-name { font-weight: 700; }
+.jny-cost-seg-val  { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+.jny-cost-bar-stages {
+  display: grid; grid-template-columns: 1fr 2fr 1fr 1fr;
+  margin-top: 4px;
+}
+.jny-cost-bar-stages span { font-size: 10px; color: var(--ink-4); text-align: center; }
+
+/* 반응형 */
+@media (max-width: 900px) {
+  .jny-map {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .jny-arrow { flex-direction: row; height: 28px; }
+  .jny-arrow-line { width: 40px; height: 2px; flex: none; max-height: none;
+    background: repeating-linear-gradient(to right, var(--border) 0, var(--border) 4px, transparent 4px, transparent 8px);
+  }
+  .jny-cost-bar-stages { grid-template-columns: repeat(4, 1fr); }
+}
+
 .ov-body {
   padding: 34px 40px 56px;
 }
@@ -1239,146 +1409,239 @@ table.mtx {
 
     <!-- =================== SECTION 0 : OVERVIEW =================== -->
     <section class="page section ov-page active" data-screen-label="00 Overview">
-      <!-- Dark editorial hero -->
-      <div class="ov-hero">
-        <div class="ov-hero-inner">
-          <div class="ov-hero-top">
-            <span class="ov-eyebrow">Overview · April 2026</span>
-            <span class="ov-period-tag">2026.04 기준</span>
-          </div>
-          <h1 class="ov-hero-title">시디즈 AS 운영을<br/><em>한눈에</em> 봅니다.</h1>
-          <div class="ov-hero-sub">조치 현황 · 신청 페이지 퍼널 · 컨택센터 비용 — 운영 핵심 지표를 한 페이지에 요약합니다.</div>
 
-          <div class="ov-hero-stats">
-            <div class="ov-hs">
-              <div class="ov-hs-lbl">전국 조치 건수</div>
-              <div class="ov-hs-num"><span class="ov-hs-val">1,464</span><span class="ov-hs-unit">건</span></div>
-              <div class="ov-hs-trend">
-                <span class="ov-hs-pill down">▼ 13.5%</span>
-                <span class="ov-hs-comp">전월 대비</span>
-              </div>
+      <!-- ── 헤더 ── -->
+      <div class="jny-hd">
+        <div class="jny-hd-left">
+          <span class="ov-eyebrow">Overview · April 2026</span>
+          <h1 class="jny-title">고객 AS 여정 &amp; 비용 흐름</h1>
+          <p class="jny-sub">AS 신청 → 상담·접수 → 현장 조치 → 완료 — 각 단계의 핵심 지표와 발생 비용</p>
+        </div>
+        <span class="ov-period-tag">2026.04 기준</span>
+      </div>
+
+      <!-- ── 여정 맵 ── -->
+      <div class="jny-map">
+
+        <!-- Stage 1 : 온라인 AS 신청 -->
+        <div class="jny-stage" data-c="funnel">
+          <div class="jny-stage-top">
+            <span class="jny-num">01</span>
+            <span class="jny-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            </span>
+          </div>
+          <div class="jny-name">온라인 AS 신청</div>
+          <div class="jny-badge jny-badge-funnel">신청 페이지 퍼널</div>
+          <div class="jny-desc">고객이 시디즈 홈페이지를 통해 AS를 신청하는 단계. 6단계 전환 퍼널을 추적합니다.</div>
+          <div class="jny-metrics">
+            <div class="jny-metric">
+              <div class="jny-m-label">메인 페이지 조회</div>
+              <div class="jny-m-val">1,390<span class="jny-m-u">회/주</span></div>
             </div>
-            <div class="ov-hs">
-              <div class="ov-hs-lbl">전국 N차 건 비율</div>
-              <div class="ov-hs-num"><span class="ov-hs-val">25.5</span><span class="ov-hs-unit">%</span></div>
-              <div class="ov-hs-trend">
-                <span class="ov-hs-pill up">▼ 2.7%p</span>
-                <span class="ov-hs-comp">전월 대비</span>
-              </div>
+            <div class="jny-metric">
+              <div class="jny-m-label">AS 신청 완료</div>
+              <div class="jny-m-val">112<span class="jny-m-u">건/주</span></div>
             </div>
-            <div class="ov-hs">
-              <div class="ov-hs-lbl">서울경인 N차 건 비율</div>
-              <div class="ov-hs-num"><span class="ov-hs-val">21.1</span><span class="ov-hs-unit">%</span></div>
-              <div class="ov-hs-trend">
-                <span class="ov-hs-pill up">▼ 2.0%p</span>
-                <span class="ov-hs-comp">전월 대비</span>
-              </div>
+            <div class="jny-metric">
+              <div class="jny-m-label">버튼 클릭률 (1→2)</div>
+              <div class="jny-m-val">29.5<span class="jny-m-u">%</span></div>
             </div>
-            <div class="ov-hs">
-              <div class="ov-hs-lbl">AS페이지 신청 클릭 비율 (1→2)</div>
-              <div class="ov-hs-num"><span class="ov-hs-val">29.5</span><span class="ov-hs-unit">%</span></div>
-              <div class="ov-hs-trend">
-                <span class="ov-hs-pill up">▼ 0.2%p</span>
-                <span class="ov-hs-comp">전주 대비 (목표 ↓)</span>
-              </div>
-            </div>
-            <div class="ov-hs">
-              <div class="ov-hs-lbl">제품증상입력 완료 비율 (4→5)</div>
-              <div class="ov-hs-num"><span class="ov-hs-val">96.2</span><span class="ov-hs-unit">%</span></div>
-              <div class="ov-hs-trend">
-                <span class="ov-hs-pill up">▲ 10.4%p</span>
-                <span class="ov-hs-comp">전주 대비</span>
-              </div>
-            </div>
-            <div class="ov-hs">
-              <div class="ov-hs-lbl">컨택센터 AS 비용</div>
-              <div class="ov-hs-num"><span class="ov-hs-val">7,388</span><span class="ov-hs-unit">만원</span></div>
-              <div class="ov-hs-trend">
-                <span class="ov-hs-pill up">▼ 25.3%</span>
-                <span class="ov-hs-comp">전월 대비</span>
-              </div>
+            <div class="jny-metric">
+              <div class="jny-m-label">고객정보 완료율 (4→5)</div>
+              <div class="jny-m-val">86.2<span class="jny-m-u">%</span></div>
             </div>
           </div>
+          <div class="jny-cost jny-cost-none">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            비용 발생 없음
+          </div>
+          <button class="jny-go" onclick="gotoTab(2)">퍼널 분석 보기 →</button>
+        </div>
+
+        <!-- 화살표 1→2 -->
+        <div class="jny-arrow">
+          <div class="jny-arrow-line"></div>
+          <div class="jny-arrow-label">접수</div>
+          <svg class="jny-arrow-head" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+
+        <!-- Stage 2 : CS 상담 & 접수 -->
+        <div class="jny-stage" data-c="contact">
+          <div class="jny-stage-top">
+            <span class="jny-num">02</span>
+            <span class="jny-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </span>
+          </div>
+          <div class="jny-name">CS 상담 &amp; 접수</div>
+          <div class="jny-badge jny-badge-contact">컨택센터 용역료</div>
+          <div class="jny-desc">컨택센터에서 유선·모바일·게시판을 통해 고객 상담 후 AS를 공식 접수합니다.</div>
+          <div class="jny-metrics">
+            <div class="jny-metric">
+              <div class="jny-m-label">월 AS 관련 건수</div>
+              <div class="jny-m-val">7,850<span class="jny-m-u">건/월</span></div>
+            </div>
+            <div class="jny-metric">
+              <div class="jny-m-label">하루 평균 처리</div>
+              <div class="jny-m-val">392<span class="jny-m-u">건/일</span></div>
+            </div>
+            <div class="jny-metric">
+              <div class="jny-m-label">유선 AS 상담</div>
+              <div class="jny-m-val">1,833<span class="jny-m-u">건</span></div>
+            </div>
+            <div class="jny-metric">
+              <div class="jny-m-label">접수 처리</div>
+              <div class="jny-m-val">2,126<span class="jny-m-u">건</span></div>
+            </div>
+          </div>
+          <div class="jny-cost jny-cost-active">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>CS 용역료</span>
+            <strong>7,388<span style="font-weight:400;font-size:11px">만원/월</span></strong>
+          </div>
+          <button class="jny-go" onclick="gotoTab(3)">용역료 분석 보기 →</button>
+        </div>
+
+        <!-- 화살표 2→3 -->
+        <div class="jny-arrow">
+          <div class="jny-arrow-line"></div>
+          <div class="jny-arrow-label">배정</div>
+          <svg class="jny-arrow-head" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+
+        <!-- Stage 3 : 현장 AS 조치 -->
+        <div class="jny-stage" data-c="as">
+          <div class="jny-stage-top">
+            <span class="jny-num">03</span>
+            <span class="jny-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </span>
+          </div>
+          <div class="jny-name">현장 AS 조치</div>
+          <div class="jny-badge jny-badge-as">AS 조치 현황</div>
+          <div class="jny-desc">기사가 현장을 방문해 제품을 수리합니다. 1차 미해결 시 N차 방문이 발생합니다.</div>
+          <div class="jny-metrics">
+            <div class="jny-metric">
+              <div class="jny-m-label">전국 조치 건수</div>
+              <div class="jny-m-val">1,464<span class="jny-m-u">건/월</span></div>
+            </div>
+            <div class="jny-metric">
+              <div class="jny-m-label">전국 N차 건 비율</div>
+              <div class="jny-m-val">25.5<span class="jny-m-u">%</span></div>
+            </div>
+            <div class="jny-metric">
+              <div class="jny-m-label">서울경인 조치</div>
+              <div class="jny-m-val">736<span class="jny-m-u">건</span></div>
+            </div>
+            <div class="jny-metric">
+              <div class="jny-m-label">평균 조치기간</div>
+              <div class="jny-m-val">5.9<span class="jny-m-u">일</span></div>
+            </div>
+          </div>
+          <div class="jny-cost jny-cost-none">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            별도 집계 없음
+          </div>
+          <button class="jny-go" onclick="gotoTab(1)">조치 현황 보기 →</button>
+        </div>
+
+        <!-- 화살표 3→4 -->
+        <div class="jny-arrow">
+          <div class="jny-arrow-line"></div>
+          <div class="jny-arrow-label">종결</div>
+          <svg class="jny-arrow-head" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+
+        <!-- Stage 4 : 완료 -->
+        <div class="jny-stage" data-c="done">
+          <div class="jny-stage-top">
+            <span class="jny-num">04</span>
+            <span class="jny-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </div>
+          <div class="jny-name">AS 완료</div>
+          <div class="jny-badge jny-badge-done">종결</div>
+          <div class="jny-desc">문제가 해결되어 AS가 종결됩니다. 미해결 시 N차 조치가 재배정됩니다.</div>
+          <div class="jny-metrics">
+            <div class="jny-metric">
+              <div class="jny-m-label">전국 1차 종결 비율</div>
+              <div class="jny-m-val">74.5<span class="jny-m-u">%</span></div>
+            </div>
+            <div class="jny-metric">
+              <div class="jny-m-label">서울경인 N차 비율</div>
+              <div class="jny-m-val">21.1<span class="jny-m-u">%</span></div>
+            </div>
+          </div>
+          <div class="jny-cost jny-cost-none">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            추적 불필요
+          </div>
+          <div class="jny-n-loop">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+            N차 발생 시 03 단계로 재배정
+          </div>
+        </div>
+
+      </div><!-- /jny-map -->
+
+      <!-- ── 비용 발생 구간 ── -->
+      <div class="jny-cost-bar-wrap">
+        <div class="jny-cost-bar-label">비용 발생 구간</div>
+        <div class="jny-cost-bar">
+          <div class="jny-cost-seg jny-cost-seg-empty" style="flex:1">—</div>
+          <div class="jny-cost-seg jny-cost-seg-fill" style="flex:2">
+            <span class="jny-cost-seg-name">CS 용역료</span>
+            <span class="jny-cost-seg-val">7,388만원 / 월</span>
+          </div>
+          <div class="jny-cost-seg jny-cost-seg-empty" style="flex:1">—</div>
+          <div class="jny-cost-seg jny-cost-seg-empty" style="flex:1">—</div>
+        </div>
+        <div class="jny-cost-bar-stages">
+          <span>01 온라인 신청</span>
+          <span>02 CS 상담/접수</span>
+          <span>03 현장 조치</span>
+          <span>04 완료</span>
         </div>
       </div>
 
-      <!-- Body -->
+      <!-- ── 섹션 바로가기 ── -->
       <div class="ov-body">
         <div class="ov-body-head">
-          <span class="ov-body-label">— 주요 영역</span>
+          <span class="ov-body-label">— 상세 분석 페이지</span>
           <div class="ov-body-rule"></div>
           <span class="ov-body-count">03 sections</span>
         </div>
-
         <div class="ov-grid">
           <button class="ov-card" data-go="1">
-            <div class="ov-card-head">
-              <span class="ov-card-num">01</span>
-              <span class="ov-card-title">시디즈 AS 조치 현황</span>
-            </div>
-            <div class="ov-card-desc">전국 · 서울경인 조치 건수, 1차 종결률, N차율, 평균 조치기간을 월별 / 년도별 추이로 분석합니다.</div>
+            <div class="ov-card-head"><span class="ov-card-num">01</span><span class="ov-card-title">시디즈 AS 조치 현황</span></div>
+            <div class="ov-card-desc">전국·서울경인 조치 건수, 1차 종결률, N차율, 평균 조치기간을 월별/년도별 추이로 분석합니다.</div>
             <div class="ov-card-stats">
-              <div>
-                <div class="ov-stat-lbl">서울경인 조치 건수</div>
-                <div class="ov-stat-val">736<span class="ov-stat-u">건</span></div>
-              </div>
-              <div>
-                <div class="ov-stat-lbl">평균 조치기간</div>
-                <div class="ov-stat-val">5.9<span class="ov-stat-u">일</span></div>
-              </div>
+              <div><div class="ov-stat-lbl">서울경인 조치 건수</div><div class="ov-stat-val">736<span class="ov-stat-u">건</span></div></div>
+              <div><div class="ov-stat-lbl">평균 조치기간</div><div class="ov-stat-val">5.9<span class="ov-stat-u">일</span></div></div>
             </div>
-            <div class="ov-card-foot">
-              <span>최근 12개월 · 월별 · 년도별</span>
-              <span class="ov-card-arrow">자세히 →</span>
-            </div>
+            <div class="ov-card-foot"><span>최근 12개월 · 월별 · 년도별</span><span class="ov-card-arrow">자세히 →</span></div>
           </button>
-
           <button class="ov-card" data-go="2">
-            <div class="ov-card-head">
-              <span class="ov-card-num">02</span>
-              <span class="ov-card-title">AS 신청 페이지 퍼널</span>
-            </div>
+            <div class="ov-card-head"><span class="ov-card-num">02</span><span class="ov-card-title">AS 신청 페이지 퍼널</span></div>
             <div class="ov-card-desc">메인 조회 → AS 신청 클릭 → 제품 선택 → 증상 입력 단계별 전환 추이와 이탈 구간을 추적합니다.</div>
             <div class="ov-card-stats">
-              <div>
-                <div class="ov-stat-lbl">최근 주 증상입력</div>
-                <div class="ov-stat-val">182<span class="ov-stat-u">건</span></div>
-              </div>
-              <div>
-                <div class="ov-stat-lbl">최근 주 정품등록</div>
-                <div class="ov-stat-val">2,330<span class="ov-stat-u">건</span></div>
-              </div>
+              <div><div class="ov-stat-lbl">최근 주 신청 완료</div><div class="ov-stat-val">112<span class="ov-stat-u">건</span></div></div>
+              <div><div class="ov-stat-lbl">최근 주 메인 조회</div><div class="ov-stat-val">1,390<span class="ov-stat-u">회</span></div></div>
             </div>
-            <div class="ov-card-foot">
-              <span>주간 단위 · 단계별 전환</span>
-              <span class="ov-card-arrow">자세히 →</span>
-            </div>
+            <div class="ov-card-foot"><span>주간 단위 · 단계별 전환</span><span class="ov-card-arrow">자세히 →</span></div>
           </button>
-
           <button class="ov-card" data-go="3">
-            <div class="ov-card-head">
-              <span class="ov-card-num">03</span>
-              <span class="ov-card-title">컨택센터 용역료</span>
-            </div>
-            <div class="ov-card-desc">인력 구성 · 채널별 접수 절차 · 시스템 연계 구조와 용역료 비용을 함께 파악합니다.</div>
+            <div class="ov-card-head"><span class="ov-card-num">03</span><span class="ov-card-title">컨택센터 용역료</span></div>
+            <div class="ov-card-desc">인력 구성·채널별 접수 절차·시스템 연계 구조와 용역료 비용을 함께 파악합니다.</div>
             <div class="ov-card-stats">
-              <div>
-                <div class="ov-stat-lbl">총 용역료 (4월)</div>
-                <div class="ov-stat-val">7,388<span class="ov-stat-u">만원</span></div>
-              </div>
-              <div>
-                <div class="ov-stat-lbl">일평균 비용</div>
-                <div class="ov-stat-val">369<span class="ov-stat-u">만원</span></div>
-              </div>
+              <div><div class="ov-stat-lbl">총 용역료 (4월)</div><div class="ov-stat-val">7,388<span class="ov-stat-u">만원</span></div></div>
+              <div><div class="ov-stat-lbl">일평균 비용</div><div class="ov-stat-val">369<span class="ov-stat-u">만원</span></div></div>
             </div>
-            <div class="ov-card-foot">
-              <span>월 단위 · 항목별 분해</span>
-              <span class="ov-card-arrow">자세히 →</span>
-            </div>
+            <div class="ov-card-foot"><span>월 단위 · 항목별 분해</span><span class="ov-card-arrow">자세히 →</span></div>
           </button>
         </div>
-
-        <!-- 데이터 출처 종합 -->
         <div class="note">
           <div class="note-ic">i</div>
           <div class="note-body">
