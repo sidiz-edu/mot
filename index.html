@@ -406,7 +406,15 @@ button { font-family: inherit; cursor: pointer; }
 .chart-box { height: 240px; position: relative; }
 .chart-box.h-220 { height: 220px; }
 .chart-box.h-180 { height: 180px; }
+.chart-box.h-160 { height: 160px; }
 .chart-box.h-280 { height: 280px; }
+/* YoY 미니 차트 */
+.chart-inner { background: var(--surface-2); border: 1px solid var(--border-soft); border-radius: 8px; padding: 10px 12px; }
+.chart-inner-title { font-size: 11.5px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+.yoy-legend { display: flex; gap: 14px; align-items: center; }
+.yoy-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink-3); }
+.yoy-line-solid { width: 20px; height: 2.5px; border-radius: 2px; background: var(--ink-2); }
+.yoy-line-dashed { width: 20px; height: 0; border-top: 2.5px dashed var(--ink-4); }
 
 /* legend chips */
 .lg-row { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 8px; }
@@ -1714,39 +1722,45 @@ table.mtx {
 
         <!-- sub 0: 건수/금액 + 총비용 -->
         <div id="cost-sub-0">
-          <div class="grid-2">
-            <div class="card">
-              <div class="card-head"><div><div class="card-title">월별 항목별 건수 비율</div><div class="card-sub">AS 관련 4개 항목 · 월별 구성 비율 비교 (100% 기준)</div></div></div>
-              <div id="lg-contact-count" class="lg-row"></div>
-              <div class="chart-box h-220"><canvas id="c_contact_count"></canvas></div>
+          <!-- 항목별 건수 YoY 비교 -->
+          <div class="card">
+            <div class="card-head">
+              <div><div class="card-title">항목별 건수 — 전년 동월 비교</div><div class="card-sub">AS 관련 4개 항목 · 1~12월 기준 매칭</div></div>
+              <div class="yoy-legend">
+                <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
+                <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
+              </div>
             </div>
-            <div class="card">
-              <div class="card-head"><div><div class="card-title">월별 항목별 금액</div><div class="card-sub">단위: 만원 · 누적 막대 (합계 표시)</div></div></div>
-              <div id="lg-contact-amount" class="lg-row"></div>
-              <div class="chart-box h-220"><canvas id="c_contact_amount"></canvas></div>
+            <div class="grid-2">
+              <div class="chart-inner"><div class="chart-inner-title">상담 (유선)_AS</div><div class="chart-box h-160"><canvas id="c_cc_yoy_0"></canvas></div></div>
+              <div class="chart-inner"><div class="chart-inner-title">상담 (모바일)</div><div class="chart-box h-160"><canvas id="c_cc_yoy_1"></canvas></div></div>
+              <div class="chart-inner"><div class="chart-inner-title">상담 (게시판)</div><div class="chart-box h-160"><canvas id="c_cc_yoy_2"></canvas></div></div>
+              <div class="chart-inner"><div class="chart-inner-title">접수 (AS)</div><div class="chart-box h-160"><canvas id="c_cc_yoy_3"></canvas></div></div>
             </div>
           </div>
+          <!-- CS 용역료 YoY -->
           <div class="grid-2 mt-16">
             <div class="card">
-              <div class="card-head"><div><div class="card-title">월별 총 용역료</div><div class="card-sub">단위: 만원 · CS 전체</div></div></div>
+              <div class="card-head"><div><div class="card-title">월별 총 용역료</div><div class="card-sub">단위: 만원 · 25년/26년 비교</div></div></div>
               <div class="chart-box"><canvas id="c_cs_total"></canvas></div>
             </div>
             <div class="card">
-              <div class="card-head"><div><div class="card-title">일 평균 비용</div><div class="card-sub">총 용역료 ÷ 영업일 수</div></div></div>
+              <div class="card-head"><div><div class="card-title">일 평균 비용</div><div class="card-sub">총 용역료 ÷ 영업일 수 · 25년/26년 비교</div></div></div>
               <div class="chart-box"><canvas id="c_cs_daily"></canvas></div>
             </div>
           </div>
+          <!-- AS 통계 YoY -->
           <div class="grid-3 mt-16">
             <div class="card">
-              <div class="card-head"><div><div class="card-title">월별 AS 건수</div><div class="card-sub">AS 관련 월별 총 접수 건수</div></div></div>
+              <div class="card-head"><div><div class="card-title">월별 AS 건수</div><div class="card-sub">AS 관련 월별 총 접수 건수 · 25년/26년 비교</div></div></div>
               <div class="chart-box"><canvas id="c_as_count"></canvas></div>
             </div>
             <div class="card">
-              <div class="card-head"><div><div class="card-title">하루 평균 AS 건수</div><div class="card-sub">AS 건수 ÷ 영업일 수</div></div></div>
+              <div class="card-head"><div><div class="card-title">하루 평균 AS 건수</div><div class="card-sub">AS 건수 ÷ 영업일 수 · 25년/26년 비교</div></div></div>
               <div class="chart-box"><canvas id="c_as_count_daily"></canvas></div>
             </div>
             <div class="card">
-              <div class="card-head"><div><div class="card-title">하루 평균 AS 비용</div><div class="card-sub">단위: 만원 · AS 비용 ÷ 영업일 수</div></div></div>
+              <div class="card-head"><div><div class="card-title">하루 평균 AS 비용</div><div class="card-sub">단위: 만원 · 25년/26년 비교</div></div></div>
               <div class="chart-box"><canvas id="c_as_amount_daily"></canvas></div>
             </div>
           </div>
@@ -1756,22 +1770,40 @@ table.mtx {
         <div id="cost-sub-1" style="display:none">
           <div class="card">
             <div class="card-head">
-              <div><div class="card-title">항목별 건수 비율 추이</div><div class="card-sub">각 항목이 전체 건수에서 차지하는 비율 변동 (100% 기준)</div></div>
-              <div id="lg-contact-ratio" class="lg-row" style="margin:0"></div>
+              <div><div class="card-title">항목별 건수 비율 추이</div><div class="card-sub">전년 동월 비교 · 실선 26년 · 점선 25년</div></div>
+              <div style="display:flex;gap:12px;align-items:center">
+                <div id="lg-contact-ratio" class="lg-row" style="margin:0"></div>
+                <div class="yoy-legend" style="margin-left:8px;padding-left:8px;border-left:1px solid var(--border)">
+                  <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
+                  <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
+                </div>
+              </div>
             </div>
             <div class="chart-box h-260"><canvas id="c_contact_ratio_line"></canvas></div>
           </div>
           <div class="card mt-16">
             <div class="card-head">
-              <div><div class="card-title">항목별 건수 추이</div><div class="card-sub">각 항목의 월별 변동 — 어느 채널이 늘고 줄었나</div></div>
-              <div id="lg-contact-count-2" class="lg-row" style="margin:0"></div>
+              <div><div class="card-title">항목별 건수 추이</div><div class="card-sub">전년 동월 비교 · 실선 26년 · 점선 25년</div></div>
+              <div style="display:flex;gap:12px;align-items:center">
+                <div id="lg-contact-count-2" class="lg-row" style="margin:0"></div>
+                <div class="yoy-legend" style="margin-left:8px;padding-left:8px;border-left:1px solid var(--border)">
+                  <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
+                  <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
+                </div>
+              </div>
             </div>
             <div class="chart-box h-260"><canvas id="c_contact_count_line"></canvas></div>
           </div>
           <div class="card mt-16">
             <div class="card-head">
-              <div><div class="card-title">항목별 금액 추이</div><div class="card-sub">단위: 만원 · 채널별 비용 변동</div></div>
-              <div id="lg-contact-amount-2" class="lg-row" style="margin:0"></div>
+              <div><div class="card-title">항목별 금액 추이</div><div class="card-sub">단위: 만원 · 전년 동월 비교</div></div>
+              <div style="display:flex;gap:12px;align-items:center">
+                <div id="lg-contact-amount-2" class="lg-row" style="margin:0"></div>
+                <div class="yoy-legend" style="margin-left:8px;padding-left:8px;border-left:1px solid var(--border)">
+                  <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
+                  <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
+                </div>
+              </div>
             </div>
             <div class="chart-box h-280"><canvas id="c_contact_amount_line"></canvas></div>
           </div>
@@ -1970,7 +2002,7 @@ const DATA = {
     19.6,
     20.7
   ],
-  "contactMonths": ["25.1월", "25.2월", "25.3월", "25.4월", "25.5월", "25.6월", "25.7월", "25.8월", "25.9월", "25.10월", "25.11월", "25.12월", "26.1월", "26.2월", "26.3월", "26.4월"],
+  "contactMonths": ["25.1월", "25.2월", "25.3월", "25.4월", "25.5월", "25.6월", "25.7월", "25.8월", "25.9월", "25.10월", "25.11월", "25.12월", "26.1월", "26.1월", "26.2월", "26.3월", "26.4월"],
   "contact": [
     {
         "name": "상담 (유선)_AS",
@@ -2083,10 +2115,10 @@ const DATA = {
             14430000,
             14650000,
             14770000,
-            17809000,
-            18271000,
-            25487000,
-            16087500
+            9714000,
+            9966000,
+            13902000,
+            8775000
         ]
     },
     {
@@ -2130,8 +2162,8 @@ const DATA = {
     }
 ],
   "csMonths": ["25.1월", "25.2월", "25.3월", "25.4월", "25.5월", "25.6월", "25.7월", "25.8월", "25.9월", "25.10월", "25.11월", "25.12월", "26.2월", "26.3월", "26.4월"],
-  "csTotals": [99123500, 137973800, 125952800, 99388200, 84581100, 87479900, 107566700, 107956400, 107500300, 89680900, 88568100, 94133900, 79067100, 98908400, 73883300],
-  "csDaily": [5506861, 6898690, 6297640, 4517645, 4229055, 4604205, 4676813, 5397820, 4886377, 4982272, 4428405, 4278814, 4651005.882352941, 3804169.230769231, 3694165.0],
+  "csTotals": [99123500, 137973800, 125952800, 99388200, 84581100, 87479900, 107566700, 107956400, 107500300, 89680900, 88568100, 94133900, 89938800, 79067100, 98908400, 73883300],
+  "csDaily": [5506861, 6898690, 6297640, 4517645, 4229055, 4604205, 4676813, 5397820, 4886377, 4982272, 4428405, 4278814, 4282800.0, 4651005.882352941, 4709923.809523810, 3694165.0],
   "asCount": [10458,13508,13229,10111,8433,8695,10343,10551,9876,8649,8340,8510,9303,8447,10996,7850],
   "asCountDaily": [581,675,661,460,422,458,450,528,449,480,417,387,443,497,524,392],
   "asAmountDaily": [396.8,466.8,461.7,337.0,313.3,347.9,356.9,412.8,358.8,375.0,319.2,296.8,307.1,326.8,338.1,265.4],
@@ -2151,6 +2183,7 @@ const DATA = {
             31428000,
             28417500,
             28984500,
+            30942000,
             24934500,
             31833000,
             24745500
@@ -2171,8 +2204,9 @@ const DATA = {
             15201000,
             17064000,
             18225000,
-            19125000,
-            19989000,
+            17428500,
+            15633000,
+            18036000,
             13608000
         ]
     },
@@ -2191,6 +2225,7 @@ const DATA = {
             6303000,
             6308500,
             5978500,
+            6633000,
             6006000,
             7194000,
             5313000
@@ -2211,6 +2246,7 @@ const DATA = {
             14430000,
             14650000,
             14770000,
+            9714000,
             9966000,
             13902000,
             8775000
@@ -2231,6 +2267,7 @@ const DATA = {
             15336300,
             14458600,
             15557400,
+            17198900,
             14646200,
             18063200,
             14244200
@@ -2251,6 +2288,7 @@ const DATA = {
             51200,
             43200,
             2670400,
+            308800,
             187200,
             115200,
             296000
@@ -2271,6 +2309,7 @@ const DATA = {
             585000,
             764400,
             886600,
+            977600,
             728000,
             949000,
             785200
@@ -2291,6 +2330,7 @@ const DATA = {
             1040400,
             946900,
             1181500,
+            1300500,
             1149200,
             1088000,
             1006400
@@ -2311,6 +2351,7 @@ const DATA = {
             5306000,
             5915000,
             5880000,
+            5435500,
             5817000,
             7728000,
             5110000
@@ -3036,6 +3077,153 @@ function makeBar(id, color, data, labels, pctY=false, label='') {
   });
 }
 
+// ── YoY helpers ──────────────────────────────────────────────
+const MONTHS12 = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+
+// contactMonths(16): [0..11]=25년 1~12월, [12..15]=26년 1~4월
+function yoy_c(arr) {
+  return {
+    y25: arr.slice(0, 12),
+    y26: [...arr.slice(12, 16), null,null,null,null,null,null,null,null]
+  };
+}
+// csMonths(15): [0..11]=25년 1~12월, [12..14]=26년 2~4월 (26년 1월 없음)
+function yoy_cs(arr) {
+  // 16 values: [0..11]=25년 1~12월, [12..15]=26년 1~4월 (contactMonths와 동일)
+  return {
+    y25: arr.slice(0, 12),
+    y26: [...arr.slice(12, 16), null,null,null,null,null,null,null,null]
+  };
+}
+
+// YoY 라인 차트 (단일 항목, 25년 점선 / 26년 실선)
+function makeYoYLine(id, y25, y26, color) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const ctx = el.getContext('2d');
+  CHARTS[id] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: MONTHS12,
+      datasets: [
+        {
+          label: '26년', data: y26,
+          borderColor: color, backgroundColor: 'transparent',
+          borderWidth: 2.5, pointRadius: 3, pointHoverRadius: 5,
+          pointBackgroundColor: color, pointBorderColor: COLORS.surface,
+          pointBorderWidth: 1.5, tension: 0.35, spanGaps: false,
+        },
+        {
+          label: '25년', data: y25,
+          borderColor: hexToRgba(color, 0.4), backgroundColor: 'transparent',
+          borderWidth: 1.8, borderDash: [5, 4],
+          pointRadius: 2, pointBackgroundColor: 'transparent',
+          pointBorderColor: hexToRgba(color, 0.4), tension: 0.35,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      layout: { padding: { top: 8 } },
+      scales: baseScales(false),
+      plugins: {
+        valueLabels: { enabled: false },
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: c => ` ${c.dataset.label}: ${c.parsed.y != null ? c.parsed.y.toLocaleString() : '-'}`
+          }
+        }
+      }
+    }
+  });
+}
+
+// YoY 막대 차트 (단일 지표, 25년 회색 / 26년 색상)
+function makeYoYBar(id, y25, y26, color, label='') {
+  const el = document.getElementById(id);
+  if (!el) return;
+  CHARTS[id] = new Chart(el.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS12,
+      datasets: [
+        {
+          label: '26년' + (label ? ` (${label})` : ''),
+          data: y26,
+          backgroundColor: hexToRgba(color, 0.85),
+          hoverBackgroundColor: color,
+          borderRadius: 4, borderSkipped: false, maxBarThickness: 22,
+        },
+        {
+          label: '25년' + (label ? ` (${label})` : ''),
+          data: y25,
+          backgroundColor: hexToRgba('#9B958A', 0.4),
+          hoverBackgroundColor: hexToRgba('#9B958A', 0.65),
+          borderRadius: 4, borderSkipped: false, maxBarThickness: 22,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      layout: { padding: { top: 18 } },
+      scales: baseScales(false),
+      plugins: {
+        valueLabels: { enabled: false },
+        tooltip: {
+          callbacks: {
+            label: c => ` ${c.dataset.label}: ${c.parsed.y != null ? c.parsed.y.toLocaleString() : '-'}`
+          }
+        }
+      }
+    }
+  });
+}
+
+// YoY 멀티 라인 차트 (항목별 추이, 25년 점선 / 26년 실선)
+function makeYoYMultiLine(id, items, pctY=false) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const datasets = [];
+  items.forEach(item => {
+    datasets.push({
+      label: item.label + ' 26년', data: item.y26,
+      borderColor: item.color, backgroundColor: 'transparent',
+      borderWidth: 2.5, pointRadius: 2.5, pointBackgroundColor: item.color,
+      fill: false, tension: 0.35, spanGaps: false,
+    });
+    datasets.push({
+      label: item.label + ' 25년', data: item.y25,
+      borderColor: hexToRgba(item.color, 0.38), backgroundColor: 'transparent',
+      borderWidth: 1.6, borderDash: [5, 4],
+      pointRadius: 1.5, pointBackgroundColor: 'transparent',
+      pointBorderColor: hexToRgba(item.color, 0.38),
+      fill: false, tension: 0.35,
+    });
+  });
+  CHARTS[id] = new Chart(el.getContext('2d'), {
+    type: 'line',
+    data: { labels: MONTHS12, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      layout: { padding: { top: 12 } },
+      scales: baseScales(pctY),
+      plugins: {
+        valueLabels: { enabled: false },
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: c => ` ${c.dataset.label}: ${c.parsed.y != null ? (pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString()) : '-'}`
+          }
+        }
+      }
+    }
+  });
+}
+
 function makeMultiLine(id, datasets, labels, pctY=false) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -3325,7 +3513,7 @@ function renderSec2() {
 const CONTACT_PALETTE = ['#2D5BE3', '#2F8C5A', '#C58A1A', '#7B5EA7'];
 
 function renderSec3() {
-  // legends
+  // 항목별 추이 범례 (색상만 표시, 실선=26년/점선=25년 구분)
   const renderLegend = (elId) => {
     const el = document.getElementById(elId);
     if (!el) return;
@@ -3335,57 +3523,67 @@ function renderSec3() {
       el.insertAdjacentHTML('beforeend', `<span class="lg-chip"><i style="background:${c}"></i>${item.name}</span>`);
     });
   };
-  renderLegend('lg-contact-count');
-  renderLegend('lg-contact-amount');
   renderLegend('lg-contact-count-2');
   renderLegend('lg-contact-amount-2');
   renderLegend('lg-contact-ratio');
 
-  // view 0 — 항목별 점선 라인 (월별 건수 비교)
-  const _totals = DATA.contactMonths.map((_, mi) =>
-    DATA.contact.reduce((s, it) => s + (it.counts[mi] || 0), 0)
-  );
-  makeDottedLine('c_contact_count',
-    DATA.contact.map((it, i) => ({
-      label: it.name, color: CONTACT_PALETTE[i],
-      data: it.counts.map((v, mi) => _totals[mi] ? Math.round(v / _totals[mi] * 1000) / 10 : 0),
-      pct: true,
-    })),
-    DATA.contactMonths, true
-  );
-  makeMultiBar('c_contact_amount',
-    DATA.contact.map((it, i) => ({label: it.name, data: it.amounts.map(v=>Math.round(v/10000)), color: CONTACT_PALETTE[i]})),
-    DATA.contactMonths, true, false,
-    { enabled: true, mode: 'stackTotal' }
-  );
+  // ── [건수/금액] tab ───────────────────────────────────────
 
-  // view 1 — ratio trend (% 기준)
-  const _ratioSets = DATA.contact.map((it, i) => ({
-    label: it.name,
-    color: CONTACT_PALETTE[i],
-    data: it.counts.map((v, mi) => _totals[mi] ? Math.round(v / _totals[mi] * 1000) / 10 : 0),
-    fill: false,
-  }));
-  makeMultiLine('c_contact_ratio_line', _ratioSets, DATA.contactMonths, true);
+  // 항목별 건수 YoY 라인 (4개 미니차트)
+  const CC_IDS = ['c_cc_yoy_0','c_cc_yoy_1','c_cc_yoy_2','c_cc_yoy_3'];
+  DATA.contact.forEach((it, i) => {
+    const { y25, y26 } = yoy_c(it.counts);
+    makeYoYLine(CC_IDS[i], y25, y26, CONTACT_PALETTE[i]);
+  });
 
-  // view 1 — lines per item, per month
-  makeMultiLine('c_contact_count_line',
-    DATA.contact.map((it, i) => ({label: it.name, color: CONTACT_PALETTE[i], data: it.counts, fill: false})),
-    DATA.contactMonths
-  );
-  makeMultiLine('c_contact_amount_line',
-    DATA.contact.map((it, i) => ({label: it.name, color: CONTACT_PALETTE[i], data: it.amounts.map(v=>Math.round(v/10000)), fill: false})),
-    DATA.contactMonths
-  );
+  // CS 용역료 YoY 막대
+  const csT = yoy_cs(DATA.csTotals.map(v => Math.round(v / 10000)));
+  const csD = yoy_cs(DATA.csDaily.map(v => Math.round(v / 10000)));
+  makeYoYBar('c_cs_total', csT.y25, csT.y26, COLORS.ink,    '만원');
+  makeYoYBar('c_cs_daily', csD.y25, csD.y26, COLORS.accent, '만원');
 
-  makeBar('c_cs_total', COLORS.ink,    DATA.csTotals.map(v=>Math.round(v/10000)), DATA.csMonths, false, '총 용역료 (만원)');
-  makeBar('c_cs_daily', COLORS.accent, DATA.csDaily.map(v=>Math.round(v/10000)),  DATA.csMonths, false, '일평균 (만원)');
-
+  // AS 통계 YoY 막대
   if (DATA.asCount) {
-    makeBar('c_as_count',        COLORS.ink,    DATA.asCount,        DATA.contactMonths, false, 'AS 건수 (건)');
-    makeBar('c_as_count_daily',  COLORS.accent, DATA.asCountDaily,   DATA.contactMonths, false, '하루 평균 (건)');
-    makeBar('c_as_amount_daily', COLORS.pos,    DATA.asAmountDaily,  DATA.contactMonths, false, '하루 평균 (만원)');
+    const aC  = yoy_c(DATA.asCount);
+    const aCD = yoy_c(DATA.asCountDaily);
+    const aAD = yoy_c(DATA.asAmountDaily);
+    makeYoYBar('c_as_count',        aC.y25,  aC.y26,  COLORS.ink,    '건');
+    makeYoYBar('c_as_count_daily',  aCD.y25, aCD.y26, COLORS.accent, '건');
+    makeYoYBar('c_as_amount_daily', aAD.y25, aAD.y26, COLORS.pos,    '만원');
   }
+
+  // ── [항목별 추이] tab ─────────────────────────────────────
+
+  // 전체 건수에서 항목별 비율 계산 (25년/26년 각각)
+  const tots25 = Array(12).fill(0);
+  const tots26 = Array(12).fill(0);
+  DATA.contact.forEach(it => {
+    const { y25, y26 } = yoy_c(it.counts);
+    y25.forEach((v, mi) => { tots25[mi] += (v || 0); });
+    y26.forEach((v, mi) => { if (v != null) tots26[mi] += v; });
+  });
+
+  const ratioItems = DATA.contact.map((it, i) => {
+    const { y25, y26 } = yoy_c(it.counts);
+    return {
+      label: it.name, color: CONTACT_PALETTE[i],
+      y25: y25.map((v, mi) => tots25[mi] ? Math.round(v / tots25[mi] * 1000) / 10 : 0),
+      y26: y26.map((v, mi) => (v != null && tots26[mi]) ? Math.round(v / tots26[mi] * 1000) / 10 : null),
+    };
+  });
+  makeYoYMultiLine('c_contact_ratio_line', ratioItems, true);
+
+  const countItems = DATA.contact.map((it, i) => {
+    const { y25, y26 } = yoy_c(it.counts);
+    return { label: it.name, color: CONTACT_PALETTE[i], y25, y26 };
+  });
+  makeYoYMultiLine('c_contact_count_line', countItems, false);
+
+  const amountItems = DATA.contact.map((it, i) => {
+    const { y25, y26 } = yoy_c(it.amounts.map(v => Math.round(v / 10000)));
+    return { label: it.name, color: CONTACT_PALETTE[i], y25, y26 };
+  });
+  makeYoYMultiLine('c_contact_amount_line', amountItems, false);
 
   // table
   const tbody = document.getElementById('cs_table');
