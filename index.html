@@ -458,7 +458,7 @@ button { font-family: inherit; cursor: pointer; }
   background: var(--surface-2); border-right: 1px solid var(--border-soft);
   font-size: 12px; vertical-align: middle;
 }
-.unit-price-tbl .unit-desc { color: var(--ink-3); font-size: 12px; text-align: left; }
+.unit-price-tbl .unit-desc { color: var(--ink-3); font-size: 12px; text-align: center; }
 .unit-price-tbl .num { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; }
 .unit-price-tbl .price-down { color: var(--neg); font-weight: 700; }
 .unit-price-tbl .change-same { color: var(--ink-4); font-size: 12px; }
@@ -474,7 +474,9 @@ button { font-family: inherit; cursor: pointer; }
 .unit-price-tbl thead th:nth-child(5),
 .unit-price-tbl thead th:nth-child(6) { color: var(--accent); }
 .unit-price-tbl tbody td { text-align: right; }
-.unit-price-tbl tbody td:nth-child(3) { text-align: left; color: var(--ink); font-weight: 500; }
+.unit-price-tbl tbody td:nth-child(3) { text-align: center; color: var(--ink); font-weight: 500; }
+.unit-price-tbl tbody td:nth-child(4) { text-align: center; }
+.unit-price-tbl thead th:nth-child(-n+4) { text-align: center; }
 .unit-price-tbl tr.is-as-row td { background: rgba(45, 91, 227, 0.045); }
 .unit-price-tbl tr.is-as-row td:nth-child(3) { color: var(--accent-ink); font-weight: 600; }
 table.t {
