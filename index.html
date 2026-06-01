@@ -1328,6 +1328,54 @@ table.mtx {
 }
 
 /* =====================================================
+   MOT STAGGER GRID
+   ===================================================== */
+.mot-stagger-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0 10px;
+  position: relative;
+}
+.mot-stagger-grid::before {
+  content: '';
+  position: absolute;
+  top: calc(50% - 26px);
+  left: 8%; right: 8%;
+  border-top: 2px dashed var(--border-strong);
+  z-index: 0;
+}
+.mot-sc-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mot-sc-top, .mot-sc-bottom {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.mot-sc-top { justify-content: flex-end; }
+.mot-sc-bottom { justify-content: flex-start; }
+.mot-sc-conn {
+  width: 2px; height: 20px; flex-shrink: 0;
+  background: repeating-linear-gradient(to bottom, var(--border-strong) 0, var(--border-strong) 4px, transparent 4px, transparent 8px);
+}
+.mot-sc-node-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  flex-shrink: 0; position: relative; z-index: 1;
+}
+.mot-tp-card-title { font-size: 13px !important; }
+.mot-tp-items { font-size: 12px !important; line-height: 1.8 !important; }
+.mot-stat-pill { font-size: 10.5px !important; }
+.mot-lower-label { font-size: 10.5px !important; }
+.mot-lower-kpi { font-size: 12.5px !important; }
+.mot-lower-kpi strong { font-size: 16px !important; display: block; }
+.mot-lower-sys { gap: 4px !important; margin-bottom: 8px !important; }
+.mot-sys-chip { font-size: 10.5px !important; }
+.mot-lower-col { padding: 12px 8px !important; }
+
+/* =====================================================
    MOT JOURNEY MAP — Smithsonian Style
    ===================================================== */
 .mot-jny-outer { border-bottom: 1px solid var(--border); }
@@ -1337,10 +1385,10 @@ table.mtx {
   background: var(--surface); border-bottom: 1px solid var(--border);
 }
 .mot-jny-title {
-  font-size: 22px; font-weight: 800; color: var(--ink);
+  font-size: 32px; font-weight: 800; color: var(--ink);
   letter-spacing: -.02em; margin: 6px 0 4px;
 }
-.mot-jny-sub { font-size: 12.5px; color: var(--ink-3); line-height: 1.5; }
+.mot-jny-sub { font-size: 15px; color: var(--ink-2); line-height: 1.5; font-weight: 500; }
 
 .mot-jny-canvas {
   padding: 24px 36px 16px 52px;
@@ -1679,198 +1727,202 @@ table.t               { font-size: 14px; }
         <div class="mot-jny-canvas">
           <div class="mot-jny-yaxis-label">TOUCHPOINTS</div>
 
-          <!-- ① 상단 터치포인트 카드 -->
-          <div class="mot-upper-row">
+          <div class="mot-stagger-grid">
 
-            <!-- 01 인지 -->
-            <div class="mot-upper-col">
-              <div class="mot-tp-card">
-                <div class="mot-tp-card-title">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.65" y2="16.65"/></svg>
-                  인지 경로
+            <!-- 1 AS 인지 -->
+            <div class="mot-sc-col">
+              <div class="mot-sc-top">
+                <div class="mot-tp-card">
+                  <div class="mot-tp-card-title">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    인지 경로
+                  </div>
+                  <ul class="mot-tp-items">
+                    <li>Google · Naver 검색</li>
+                    <li>주변 지인 추천</li>
+                    <li>구매처 안내</li>
+                    <li>SNS · 커뮤니티</li>
+                  </ul>
                 </div>
-                <ul class="mot-tp-items">
-                  <li>Google · Naver 검색</li>
-                  <li>주변 지인 추천</li>
-                  <li>구매처 안내</li>
-                  <li>SNS · 커뮤니티</li>
-                </ul>
               </div>
-              <div class="mot-tp-conn"></div>
-            </div>
-
-            <!-- 02 온라인 신청 -->
-            <div class="mot-upper-col">
-              <div class="mot-tp-card" style="border-top:3px solid var(--accent)">
-                <div class="mot-tp-card-title" style="color:var(--accent)">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                  신청 페이지 퍼널
+              <div class="mot-sc-conn"></div>
+              <div class="mot-sc-node-wrap">
+                <div class="mot-node mot-node-pre" title="AS 인지 단계">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
                 </div>
-                <ul class="mot-tp-items">
-                  <li>① 메인 조회 <span class="mot-stat-pill">1,390회/주</span></li>
-                  <li>② AS신청 클릭 <span class="mot-stat-pill">29.5%</span></li>
-                  <li>③ 제품 선택</li>
-                  <li>④ 증상 입력</li>
-                  <li>⑤ 고객정보 입력 <span class="mot-stat-pill">86.2%</span></li>
-                  <li>⑥ 신청 완료 <span class="mot-stat-pill" style="background:var(--accent-soft);color:var(--accent-ink)">112건/주</span></li>
-                </ul>
+                <div class="mot-node-label">AS 인지</div>
               </div>
-              <div class="mot-tp-conn"></div>
-            </div>
-
-            <!-- 03 CS 상담·접수 -->
-            <div class="mot-upper-col">
-              <div class="mot-tp-card" style="border-top:3px solid var(--warn)">
-                <div class="mot-tp-card-title" style="color:var(--warn)">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.9 8.6a16 16 0 0 0 6 6l.97-.95a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                  상담 채널 (컨택센터)
+              <div class="mot-sc-conn"></div>
+              <div class="mot-sc-bottom">
+                <div class="mot-lower-col c-pre" style="border-top:2.5px solid var(--ink-4)">
+                  <div class="mot-lower-label">시스템</div>
+                  <div class="mot-lower-sys"><span class="mot-sys-chip">없음</span></div>
+                  <div class="mot-lower-kpi">별도 시스템 미사용</div>
                 </div>
-                <ul class="mot-tp-items">
-                  <li>유선 전화 (인바운드) <span class="mot-stat-pill" style="background:var(--warn-soft);color:var(--warn)">1,833건</span></li>
-                  <li>해피톡 채팅 (모바일)</li>
-                  <li>게시판 (이메일)</li>
-                  <li>타부서 이관</li>
-                  <li>접수 처리 <span class="mot-stat-pill" style="background:var(--warn-soft);color:var(--warn)">2,126건</span></li>
-                </ul>
               </div>
-              <div class="mot-tp-conn"></div>
             </div>
 
-            <!-- 04 현장 조치 -->
-            <div class="mot-upper-col">
-              <div class="mot-tp-card" style="border-top:3px solid var(--pos)">
-                <div class="mot-tp-card-title" style="color:var(--pos)">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                  조치 유형
+            <!-- 2 AS 신청 페이지 (짝수: 정보위 카드아래) -->
+            <div class="mot-sc-col mot-sc-col-flip">
+              <div class="mot-sc-top">
+                <div class="mot-lower-col c-funnel" style="border-top:none;border-bottom:2.5px solid var(--accent)">
+                  <div class="mot-lower-label">시스템</div>
+                  <div class="mot-lower-sys">
+                    <span class="mot-sys-chip">웹 로그</span>
+                    <span class="mot-sys-chip is-looker">Looker Studio</span>
+                  </div>
+                  <div class="mot-lower-kpi">1→2 전환율<strong>29.5%</strong></div>
+                  <div class="mot-lower-kpi">주 신청 완료<strong>112건</strong></div>
                 </div>
-                <ul class="mot-tp-items">
-                  <li>엔지니어 현장 수리 <span class="mot-stat-pill" style="background:var(--pos-soft);color:var(--pos)">서울경인 736건</span></li>
-                  <li>시공팀 배정</li>
-                  <li>N차 재방문 <span class="mot-stat-pill">25.5%</span></li>
-                  <li>전국 조치 건수 <span class="mot-stat-pill" style="background:var(--pos-soft);color:var(--pos)">1,464건</span></li>
-                  <li>평균 조치기간 <span class="mot-stat-pill">5.9일</span></li>
-                </ul>
               </div>
-              <div class="mot-tp-conn"></div>
-            </div>
-
-            <!-- 05 완료 -->
-            <div class="mot-upper-col">
-              <div class="mot-tp-card">
-                <div class="mot-tp-card-title">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  결과 분기
+              <div class="mot-sc-conn"></div>
+              <div class="mot-sc-node-wrap">
+                <div class="mot-node mot-node-funnel" onclick="gotoTab(1)" title="신청 페이지 퍼널 보기">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 </div>
-                <ul class="mot-tp-items">
-                  <li>1차 종결 <span class="mot-stat-pill" style="background:var(--pos-soft);color:var(--pos)">74.5%</span></li>
-                  <li>N차 재배정 <span class="mot-stat-pill">25.5%</span></li>
-                  <li>서울경인 N차 <span class="mot-stat-pill">21.1%</span></li>
-                  <li>고객 만족 확인</li>
-                </ul>
+                <div class="mot-node-label"><a href="https://kr.sidiz.com/pages/as-main" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:2px">AS 신청 페이지<br>(시디즈 닷컴)</a></div>
               </div>
-              <div class="mot-tp-conn"></div>
-            </div>
-
-          </div><!-- /mot-upper-row -->
-
-          <!-- ② 여정 노드 행 -->
-          <div class="mot-nodes-row">
-
-            <div class="mot-node-col" style="--node-y: 4px">
-              <div class="mot-node mot-node-pre" title="AS 인지 단계">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-              </div>
-              <div class="mot-node-label">AS 인지</div>
-            </div>
-
-            <div class="mot-node-col" style="--node-y: -14px">
-              <div class="mot-node mot-node-funnel" onclick="gotoTab(1)" title="신청 페이지 퍼널 보기">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-              </div>
-              <div class="mot-node-label"><a href="https://kr.sidiz.com/pages/as-main" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:2px">AS 신청 페이지<br>(시디즈 닷컴)</a></div>
-            </div>
-
-            <div class="mot-node-col" style="--node-y: 14px">
-              <div class="mot-node mot-node-contact" onclick="gotoTab(3)" title="컨택센터 용역료 보기">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.9 8.6a16 16 0 0 0 6 6l.97-.95a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              </div>
-              <div class="mot-node-label">CS 상담<br>&amp; 접수</div>
-            </div>
-
-            <div class="mot-node-col" style="--node-y: -4px">
-              <div class="mot-node mot-node-as" onclick="gotoTab(2)" title="AS 조치 현황 보기">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-              </div>
-              <div class="mot-node-label">현장 AS 조치</div>
-            </div>
-
-            <div class="mot-node-col" style="--node-y: -12px">
-              <div class="mot-node mot-node-done" title="AS 완료">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
-              <div class="mot-node-label">AS 완료</div>
-            </div>
-
-          </div><!-- /mot-nodes-row -->
-
-          <!-- ③ 하단 시스템·지표 -->
-          <div class="mot-lower-row">
-
-            <div class="mot-lower-col c-pre">
-              <div class="mot-lower-label">시스템</div>
-              <div class="mot-lower-sys"><span class="mot-sys-chip">없음</span></div>
-              <div class="mot-lower-kpi">별도 시스템 미사용</div>
-            </div>
-
-            <div class="mot-lower-col c-funnel">
-              <div class="mot-lower-label">시스템</div>
-              <div class="mot-lower-sys">
-                <span class="mot-sys-chip">웹 로그</span>
-                <span class="mot-sys-chip is-looker">Looker Studio</span>
-              </div>
-              <div class="mot-lower-kpi">1→2 전환율<strong>29.5%</strong></div>
-              <div class="mot-lower-kpi">주 신청 완료<strong>112건</strong></div>
-            </div>
-
-            <div class="mot-lower-col c-contact">
-              <div class="mot-lower-label">시스템</div>
-              <div class="mot-lower-sys">
-                <span class="mot-sys-chip is-cti">CTI</span>
-                <span class="mot-sys-chip is-happy">해피톡</span>
-                <span class="mot-sys-chip is-board">게시판</span>
-                <span class="mot-sys-chip is-erp">ERP</span>
-              </div>
-              <div class="mot-lower-kpi">월 AS 건수<strong>7,850건</strong></div>
-              <div class="mot-lower-kpi">일 평균<strong>392건</strong></div>
-              <div class="mot-lower-cost">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
-                CS 용역료 <strong>7,388만원/월</strong>
+              <div class="mot-sc-conn"></div>
+              <div class="mot-sc-bottom">
+                <div class="mot-tp-card" style="border-top:3px solid var(--accent)">
+                  <div class="mot-tp-card-title" style="color:var(--accent)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                    신청 페이지 퍼널
+                  </div>
+                  <ul class="mot-tp-items">
+                    <li>① 메인 조회 <span class="mot-stat-pill">1,390회/주</span></li>
+                    <li>② AS신청 클릭 <span class="mot-stat-pill">29.5%</span></li>
+                    <li>③ 제품 선택</li>
+                    <li>④ 증상 입력</li>
+                    <li>⑤ 고객정보 입력 <span class="mot-stat-pill">86.2%</span></li>
+                    <li>⑥ 신청 완료 <span class="mot-stat-pill" style="background:var(--accent-soft);color:var(--accent-ink)">112건/주</span></li>
+                  </ul>
+                </div>
               </div>
             </div>
 
-            <div class="mot-lower-col c-as">
-              <div class="mot-lower-label">시스템</div>
-              <div class="mot-lower-sys">
-                <span class="mot-sys-chip is-erp">ERP</span>
-                <span class="mot-sys-chip">AS현황확인</span>
+            <!-- 3 CS 상담접수 -->
+            <div class="mot-sc-col">
+              <div class="mot-sc-top">
+                <div class="mot-tp-card" style="border-top:3px solid var(--warn)">
+                  <div class="mot-tp-card-title" style="color:var(--warn)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.9 8.6a16 16 0 0 0 6 6l.97-.95a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    상담 채널 (컨택센터)
+                  </div>
+                  <ul class="mot-tp-items">
+                    <li>유선 전화 (인바운드) <span class="mot-stat-pill" style="background:var(--warn-soft);color:var(--warn)">1,833건</span></li>
+                    <li>해피톡 채팅 (모바일)</li>
+                    <li>게시판 (이메일)</li>
+                    <li>타부서 이관</li>
+                    <li>접수 처리 <span class="mot-stat-pill" style="background:var(--warn-soft);color:var(--warn)">2,126건</span></li>
+                  </ul>
+                </div>
               </div>
-              <div class="mot-lower-kpi">전국 조치<strong>1,464건/월</strong></div>
-              <div class="mot-lower-kpi">평균 조치기간<strong>5.95일</strong></div>
+              <div class="mot-sc-conn"></div>
+              <div class="mot-sc-node-wrap">
+                <div class="mot-node mot-node-contact" onclick="gotoTab(3)" title="컨택센터 용역료 보기">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.9 8.6a16 16 0 0 0 6 6l.97-.95a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <div class="mot-node-label">CS 상담<br>&amp; 접수</div>
+              </div>
+              <div class="mot-sc-conn"></div>
+              <div class="mot-sc-bottom">
+                <div class="mot-lower-col c-contact" style="border-top:2.5px solid var(--warn)">
+                  <div class="mot-lower-label">시스템</div>
+                  <div class="mot-lower-sys">
+                    <span class="mot-sys-chip is-cti">CTI</span>
+                    <span class="mot-sys-chip is-happy">해피톡</span>
+                    <span class="mot-sys-chip is-board">게시판</span>
+                    <span class="mot-sys-chip is-erp">ERP</span>
+                  </div>
+                  <div class="mot-lower-kpi">월 AS 건수<strong>7,850건</strong></div>
+                  <div class="mot-lower-kpi">일 평균<strong>392건</strong></div>
+                  <div class="mot-lower-cost">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+                    CS 용역료 <strong>7,388만원/월</strong>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div class="mot-lower-col c-done">
-              <div class="mot-lower-label">시스템</div>
-              <div class="mot-lower-sys">
-                <span class="mot-sys-chip is-erp">ERP 종결처리</span>
+            <!-- 4 현장 조치 (짝수: 정보위 카드아래) -->
+            <div class="mot-sc-col mot-sc-col-flip">
+              <div class="mot-sc-top">
+                <div class="mot-lower-col c-as" style="border-top:none;border-bottom:2.5px solid var(--pos)">
+                  <div class="mot-lower-label">시스템</div>
+                  <div class="mot-lower-sys">
+                    <span class="mot-sys-chip is-erp">ERP</span>
+                    <span class="mot-sys-chip">AS현황확인</span>
+                  </div>
+                  <div class="mot-lower-kpi">전국 조치<strong>1,464건/월</strong></div>
+                  <div class="mot-lower-kpi">평균 조치기간<strong>5.95일</strong></div>
+                </div>
               </div>
-              <div class="mot-lower-kpi">1차 종결<strong>74.5%</strong></div>
-              <div class="mot-loop-note">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-                N차 발생 시 → 현장조치 재배정
+              <div class="mot-sc-conn"></div>
+              <div class="mot-sc-node-wrap">
+                <div class="mot-node mot-node-as" onclick="gotoTab(2)" title="AS 조치 현황 보기">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                </div>
+                <div class="mot-node-label">현장 AS 조치</div>
+              </div>
+              <div class="mot-sc-conn"></div>
+              <div class="mot-sc-bottom">
+                <div class="mot-tp-card" style="border-top:3px solid var(--pos)">
+                  <div class="mot-tp-card-title" style="color:var(--pos)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    조치 유형
+                  </div>
+                  <ul class="mot-tp-items">
+                    <li>엔지니어 현장 수리 <span class="mot-stat-pill" style="background:var(--pos-soft);color:var(--pos)">서울경인 736건</span></li>
+                    <li>시공팀 배정</li>
+                    <li>N차 재방문 <span class="mot-stat-pill">25.5%</span></li>
+                    <li>전국 조치 건수 <span class="mot-stat-pill" style="background:var(--pos-soft);color:var(--pos)">1,464건</span></li>
+                    <li>평균 조치기간 <span class="mot-stat-pill">5.9일</span></li>
+                  </ul>
+                </div>
               </div>
             </div>
 
-          </div><!-- /mot-lower-row -->
+            <!-- 5 AS 완료 -->
+            <div class="mot-sc-col">
+              <div class="mot-sc-top">
+                <div class="mot-tp-card">
+                  <div class="mot-tp-card-title">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    결과 분기
+                  </div>
+                  <ul class="mot-tp-items">
+                    <li>1차 종결 <span class="mot-stat-pill" style="background:var(--pos-soft);color:var(--pos)">74.5%</span></li>
+                    <li>N차 재배정 <span class="mot-stat-pill">25.5%</span></li>
+                    <li>서울경인 N차 <span class="mot-stat-pill">21.1%</span></li>
+                    <li>고객 만족 확인</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="mot-sc-conn"></div>
+              <div class="mot-sc-node-wrap">
+                <div class="mot-node mot-node-done" title="AS 완료">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="mot-node-label">AS 완료</div>
+              </div>
+              <div class="mot-sc-conn"></div>
+              <div class="mot-sc-bottom">
+                <div class="mot-lower-col c-done" style="border-top:2.5px solid var(--ink-3)">
+                  <div class="mot-lower-label">시스템</div>
+                  <div class="mot-lower-sys">
+                    <span class="mot-sys-chip is-erp">ERP 종결처리</span>
+                  </div>
+                  <div class="mot-lower-kpi">1차 종결<strong>74.5%</strong></div>
+                  <div class="mot-loop-note">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+                    N차 발생 시 → 현장조치 재배정
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /mot-stagger-grid -->
         </div><!-- /mot-jny-canvas -->
 
         <!-- 페이즈 바 -->
