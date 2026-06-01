@@ -2388,11 +2388,29 @@ table.mtx {
           <!-- CS 용역료 YoY -->
           <div class="grid-2 mt-16">
             <div class="card">
-              <div class="card-head"><div><div class="card-title">월별 총 용역료</div><div class="card-sub">단위: 만원 · 25년/26년 비교</div></div></div>
+              <div class="card-head">
+                <div>
+                  <div class="card-title">월별 AS 관련 총 용역료</div>
+                  <div class="card-sub">단위: 만원 · 25년/26년 비교</div>
+                </div>
+              </div>
               <div class="chart-box"><canvas id="c_cs_total"></canvas></div>
+              <div class="note" style="margin-top:12px">
+                <div class="note-ic" style="font-size:9px">AS</div>
+                <div class="note-body" style="font-size:11.5px">
+                  <span style="color:var(--ink-3)">포함 항목:</span>
+                  <strong style="color:var(--ink)"> 유선 (AS)</strong> · <strong style="color:var(--ink)">모바일 (AS+ON)</strong> · <strong style="color:var(--ink)">게시판 (AS+ON)</strong> · <strong style="color:var(--ink)">접수 (AS)</strong>
+                  <span style="color:var(--ink-3);margin-left:6px">— 유선 온라인·수주 항목 제외</span>
+                </div>
+              </div>
             </div>
             <div class="card">
-              <div class="card-head"><div><div class="card-title">일 평균 비용</div><div class="card-sub">총 용역료 ÷ 영업일 수 · 25년/26년 비교</div></div></div>
+              <div class="card-head">
+                <div>
+                  <div class="card-title">일 평균 AS 관련 비용</div>
+                  <div class="card-sub">AS 관련 총 용역료 ÷ 영업일 수 · 25년/26년 비교</div>
+                </div>
+              </div>
               <div class="chart-box"><canvas id="c_cs_daily"></canvas></div>
             </div>
           </div>
@@ -4271,9 +4289,15 @@ function renderSec3() {
     });
   }
 
-  // CS 용역료 YoY 막대
-  const csT = yoy_cs(DATA.csTotals.map(v => Math.round(v / 10000)));
-  const csD = yoy_cs(DATA.csDaily.map(v => Math.round(v / 10000)));
+  // AS 관련 용역료 YoY 막대 (유선AS + 모바일 + 게시판 + 접수AS)
+  const asRelTotals = DATA.contact.reduce((acc, it) => {
+    it.amounts.forEach((v, i) => { acc[i] = (acc[i] || 0) + v; });
+    return acc;
+  }, []);
+  const workingDays = DATA.csTotals.map((t, i) => t / DATA.csDaily[i]);
+  const asRelDaily  = asRelTotals.map((v, i) => v / workingDays[i]);
+  const csT = yoy_c(asRelTotals.map(v => Math.round(v / 10000)));
+  const csD = yoy_c(asRelDaily.map(v => Math.round(v / 10000)));
   makeYoYBar('c_cs_total', csT.y25, csT.y26, COLORS.ink,    '만원');
   makeYoYBar('c_cs_daily', csD.y25, csD.y26, COLORS.accent, '만원');
 
