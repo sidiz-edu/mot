@@ -1305,6 +1305,99 @@ table.mtx {
 }
 
 /* =====================================================
+   SECTION COLOR THEMES
+   ===================================================== */
+
+/* ---- AS 조치 현황 섹션 : 초록색 테마 ---- */
+#sec-as .page-head {
+  background: linear-gradient(to right, var(--pos-soft), transparent);
+  margin: -28px -32px 22px;
+  padding: 28px 32px 22px;
+  border-bottom: 1px solid rgba(47, 140, 90, 0.2);
+}
+#sec-as .page-eyebrow { color: var(--pos); font-weight: 700; }
+#sec-as .page-title { color: var(--pos); }
+#sec-as .card { border-top: 2.5px solid var(--pos); }
+#sec-as .card-title { color: #1A5E3A; }
+#sec-as .sec-h-title { color: #1A5E3A; }
+#sec-as .sec-h-rule { background: rgba(47, 140, 90, 0.25); }
+#sec-as .note-ic { background: var(--pos-soft); color: var(--pos); border: 1px solid rgba(47,140,90,0.2); }
+#sec-as .note-title { color: #1A5E3A; }
+#sec-as .tag { background: var(--pos-soft); color: var(--pos); }
+#sec-as .tag.up, #sec-as .tag.down, #sec-as .tag.warn, #sec-as .tag.accent { background: var(--pos-soft); color: var(--pos); }
+#sec-as .kpi-label .dot { background: var(--pos); }
+#sec-as .kpi-trend.up { background: var(--pos-soft); color: var(--pos); }
+html[data-theme="dark"] #sec-as .card-title,
+html[data-theme="dark"] #sec-as .sec-h-title,
+html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
+
+/* ---- 컨택센터 섹션 : 주황색 테마 ---- */
+#sec-cost .page-head {
+  background: linear-gradient(to right, var(--warn-soft), transparent);
+  margin: -28px -32px 22px;
+  padding: 28px 32px 22px;
+  border-bottom: 1px solid rgba(197, 138, 26, 0.2);
+}
+#sec-cost .page-eyebrow { color: var(--warn); font-weight: 700; }
+#sec-cost .page-title { color: var(--warn); }
+#sec-cost .card { border-top: 2.5px solid var(--warn); }
+#sec-cost .card-title { color: #7A4E00; }
+#sec-cost .sec-h-title { color: #7A4E00; }
+#sec-cost .sec-h-rule { background: rgba(197, 138, 26, 0.25); }
+#sec-cost .note-ic { background: var(--warn-soft); color: var(--warn); border: 1px solid rgba(197,138,26,0.2); }
+#sec-cost .note-title { color: #7A4E00; }
+#sec-cost .tag { background: var(--warn-soft); color: var(--warn); }
+#sec-cost .tag.up, #sec-cost .tag.down, #sec-cost .tag.accent { background: var(--warn-soft); color: var(--warn); }
+#sec-cost .seg-btn.active { background: var(--warn); color: #fff; }
+#sec-cost .cc-part-num, #sec-cost .cc-part-title { color: var(--warn); }
+#sec-cost .cc-part-rule { background: rgba(197,138,26,0.25); }
+#sec-cost .kpi-label .dot { background: var(--warn); }
+#sec-cost .t tr.is-as-row td { background: rgba(197,138,26,0.06); }
+#sec-cost .t tr.is-as-row td:first-child { color: #7A4E00; }
+#sec-cost .unit-price-tbl thead th:nth-child(5),
+#sec-cost .unit-price-tbl thead th:nth-child(6) { color: var(--warn); }
+#sec-cost .t thead th.yr-25 { color: var(--warn); border-bottom-color: var(--warn); }
+html[data-theme="dark"] #sec-cost .card-title,
+html[data-theme="dark"] #sec-cost .sec-h-title,
+html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
+
+/* ---- 퍼널 섹션 : 파란색 테마 ---- */
+#sec-funnel .page-head {
+  background: linear-gradient(to right, var(--accent-soft), transparent);
+  margin: -28px -32px 22px;
+  padding: 28px 32px 22px;
+  border-bottom: 1px solid rgba(45, 91, 227, 0.15);
+}
+#sec-funnel .page-eyebrow {
+  color: var(--accent);
+  font-weight: 700;
+}
+#sec-funnel .page-title { color: var(--accent); }
+#sec-funnel .card { border-top: 2.5px solid var(--accent); }
+#sec-funnel .card-title { color: var(--accent-ink); }
+#sec-funnel .sec-h-title { color: var(--accent-ink); }
+#sec-funnel .sec-h-rule { background: rgba(45, 91, 227, 0.2); }
+#sec-funnel .note-ic {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(45, 91, 227, 0.2);
+}
+#sec-funnel .note-title { color: var(--accent-ink); }
+#sec-funnel .tag { background: var(--accent-soft); color: var(--accent-ink); }
+#sec-funnel .tag.up, #sec-funnel .tag.down { background: var(--accent-soft); color: var(--accent-ink); }
+#sec-funnel .page-head a {
+  border-color: rgba(45, 91, 227, 0.3) !important;
+  color: var(--accent-ink) !important;
+  background: var(--accent-soft) !important;
+}
+#sec-funnel .page-head a:hover {
+  background: rgba(45, 91, 227, 0.12) !important;
+}
+#sec-funnel .kpi.is-accent .kpi-label .dot,
+#sec-funnel .kpi-label .dot { background: var(--accent); }
+#sec-funnel .kpi-trend.up { background: var(--accent-soft); color: var(--accent-ink); }
+
+/* =====================================================
    Responsive (gentle)
    ===================================================== */
 @media (max-width: 1280px) {
@@ -1646,14 +1739,14 @@ table.t               { font-size: 14px; }
           <span class="sb-count">주</span>
         </button>
         <button class="sb-item" data-tab="2">
-          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
-          <span>AS 조치 현황</span>
-          <span class="sb-count">04월</span>
-        </button>
-        <button class="sb-item" data-tab="3">
           <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/><circle cx="7" cy="7" r="1.4" fill="currentColor"/><circle cx="14" cy="12" r="1.4" fill="currentColor"/><circle cx="10" cy="17" r="1.4" fill="currentColor"/></svg>
           <span>컨택센터 용역료</span>
           <span class="sb-count">CC</span>
+        </button>
+        <button class="sb-item" data-tab="3">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+          <span>AS 조치 현황</span>
+          <span class="sb-count">04월</span>
         </button>
       </div>
     </div>
@@ -1820,7 +1913,7 @@ table.t               { font-size: 14px; }
               </div>
               <div class="mot-sc-conn"></div>
               <div class="mot-sc-node-wrap">
-                <div class="mot-node mot-node-contact" onclick="gotoTab(3)" title="컨택센터 용역료 보기">
+                <div class="mot-node mot-node-contact" onclick="gotoTab(2)" title="컨택센터 용역료 보기">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.9 8.6a16 16 0 0 0 6 6l.97-.95a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                 </div>
                 <div class="mot-node-label">CS 상담<br>&amp; 접수</div>
@@ -1860,7 +1953,7 @@ table.t               { font-size: 14px; }
               </div>
               <div class="mot-sc-conn"></div>
               <div class="mot-sc-node-wrap">
-                <div class="mot-node mot-node-as" onclick="gotoTab(2)" title="AS 조치 현황 보기">
+                <div class="mot-node mot-node-as" onclick="gotoTab(3)" title="AS 조치 현황 보기">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                 </div>
                 <div class="mot-node-label">현장 AS 조치</div>
@@ -2016,7 +2109,7 @@ table.t               { font-size: 14px; }
             <span>CS 용역료</span>
             <strong>7,388<span style="font-weight:400;font-size:11px">만원/월</span></strong>
           </div>
-          <button class="jny-go" onclick="gotoTab(3)">용역료 분석 보기 →</button>
+          <button class="jny-go" onclick="gotoTab(2)">용역료 분석 보기 →</button>
         </div>
 
         <!-- 화살표 2→3 -->
@@ -2059,7 +2152,7 @@ table.t               { font-size: 14px; }
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             별도 집계 없음
           </div>
-          <button class="jny-go" onclick="gotoTab(2)">조치 현황 보기 →</button>
+          <button class="jny-go" onclick="gotoTab(3)">조치 현황 보기 →</button>
         </div>
 
         <!-- 화살표 3→4 -->
@@ -2130,7 +2223,7 @@ table.t               { font-size: 14px; }
           <span class="ov-body-count">03 sections</span>
         </div>
         <div class="ov-grid">
-          <button class="ov-card" data-go="2">
+          <button class="ov-card" data-go="3">
             <div class="ov-card-head"><span class="ov-card-num">02</span><span class="ov-card-title">시디즈 AS 조치 현황</span></div>
             <div class="ov-card-desc">전국·서울경인 조치 건수, 1차 종결률, N차율, 평균 조치기간을 월별/년도별 추이로 분석합니다.</div>
             <div class="ov-card-stats">
@@ -2148,7 +2241,7 @@ table.t               { font-size: 14px; }
             </div>
             <div class="ov-card-foot"><span>주간 단위 · 단계별 전환</span><span class="ov-card-arrow">자세히 →</span></div>
           </button>
-          <button class="ov-card" data-go="3">
+          <button class="ov-card" data-go="2">
             <div class="ov-card-head"><span class="ov-card-num">03</span><span class="ov-card-title">컨택센터 용역료</span></div>
             <div class="ov-card-desc">인력 구성·채널별 접수 절차·시스템 연계 구조와 용역료 비용을 함께 파악합니다.</div>
             <div class="ov-card-stats">
@@ -2261,8 +2354,8 @@ table.t               { font-size: 14px; }
         <div class="card mt-16">
           <div class="card-head"><div><div class="card-title">엔지니어 vs 시공팀 비율</div><div class="card-sub">서울경인 월별 처리 구성</div></div>
             <div class="lg-row" style="margin:0">
-              <span class="lg-chip"><i style="background:var(--ink)"></i>엔지니어</span>
-              <span class="lg-chip"><i style="background:var(--accent)"></i>시공팀</span>
+              <span class="lg-chip"><i style="background:#073D20"></i>엔지니어</span>
+              <span class="lg-chip"><i style="background:#48B47A"></i>시공팀</span>
             </div>
           </div>
           <div class="chart-box h-220"><canvas id="c_se_team"></canvas></div>
@@ -2272,8 +2365,8 @@ table.t               { font-size: 14px; }
       <!-- charts: view 2 (전국 vs 서울경인) -->
       <div id="view-2" style="display:none">
         <div class="lg-row" style="padding:0 4px 8px">
-          <span class="lg-chip"><i style="background:var(--ink)"></i>전국</span>
-          <span class="lg-chip"><i style="background:var(--accent)"></i>서울경인</span>
+          <span class="lg-chip"><i style="background:#073D20"></i>전국</span>
+          <span class="lg-chip"><i style="background:#48B47A"></i>서울경인</span>
         </div>
         <div class="grid-2">
           <div class="card">
@@ -2299,8 +2392,8 @@ table.t               { font-size: 14px; }
       <div id="view-3" style="display:none">
         <div class="lg-row" style="padding:0 4px 8px">
           <span class="lg-chip"><i style="background:#C8C2B0"></i>2024년</span>
-          <span class="lg-chip"><i style="background:#5B7C8C"></i>2025년</span>
-          <span class="lg-chip"><i style="background:var(--accent)"></i>2026년</span>
+          <span class="lg-chip"><i style="background:#7DCE9E"></i>2025년</span>
+          <span class="lg-chip"><i style="background:#1A5E3A"></i>2026년</span>
           <span style="margin-left:auto; font-size:12px; color:var(--ink-3)">전국 기준 · 1~12월</span>
         </div>
         <div class="grid-2">
@@ -2359,12 +2452,12 @@ table.t               { font-size: 14px; }
             <div class="card-sub">주별 단계별 사용자 수 · 6단계</div>
           </div>
           <div class="lg-row" style="margin:0">
-            <span class="lg-chip"><i style="background:var(--ink)"></i>메인조회</span>
+            <span class="lg-chip"><i style="background:#0D2259"></i>메인조회</span>
             <span class="lg-chip"><i style="background:var(--accent)"></i>AS신청클릭</span>
-            <span class="lg-chip"><i style="background:#5B7C8C"></i>제품선택</span>
-            <span class="lg-chip"><i style="background:#A88742"></i>증상입력</span>
-            <span class="lg-chip"><i style="background:#856B9D"></i>고객정보입력</span>
-            <span class="lg-chip"><i style="background:var(--pos)"></i>신청완료</span>
+            <span class="lg-chip"><i style="background:#3D72D7"></i>제품선택</span>
+            <span class="lg-chip"><i style="background:#6B9FE8"></i>증상입력</span>
+            <span class="lg-chip"><i style="background:#95BEFF"></i>고객정보입력</span>
+            <span class="lg-chip"><i style="background:#38BDF8"></i>신청완료</span>
           </div>
         </div>
         <div class="chart-box h-280"><canvas id="c_funnel_flow"></canvas></div>
@@ -3692,13 +3785,13 @@ const CHANNELS = [
 ];
 
 const KPIS = [
-  {label: "전국 조치 건수",       value: 1464,  unit: "건",  trend: -13.5,  dir: "down", comp: "전월 대비",                   series: DATA.natCount,  cls: "is-accent"},
+  {label: "전국 조치 건수",       value: 1464,  unit: "건",  trend: -13.5,  dir: "down", comp: "전월 대비",                   series: DATA.natCount,  cls: "is-pos"},
   {label: "전국 1차 종결률",      value: 74.5, unit: "%",   trend: 3.8,  dir: "up", comp: "전월 대비",                   series: DATA.natClose,  cls: "is-pos"},
-  {label: "전국 N차율",           value: 25.5,     unit: "%",   trend: -9.6,   dir: "up",    comp: "전월 대비 (낮을수록 좋음)",  series: DATA.natN,      cls: "is-warn"},
+  {label: "전국 N차율",           value: 25.5,     unit: "%",   trend: -9.6,   dir: "up",    comp: "전월 대비 (낮을수록 좋음)",  series: DATA.natN,      cls: "is-pos"},
   {label: "전국 평균 조치기간",   value: 5.95, unit: "일", trend: -0.2, dir: "up", comp: "전월 대비 (낮을수록 좋음)", series: DATA.natDays,  cls: "is-pos"},
   {label: "서울경인 조치 건수",   value: 736,  unit: "건",  trend: -12.5,  dir: "down", comp: "전월 대비",                   series: DATA.seCount,   cls: ""},
   {label: "서울경인 1차 종결률",  value: 78.9, unit: "%",   trend: 2.6, dir: "up",comp: "전월 대비",                   series: DATA.seClose,   cls: "is-pos"},
-  {label: "서울경인 N차율",       value: 21.1,     unit: "%",   trend: -8.7,  dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.seN,       cls: "is-warn"},
+  {label: "서울경인 N차율",       value: 21.1,     unit: "%",   trend: -8.7,  dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.seN,       cls: "is-pos"},
   {label: "서울경인 평균 조치",   value: 5.89, unit: "일", trend: 1.5, dir: "down", comp: "전월 대비 (낮을수록 좋음)", series: DATA.seDays, cls: ""},
 ];
 </script>
@@ -4342,41 +4435,41 @@ function renderHeroSpark() { /* no-op */ }
 // ---- Section 1 charts ----
 function renderSec1() {
   // 전국
-  makeBar  ('c_nat_count', COLORS.ink,    DATA.natCount, DATA.natMonths, false, '조치 건수');
-  makeLine ('c_nat_close', COLORS.pos,    DATA.natClose, DATA.natMonths, true,  '1차 종결률');
-  makeLine ('c_nat_n',     COLORS.warn,   DATA.natN,     DATA.natMonths, true,  'N차율');
-  makeLine ('c_nat_days',  COLORS.accent, DATA.natDays,  DATA.natMonths, false, '평균 조치 (일)');
+  makeBar  ('c_nat_count', '#2F8C5A',   DATA.natCount, DATA.natMonths, false, '조치 건수');
+  makeLine ('c_nat_close', '#073D20',   DATA.natClose, DATA.natMonths, true,  '1차 종결률');
+  makeLine ('c_nat_n',     '#48B47A',   DATA.natN,     DATA.natMonths, true,  'N차율');
+  makeLine ('c_nat_days',  '#1A7A45',   DATA.natDays,  DATA.natMonths, false, '평균 조치 (일)');
 
   // 서울경인
-  makeBar  ('c_se_count', COLORS.accent, DATA.seCount, DATA.natMonths, false, '조치 건수');
-  makeLine ('c_se_close', COLORS.pos,    DATA.seClose, DATA.natMonths, true,  '1차 종결률');
-  makeLine ('c_se_n',     COLORS.warn,   DATA.seN,     DATA.natMonths, true,  'N차율');
-  makeLine ('c_se_days',  COLORS.ink,    DATA.seDays,  DATA.natMonths, false, '평균 조치 (일)');
+  makeBar  ('c_se_count', '#2F8C5A',    DATA.seCount, DATA.natMonths, false, '조치 건수');
+  makeLine ('c_se_close', '#073D20',    DATA.seClose, DATA.natMonths, true,  '1차 종결률');
+  makeLine ('c_se_n',     '#48B47A',    DATA.seN,     DATA.natMonths, true,  'N차율');
+  makeLine ('c_se_days',  '#1A7A45',    DATA.seDays,  DATA.natMonths, false, '평균 조치 (일)');
   makeMultiBar('c_se_team', [
-    {label: '엔지니어', data: DATA.seEng, color: COLORS.ink},
-    {label: '시공팀',   data: DATA.seSig, color: COLORS.accent},
+    {label: '엔지니어', data: DATA.seEng, color: '#073D20'},
+    {label: '시공팀',   data: DATA.seSig, color: '#48B47A'},
   ], DATA.natMonths, false, false);
 
   // 전국 vs 서울경인
   makeMultiLine('c_cmp_count', [
-    {label: '전국',     color: COLORS.ink,    data: DATA.natCount, fill: false},
-    {label: '서울경인', color: COLORS.accent, data: DATA.seCount,  fill: false},
+    {label: '전국',     color: '#073D20', data: DATA.natCount, fill: false},
+    {label: '서울경인', color: '#48B47A', data: DATA.seCount,  fill: false},
   ], DATA.natMonths);
   makeMultiLine('c_cmp_close', [
-    {label: '전국',     color: COLORS.ink,    data: DATA.natClose, fill: false},
-    {label: '서울경인', color: COLORS.accent, data: DATA.seClose,  fill: false},
+    {label: '전국',     color: '#073D20', data: DATA.natClose, fill: false},
+    {label: '서울경인', color: '#48B47A', data: DATA.seClose,  fill: false},
   ], DATA.natMonths, true);
   makeMultiLine('c_cmp_n', [
-    {label: '전국',     color: COLORS.ink,    data: DATA.natN, fill: false},
-    {label: '서울경인', color: COLORS.accent, data: DATA.seN,  fill: false},
+    {label: '전국',     color: '#073D20', data: DATA.natN, fill: false},
+    {label: '서울경인', color: '#48B47A', data: DATA.seN,  fill: false},
   ], DATA.natMonths, true);
   makeMultiLine('c_cmp_days', [
-    {label: '전국',     color: COLORS.ink,    data: DATA.natDays, fill: false},
-    {label: '서울경인', color: COLORS.accent, data: DATA.seDays,  fill: false},
+    {label: '전국',     color: '#073D20', data: DATA.natDays, fill: false},
+    {label: '서울경인', color: '#48B47A', data: DATA.seDays,  fill: false},
   ], DATA.natMonths);
 
   // 년도별 동월 비교 — 1~12월을 X축으로, 2024/2025/2026 라인을 겹쳐서
-  const YOY_COLORS = { "2024": "#C8C2B0", "2025": "#5B7C8C", "2026": COLORS.accent };
+  const YOY_COLORS = { "2024": "#C8C2B0", "2025": "#6BC990", "2026": "#1A5E3A" };
   const yoyDs = (key) => Object.keys(DATA.yoy[key]).map(year => ({
     label: year + '년',
     color: YOY_COLORS[year],
@@ -4393,21 +4486,21 @@ function renderSec1() {
 function renderSec2() {
   const F = DATA.funnel;
   makeMultiLine('c_funnel_flow', [
-    {label:'메인조회',     color: COLORS.ink,    data: F.main,  fill: false},
+    {label:'메인조회',     color: '#0D2259',     data: F.main,  fill: false},
     {label:'AS신청클릭',   color: COLORS.accent, data: F.click, fill: false},
-    {label:'제품선택',     color: '#5B7C8C',     data: F.pick,  fill: false},
-    {label:'증상입력',     color: '#A88742',     data: F.sym,   fill: false},
-    {label:'고객정보입력', color: '#856B9D',     data: F.info,  fill: false},
-    {label:'신청완료',     color: COLORS.pos,    data: F.done,  fill: false},
+    {label:'제품선택',     color: '#3D72D7',     data: F.pick,  fill: false},
+    {label:'증상입력',     color: '#6B9FE8',     data: F.sym,   fill: false},
+    {label:'고객정보입력', color: '#95BEFF',     data: F.info,  fill: false},
+    {label:'신청완료',     color: '#38BDF8',     data: F.done,  fill: false},
   ], F.periods);
 
-  makeLine('c_conv12', COLORS.pos,    F.conv12, F.periods, true, '유입률');
-  makeLine('c_conv45', COLORS.ink,    F.conv45, F.periods, true, '유입률');
-  makeBar ('c_product_reg', COLORS.ink2, F.productReg, F.periods, false, '등록 수');
+  makeLine('c_conv12', COLORS.accent, F.conv12, F.periods, true, '유입률');
+  makeLine('c_conv45', '#3D72D7',     F.conv45, F.periods, true, '유입률');
+  makeBar ('c_product_reg', COLORS.accent, F.productReg, F.periods, false, '등록 수');
 }
 
 // ---- Section 3 charts + table ----
-const CONTACT_PALETTE = ['#2D5BE3', '#2F8C5A', '#C58A1A', '#7B5EA7'];
+const CONTACT_PALETTE = ['#CC3D00', '#E85A00', '#F57D20', '#F9A84D'];
 
 function renderSec3() {
   // 항목별 추이 범례 (색상만 표시, 실선=26년/점선=25년 구분)
@@ -4960,7 +5053,7 @@ function reflowChartsIn(rootEl) {
   setTimeout(doResize, 80);
 }
 
-const SECTION_IDS = ['ov-page', 'sec-funnel', 'sec-as', 'sec-cost'];
+const SECTION_IDS = ['ov-page', 'sec-funnel', 'sec-cost', 'sec-as'];
 
 function gotoTab(idx) {
   document.querySelectorAll('.sb-item[data-tab]').forEach(b => b.classList.toggle('active', +b.dataset.tab === idx));
