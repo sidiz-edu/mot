@@ -4448,9 +4448,11 @@ function renderSec3() {
     const n = DATA.csMonths.length;
     thead.innerHTML = '<tr><th>항목</th>' + DATA.csMonths.map(m=>`<th>${m}</th>`).join('') + '<th>합계</th></tr>';
     tbody.innerHTML = '';
+    const AS_ITEMS = new Set(['유선AS','모바일','게시판','접수AS']);
     DATA.cs.forEach(item => {
       const total = item.amounts.reduce((a,b)=>a+b, 0);
       const tr = document.createElement('tr');
+      if (AS_ITEMS.has(item.name)) tr.classList.add('is-as-row');
       tr.innerHTML = `<td>${item.name}</td>` +
         item.amounts.map(v => `<td>${Math.round(v/10000).toLocaleString()}</td>`).join('') +
         `<td>${Math.round(total/10000).toLocaleString()}</td>`;
