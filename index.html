@@ -5161,13 +5161,20 @@ function drawMotArrows() {
   svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:visible';
 
   const color = '#B8B2A5';
+  const colorBranch = '#C8A882'; // 분기 화살표 색 (옅은 황갈색)
   const defs = document.createElementNS(ns, 'defs');
-  defs.innerHTML = `<marker id="mot-ah" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
-    <path d="M0,0 L0,7 L10,3.5 z" fill="${color}"/>
-  </marker>`;
+  defs.innerHTML = `
+    <marker id="mot-ah" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0 L0,7 L10,3.5 z" fill="${color}"/>
+    </marker>
+    <marker id="mot-ah-branch" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0 L0,7 L10,3.5 z" fill="${colorBranch}"/>
+    </marker>`;
   svg.appendChild(defs);
 
   const gr = grid.getBoundingClientRect();
+
+  // 기본 순차 화살표 (1→2, 2→3, 3→4, 4→5)
   for (let i = 0; i < nodes.length - 1; i++) {
     const a = nodes[i].getBoundingClientRect();
     const b = nodes[i + 1].getBoundingClientRect();
@@ -5185,6 +5192,27 @@ function drawMotArrows() {
     line.setAttribute('marker-end', 'url(#mot-ah)');
     svg.appendChild(line);
   }
+
+  // 분기 화살표: AS 인지(0) → CS 상담&접수(2) — 아래쪽으로 휘는 곡선
+  if (nodes.length >= 3) {
+    const a = nodes[0].getBoundingClientRect();
+    const b = nodes[2].getBoundingClientRect();
+    const x1 = a.left + a.width / 2 - gr.left;
+    const y1 = a.bottom - gr.top;
+    const x2 = b.left + b.width / 2 - gr.left;
+    const y2 = b.bottom - gr.top;
+    const cx = (x1 + x2) / 2;
+    const cy = Math.max(y1, y2) + 36; // 아래로 볼록한 곡선
+    const path = document.createElementNS(ns, 'path');
+    path.setAttribute('d', `M${x1},${y1} Q${cx},${cy} ${x2},${y2 + 12}`);
+    path.setAttribute('stroke', colorBranch);
+    path.setAttribute('stroke-width', '1.6');
+    path.setAttribute('stroke-dasharray', '5,3');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('marker-end', 'url(#mot-ah-branch)');
+    svg.appendChild(path);
+  }
+
   grid.appendChild(svg);
 }
 requestAnimationFrame(drawMotArrows);
