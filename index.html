@@ -1431,14 +1431,7 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   gap: 0 10px;
   position: relative;
 }
-.mot-stagger-grid::before {
-  content: '';
-  position: absolute;
-  top: calc(50% - 26px);
-  left: 8%; right: 8%;
-  border-top: 2px dashed var(--border-strong);
-  z-index: 0;
-}
+.mot-stagger-grid::before { display: none; }
 .mot-sc-col {
   display: flex;
   flex-direction: column;
@@ -2020,14 +2013,6 @@ table.t               { font-size: 14px; }
           </div><!-- /mot-stagger-grid -->
         </div><!-- /mot-jny-canvas -->
 
-        <!-- 페이즈 바 -->
-        <div class="mot-phase-bar">
-          <div class="mot-phase-seg ph-pre">AS 인지</div>
-          <div class="mot-phase-seg ph-funnel">AS 신청 페이지 (퍼널)</div>
-          <div class="mot-phase-seg ph-contact">CS 상담 · 접수</div>
-          <div class="mot-phase-seg ph-as">현장 AS 조치</div>
-          <div class="mot-phase-seg ph-done">AS 완료</div>
-        </div>
 
       </div><!-- /mot-jny-outer -->
 
@@ -5158,6 +5143,52 @@ function rebuildAll() {
   hidden.forEach(el => { el.style.display = 'none'; });
 }
 window.__rebuildCharts = null;
+
+// ---- MOT Journey 화살표 ----
+function drawMotArrows() {
+  const grid = document.querySelector('.mot-stagger-grid');
+  if (!grid) return;
+  const old = grid.querySelector('.mot-arrows-svg');
+  if (old) old.remove();
+
+  const nodes = Array.from(grid.querySelectorAll('.mot-sc-node-wrap'));
+  if (nodes.length < 2) return;
+
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.classList.add('mot-arrows-svg');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:visible';
+
+  const color = '#B8B2A5';
+  const defs = document.createElementNS(ns, 'defs');
+  defs.innerHTML = `<marker id="mot-ah" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+    <path d="M0,0 L0,7 L10,3.5 z" fill="${color}"/>
+  </marker>`;
+  svg.appendChild(defs);
+
+  const gr = grid.getBoundingClientRect();
+  for (let i = 0; i < nodes.length - 1; i++) {
+    const a = nodes[i].getBoundingClientRect();
+    const b = nodes[i + 1].getBoundingClientRect();
+    const x1 = a.right - gr.left;
+    const y1 = a.top + a.height / 2 - gr.top;
+    const x2 = b.left - gr.left;
+    const y2 = b.top + b.height / 2 - gr.top;
+    const line = document.createElementNS(ns, 'line');
+    line.setAttribute('x1', x1 + 2);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2 - 12);
+    line.setAttribute('y2', y2);
+    line.setAttribute('stroke', color);
+    line.setAttribute('stroke-width', '2');
+    line.setAttribute('marker-end', 'url(#mot-ah)');
+    svg.appendChild(line);
+  }
+  grid.appendChild(svg);
+}
+requestAnimationFrame(drawMotArrows);
+window.addEventListener('resize', drawMotArrows);
 </script>
 
 <!-- =====================================================
