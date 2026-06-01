@@ -57,17 +57,17 @@
   --sb-ink-mute:  #6E6A60;
 
   /* Accent — blue */
-  --accent:       #2D5BE3;
-  --accent-2:     #1E45BD;
+  --accent:       #003EFF;
+  --accent-2:     #002FCC;
   --accent-soft:  #E6EDFC;
   --accent-ink:   #162B6E;
 
   /* Semantic */
-  --pos:          #2F8C5A;
+  --pos:          #00B65F;
   --pos-soft:     #E4F1E8;
   --neg:          #C04A3B;
   --neg-soft:     #FBE6E1;
-  --warn:         #C58A1A;
+  --warn:         #FF8000;
   --warn-soft:    #FAF0D8;
 
   /* Chart neutrals */
@@ -1604,7 +1604,7 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
 }
 .ph-pre     { background: #6E6A60; }
 .ph-funnel  { background: var(--accent); }
-.ph-contact { background: #C58A1A; }
+.ph-contact { background: #FF8000; }
 .ph-as      { background: var(--pos); }
 .ph-done    { background: #3D3930; }
 
@@ -4140,17 +4140,17 @@ function makeYoYBar(id, y25, y26, color, label='') {
       labels: MONTHS12,
       datasets: [
         {
-          label: '26년' + (label ? ` (${label})` : ''),
-          data: y26,
-          backgroundColor: hexToRgba(color, 0.85),
-          hoverBackgroundColor: color,
-          borderRadius: 4, borderSkipped: false, maxBarThickness: 22,
-        },
-        {
           label: '25년' + (label ? ` (${label})` : ''),
           data: y25,
           backgroundColor: hexToRgba('#9B958A', 0.4),
           hoverBackgroundColor: hexToRgba('#9B958A', 0.65),
+          borderRadius: 4, borderSkipped: false, maxBarThickness: 22,
+        },
+        {
+          label: '26년' + (label ? ` (${label})` : ''),
+          data: y26,
+          backgroundColor: hexToRgba(color, 0.85),
+          hoverBackgroundColor: color,
           borderRadius: 4, borderSkipped: false, maxBarThickness: 22,
         }
       ]
@@ -4435,13 +4435,13 @@ function renderHeroSpark() { /* no-op */ }
 // ---- Section 1 charts ----
 function renderSec1() {
   // 전국
-  makeBar  ('c_nat_count', '#2F8C5A',   DATA.natCount, DATA.natMonths, false, '조치 건수');
+  makeBar  ('c_nat_count', '#00B65F',   DATA.natCount, DATA.natMonths, false, '조치 건수');
   makeLine ('c_nat_close', '#073D20',   DATA.natClose, DATA.natMonths, true,  '1차 종결률');
   makeLine ('c_nat_n',     '#48B47A',   DATA.natN,     DATA.natMonths, true,  'N차율');
   makeLine ('c_nat_days',  '#1A7A45',   DATA.natDays,  DATA.natMonths, false, '평균 조치 (일)');
 
   // 서울경인
-  makeBar  ('c_se_count', '#2F8C5A',    DATA.seCount, DATA.natMonths, false, '조치 건수');
+  makeBar  ('c_se_count', '#00B65F',    DATA.seCount, DATA.natMonths, false, '조치 건수');
   makeLine ('c_se_close', '#073D20',    DATA.seClose, DATA.natMonths, true,  '1차 종결률');
   makeLine ('c_se_n',     '#48B47A',    DATA.seN,     DATA.natMonths, true,  'N차율');
   makeLine ('c_se_days',  '#1A7A45',    DATA.seDays,  DATA.natMonths, false, '평균 조치 (일)');
