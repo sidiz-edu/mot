@@ -463,9 +463,16 @@ button { font-family: inherit; cursor: pointer; }
 .unit-price-tbl .price-down { color: var(--neg); font-weight: 700; }
 .unit-price-tbl .change-same { color: var(--ink-4); font-size: 12px; }
 .unit-price-tbl .change-down { color: var(--neg); font-size: 12px; font-weight: 600; }
+.unit-price-tbl { table-layout: fixed; }
+.unit-price-tbl col.c-cat  { width: 72px; }
+.unit-price-tbl col.c-part { width: 90px; }
+.unit-price-tbl col.c-item { width: auto; }
+.unit-price-tbl col.c-unit { width: 160px; }
+.unit-price-tbl col.c-y25  { width: 90px; }
+.unit-price-tbl col.c-y26  { width: 90px; }
+.unit-price-tbl col.c-chg  { width: 80px; }
 .unit-price-tbl thead th:nth-child(5),
 .unit-price-tbl thead th:nth-child(6) { color: var(--accent); }
-.unit-price-tbl thead th:nth-child(5)::before { content: '🗓 '; }
 .unit-price-tbl tbody td { text-align: right; }
 .unit-price-tbl tbody td:nth-child(3) { text-align: left; color: var(--ink); font-weight: 500; }
 table.t {
@@ -2477,6 +2484,10 @@ table.mtx {
             <div class="card-head"><div><div class="card-title">CS 용역료 — 항목별 단가표</div><div class="card-sub">단위: 원/건(또는 콜) · 연도별 단가 비교</div></div></div>
             <div class="tbl-wrap">
               <table class="t unit-price-tbl">
+                <colgroup>
+                  <col class="c-cat"><col class="c-part"><col class="c-item">
+                  <col class="c-unit"><col class="c-y25"><col class="c-y26"><col class="c-chg">
+                </colgroup>
                 <thead>
                   <tr>
                     <th>대분류</th><th>Part</th><th>항목</th><th>단위</th>
