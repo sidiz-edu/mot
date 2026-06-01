@@ -1551,6 +1551,18 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   margin-top: 8px; text-align: center; line-height: 1.35; max-width: 96px;
 }
 .mot-node svg { width: 28px; height: 28px; }
+.mot-step-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; font-weight: 700; letter-spacing: .14em;
+  color: var(--ink-4); margin-bottom: 5px; text-transform: uppercase;
+}
+.mot-start-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 9px; font-weight: 700; letter-spacing: .1em;
+  background: var(--ink); color: var(--bg);
+  padding: 2px 9px; border-radius: 999px;
+  margin-bottom: 6px; text-transform: uppercase;
+}
 
 /* Lower info row */
 .mot-lower-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0 8px; }
@@ -1832,7 +1844,7 @@ table.t               { font-size: 14px; }
           <div>
             <span class="ov-eyebrow">Customer Journey Map · April 2026</span>
             <h1 class="mot-jny-title">시디즈 AS Journey Map</h1>
-            <p class="mot-jny-sub">AS 인지 → AS 신청 페이지 (시디즈 닷컴) → CS 상담·접수 → 현장 조치 → 완료 — 각 단계의 채널·시스템·비용을 한눈에</p>
+            <p class="mot-jny-sub">고객이 AS를 인지하는 순간부터 완료까지 <strong>5단계 여정</strong>을 흐름으로 읽어보세요. 각 단계에서 어떤 채널·시스템이 개입하고, 비용이 발생하는 구간이 어디인지 한눈에 파악할 수 있습니다.</p>
           </div>
           <span class="ov-period-tag">2026.04 기준</span>
         </div>
@@ -1860,6 +1872,8 @@ table.t               { font-size: 14px; }
               </div>
               <div class="mot-sc-conn"></div>
               <div class="mot-sc-node-wrap">
+                <div class="mot-start-badge">▶ START</div>
+                <div class="mot-step-num">STEP 01</div>
                 <div class="mot-node mot-node-pre" title="AS 인지 단계">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
                 </div>
@@ -1876,6 +1890,7 @@ table.t               { font-size: 14px; }
               </div>
               <div class="mot-sc-conn"></div>
               <div class="mot-sc-node-wrap">
+                <div class="mot-step-num">STEP 02</div>
                 <div class="mot-node mot-node-funnel" onclick="gotoTab(1)" title="신청 페이지 퍼널 보기">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 </div>
@@ -1919,6 +1934,7 @@ table.t               { font-size: 14px; }
               </div>
               <div class="mot-sc-conn"></div>
               <div class="mot-sc-node-wrap">
+                <div class="mot-step-num">STEP 03</div>
                 <div class="mot-node mot-node-contact" onclick="gotoTab(2)" title="컨택센터 용역료 보기">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.9 8.6a16 16 0 0 0 6 6l.97-.95a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                 </div>
@@ -1941,6 +1957,7 @@ table.t               { font-size: 14px; }
               </div>
               <div class="mot-sc-conn"></div>
               <div class="mot-sc-node-wrap">
+                <div class="mot-step-num">STEP 04</div>
                 <div class="mot-node mot-node-as" onclick="gotoTab(3)" title="AS 조치 현황 보기">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                 </div>
@@ -1982,6 +1999,7 @@ table.t               { font-size: 14px; }
               </div>
               <div class="mot-sc-conn"></div>
               <div class="mot-sc-node-wrap">
+                <div class="mot-step-num">STEP 05</div>
                 <div class="mot-node mot-node-done" title="AS 완료">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
                 </div>
@@ -5189,6 +5207,7 @@ function drawMotArrows() {
   const gr = grid.getBoundingClientRect();
 
   // 기본 순차 화살표 (1→2, 2→3, 3→4, 4→5)
+  const arrowLabels = ['온라인 신청', '접수 요청', 'AS 배정', '조치 완료'];
   for (let i = 0; i < nodes.length - 1; i++) {
     const a = nodes[i].getBoundingClientRect();
     const b = nodes[i + 1].getBoundingClientRect();
@@ -5205,6 +5224,20 @@ function drawMotArrows() {
     line.setAttribute('stroke-width', '2');
     line.setAttribute('marker-end', 'url(#mot-ah)');
     svg.appendChild(line);
+    // 라벨
+    const mx = (x1 + x2) / 2;
+    const my = Math.min(y1, y2) - 7;
+    const txt = document.createElementNS(ns, 'text');
+    txt.setAttribute('x', mx);
+    txt.setAttribute('y', my);
+    txt.setAttribute('text-anchor', 'middle');
+    txt.setAttribute('font-size', '9.5');
+    txt.setAttribute('font-weight', '600');
+    txt.setAttribute('fill', color);
+    txt.setAttribute('font-family', 'Pretendard Variable, Pretendard, system-ui, sans-serif');
+    txt.setAttribute('letter-spacing', '0.02em');
+    txt.textContent = arrowLabels[i] || '';
+    svg.appendChild(txt);
   }
 
   // 분기 화살표: AS 인지(0) → CS 상담&접수(2) — 아래쪽으로 휘는 곡선
@@ -5225,6 +5258,17 @@ function drawMotArrows() {
     path.setAttribute('fill', 'none');
     path.setAttribute('marker-end', 'url(#mot-ah-branch)');
     svg.appendChild(path);
+    // 분기 라벨
+    const btxt = document.createElementNS(ns, 'text');
+    btxt.setAttribute('x', cx);
+    btxt.setAttribute('y', cy + 14);
+    btxt.setAttribute('text-anchor', 'middle');
+    btxt.setAttribute('font-size', '9');
+    btxt.setAttribute('font-weight', '600');
+    btxt.setAttribute('fill', colorBranch);
+    btxt.setAttribute('font-family', 'Pretendard Variable, Pretendard, system-ui, sans-serif');
+    btxt.textContent = '전화 직접 연락';
+    svg.appendChild(btxt);
   }
 
   grid.appendChild(svg);
