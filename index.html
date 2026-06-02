@@ -1307,6 +1307,60 @@ table.mtx {
 }
 
 /* =====================================================
+   ANALYSIS SUMMARY CARD
+   ===================================================== */
+.analysis-summary {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-1);
+}
+.analysis-summary-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; gap: 12px;
+}
+.analysis-summary-title {
+  font-size: 14.5px; font-weight: 700; color: var(--ink);
+  display: flex; align-items: center; gap: 8px;
+  letter-spacing: -0.1px;
+}
+.analysis-summary-title svg { flex-shrink: 0; }
+.analysis-summary-period {
+  font-size: 11px; color: var(--ink-3); font-weight: 500;
+  background: var(--surface-3); padding: 3px 10px; border-radius: 999px;
+  white-space: nowrap;
+}
+.analysis-items {
+  display: flex; flex-direction: column; gap: 0;
+}
+.analysis-item {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 14px 0;
+  border-top: 1px solid var(--border-soft);
+}
+.analysis-items .analysis-item:first-child { border-top: none; padding-top: 0; }
+.analysis-item-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: grid; place-items: center; flex-shrink: 0;
+  font-size: 15px;
+  background: var(--surface-2); border: 1px solid var(--border-soft);
+}
+.analysis-item-body { flex: 1; min-width: 0; }
+.analysis-item-title {
+  font-size: 13px; font-weight: 700; color: var(--ink);
+  margin-bottom: 4px; letter-spacing: -0.1px;
+}
+.analysis-item-desc {
+  font-size: 13px; color: var(--ink-2); line-height: 1.65;
+}
+.analysis-item-desc strong { color: var(--ink); font-weight: 700; }
+.analysis-item-desc .hi-pos { color: var(--pos); font-weight: 700; }
+.analysis-item-desc .hi-neg { color: var(--neg); font-weight: 700; }
+.analysis-item-desc .hi-warn { color: var(--warn); font-weight: 700; }
+
+/* =====================================================
    SECTION COLOR THEMES
    ===================================================== */
 
@@ -2298,6 +2352,67 @@ table.t               { font-size: 14px; }
           <button class="seg-btn" data-cmp="1">서울경인</button>
           <button class="seg-btn" data-cmp="2">전국 vs 서울경인</button>
           <button class="seg-btn" data-cmp="3">년도별 동월 비교</button>
+        </div>
+      </div>
+
+      <!-- ── 분석 요약 ── -->
+      <div class="analysis-summary">
+        <div class="analysis-summary-head">
+          <div class="analysis-summary-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            전국 A/S 처리 현황 요약
+          </div>
+          <span class="analysis-summary-period">25년 5월 ~ 26년 4월 기준</span>
+        </div>
+        <div class="analysis-items">
+
+          <div class="analysis-item">
+            <div class="analysis-item-icon">📦</div>
+            <div class="analysis-item-body">
+              <div class="analysis-item-title">A/S 물량 트렌드</div>
+              <div class="analysis-item-desc">
+                연간 월평균 약 <strong>1,514건</strong>의 A/S가 완료되고 있으며, 이사·신학기 시즌 등의 영향으로
+                <strong>7~9월(여름)</strong>과 <strong>1~3월(겨울~초봄)</strong>에 일시적으로 접수 건수가
+                <strong>1,700~1,800건 이상</strong>으로 크게 증가하는 경향을 보입니다.
+              </div>
+            </div>
+          </div>
+
+          <div class="analysis-item">
+            <div class="analysis-item-icon">⚡</div>
+            <div class="analysis-item-body">
+              <div class="analysis-item-title">A/S 효율성 개선</div>
+              <div class="analysis-item-desc">
+                2025년 상반기(5월 기준) 평균 <strong>8.5일</strong>이 소요되던 조치 기간이 점진적으로 단축되어,
+                2026년 초에는 평균 <span class="hi-pos">5.8일 ~ 5.9일</span> 수준까지 떨어졌습니다.
+                조치 속도가 약 <span class="hi-pos">30% 이상 향상</span>된 긍정적인 지표입니다.
+              </div>
+            </div>
+          </div>
+
+          <div class="analysis-item">
+            <div class="analysis-item-icon">🔁</div>
+            <div class="analysis-item-body">
+              <div class="analysis-item-title">재방문율 (N차율)</div>
+              <div class="analysis-item-desc">
+                전체 A/S 건 중 한 번에 해결되지 못하고 2회 이상 방문하거나 추가 조치가 필요했던 비율은
+                평균 약 <span class="hi-warn">25.1%</span>입니다. 즉, <strong>4건 중 1건</strong>은 재방문이 발생하고 있으며,
+                이 수치는 기간 내에 크게 줄어들지 않고 일정하게 유지되는 편입니다.
+              </div>
+            </div>
+          </div>
+
+          <!-- 분석 항목 추가 시 아래 블록을 복사해 사용하세요 -->
+          <!--
+          <div class="analysis-item">
+            <div class="analysis-item-icon">🔍</div>
+            <div class="analysis-item-body">
+              <div class="analysis-item-title">항목 제목</div>
+              <div class="analysis-item-desc">분석 내용을 여기에 입력하세요.</div>
+            </div>
+          </div>
+          -->
+
         </div>
       </div>
 
