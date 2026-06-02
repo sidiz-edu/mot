@@ -4535,6 +4535,7 @@ function fmtNum(v) {
 }
 function renderKpis() {
   const row = document.getElementById('kpi-row');
+  if (!row) return;
   row.innerHTML = '';
   KPIS.slice(0, 4).forEach((k, i) => {
     const card = document.createElement('div');
