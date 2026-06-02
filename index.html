@@ -2484,7 +2484,7 @@ table.t               { font-size: 14px; }
           </div>
         </div>
         <div class="card mt-16">
-          <div class="card-head"><div><div class="card-title">엔지니어 vs 시공팀 비율</div><div class="card-sub">서울경인 월별 처리 구성</div></div>
+          <div class="card-head"><div><div class="card-title">엔지니어 vs 시공팀 비율</div><div class="card-sub">서울경인 · 합계 100% 기준 월별 추세</div></div>
             <div class="lg-row" style="margin:0">
               <span class="lg-chip"><i style="background:#073D20"></i>엔지니어</span>
               <span class="lg-chip"><i style="background:#48B47A"></i>시공팀</span>
@@ -4578,10 +4578,16 @@ function renderSec1() {
   makeLine ('c_se_close', '#073D20',    DATA.seClose, DATA.natMonths, true,  '1차 종결률');
   makeLine ('c_se_n',     '#48B47A',    DATA.seN,     DATA.natMonths, true,  'N차율');
   makeLine ('c_se_days',  '#1A7A45',    DATA.seDays,  DATA.natMonths, false, '평균 조치 (일)');
-  makeMultiBar('c_se_team', [
-    {label: '엔지니어', data: DATA.seEng, color: '#073D20'},
-    {label: '시공팀',   data: DATA.seSig, color: '#48B47A'},
-  ], DATA.natMonths, false, false);
+  // 엔지니어 vs 시공팀 비율 — 합계 100% 기준 추세선
+  {
+    const total = DATA.seEng.map((v, i) => v + (DATA.seSig[i] || 0));
+    const engRatio = DATA.seEng.map((v, i) => total[i] ? Math.round(v / total[i] * 1000) / 10 : null);
+    const sigRatio = DATA.seSig.map((v, i) => total[i] ? Math.round(v / total[i] * 1000) / 10 : null);
+    makeMultiLine('c_se_team', [
+      {label: '엔지니어', color: '#073D20', data: engRatio, fill: false},
+      {label: '시공팀',   color: '#48B47A', data: sigRatio, fill: false},
+    ], DATA.natMonths, true);
+  }
 
   // 전국 vs 서울경인
   makeMultiLine('c_cmp_count', [
