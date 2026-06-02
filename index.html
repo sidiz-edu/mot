@@ -2352,6 +2352,7 @@ table.t               { font-size: 14px; }
           <button class="seg-btn" data-cmp="1">서울경인</button>
           <button class="seg-btn" data-cmp="2">전국 vs 서울경인</button>
           <button class="seg-btn" data-cmp="3">년도별 동월 비교</button>
+          <button class="seg-btn" data-cmp="4">원본 데이터</button>
         </div>
       </div>
 
@@ -2544,6 +2545,68 @@ table.t               { font-size: 14px; }
           <div class="card">
             <div class="card-head"><div><div class="card-title">평균 조치기간 · 년도별</div><div class="card-sub">년도별 동월 비교</div></div></div>
             <div class="chart-box"><canvas id="c_yoy_days"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- raw data: view 4 -->
+      <div id="view-4" style="display:none">
+        <div class="card mt-16">
+          <div class="card-head">
+            <div><div class="card-title">A/S 현황 — 전국</div><div class="card-sub">조치월 기준 · 전국 진행 건수</div></div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="t">
+              <thead><tr>
+                <th style="text-align:left">조치월</th>
+                <th>진행건수</th><th>N차 건</th><th>N차율</th>
+                <th>1차종결건수</th><th>1차 종결율</th><th>평균 조치기간</th>
+              </tr></thead>
+              <tbody>
+                <tr><td>2025-05</td><td>1,482</td><td>392</td><td>26.5%</td><td>1,090</td><td>73.5%</td><td>8.52일</td></tr>
+                <tr><td>2025-06</td><td>1,454</td><td>324</td><td>22.3%</td><td>1,130</td><td>77.7%</td><td>7.32일</td></tr>
+                <tr><td>2025-07</td><td>1,737</td><td>390</td><td>22.5%</td><td>1,347</td><td>77.5%</td><td>7.43일</td></tr>
+                <tr><td>2025-08</td><td>1,830</td><td>397</td><td>21.7%</td><td>1,433</td><td>78.3%</td><td>8.00일</td></tr>
+                <tr><td>2025-09</td><td>1,809</td><td>466</td><td>25.8%</td><td>1,343</td><td>74.2%</td><td>7.18일</td></tr>
+                <tr><td>2025-10</td><td>1,464</td><td>325</td><td>22.2%</td><td>1,139</td><td>77.8%</td><td>7.42일</td></tr>
+                <tr><td>2025-11</td><td>1,460</td><td>416</td><td>28.5%</td><td>1,044</td><td>71.5%</td><td>7.05일</td></tr>
+                <tr><td>2025-12</td><td>1,454</td><td>373</td><td>25.7%</td><td>1,081</td><td>74.3%</td><td>6.33일</td></tr>
+                <tr><td>2026-01</td><td>1,635</td><td>453</td><td>27.7%</td><td>1,182</td><td>72.3%</td><td>5.80일</td></tr>
+                <tr><td>2026-02</td><td>1,217</td><td>332</td><td>27.3%</td><td>885</td><td>72.7%</td><td>5.83일</td></tr>
+                <tr><td>2026-03</td><td>1,693</td><td>478</td><td>28.2%</td><td>1,215</td><td>71.8%</td><td>5.96일</td></tr>
+                <tr><td>2026-04</td><td>1,464</td><td>374</td><td>25.5%</td><td>1,090</td><td>74.5%</td><td>5.95일</td></tr>
+                <tr><td>2026-05</td><td>1,326</td><td>321</td><td>24.2%</td><td>1,005</td><td>75.8%</td><td>6.59일</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card mt-16">
+          <div class="card-head">
+            <div><div class="card-title">A/S 현황 — 서울경인</div><div class="card-sub">조치월 기준 · 서울경인 진행 건수</div></div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="t">
+              <thead><tr>
+                <th style="text-align:left">조치월</th>
+                <th>진행건수</th><th>N차 건</th><th>N차율</th>
+                <th>1차종결건수</th><th>1차 종결율</th><th>평균 조치기간</th>
+                <th>엔지니어 비율</th><th>시공팀 비율</th>
+              </tr></thead>
+              <tbody>
+                <tr><td>2025-05</td><td>982</td><td>240</td><td>24.4%</td><td>742</td><td>75.6%</td><td>9.06일</td><td>70.5%</td><td>33.9%</td></tr>
+                <tr><td>2025-06</td><td>954</td><td>184</td><td>19.3%</td><td>770</td><td>80.7%</td><td>7.82일</td><td>76.2%</td><td>27.3%</td></tr>
+                <tr><td>2025-07</td><td>1,159</td><td>207</td><td>17.9%</td><td>952</td><td>82.1%</td><td>7.87일</td><td>62.2%</td><td>42.2%</td></tr>
+                <tr><td>2025-08</td><td>1,270</td><td>249</td><td>19.6%</td><td>1,021</td><td>80.4%</td><td>8.41일</td><td>76.0%</td><td>28.6%</td></tr>
+                <tr><td>2025-09</td><td>1,249</td><td>279</td><td>22.3%</td><td>970</td><td>77.7%</td><td>7.71일</td><td>74.6%</td><td>30.6%</td></tr>
+                <tr><td>2025-10</td><td>1,014</td><td>204</td><td>20.1%</td><td>810</td><td>79.9%</td><td>8.09일</td><td>74.3%</td><td>29.8%</td></tr>
+                <tr><td>2025-11</td><td>972</td><td>252</td><td>25.9%</td><td>720</td><td>74.1%</td><td>7.42일</td><td>74.5%</td><td>29.8%</td></tr>
+                <tr><td>2025-12</td><td>680</td><td>150</td><td>22.1%</td><td>530</td><td>77.9%</td><td>6.10일</td><td>80.4%</td><td>23.2%</td></tr>
+                <tr><td>2026-01</td><td>869</td><td>212</td><td>24.4%</td><td>657</td><td>75.6%</td><td>5.65일</td><td>73.4%</td><td>31.5%</td></tr>
+                <tr><td>2026-02</td><td>813</td><td>178</td><td>21.9%</td><td>635</td><td>78.1%</td><td>6.01일</td><td>80.1%</td><td>22.4%</td></tr>
+                <tr><td>2026-03</td><td>841</td><td>194</td><td>23.1%</td><td>647</td><td>76.9%</td><td>5.81일</td><td>82.5%</td><td>19.6%</td></tr>
+                <tr><td>2026-04</td><td>736</td><td>155</td><td>21.1%</td><td>581</td><td>78.9%</td><td>5.89일</td><td>82.3%</td><td>20.7%</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -5223,7 +5286,7 @@ document.querySelectorAll('.seg-btn[data-cmp]').forEach(btn => {
   btn.addEventListener('click', () => {
     const idx = +btn.dataset.cmp;
     document.querySelectorAll('.seg-btn[data-cmp]').forEach(b => b.classList.toggle('active', b===btn));
-    ['view-0','view-1','view-2','view-3'].forEach((id, i) => {
+    ['view-0','view-1','view-2','view-3','view-4'].forEach((id, i) => {
       const el = document.getElementById(id);
       if (el) el.style.display = i===idx ? 'block' : 'none';
     });
