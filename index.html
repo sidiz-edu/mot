@@ -1477,36 +1477,73 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
 }
 
 /* =====================================================
-   MOT STAGGER GRID
+   MOT STAGGER GRID — simplified
    ===================================================== */
 .mot-stagger-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 0 10px;
   position: relative;
+  padding: 48px 0 36px;
+  align-items: center;
 }
 .mot-stagger-grid::before { display: none; }
 .mot-sc-col {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-.mot-sc-top, .mot-sc-bottom {
-  width: 100%;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.mot-sc-top { justify-content: flex-end; }
-.mot-sc-bottom { justify-content: flex-start; }
-.mot-sc-conn {
-  width: 2px; height: 28px; flex-shrink: 0;
-  background: repeating-linear-gradient(to bottom, var(--border-strong) 0, var(--border-strong) 4px, transparent 4px, transparent 8px);
+  justify-content: center;
 }
 .mot-sc-node-wrap {
   display: flex; flex-direction: column; align-items: center;
   flex-shrink: 0; position: relative; z-index: 1;
+  cursor: pointer;
 }
+.mot-sc-node-wrap:hover .mot-node { transform: scale(1.08); box-shadow: 0 6px 24px rgba(0,0,0,0.25); }
+
+/* 팝오버 */
+.mot-popover {
+  position: absolute;
+  z-index: 100;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: 0 8px 32px rgba(26,25,22,0.14);
+  padding: 16px 18px;
+  min-width: 220px; max-width: 280px;
+  pointer-events: all;
+  animation: popFadeIn .15s ease;
+}
+@keyframes popFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mot-popover-title {
+  font-size: 13px; font-weight: 700; color: var(--ink);
+  margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border-soft);
+}
+.mot-popover ul {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.mot-popover ul li {
+  font-size: 12px; color: var(--ink-2); line-height: 1.5;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.mot-popover ul li::before { content: '—'; color: var(--ink-4); font-size: 9px; flex-shrink: 0; }
+.mot-popover-extra {
+  margin-top: 10px; padding: 7px 10px;
+  background: var(--surface-2); border-radius: var(--r-sm);
+  font-size: 11.5px; color: var(--ink-2); line-height: 1.5;
+}
+.mot-popover-close {
+  position: absolute; top: 10px; right: 12px;
+  background: none; border: none; cursor: pointer;
+  color: var(--ink-4); font-size: 16px; line-height: 1;
+  padding: 2px 4px; border-radius: 4px;
+}
+.mot-popover-close:hover { background: var(--surface-3); color: var(--ink); }
 .mot-tp-card-title { font-size: 13px !important; }
 .mot-tp-items { font-size: 12px !important; line-height: 1.8 !important; }
 .mot-stat-pill { font-size: 10.5px !important; }
@@ -1910,163 +1947,58 @@ table.t               { font-size: 14px; }
 
             <!-- 1 AS 인지 -->
             <div class="mot-sc-col">
-              <div class="mot-sc-top">
-                <div class="mot-tp-card">
-                  <div class="mot-tp-card-title">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    인지 경로
-                  </div>
-                  <ul class="mot-tp-items">
-                    <li>Google · Naver 검색</li>
-                    <li>주변 지인 추천</li>
-                    <li>구매처 안내</li>
-                    <li>SNS · 커뮤니티</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="mot-sc-conn"></div>
-              <div class="mot-sc-node-wrap">
+              <div class="mot-sc-node-wrap" data-node="0" onclick="showNodePopover(this, 0)">
                 <div class="mot-start-badge">▶ START</div>
                 <div class="mot-step-num">STEP 01</div>
-                <div class="mot-node mot-node-pre" title="AS 인지 단계">
+                <div class="mot-node mot-node-pre">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
                 </div>
                 <div class="mot-node-label">AS 인지</div>
               </div>
-              <div class="mot-sc-conn"></div>
-              <div class="mot-sc-bottom">
-              </div>
             </div>
 
-            <!-- 2 AS 신청 페이지 (짝수: 정보위 카드아래) -->
-            <div class="mot-sc-col mot-sc-col-flip">
-              <div class="mot-sc-top">
-              </div>
-              <div class="mot-sc-conn"></div>
-              <div class="mot-sc-node-wrap">
+            <!-- 2 AS 신청 페이지 -->
+            <div class="mot-sc-col">
+              <div class="mot-sc-node-wrap" data-node="1" onclick="showNodePopover(this, 1)">
                 <div class="mot-step-num">STEP 02</div>
-                <div class="mot-node mot-node-funnel" onclick="gotoTab(1)" title="신청 페이지 퍼널 보기">
+                <div class="mot-node mot-node-funnel">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 </div>
-                <div class="mot-node-label"><a href="https://kr.sidiz.com/pages/as-main" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:2px">AS 신청 페이지<br>(시디즈 닷컴)</a></div>
-              </div>
-              <div class="mot-sc-conn"></div>
-              <div class="mot-sc-bottom">
-                <div class="mot-tp-card" style="border-top:3px solid var(--accent)">
-                  <div class="mot-tp-card-title" style="color:var(--accent)">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                    신청 페이지 퍼널
-                  </div>
-                  <ul class="mot-tp-items">
-                    <li>① 메인 조회 <span class="mot-stat-pill">1,390회/주</span></li>
-                    <li>② AS신청 클릭 <span class="mot-stat-pill">29.5%</span></li>
-                    <li>③ 제품 선택</li>
-                    <li>④ 증상 입력</li>
-                    <li>⑤ 고객정보 입력 <span class="mot-stat-pill">86.2%</span></li>
-                    <li>⑥ 신청 완료 <span class="mot-stat-pill" style="background:var(--accent-soft);color:var(--accent-ink)">112건/주</span></li>
-                  </ul>
-                </div>
+                <div class="mot-node-label">AS 신청 페이지</div>
               </div>
             </div>
 
-            <!-- 3 CS 상담접수 -->
+            <!-- 3 컨택센터 -->
             <div class="mot-sc-col">
-              <div class="mot-sc-top">
-                <div class="mot-tp-card" style="border-top:3px solid var(--warn)">
-                  <div class="mot-tp-card-title" style="color:var(--warn)">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.9 8.6a16 16 0 0 0 6 6l.97-.95a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                    상담 채널 (컨택센터)
-                  </div>
-                  <ul class="mot-tp-items">
-                    <li>유선 전화 (인바운드) <span class="mot-stat-pill" style="background:var(--warn-soft);color:var(--warn)">1,833건</span></li>
-                    <li>해피톡 채팅 (모바일)</li>
-                    <li>게시판 (이메일)</li>
-                    <li>타부서 이관</li>
-                    <li>접수 처리 <span class="mot-stat-pill" style="background:var(--warn-soft);color:var(--warn)">2,126건</span></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="mot-sc-conn"></div>
-              <div class="mot-sc-node-wrap">
+              <div class="mot-sc-node-wrap" data-node="2" onclick="showNodePopover(this, 2)">
                 <div class="mot-step-num">STEP 03</div>
-                <div class="mot-node mot-node-contact" onclick="gotoTab(2)" title="컨택센터 용역료 보기">
+                <div class="mot-node mot-node-contact">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.9 8.6a16 16 0 0 0 6 6l.97-.95a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                 </div>
                 <div class="mot-node-label">컨택센터<br>상담&amp;접수</div>
               </div>
-              <div class="mot-sc-conn"></div>
-              <div class="mot-sc-bottom">
-                <div class="mot-lower-col c-contact" style="border-top:2.5px solid var(--warn)">
-                  <div class="mot-lower-cost">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
-                    CS 용역료 <strong>7,388만원/월</strong>
-                  </div>
-                </div>
-              </div>
             </div>
 
-            <!-- 4 현장 조치 (짝수: 정보위 카드아래) -->
-            <div class="mot-sc-col mot-sc-col-flip">
-              <div class="mot-sc-top">
-              </div>
-              <div class="mot-sc-conn"></div>
-              <div class="mot-sc-node-wrap">
+            <!-- 4 현장 AS 조치 -->
+            <div class="mot-sc-col">
+              <div class="mot-sc-node-wrap" data-node="3" onclick="showNodePopover(this, 3)">
                 <div class="mot-step-num">STEP 04</div>
-                <div class="mot-node mot-node-as" onclick="gotoTab(3)" title="AS 조치 현황 보기">
+                <div class="mot-node mot-node-as">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                 </div>
                 <div class="mot-node-label">현장 AS 조치</div>
-              </div>
-              <div class="mot-sc-conn"></div>
-              <div class="mot-sc-bottom">
-                <div class="mot-tp-card" style="border-top:3px solid var(--pos)">
-                  <div class="mot-tp-card-title" style="color:var(--pos)">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                    조치 유형
-                  </div>
-                  <ul class="mot-tp-items">
-                    <li>엔지니어 현장 수리 <span class="mot-stat-pill" style="background:var(--pos-soft);color:var(--pos)">서울경인 736건</span></li>
-                    <li>시공팀 배정</li>
-                    <li>N차 재방문 <span class="mot-stat-pill">25.5%</span></li>
-                    <li>전국 조치 건수 <span class="mot-stat-pill" style="background:var(--pos-soft);color:var(--pos)">1,464건</span></li>
-                    <li>평균 조치기간 <span class="mot-stat-pill">5.9일</span></li>
-                  </ul>
-                </div>
               </div>
             </div>
 
             <!-- 5 AS 완료 -->
             <div class="mot-sc-col">
-              <div class="mot-sc-top">
-                <div class="mot-tp-card">
-                  <div class="mot-tp-card-title">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                    결과 분기
-                  </div>
-                  <ul class="mot-tp-items">
-                    <li>1차 종결 <span class="mot-stat-pill" style="background:var(--pos-soft);color:var(--pos)">74.5%</span></li>
-                    <li>N차 재배정 <span class="mot-stat-pill">25.5%</span></li>
-                    <li>서울경인 N차 <span class="mot-stat-pill">21.1%</span></li>
-                    <li>고객 만족 확인</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="mot-sc-conn"></div>
-              <div class="mot-sc-node-wrap">
+              <div class="mot-sc-node-wrap" data-node="4" onclick="showNodePopover(this, 4)">
                 <div class="mot-step-num">STEP 05</div>
-                <div class="mot-node mot-node-done" title="AS 완료">
+                <div class="mot-node mot-node-done">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
                 </div>
                 <div class="mot-node-label">AS 완료</div>
               </div>
-              <div class="mot-sc-conn"></div>
-              <div class="mot-sc-bottom">
-                <div class="mot-lower-col c-done" style="border-top:2.5px solid var(--ink-3)">
-                  <div class="mot-loop-note">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-                    N차 발생 시 → 현장조치 재배정
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -5358,6 +5290,84 @@ function rebuildAll() {
   hidden.forEach(el => { el.style.display = 'none'; });
 }
 window.__rebuildCharts = null;
+
+// ---- MOT Node 팝오버 ----
+const NODE_POPUPS = [
+  {
+    title: '인지 경로', color: 'var(--ink-3)',
+    items: ['Google · Naver 검색', '주변 지인 추천', '구매처 안내', 'SNS · 커뮤니티'],
+  },
+  {
+    title: '신청 페이지 퍼널', color: 'var(--accent)',
+    items: ['① 메인 조회 — 1,390회/주', '② AS신청 클릭 — 29.5%', '③ 제품 선택', '④ 증상 입력', '⑤ 고객정보 입력 — 86.2%', '⑥ 신청 완료 — 112건/주'],
+    link: { label: '퍼널 상세 보기 →', tab: 1 },
+  },
+  {
+    title: '상담 채널 (컨택센터)', color: 'var(--warn)',
+    items: ['유선 전화 (인바운드) — 1,833건', '해피톡 채팅 (모바일)', '게시판 (이메일)', '타부서 이관', '접수 처리 — 2,126건'],
+    extra: '💰 CS 용역료 7,388만원/월',
+    link: { label: '용역료 상세 보기 →', tab: 2 },
+  },
+  {
+    title: '조치 유형', color: 'var(--pos)',
+    items: ['엔지니어 현장 수리 — 서울경인 736건', '시공팀 배정', 'N차 재방문 — 25.5%', '전국 조치 건수 — 1,464건', '평균 조치기간 — 5.9일'],
+    link: { label: 'AS 현황 상세 보기 →', tab: 3 },
+  },
+  {
+    title: '결과 분기', color: 'var(--ink)',
+    items: ['1차 종결 — 74.5%', 'N차 재배정 — 25.5%', '서울경인 N차 — 21.1%', '고객 만족 확인'],
+    extra: '🔁 N차 발생 시 → 현장조치 재배정',
+  },
+];
+
+let _activePopover = null;
+
+function showNodePopover(wrap, idx) {
+  // 같은 노드 재클릭 시 닫기
+  if (_activePopover && _activePopover.dataset.forNode === String(idx)) {
+    closeNodePopover(); return;
+  }
+  closeNodePopover();
+
+  const d = NODE_POPUPS[idx];
+  if (!d) return;
+
+  const pop = document.createElement('div');
+  pop.className = 'mot-popover';
+  pop.dataset.forNode = idx;
+
+  const itemsHtml = d.items.map(it => `<li>${it}</li>`).join('');
+  const extraHtml = d.extra ? `<div class="mot-popover-extra">${d.extra}</div>` : '';
+  const linkHtml  = d.link  ? `<div style="margin-top:10px"><button onclick="gotoTab(${d.link.tab})" style="background:none;border:none;cursor:pointer;font-size:12px;font-weight:600;color:${d.color};padding:0">${d.link.label}</button></div>` : '';
+
+  pop.innerHTML = `
+    <button class="mot-popover-close" onclick="closeNodePopover()">✕</button>
+    <div class="mot-popover-title" style="color:${d.color}">${d.title}</div>
+    <ul>${itemsHtml}</ul>
+    ${extraHtml}${linkHtml}
+  `;
+
+  wrap.appendChild(pop);
+  _activePopover = pop;
+
+  // 화면 밖으로 넘어가는지 체크 후 위치 조정
+  requestAnimationFrame(() => {
+    const pr = pop.getBoundingClientRect();
+    const wr = wrap.getBoundingClientRect();
+    if (pr.right > window.innerWidth - 16) pop.style.right = '0';
+    if (pr.left < 16) pop.style.left = '0';
+  });
+}
+
+function closeNodePopover() {
+  if (_activePopover) { _activePopover.remove(); _activePopover = null; }
+}
+
+document.addEventListener('click', e => {
+  if (_activePopover && !e.target.closest('.mot-sc-node-wrap') && !e.target.closest('.mot-popover')) {
+    closeNodePopover();
+  }
+});
 
 // ---- MOT Journey 화살표 ----
 function drawMotArrows() {
