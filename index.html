@@ -1504,10 +1504,6 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
 /* 팝오버 */
 .mot-popover {
   position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 10px;
   z-index: 100;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -5370,20 +5366,27 @@ function showNodePopover(wrap, idx) {
     ${extraHtml}${linkHtml}
   `;
 
-  wrap.appendChild(pop);
+  // grid에 붙여 절대 좌표로 위치 계산
+  const grid = document.querySelector('.mot-stagger-grid');
+  grid.appendChild(pop);
   _activePopover = pop;
 
-  // 화면 경계 벗어날 경우 위치 보정
   requestAnimationFrame(() => {
-    const pr = pop.getBoundingClientRect();
-    if (pr.right > window.innerWidth - 16) {
-      pop.style.left = 'auto';
-      pop.style.right = '0';
-      pop.style.transform = 'none';
-    } else if (pr.left < 16) {
-      pop.style.left = '0';
-      pop.style.transform = 'none';
-    }
+    const wrapRect = wrap.getBoundingClientRect();
+    const gridRect = grid.getBoundingClientRect();
+    const popW = pop.offsetWidth;
+
+    // wrap 하단 기준, 가운데 정렬
+    let top  = wrapRect.bottom - gridRect.top + 10;
+    let left = (wrapRect.left + wrapRect.width / 2) - gridRect.left - popW / 2;
+
+    // 화면 경계 보정
+    const rightEdge = gridRect.left + left + popW;
+    if (rightEdge > window.innerWidth - 16) left -= (rightEdge - (window.innerWidth - 16));
+    if (gridRect.left + left < 16) left = 16 - gridRect.left;
+
+    pop.style.top  = top  + 'px';
+    pop.style.left = left + 'px';
   });
 }
 
