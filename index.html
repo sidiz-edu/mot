@@ -2907,9 +2907,11 @@ table.t               { font-size: 14px; }
 
         <!-- sub 1: 항목별 추이 -->
         <div id="cost-sub-1" style="display:none">
+
+          <!-- 상담 3채널 -->
           <div class="card">
             <div class="card-head">
-              <div><div class="card-title">항목별 건수 비율 추이</div><div class="card-sub">전년 동월 비교 · 실선 26년 · 점선 25년</div></div>
+              <div><div class="card-title">상담 채널 건수 비율 추이</div><div class="card-sub">유선·모바일·게시판 3채널 합계 기준 · 실선 26년 · 점선 25년</div></div>
               <div style="display:flex;gap:12px;align-items:center">
                 <div id="lg-contact-ratio" class="lg-row" style="margin:0"></div>
                 <div class="yoy-legend" style="margin-left:8px;padding-left:8px;border-left:1px solid var(--border)">
@@ -2920,32 +2922,59 @@ table.t               { font-size: 14px; }
             </div>
             <div class="chart-box h-260"><canvas id="c_contact_ratio_line"></canvas></div>
           </div>
-          <div class="card mt-16">
-            <div class="card-head">
-              <div><div class="card-title">항목별 건수 추이</div><div class="card-sub">전년 동월 비교 · 실선 26년 · 점선 25년</div></div>
-              <div style="display:flex;gap:12px;align-items:center">
-                <div id="lg-contact-count-2" class="lg-row" style="margin:0"></div>
-                <div class="yoy-legend" style="margin-left:8px;padding-left:8px;border-left:1px solid var(--border)">
+          <div class="grid-2 mt-16">
+            <div class="card">
+              <div class="card-head">
+                <div><div class="card-title">상담 채널 건수 추이</div><div class="card-sub">유선·모바일·게시판 · 실선 26년 · 점선 25년</div></div>
+                <div style="display:flex;gap:12px;align-items:center">
+                  <div id="lg-contact-count-2" class="lg-row" style="margin:0"></div>
+                  <div class="yoy-legend" style="margin-left:8px;padding-left:8px;border-left:1px solid var(--border)">
+                    <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
+                    <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-box h-260"><canvas id="c_contact_count_line"></canvas></div>
+            </div>
+            <div class="card">
+              <div class="card-head">
+                <div><div class="card-title">상담 채널 금액 추이</div><div class="card-sub">유선·모바일·게시판 · 단위: 만원</div></div>
+                <div style="display:flex;gap:12px;align-items:center">
+                  <div id="lg-contact-amount-2" class="lg-row" style="margin:0"></div>
+                  <div class="yoy-legend" style="margin-left:8px;padding-left:8px;border-left:1px solid var(--border)">
+                    <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
+                    <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-box h-260"><canvas id="c_contact_amount_line"></canvas></div>
+            </div>
+          </div>
+
+          <!-- 접수(AS) 별도 -->
+          <div class="grid-2 mt-16">
+            <div class="card">
+              <div class="card-head">
+                <div><div class="card-title">접수 (AS) 건수 추이</div><div class="card-sub">상담 채널과 별도 · 실선 26년 · 점선 25년</div></div>
+                <div class="yoy-legend">
                   <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
                   <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
                 </div>
               </div>
+              <div class="chart-box h-220"><canvas id="c_contact_recv_count"></canvas></div>
             </div>
-            <div class="chart-box h-260"><canvas id="c_contact_count_line"></canvas></div>
-          </div>
-          <div class="card mt-16">
-            <div class="card-head">
-              <div><div class="card-title">항목별 금액 추이</div><div class="card-sub">단위: 만원 · 전년 동월 비교</div></div>
-              <div style="display:flex;gap:12px;align-items:center">
-                <div id="lg-contact-amount-2" class="lg-row" style="margin:0"></div>
-                <div class="yoy-legend" style="margin-left:8px;padding-left:8px;border-left:1px solid var(--border)">
+            <div class="card">
+              <div class="card-head">
+                <div><div class="card-title">접수 (AS) 금액 추이</div><div class="card-sub">상담 채널과 별도 · 단위: 만원</div></div>
+                <div class="yoy-legend">
                   <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
                   <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
                 </div>
               </div>
+              <div class="chart-box h-220"><canvas id="c_contact_recv_amount"></canvas></div>
             </div>
-            <div class="chart-box h-280"><canvas id="c_contact_amount_line"></canvas></div>
           </div>
+
         </div>
 
         <!-- sub 2: 상세 표 -->
@@ -4755,11 +4784,12 @@ const CONTACT_PALETTE = ['#CC3D00', '#E85A00', '#F57D20', '#F9A84D'];
 
 function renderSec3() {
   // 항목별 추이 범례 (색상만 표시, 실선=26년/점선=25년 구분)
+  // 상담 3채널만 범례 표시 (접수AS 제외)
   const renderLegend = (elId) => {
     const el = document.getElementById(elId);
     if (!el) return;
     el.innerHTML = '';
-    DATA.contact.forEach((item, i) => {
+    DATA.contact.slice(0, 3).forEach((item, i) => {
       const c = CONTACT_PALETTE[i] || COLORS.ink2;
       el.insertAdjacentHTML('beforeend', `<span class="lg-chip"><i style="background:${c}"></i>${item.name}</span>`);
     });
@@ -4820,16 +4850,17 @@ function renderSec3() {
 
   // ── [항목별 추이] tab ─────────────────────────────────────
 
-  // 전체 건수에서 항목별 비율 계산 (25년/26년 각각)
+  // 상담 3채널(0~2) 합계 기준 비율
   const tots25 = Array(12).fill(0);
   const tots26 = Array(12).fill(0);
-  DATA.contact.forEach(it => {
+  DATA.contact.slice(0, 3).forEach(it => {
     const { y25, y26 } = yoy_c(it.counts);
     y25.forEach((v, mi) => { tots25[mi] += (v || 0); });
     y26.forEach((v, mi) => { if (v != null) tots26[mi] += v; });
   });
 
-  const ratioItems = DATA.contact.map((it, i) => {
+  // 비율 — 상담 3채널만
+  const ratioItems = DATA.contact.slice(0, 3).map((it, i) => {
     const { y25, y26 } = yoy_c(it.counts);
     return {
       label: it.name, color: CONTACT_PALETTE[i],
@@ -4839,17 +4870,28 @@ function renderSec3() {
   });
   makeYoYMultiLine('c_contact_ratio_line', ratioItems, true);
 
-  const countItems = DATA.contact.map((it, i) => {
+  // 건수 — 상담 3채널만
+  const countItems = DATA.contact.slice(0, 3).map((it, i) => {
     const { y25, y26 } = yoy_c(it.counts);
     return { label: it.name, color: CONTACT_PALETTE[i], y25, y26 };
   });
   makeYoYMultiLine('c_contact_count_line', countItems, false);
 
-  const amountItems = DATA.contact.map((it, i) => {
+  // 금액 — 상담 3채널만
+  const amountItems = DATA.contact.slice(0, 3).map((it, i) => {
     const { y25, y26 } = yoy_c(it.amounts.map(v => Math.round(v / 10000)));
     return { label: it.name, color: CONTACT_PALETTE[i], y25, y26 };
   });
   makeYoYMultiLine('c_contact_amount_line', amountItems, false);
+
+  // 접수(AS) 별도 차트
+  const recv = DATA.contact[3];
+  if (recv) {
+    const rc = yoy_c(recv.counts);
+    const ra = yoy_c(recv.amounts.map(v => Math.round(v / 10000)));
+    makeYoYLine('c_contact_recv_count',  rc.y25, rc.y26, CONTACT_PALETTE[3], false);
+    makeYoYLine('c_contact_recv_amount', ra.y25, ra.y26, CONTACT_PALETTE[3], false);
+  }
 
   // table
   const tbody = document.getElementById('cs_table');
