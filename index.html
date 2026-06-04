@@ -1945,7 +1945,7 @@ table.t               { font-size: 14px; }
 
           <div class="mot-stagger-grid">
 
-            <!-- 1 AS 인지 -->
+            <!-- 1 AS 정보 탐색 -->
             <div class="mot-sc-col">
               <div class="mot-sc-node-wrap" data-node="0" onclick="showNodePopover(this, 0)">
                 <div class="mot-start-badge">▶ START</div>
@@ -1953,7 +1953,7 @@ table.t               { font-size: 14px; }
                 <div class="mot-node mot-node-pre">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
                 </div>
-                <div class="mot-node-label">AS 인지</div>
+                <div class="mot-node-label">AS 정보 탐색</div>
               </div>
             </div>
 
@@ -5432,7 +5432,7 @@ function drawMotArrows() {
     svg.appendChild(txt);
   }
 
-  // 분기 화살표: AS 인지(0) → CS 상담&접수(2) — 아래쪽으로 휘는 곡선
+  // 분기 화살표: AS 정보 탐색(0) → CS 상담&접수(2) — 아래쪽으로 휘는 곡선
   if (nodes.length >= 3) {
     const a = nodes[0].getBoundingClientRect();
     const b = nodes[2].getBoundingClientRect();
