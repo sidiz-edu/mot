@@ -5663,12 +5663,14 @@ function drawMotArrows() {
   svg.appendChild(defs);
 
   const gr = grid.getBoundingClientRect();
+  // 원(mot-node) 기준으로 좌표 계산
+  const circles = nodes.map(n => n.querySelector('.mot-node'));
 
   // 기본 순차 화살표 (1→2, 2→3, 3→4, 4→5)
   const arrowLabels = ['온라인 신청', '접수 요청', 'AS 배정', '조치 완료'];
   for (let i = 0; i < nodes.length - 1; i++) {
-    const a = nodes[i].getBoundingClientRect();
-    const b = nodes[i + 1].getBoundingClientRect();
+    const a = circles[i].getBoundingClientRect();
+    const b = circles[i + 1].getBoundingClientRect();
     const x1 = a.right - gr.left;
     const y1 = a.top + a.height / 2 - gr.top;
     const x2 = b.left - gr.left;
@@ -5701,9 +5703,9 @@ function drawMotArrows() {
   // 분기 화살표: AS 정보 탐색(0) → CS 상담&접수(2) — 아래쪽으로 휘는 곡선
   if (nodes.length >= 3) {
     const a = nodes[0].getBoundingClientRect();
-    const b = nodes[2].getBoundingClientRect();
-    const x1 = a.left + a.width / 2 - gr.left;
-    const y1 = a.bottom - gr.top;
+    const b = circles[2].getBoundingClientRect();
+    const x1 = circles[0].getBoundingClientRect().left + circles[0].getBoundingClientRect().width / 2 - gr.left;
+    const y1 = circles[0].getBoundingClientRect().bottom - gr.top;
     const x2 = b.left + b.width / 2 - gr.left;
     const y2 = b.bottom - gr.top;
     const cx = (x1 + x2) / 2;
