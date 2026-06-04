@@ -2589,16 +2589,15 @@ table.t               { font-size: 14px; }
       <div class="card">
         <div class="card-head">
           <div>
-            <div class="card-title">단계별 유입 추이</div>
-            <div class="card-sub">주별 단계별 사용자 수 · 6단계</div>
+            <div class="card-title">신청 클릭 이후 단계별 전환율</div>
+            <div class="card-sub">② AS신청클릭 = 100% 기준 · 이후 단계 누적 전환율</div>
           </div>
           <div class="lg-row" style="margin:0">
-            <span class="lg-chip"><i style="background:#0D2259"></i>메인조회</span>
-            <span class="lg-chip"><i style="background:var(--accent)"></i>AS신청클릭</span>
-            <span class="lg-chip"><i style="background:#3D72D7"></i>제품선택</span>
-            <span class="lg-chip"><i style="background:#6B9FE8"></i>증상입력</span>
-            <span class="lg-chip"><i style="background:#95BEFF"></i>고객정보입력</span>
-            <span class="lg-chip"><i style="background:#38BDF8"></i>신청완료</span>
+            <span class="lg-chip"><i style="background:var(--accent)"></i>② AS신청클릭 (기준)</span>
+            <span class="lg-chip"><i style="background:#3D72D7"></i>③ 제품선택</span>
+            <span class="lg-chip"><i style="background:#6B9FE8"></i>④ 증상입력</span>
+            <span class="lg-chip"><i style="background:#95BEFF"></i>⑤ 고객정보입력</span>
+            <span class="lg-chip"><i style="background:#38BDF8"></i>⑥ 신청완료</span>
           </div>
         </div>
         <div class="chart-box h-280"><canvas id="c_funnel_flow"></canvas></div>
@@ -4655,14 +4654,15 @@ function renderSec1() {
 // ---- Section 2 charts ----
 function renderSec2() {
   const F = DATA.funnel;
+  // AS신청 클릭(②)을 100% 기준으로 이후 단계 누적 전환율
+  const pct = (arr, base) => arr.map((v, i) => base[i] ? Math.round(v / base[i] * 1000) / 10 : null);
   makeMultiLine('c_funnel_flow', [
-    {label:'메인조회',     color: '#0D2259',     data: F.main,  fill: false},
-    {label:'AS신청클릭',   color: COLORS.accent, data: F.click, fill: false},
-    {label:'제품선택',     color: '#3D72D7',     data: F.pick,  fill: false},
-    {label:'증상입력',     color: '#6B9FE8',     data: F.sym,   fill: false},
-    {label:'고객정보입력', color: '#95BEFF',     data: F.info,  fill: false},
-    {label:'신청완료',     color: '#38BDF8',     data: F.done,  fill: false},
-  ], F.periods);
+    {label:'② AS신청클릭 (기준)',  color: COLORS.accent, data: F.click.map(() => 100), fill: false},
+    {label:'③ 제품선택',          color: '#3D72D7',     data: pct(F.pick, F.click),  fill: false},
+    {label:'④ 증상입력',          color: '#6B9FE8',     data: pct(F.sym,  F.click),  fill: false},
+    {label:'⑤ 고객정보입력',      color: '#95BEFF',     data: pct(F.info, F.click),  fill: false},
+    {label:'⑥ 신청완료',          color: '#38BDF8',     data: pct(F.done, F.click),  fill: false},
+  ], F.periods, true);
 
   makeLine('c_conv12', COLORS.accent, F.conv12, F.periods, true, '유입률');
   makeLine('c_conv45', '#3D72D7',     F.conv45, F.periods, true, '유입률');
