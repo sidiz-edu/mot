@@ -1457,9 +1457,12 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 #sec-cost .unit-price-tbl thead th:nth-child(6) { color: var(--warn); }
 #sec-cost .t thead th.yr-25 { color: var(--warn); border-bottom-color: var(--warn); }
 #sec-cost .unit-price-tbl tr.is-as-row td { background: rgba(255,128,0,0.06); }
-#sec-cost .unit-price-tbl tr.is-as-row td:nth-child(3) { color: #994D00; font-weight: 600; }
 #sec-cost .unit-price-tbl tr.is-recv-row td { background: rgba(124,58,237,0.05); }
-#sec-cost .unit-price-tbl tr.is-recv-row td:nth-child(3) { color: #5B21B6; font-weight: 600; }
+/* 채널 카드 배경 — 운영 개요 */
+.ch-card.part-counsel { background: rgba(255,128,0,0.05); border-color: rgba(255,128,0,0.2); }
+.ch-card.part-counsel:hover { background: rgba(255,128,0,0.09); }
+.ch-card.part-receive { background: rgba(124,58,237,0.05); border-color: rgba(124,58,237,0.2); }
+.ch-card.part-receive:hover { background: rgba(124,58,237,0.09); }
 html[data-theme="dark"] #sec-cost .card-title,
 html[data-theme="dark"] #sec-cost .sec-h-title,
 html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
@@ -2726,8 +2729,8 @@ table.t               { font-size: 14px; }
 
         <!-- 접수 Part -->
         <div class="cc-part">
-          <span class="cc-part-num">B.</span>
-          <span class="cc-part-title">접수 Part</span>
+          <span class="cc-part-num" style="color:#7C3AED">B.</span>
+          <span class="cc-part-title" style="color:#7C3AED">접수 Part</span>
           <span class="cc-part-sub">AS 접수 — ERP 처리</span>
           <span class="cc-part-rule"></span>
         </div>
@@ -3034,7 +3037,7 @@ table.t               { font-size: 14px; }
                   <tr class="is-as-row">
                     <td rowspan="5" class="cat-cell">상담</td>
                     <td rowspan="4" class="part-cell">상담 Part</td>
-                    <td style="text-align:left">유선 (AS)</td><td class="unit-desc">인바운드 (콜/월)</td>
+                    <td style="text-align:left;color:#994D00;font-weight:600">유선 (AS)</td><td class="unit-desc">인바운드 (콜/월)</td>
                     <td class="num">13,500</td><td class="num">13,500</td>
                     <td class="change-same">—</td>
                   </tr>
@@ -3044,18 +3047,18 @@ table.t               { font-size: 14px; }
                     <td class="change-same">—</td>
                   </tr>
                   <tr class="is-as-row">
-                    <td>모바일 (AS+ON)</td><td class="unit-desc">해피톡 채팅 (건/월)</td>
+                    <td style="color:#994D00;font-weight:600">모바일 (AS+ON)</td><td class="unit-desc">해피톡 채팅 (건/월)</td>
                     <td class="num">5,500</td><td class="num">5,500</td>
                     <td class="change-same">—</td>
                   </tr>
                   <tr class="is-as-row">
-                    <td>게시판 (AS+ON)</td><td class="unit-desc">게시글 처리 (건/월)</td>
+                    <td style="color:#994D00;font-weight:600">게시판 (AS+ON)</td><td class="unit-desc">게시글 처리 (건/월)</td>
                     <td class="num">5,000</td><td class="num price-down">3,000</td>
                     <td class="change-down">▼ 2,000</td>
                   </tr>
                   <tr class="is-recv-row">
                     <td class="part-cell">접수 Part</td>
-                    <td style="text-align:left">접수 (AS)</td><td class="unit-desc">유상/무상 (건/월)</td>
+                    <td style="text-align:left;color:#5B21B6;font-weight:600">접수 (AS)</td><td class="unit-desc">유상/무상 (건/월)</td>
                     <td class="num">6,700</td><td class="num">6,700</td>
                     <td class="change-same">—</td>
                   </tr>
@@ -5068,7 +5071,7 @@ function renderTeams() {
 function channelCardHtml(ch) {
   const sys = (ch.sysChips || []).map(sysChipHtml).join('');
   return `
-    <button class="ch-card" data-ch="${ch.id}">
+    <button class="ch-card part-${ch.part}" data-ch="${ch.id}">
       <div class="ch-card-h">
         <div class="ch-card-name">${ch.name}</div>
         <span class="ch-card-type">${ch.kind}</span>
