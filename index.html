@@ -1360,6 +1360,35 @@ table.mtx {
 .analysis-item-desc .hi-neg { color: var(--neg); font-weight: 700; }
 .analysis-item-desc .hi-warn { color: var(--warn); font-weight: 700; }
 
+/* 월별 분석 노트 아코디언 */
+.cs-notes { display: flex; flex-direction: column; gap: 0; }
+.cs-note-item { border-top: 1px solid var(--border-soft); }
+.cs-note-item:first-child { border-top: none; }
+.cs-note-head {
+  width: 100%; display: flex; align-items: center; gap: 14px;
+  padding: 14px 4px; background: none; border: none; cursor: pointer;
+  text-align: left; font-family: inherit;
+  transition: background .12s;
+}
+.cs-note-head:hover { background: var(--surface-2); border-radius: var(--r-sm); }
+.cs-note-month {
+  font-size: 14px; font-weight: 700; color: var(--ink);
+  min-width: 90px;
+}
+.cs-note-summary {
+  font-size: 13px; color: var(--ink-3); flex: 1;
+}
+.cs-note-summary strong { color: var(--ink-2); }
+.cs-note-chevron {
+  font-size: 11px; color: var(--ink-4); flex-shrink: 0;
+  transition: transform .15s;
+}
+.cs-note-body {
+  font-size: 13px; color: var(--ink-2); line-height: 1.75;
+  padding: 0 4px 18px;
+}
+.cs-note-body strong { color: var(--ink); font-weight: 700; }
+
 /* 차트 인사이트 한 줄 */
 .chart-insight {
   font-size: 12px; color: var(--ink-3); line-height: 1.6;
@@ -2763,6 +2792,7 @@ table.t               { font-size: 14px; }
           <button class="seg-btn active" data-cost-sub="0">건수 / 금액</button>
           <button class="seg-btn" data-cost-sub="1">항목별 추이</button>
           <button class="seg-btn" data-cost-sub="2">상세 표</button>
+          <button class="seg-btn" data-cost-sub="3">월별 분석 노트</button>
         </div>
 
         <!-- sub 0: 건수/금액 + 총비용 -->
@@ -3060,6 +3090,61 @@ table.t               { font-size: 14px; }
             </div>
           </div>
         </div>
+
+        <!-- sub 3: 월별 분석 노트 -->
+        <div id="cost-sub-3" style="display:none">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">월별 분석 노트</div>
+                <div class="card-sub">월을 클릭하면 해당 월 분석이 펼쳐집니다</div>
+              </div>
+            </div>
+            <div class="cs-notes">
+
+              <div class="cs-note-item">
+                <button class="cs-note-head" onclick="toggleNote(this)">
+                  <span class="cs-note-month">2026년 5월</span>
+                  <span class="cs-note-summary">전월(4월) 대비 <strong>+0.4%</strong> · 74,214,600원</span>
+                  <span class="cs-note-chevron">▼</span>
+                </button>
+                <div class="cs-note-body">
+                  전월(4월) 73,883,300원 → 당월(5월) 74,214,600원으로 전월 대비 <strong>0.4% 소폭 증가</strong>했습니다. 4월과 영업일 수가 동일(20일)한 가운데, 전체 용역료는 거의 변동 없는 수준으로 유지되었습니다.<br><br>
+                  항목별로 보면, 인바운드 유선 AS 상담 건수가 4월(1,833건) 대비 5월(1,929건)으로 <strong>+5.2% 증가</strong>하며 유선 AS 금액이 약 130만원 상승했고, 게시판 처리 건수도 2,925건 → 3,023건으로 <strong>+3.4% 소폭 증가</strong>했습니다. 반면 유선 온라인 상담은 4월 대비 약 <strong>5.8% 감소</strong>했고, 모바일 채팅도 소폭 줄었습니다.<br><br>
+                  수주 Part에서는 오프라인 수기등록 건수가 4월(185건) 대비 5월(73건)으로 <strong>약 61% 급감</strong>하며 해당 항목 비용이 크게 줄었으나, 온라인 수기등록은 302건 → 340건으로 증가해 일부 상쇄되었습니다.<br><br>
+                  결과적으로 일 평균 비용은 4월(369만원) 대비 <strong>5월 371만원으로 거의 동일한 수준</strong>을 유지했으며, 총 AS 건수는 7,850건 → 8,035건으로 <strong>+2.4% 소폭 회복</strong>되었습니다. 비수기 진입에도 불구하고 전체 용역료가 전월과 유사하게 유지된 것은 유선 상담 및 게시판 처리 증가가 다른 항목의 감소를 상쇄한 결과입니다.
+                </div>
+              </div>
+
+              <div class="cs-note-item">
+                <button class="cs-note-head" onclick="toggleNote(this)">
+                  <span class="cs-note-month">2026년 4월</span>
+                  <span class="cs-note-summary">전월(3월) 대비 <strong>-25.3%</strong> · 73,883,300원</span>
+                  <span class="cs-note-chevron">▶</span>
+                </button>
+                <div class="cs-note-body" style="display:none">
+                  전월(3월) 98,908,400원 → 당월(4월) 73,883,300원으로 전월 대비 <strong>25.3% 감소</strong>했습니다. 4월은 3월 대비 영업일 수가 1일 감소(21일 → 20일)하였으나, 성수기 종료에 따라 전반적인 서비스 요청량이 줄어들며 용역료가 큰 폭으로 감소하였습니다.<br><br>
+                  특히 인바운드 상담(유선 AS 및 온라인)과 게시판 처리 건수가 3월 대비 약 <strong>22~36%가량 크게 줄어들며</strong> 전체 비용 하락을 견인하였습니다. 수주 Part에서는 온라인 수기등록 및 수기변경 건수가 감소하며 전반적인 하락세를 보였으나, 오프라인 수기등록 건수는 3월 대비 증가(72건 → 185건)하며 대조적인 모습을 보였습니다.<br><br>
+                  결과적으로 일 평균 비용이 3월(471만원) 대비 약 <strong>21% 낮은 369만원</strong> 수준으로 떨어졌습니다.
+                </div>
+              </div>
+
+              <!-- 분석 노트 추가 시 아래 블록을 복사하세요 -->
+              <!--
+              <div class="cs-note-item">
+                <button class="cs-note-head" onclick="toggleNote(this)">
+                  <span class="cs-note-month">2026년 N월</span>
+                  <span class="cs-note-summary">전월 대비 <strong>X%</strong> · 금액</span>
+                  <span class="cs-note-chevron">▶</span>
+                </button>
+                <div class="cs-note-body" style="display:none">분석 내용</div>
+              </div>
+              -->
+
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- 데이터 출처 -->
@@ -5418,7 +5503,7 @@ document.querySelectorAll('.seg-btn[data-cost-sub]').forEach(btn => {
   btn.addEventListener('click', () => {
     const idx = +btn.dataset.costSub;
     document.querySelectorAll('.seg-btn[data-cost-sub]').forEach(b => b.classList.toggle('active', b===btn));
-    ['cost-sub-0','cost-sub-1','cost-sub-2'].forEach((id, i) => {
+    ['cost-sub-0','cost-sub-1','cost-sub-2','cost-sub-3'].forEach((id, i) => {
       const el = document.getElementById(id);
       if (el) el.style.display = i===idx ? 'block' : 'none';
     });
@@ -5459,6 +5544,15 @@ function rebuildAll() {
   hidden.forEach(el => { el.style.display = 'none'; });
 }
 window.__rebuildCharts = null;
+
+// ---- 월별 분석 노트 아코디언 ----
+function toggleNote(btn) {
+  const body = btn.nextElementSibling;
+  const chevron = btn.querySelector('.cs-note-chevron');
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  chevron.textContent = isOpen ? '▶' : '▼';
+}
 
 // ---- MOT Node 팝오버 ----
 const NODE_POPUPS = [
