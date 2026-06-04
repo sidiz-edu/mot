@@ -2832,7 +2832,7 @@ table.t               { font-size: 14px; }
           <!-- 항목별 건수 비율 YoY 비교 -->
           <div class="card mt-16">
             <div class="card-head">
-              <div><div class="card-title">항목별 건수 비율 — 전년 동월 비교</div><div class="card-sub">전체 AS 건수 대비 항목별 비율 (%) · 25년/26년 비교</div></div>
+              <div><div class="card-title">항목별 건수 비율 — 전년 동월 비교</div><div class="card-sub">상담 3채널(유선·모바일·게시판) 합계 기준 비율 · 접수(AS)는 건수 절대값 표시</div></div>
               <div class="yoy-legend">
                 <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
                 <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
@@ -2855,9 +2855,9 @@ table.t               { font-size: 14px; }
                 <p class="chart-insight">26년 1~3월 단가 인하(5,000→3,000원) 이후 <strong>비율 변동 주목</strong>. 건수 자체는 유지되는 편.</p>
               </div>
               <div class="chart-inner">
-                <div class="chart-inner-title">접수 (AS) 비율</div>
+                <div class="chart-inner-title">접수 (AS) 건수</div>
                 <div class="chart-box h-160"><canvas id="c_cc_yoy_3"></canvas></div>
-                <p class="chart-insight">전체 건수 내 접수 비율이 <span class="hi">상대적으로 안정적</span>. 온라인 신청 증가와 함께 접수 건수도 유지되는 구조.</p>
+                <p class="chart-insight">상담 채널과 별도로 <strong>절대 건수</strong> 표시. 온라인 신청 증가와 함께 접수 건수가 <span class="hi">비교적 안정적</span>으로 유지되는 구조.</p>
               </div>
             </div>
           </div>
@@ -4770,21 +4770,31 @@ function renderSec3() {
 
   // ── [건수/금액] tab ───────────────────────────────────────
 
-  // 항목별 건수 비율 YoY 라인 (4개 미니차트) — 전체 합 대비 %
+  // 항목별 건수 비율 YoY 라인
+  // - 상담 3개(유선·모바일·게시판): 3개 합계 기준 비율
+  // - 접수(AS): 별도 절대 건수 라인
   const CC_IDS = ['c_cc_yoy_0','c_cc_yoy_1','c_cc_yoy_2','c_cc_yoy_3'];
   {
+    // 상담 3개(index 0~2)만 합산
     const t25 = Array(12).fill(0), t26 = Array(12).fill(0);
-    DATA.contact.forEach(it => {
+    DATA.contact.slice(0, 3).forEach(it => {
       const { y25, y26 } = yoy_c(it.counts);
       y25.forEach((v, mi) => { t25[mi] += (v || 0); });
       y26.forEach((v, mi) => { if (v != null) t26[mi] += v; });
     });
-    DATA.contact.forEach((it, i) => {
+    // 상담 3개 — 3개 합 대비 비율
+    DATA.contact.slice(0, 3).forEach((it, i) => {
       const { y25, y26 } = yoy_c(it.counts);
       const r25 = y25.map((v, mi) => t25[mi] ? Math.round(v / t25[mi] * 1000) / 10 : 0);
       const r26 = y26.map((v, mi) => (v != null && t26[mi]) ? Math.round(v / t26[mi] * 1000) / 10 : null);
       makeYoYLine(CC_IDS[i], r25, r26, CONTACT_PALETTE[i], true);
     });
+    // 접수(AS) — 절대 건수 라인 (별도 기준)
+    const recv = DATA.contact[3];
+    if (recv) {
+      const { y25, y26 } = yoy_c(recv.counts);
+      makeYoYLine(CC_IDS[3], y25, y26, CONTACT_PALETTE[3], false);
+    }
   }
 
   // AS 관련 용역료 YoY 막대 (유선AS + 모바일 + 게시판 + 접수AS)
