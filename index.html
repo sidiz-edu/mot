@@ -1449,13 +1449,17 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 #sec-cost .cc-part-num, #sec-cost .cc-part-title { color: var(--warn); }
 #sec-cost .cc-part-rule { background: rgba(197,138,26,0.25); }
 #sec-cost .kpi-label .dot { background: var(--warn); }
-#sec-cost .t tr.is-as-row td { background: rgba(124,58,237,0.05); }
-#sec-cost .t tr.is-as-row td:first-child { color: #5B21B6; font-weight: 600; }
+#sec-cost .t tr.is-as-row td { background: rgba(255,128,0,0.06); }
+#sec-cost .t tr.is-as-row td:first-child { color: #994D00; font-weight: 600; }
+#sec-cost .t tr.is-recv-row td { background: rgba(124,58,237,0.05); }
+#sec-cost .t tr.is-recv-row td:first-child { color: #5B21B6; font-weight: 600; }
 #sec-cost .unit-price-tbl thead th:nth-child(5),
 #sec-cost .unit-price-tbl thead th:nth-child(6) { color: var(--warn); }
 #sec-cost .t thead th.yr-25 { color: var(--warn); border-bottom-color: var(--warn); }
-#sec-cost .unit-price-tbl tr.is-as-row td { background: rgba(124,58,237,0.05); }
-#sec-cost .unit-price-tbl tr.is-as-row td:nth-child(3) { color: #5B21B6; font-weight: 600; }
+#sec-cost .unit-price-tbl tr.is-as-row td { background: rgba(255,128,0,0.06); }
+#sec-cost .unit-price-tbl tr.is-as-row td:nth-child(3) { color: #994D00; font-weight: 600; }
+#sec-cost .unit-price-tbl tr.is-recv-row td { background: rgba(124,58,237,0.05); }
+#sec-cost .unit-price-tbl tr.is-recv-row td:nth-child(3) { color: #5B21B6; font-weight: 600; }
 html[data-theme="dark"] #sec-cost .card-title,
 html[data-theme="dark"] #sec-cost .sec-h-title,
 html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
@@ -3049,7 +3053,7 @@ table.t               { font-size: 14px; }
                     <td class="num">5,000</td><td class="num price-down">3,000</td>
                     <td class="change-down">▼ 2,000</td>
                   </tr>
-                  <tr class="is-as-row">
+                  <tr class="is-recv-row">
                     <td class="part-cell">접수 Part</td>
                     <td style="text-align:left">접수 (AS)</td><td class="unit-desc">유상/무상 (건/월)</td>
                     <td class="num">6,700</td><td class="num">6,700</td>
@@ -5012,7 +5016,8 @@ function renderSec3() {
     DATA.cs.forEach(item => {
       const total = item.amounts.reduce((a,b)=>a+b, 0);
       const tr = document.createElement('tr');
-      if (AS_ITEMS.has(item.name)) tr.classList.add('is-as-row');
+      if (item.name === '접수AS') tr.classList.add('is-recv-row');
+      else if (AS_ITEMS.has(item.name)) tr.classList.add('is-as-row');
       const displayName = NAME_MAP[item.name] || item.name;
       tr.innerHTML = `<td>${displayName}</td>` +
         item.amounts.map(v => `<td>${Math.round(v/10000).toLocaleString()}</td>`).join('') +
