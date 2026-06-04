@@ -1736,6 +1736,46 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   display: flex; align-items: center; gap: 4px;
 }
 
+/* 단계별 상세 정보 */
+.mot-stage-info {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 0 10px; padding: 24px 36px 32px 52px;
+  background: var(--surface); border-top: 1px solid var(--border);
+}
+.mot-stage-card {
+  border-radius: var(--r-lg); padding: 14px 14px 12px;
+  background: var(--surface-2); border: 1px solid var(--border-soft);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.mot-stage-card.c-pre    { border-top: 2.5px solid var(--ink-4); }
+.mot-stage-card.c-funnel { border-top: 2.5px solid var(--accent); }
+.mot-stage-card.c-contact{ border-top: 2.5px solid var(--warn); }
+.mot-stage-card.c-as     { border-top: 2.5px solid var(--pos); }
+.mot-stage-card.c-done   { border-top: 2.5px solid var(--ink-3); }
+.mot-stage-section { display: flex; flex-direction: column; gap: 5px; }
+.mot-stage-section-label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-4);
+}
+.mot-stage-section-body {
+  font-size: 12px; color: var(--ink-2); line-height: 1.6;
+}
+.mot-stage-task {
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 12px; color: var(--ink-2); line-height: 1.5;
+  padding: 4px 0; border-bottom: 1px solid var(--border-soft);
+}
+.mot-stage-task:last-child { border-bottom: none; }
+.mot-stage-task-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 5px;
+}
+.dot-doing  { background: var(--accent); }
+.dot-todo   { background: var(--ink-4); border: 1.5px solid var(--ink-4); background: transparent; }
+.mot-stage-empty {
+  font-size: 11px; color: var(--ink-4); font-style: italic;
+}
+
 /* 통합 시스템 바 */
 .mot-sys-bar {
   display: grid; grid-template-columns: repeat(5, 1fr);
@@ -1985,6 +2025,29 @@ table.t               { font-size: 14px; }
 
         <div class="mot-jny-canvas">
 
+          <!-- 통합 시스템 바 (상단) -->
+          <div class="mot-sys-bar" style="padding-bottom:16px">
+            <div class="mot-sys-bar-label" style="grid-column:1/-1">사용 시스템</div>
+            <div class="mot-sys-bar-col c-pre"></div>
+            <div class="mot-sys-bar-col c-funnel">
+              <span class="mot-sys-chip">웹 로그</span>
+              <span class="mot-sys-chip is-looker">Looker Studio</span>
+            </div>
+            <div class="mot-sys-bar-col c-contact">
+              <span class="mot-sys-chip is-cti">CTI</span>
+              <span class="mot-sys-chip is-happy">해피톡</span>
+              <span class="mot-sys-chip is-board">게시판</span>
+              <span class="mot-sys-chip is-erp">ERP</span>
+            </div>
+            <div class="mot-sys-bar-col c-as">
+              <span class="mot-sys-chip is-erp">ERP</span>
+              <span class="mot-sys-chip">AS현황확인</span>
+            </div>
+            <div class="mot-sys-bar-col c-done">
+              <span class="mot-sys-chip is-erp">ERP 종결처리</span>
+            </div>
+          </div>
+
           <div class="mot-stagger-grid">
 
             <!-- 1 AS 정보 탐색 -->
@@ -2044,31 +2107,93 @@ table.t               { font-size: 14px; }
 
           </div><!-- /mot-stagger-grid -->
 
-          <!-- 통합 시스템 바 -->
-          <div class="mot-sys-bar">
-            <div class="mot-sys-bar-label" style="grid-column:1/-1">사용 시스템</div>
-            <div class="mot-sys-bar-col c-pre"></div>
-            <div class="mot-sys-bar-col c-funnel">
-              <span class="mot-sys-chip">웹 로그</span>
-              <span class="mot-sys-chip is-looker">Looker Studio</span>
-            </div>
-            <div class="mot-sys-bar-col c-contact">
-              <span class="mot-sys-chip is-cti">CTI</span>
-              <span class="mot-sys-chip is-happy">해피톡</span>
-              <span class="mot-sys-chip is-board">게시판</span>
-              <span class="mot-sys-chip is-erp">ERP</span>
-            </div>
-            <div class="mot-sys-bar-col c-as">
-              <span class="mot-sys-chip is-erp">ERP</span>
-              <span class="mot-sys-chip">AS현황확인</span>
-            </div>
-            <div class="mot-sys-bar-col c-done">
-              <span class="mot-sys-chip is-erp">ERP 종결처리</span>
-            </div>
-          </div>
-
         </div><!-- /mot-jny-canvas -->
 
+
+      <!-- ── 단계별 상세 정보 ── -->
+      <div class="mot-stage-info">
+
+        <!-- 1. AS 정보 탐색 -->
+        <div class="mot-stage-card c-pre">
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">단계 설명</div>
+            <div class="mot-stage-section-body">고객이 AS 필요성을 인지하고 정보를 탐색하는 단계. 검색 엔진 및 AI 검색을 통해 유입.</div>
+          </div>
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">현재 진행 중</div>
+            <span class="mot-stage-empty">기록 없음</span>
+          </div>
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">추가 필요</div>
+            <span class="mot-stage-empty">기록 없음</span>
+          </div>
+        </div>
+
+        <!-- 2. AS 신청 페이지 -->
+        <div class="mot-stage-card c-funnel">
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">단계 설명</div>
+            <div class="mot-stage-section-body">시디즈 닷컴 내 AS 신청 페이지를 통한 온라인 접수. 6단계 퍼널로 전환율 추적 중.</div>
+          </div>
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">현재 진행 중</div>
+            <div class="mot-stage-task"><span class="mot-stage-task-dot dot-doing"></span>주차별 퍼널 전환율 모니터링</div>
+          </div>
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">추가 필요</div>
+            <span class="mot-stage-empty">기록 없음</span>
+          </div>
+        </div>
+
+        <!-- 3. 컨택센터 상담·접수 -->
+        <div class="mot-stage-card c-contact">
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">단계 설명</div>
+            <div class="mot-stage-section-body">유선·모바일·게시판을 통한 상담 및 ERP 접수 처리. 용역료 비용 발생 구간.</div>
+          </div>
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">현재 진행 중</div>
+            <div class="mot-stage-task"><span class="mot-stage-task-dot dot-doing"></span>월별 용역료 추이 모니터링</div>
+          </div>
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">추가 필요</div>
+            <span class="mot-stage-empty">기록 없음</span>
+          </div>
+        </div>
+
+        <!-- 4. 현장 AS 조치 -->
+        <div class="mot-stage-card c-as">
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">단계 설명</div>
+            <div class="mot-stage-section-body">엔지니어/시공팀 현장 방문 수리. 평균 조치기간·N차율·1차 종결률이 핵심 지표.</div>
+          </div>
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">현재 진행 중</div>
+            <div class="mot-stage-task"><span class="mot-stage-task-dot dot-doing"></span>월별 조치기간·N차율 모니터링</div>
+          </div>
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">추가 필요</div>
+            <span class="mot-stage-empty">기록 없음</span>
+          </div>
+        </div>
+
+        <!-- 5. AS 완료 -->
+        <div class="mot-stage-card c-done">
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">단계 설명</div>
+            <div class="mot-stage-section-body">ERP 종결 처리 후 고객 만족 확인. N차 발생 시 현장 조치 재배정.</div>
+          </div>
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">현재 진행 중</div>
+            <span class="mot-stage-empty">기록 없음</span>
+          </div>
+          <div class="mot-stage-section">
+            <div class="mot-stage-section-label">추가 필요</div>
+            <span class="mot-stage-empty">기록 없음</span>
+          </div>
+        </div>
+
+      </div><!-- /mot-stage-info -->
 
       </div><!-- /mot-jny-outer -->
 
