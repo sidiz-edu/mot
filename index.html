@@ -4427,19 +4427,18 @@ function makeBar(id, color, data, labels, pctY=false, label='') {
 // ── YoY helpers ──────────────────────────────────────────────
 const MONTHS12 = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
 
-// contactMonths(16): [0..11]=25년 1~12월, [12..15]=26년 1~4월
+// contactMonths(17): [0..11]=25년 1~12월, [12..16]=26년 1~5월
 function yoy_c(arr) {
   return {
     y25: arr.slice(0, 12),
-    y26: [...arr.slice(12, 16), null,null,null,null,null,null,null,null]
+    y26: [...arr.slice(12, 17), null,null,null,null,null,null,null]
   };
 }
-// csMonths(15): [0..11]=25년 1~12월, [12..14]=26년 2~4월 (26년 1월 없음)
+// csMonths(17): [0..11]=25년 1~12월, [12..16]=26년 1~5월
 function yoy_cs(arr) {
-  // 16 values: [0..11]=25년 1~12월, [12..15]=26년 1~4월 (contactMonths와 동일)
   return {
     y25: arr.slice(0, 12),
-    y26: [...arr.slice(12, 16), null,null,null,null,null,null,null,null]
+    y26: [...arr.slice(12, 17), null,null,null,null,null,null,null]
   };
 }
 
