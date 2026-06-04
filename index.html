@@ -5360,7 +5360,7 @@ function showNodePopover(wrap, idx) {
   const linkHtml  = d.link  ? `<div style="margin-top:10px"><button onclick="gotoTab(${d.link.tab})" style="background:none;border:none;cursor:pointer;font-size:12px;font-weight:600;color:${d.color};padding:0">${d.link.label}</button></div>` : '';
 
   pop.innerHTML = `
-    <button class="mot-popover-close" onclick="closeNodePopover()">✕</button>
+    <button class="mot-popover-close" onclick="event.stopPropagation(); closeNodePopover()">✕</button>
     <div class="mot-popover-title" style="color:${d.color}">${d.title}</div>
     <ul>${itemsHtml}</ul>
     ${extraHtml}${linkHtml}
