@@ -1449,11 +1449,13 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 #sec-cost .cc-part-num, #sec-cost .cc-part-title { color: var(--warn); }
 #sec-cost .cc-part-rule { background: rgba(197,138,26,0.25); }
 #sec-cost .kpi-label .dot { background: var(--warn); }
-#sec-cost .t tr.is-as-row td { background: rgba(197,138,26,0.06); }
-#sec-cost .t tr.is-as-row td:first-child { color: #7A4E00; }
+#sec-cost .t tr.is-as-row td { background: rgba(124,58,237,0.05); }
+#sec-cost .t tr.is-as-row td:first-child { color: #5B21B6; font-weight: 600; }
 #sec-cost .unit-price-tbl thead th:nth-child(5),
 #sec-cost .unit-price-tbl thead th:nth-child(6) { color: var(--warn); }
 #sec-cost .t thead th.yr-25 { color: var(--warn); border-bottom-color: var(--warn); }
+#sec-cost .unit-price-tbl tr.is-as-row td { background: rgba(124,58,237,0.05); }
+#sec-cost .unit-price-tbl tr.is-as-row td:nth-child(3) { color: #5B21B6; font-weight: 600; }
 html[data-theme="dark"] #sec-cost .card-title,
 html[data-theme="dark"] #sec-cost .sec-h-title,
 html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
@@ -4865,7 +4867,7 @@ function renderSec2() {
 }
 
 // ---- Section 3 charts + table ----
-const CONTACT_PALETTE = ['#CC3D00', '#E85A00', '#F57D20', '#F9A84D'];
+const CONTACT_PALETTE = ['#CC3D00', '#E85A00', '#F57D20', '#7C3AED']; // 마지막(접수AS)은 보라
 
 function renderSec3() {
   // 항목별 추이 범례 (색상만 표시, 실선=26년/점선=25년 구분)
