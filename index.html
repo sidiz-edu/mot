@@ -1858,7 +1858,7 @@ table.t               { font-size: 14px; }
         </button>
         <button class="sb-item" data-tab="1">
           <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 9v6l-4 2v-8z"/></svg>
-          <span>신청 페이지 퍼널</span>
+          <span>AS 신청 페이지</span>
           <span class="sb-count">주</span>
         </button>
         <button class="sb-item" data-tab="2">
@@ -2043,7 +2043,7 @@ table.t               { font-size: 14px; }
             </span>
           </div>
           <div class="jny-name">온라인 AS 신청</div>
-          <div class="jny-badge jny-badge-funnel">신청 페이지 퍼널</div>
+          <div class="jny-badge jny-badge-funnel">AS 신청 페이지</div>
           <div class="jny-desc">고객이 시디즈 홈페이지를 통해 AS를 신청하는 단계. 6단계 전환 퍼널을 추적합니다.</div>
           <div class="jny-metrics">
             <div class="jny-metric">
@@ -2226,7 +2226,7 @@ table.t               { font-size: 14px; }
         </div>
         <div class="ov-grid">
           <button class="ov-card" data-go="1" style="--card-accent:#003EFF">
-            <div class="ov-card-head"><span class="ov-card-num" style="background:rgba(0,62,255,0.08);color:#003EFF">01</span><span class="ov-card-title">AS 신청 페이지 퍼널</span></div>
+            <div class="ov-card-head"><span class="ov-card-num" style="background:rgba(0,62,255,0.08);color:#003EFF">01</span><span class="ov-card-title">AS 신청 페이지</span></div>
             <div class="ov-card-desc">메인 조회 → AS 신청 클릭 → 제품 선택 → 증상 입력 단계별 전환 추이와 이탈 구간을 추적합니다.</div>
             <div class="ov-card-stats">
               <div><div class="ov-stat-lbl">최근 주 신청 완료</div><div class="ov-stat-val">112<span class="ov-stat-u">건</span></div></div>
@@ -2260,7 +2260,7 @@ table.t               { font-size: 14px; }
             <dl>
               <dt>전국 AS 데이터</dt><dd>ERP · [AS진행상태 확인] → 조치일 기준 월별 데이터 <span class="mute">(시디즈)</span></dd>
               <dt>서울경인 AS 데이터</dt><dd>라스트마일사업팀 김진우님 요청본</dd>
-              <dt>신청 페이지 퍼널</dt><dd>웹 행동 로그 · 주별 단계별 집계</dd>
+              <dt>AS 신청 페이지</dt><dd>웹 행동 로그 · 주별 단계별 집계</dd>
               <dt>컨택센터 비용</dt><dd>브랜드 용역료 청구 현황 <span class="mute">(월별 자료)</span></dd>
             </dl>
           </div>
@@ -2556,11 +2556,11 @@ table.t               { font-size: 14px; }
     </section>
 
     <!-- =================== SECTION 2 : 퍼널 =================== -->
-    <section class="page section" id="sec-funnel" data-screen-label="02 신청 페이지 퍼널">
+    <section class="page section" id="sec-funnel" data-screen-label="02 AS 신청 페이지">
       <div class="page-head">
         <div class="page-h-left">
           <div class="page-eyebrow">Funnel · Weekly</div>
-          <h1 class="page-title">AS 신청 페이지 퍼널</h1>
+          <h1 class="page-title">AS 신청 페이지</h1>
           <div class="page-sub">메인조회 → AS신청클릭 → 제품선택 → 증상입력 → 고객정보 → 신청완료 · 주별 전환 추이</div>
         </div>
         <a href="https://datastudio.google.com/u/0/reporting/c1c840c2-3f4c-4574-bc04-e0f171694e62/page/p_wjcqp4l5zd?s=vOvBNV2iETU" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--ink-2);font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;flex-shrink:0">
@@ -5162,7 +5162,7 @@ document.querySelectorAll('.section').forEach(s => {
 __hiddenViews.forEach(el => { el.style.display = 'none'; });
 
 // ---- Tab switching ----
-const TAB_TITLES = ['Overview', 'AS 신청 페이지 퍼널', '시디즈 AS 조치 현황', '컨택센터 용역료'];
+const TAB_TITLES = ['Overview', 'AS 신청 페이지', '시디즈 AS 조치 현황', '컨택센터 용역료'];
 function reflowChartsIn(rootEl) {
   rootEl.querySelectorAll('canvas').forEach(cv => {
     cv.style.width = '';
@@ -5295,7 +5295,7 @@ const NODE_POPUPS = [
     items: ['Google · Naver 검색', '주변 지인 추천', '구매처 안내', 'SNS · 커뮤니티'],
   },
   {
-    title: '신청 페이지 퍼널', color: 'var(--accent)',
+    title: 'AS 신청 페이지', color: 'var(--accent)',
     items: ['① 메인 조회 — 1,390회/주', '② AS신청 클릭 — 29.5%', '③ 제품 선택', '④ 증상 입력', '⑤ 고객정보 입력 — 86.2%', '⑥ 신청 완료 — 112건/주'],
     link: { label: '퍼널 상세 보기 →', tab: 1 },
   },
@@ -5653,7 +5653,7 @@ const SEARCH_INDEX = [
   {label:'평균 조치기간',      sub:'AS 조치 현황', tab:1},
   {label:'서울경인 조치 현황', sub:'AS 조치 현황', tab:1},
   {label:'년도별 동월 비교',   sub:'AS 조치 현황', tab:1},
-  {label:'AS 신청 페이지 퍼널',sub:'퍼널 분석', tab:2},
+  {label:'AS 신청 페이지',sub:'퍼널 분석', tab:2},
   {label:'단계별 유입 추이',   sub:'퍼널 분석', tab:2},
   {label:'1→2 유입률',        sub:'퍼널 분석', tab:2},
   {label:'4→5 유입률',        sub:'퍼널 분석', tab:2},
@@ -5884,7 +5884,7 @@ const _SB = supabase.createClient(
 );
 
 const MEMO_TAB_KEYS  = ['overview', 'as', 'funnel', 'cost'];
-const MEMO_TAB_NAMES = ['Overview', 'AS 조치 현황', '신청 페이지 퍼널', '컨택센터 용역료'];
+const MEMO_TAB_NAMES = ['Overview', 'AS 조치 현황', 'AS 신청 페이지', '컨택센터 용역료'];
 
 let _memoCurrentTab = 0;
 let _memoCache = {};   // { [section]: content }
