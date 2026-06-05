@@ -5814,8 +5814,8 @@ function taskListHtml(raw) {
       <span class="mot-task-chip ${IMP_MAP[t.imp]||'chip-imp-mid'}">중요 ${SHORT[t.imp]||t.imp}</span>
       <span class="mot-task-chip ${URG_MAP[t.urg]||'chip-urg-mid'}">긴급 ${SHORT[t.urg]||t.urg}</span>
       <input class="mot-task-inline-input" value="${escHtml(t.text)}" placeholder="업무 내용">
-      <select class="mot-task-inline-select" title="중요도">${lvls.map(([v,lb])=>`<option value="${v}"${t.imp===v?' selected':''}>${lb}</option>`).join('')}</select>
-      <select class="mot-task-inline-select" title="긴급도">${lvls.map(([v,lb])=>`<option value="${v}"${t.urg===v?' selected':''}>${lb}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="중요도"><option value="" disabled${!t.imp?' selected':''}>중요도</option>${lvls.map(([v,lb])=>`<option value="${v}"${t.imp===v?' selected':''}>${lb}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="긴급도"><option value="" disabled${!t.urg?' selected':''}>긴급도</option>${lvls.map(([v,lb])=>`<option value="${v}"${t.urg===v?' selected':''}>${lb}</option>`).join('')}</select>
       <button class="mot-task-inline-del" title="삭제">✕</button>
     </div>`;
   }).join('') + `<button class="mot-task-add-btn">+ 업무 추가</button></div>`;
@@ -5877,8 +5877,8 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
       <span class="mot-task-chip chip-imp-mid">중요 中</span>
       <span class="mot-task-chip chip-urg-mid">긴급 中</span>
       <input class="mot-task-inline-input" value="" placeholder="업무 내용">
-      <select class="mot-task-inline-select" title="중요도">${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
-      <select class="mot-task-inline-select" title="긴급도">${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="중요도"><option value="" disabled selected>중요도</option>${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="긴급도"><option value="" disabled selected>긴급도</option>${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
       <button class="mot-task-inline-del" title="삭제">✕</button>`;
     const newList = document.createElement('div');
     newList.className = 'mot-task-list';
@@ -5902,8 +5902,8 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
       <span class="mot-task-chip chip-imp-mid">중요 中</span>
       <span class="mot-task-chip chip-urg-mid">긴급 中</span>
       <input class="mot-task-inline-input" value="" placeholder="업무 내용">
-      <select class="mot-task-inline-select" title="중요도">${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
-      <select class="mot-task-inline-select" title="긴급도">${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="중요도"><option value="" disabled selected>중요도</option>${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="긴급도"><option value="" disabled selected>긴급도</option>${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
       <button class="mot-task-inline-del" title="삭제">✕</button>`;
     addTaskDrag(row, taskList, stage, sectionEl);
     return row;
