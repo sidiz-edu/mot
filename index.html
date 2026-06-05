@@ -1753,6 +1753,20 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   white-space: nowrap;
 }
 .mot-update-badge::before { content: '✓'; font-size: 9px; }
+.mot-update-edit-btn {
+  font-size: 9px; color: var(--ink-4); background: none; border: none;
+  cursor: pointer; padding: 2px 4px; border-radius: 4px; opacity: 0;
+  transition: opacity .12s;
+}
+.mot-update-col:hover .mot-update-edit-btn { opacity: 1; }
+.mot-update-col:hover .mot-update-edit-btn:hover { background: var(--surface-3); color: var(--ink-2); }
+.mot-update-textarea {
+  width: 100%; font-size: 11px; font-family: inherit;
+  border: 1.5px solid var(--accent); border-radius: 6px;
+  padding: 6px 8px; resize: none; background: var(--surface);
+  color: var(--ink); line-height: 1.6; outline: none;
+  margin-top: 4px;
+}
 
 /* 단계별 상세 정보 */
 .mot-stage-info {
@@ -2078,21 +2092,8 @@ table.t               { font-size: 14px; }
             </div>
           </div>
 
-          <!-- 단계별 업데이트 현황 -->
-          <div class="mot-update-row">
-            <div class="mot-update-col"></div>
-            <div class="mot-update-col">
-              <span class="mot-update-badge">5.25~5.31 업데이트 완료</span>
-            </div>
-            <div class="mot-update-col">
-              <span class="mot-update-badge">5월 CS 용역료 업데이트 완료</span>
-            </div>
-            <div class="mot-update-col">
-              <span class="mot-update-badge">5월 전국 데이터 업데이트 완료</span>
-              <span class="mot-update-badge">5월 서울/경인 데이터 업데이트 완료</span>
-            </div>
-            <div class="mot-update-col"></div>
-          </div>
+          <!-- 단계별 업데이트 현황 (동적) -->
+          <div class="mot-update-row" id="mot-update-row"></div>
 
           <div class="mot-stagger-grid">
 
@@ -5643,11 +5644,11 @@ const STAGE_META = {
 };
 
 const STAGE_DEFAULTS = {
-  pre:     { description: '고객이 AS 필요성을 인지하고 정보를 탐색하는 단계.\n검색 엔진 및 AI 검색을 통해 유입.', doing: '', todo: '' },
-  funnel:  { description: '시디즈 닷컴 내 AS 신청 페이지를 통한 온라인 접수.\n6단계 퍼널로 전환율 추적 중.', doing: '주차별 퍼널 전환율 모니터링', todo: '' },
-  contact: { description: '유선·모바일·게시판을 통한 상담 및 ERP 접수 처리.\n용역료 비용 발생 구간.', doing: '월별 용역료 추이 모니터링', todo: '' },
-  as:      { description: '엔지니어/시공팀 현장 방문 수리.\n평균 조치기간·N차율·1차 종결률이 핵심 지표.', doing: '월별 조치기간·N차율 모니터링', todo: '' },
-  done:    { description: 'ERP 종결 처리 후 고객 만족 확인.\nN차 발생 시 현장 조치 재배정.', doing: '', todo: '' },
+  pre:     { description: '고객이 AS 필요성을 인지하고 정보를 탐색하는 단계.\n검색 엔진 및 AI 검색을 통해 유입.', doing: '', todo: '', updates: '' },
+  funnel:  { description: '시디즈 닷컴 내 AS 신청 페이지를 통한 온라인 접수.\n6단계 퍼널로 전환율 추적 중.', doing: '주차별 퍼널 전환율 모니터링', todo: '', updates: '5.25~5.31 업데이트 완료' },
+  contact: { description: '유선·모바일·게시판을 통한 상담 및 ERP 접수 처리.\n용역료 비용 발생 구간.', doing: '월별 용역료 추이 모니터링', todo: '', updates: '5월 CS 용역료 업데이트 완료' },
+  as:      { description: '엔지니어/시공팀 현장 방문 수리.\n평균 조치기간·N차율·1차 종결률이 핵심 지표.', doing: '월별 조치기간·N차율 모니터링', todo: '', updates: '5월 전국 데이터 업데이트 완료\n5월 서울/경인 데이터 업데이트 완료' },
+  done:    { description: 'ERP 종결 처리 후 고객 만족 확인.\nN차 발생 시 현장 조치 재배정.', doing: '', todo: '', updates: '' },
 };
 
 function escHtml(str) {
@@ -5699,14 +5700,60 @@ function getTextFromEditable(el) {
     .trim();
 }
 
+function renderUpdateRow(map) {
+  const row = document.getElementById('mot-update-row');
+  if (!row) return;
+  const stageOrder = ['pre','funnel','contact','as','done'];
+  row.innerHTML = stageOrder.map(stage => {
+    const def = STAGE_DEFAULTS[stage] || {};
+    const raw = (map[stage]?.updates != null && map[stage].updates !== '')
+                  ? map[stage].updates : (def.updates || '');
+    const badges = raw.split('\n').filter(l => l.trim())
+      .map(l => `<span class="mot-update-badge">${escHtml(l.trim())}</span>`).join('');
+    return `
+      <div class="mot-update-col" data-stage="${stage}">
+        <div class="mot-update-badges">${badges}</div>
+        <button class="mot-update-edit-btn" onclick="openUpdateEdit('${stage}')" title="편집">✏</button>
+      </div>`;
+  }).join('');
+}
+
+function openUpdateEdit(stage) {
+  const col = document.querySelector(`.mot-update-col[data-stage="${stage}"]`);
+  if (!col || col.querySelector('.mot-update-textarea')) return;
+  const current = Array.from(col.querySelectorAll('.mot-update-badge'))
+    .map(b => b.textContent).join('\n');
+  const ta = document.createElement('textarea');
+  ta.className = 'mot-update-textarea';
+  ta.rows = 3;
+  ta.value = current;
+  ta.placeholder = '줄마다 하나씩 입력\n예) 5월 데이터 업데이트 완료';
+  col.appendChild(ta);
+  ta.focus();
+  ta.addEventListener('blur', async () => {
+    const val = ta.value.trim();
+    await saveStageField(stage, 'updates', val);
+    // 뱃지 다시 렌더링
+    const badges = col.querySelector('.mot-update-badges');
+    if (badges) badges.innerHTML = val.split('\n').filter(l=>l.trim())
+      .map(l=>`<span class="mot-update-badge">${escHtml(l.trim())}</span>`).join('');
+    ta.remove();
+  });
+}
+
 async function loadStageInfo() {
   const cards = document.querySelectorAll('.mot-stage-card[data-stage]');
   const { data, error } = await _SB.from('stage_info').select('*');
   const map = {};
   if (data) data.forEach(r => { map[r.stage_id] = r; });
+
+  // 업데이트 뱃지 행 렌더링
+  renderUpdateRow(map);
+
+  // 단계 카드 렌더링
   cards.forEach(el => renderStageCard(el, map[el.dataset.stage]));
 
-  // 편집 이벤트 등록
+  // 카드 편집 이벤트 등록
   document.querySelectorAll('.mot-stage-editable').forEach(el => {
     el.addEventListener('input', () => {
       const stage = el.dataset.stage;
