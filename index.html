@@ -5848,8 +5848,8 @@ function saveTasksNow(stage, sectionEl) {
       const txtEl = row.querySelector('.mot-task-text');
       const chips = row.querySelectorAll('.mot-task-chip');
       if (txtEl) txtEl.textContent = text;
-      if (chips[0]) { chips[0].className = `mot-task-chip ${IMP_MAP[imp]||'chip-imp-mid'}`; chips[0].textContent = `중요:${imp}`; }
-      if (chips[1]) { chips[1].className = `mot-task-chip ${URG_MAP[urg]||'chip-urg-mid'}`; chips[1].textContent = `긴급:${urg}`; }
+      if (chips[0]) { chips[0].className = `mot-task-chip ${IMP_MAP[imp]||'chip-imp-mid'}`; chips[0].textContent = `중요 ${SHORT[imp]||imp}`; }
+      if (chips[1]) { chips[1].className = `mot-task-chip ${URG_MAP[urg]||'chip-urg-mid'}`; chips[1].textContent = `긴급 ${SHORT[urg]||urg}`; }
     });
   }, 600);
 }
