@@ -5702,7 +5702,7 @@ function getTextFromEditable(el) {
 
 function renderUpdateRow(map) {
   const row = document.getElementById('mot-update-row');
-  if (!row) return;
+  if (!row) { console.warn('mot-update-row 없음'); return; }
   const stageOrder = ['pre','funnel','contact','as','done'];
   row.innerHTML = stageOrder.map(stage => {
     const def = STAGE_DEFAULTS[stage] || {};
@@ -5744,6 +5744,7 @@ function openUpdateEdit(stage) {
 async function loadStageInfo() {
   const cards = document.querySelectorAll('.mot-stage-card[data-stage]');
   const { data, error } = await _SB.from('stage_info').select('*');
+  if (error) console.error('stage_info 로드 오류:', error);
   const map = {};
   if (data) data.forEach(r => { map[r.stage_id] = r; });
 
@@ -5778,6 +5779,8 @@ async function saveStageField(stage, field, value) {
   }
 }
 
+// 즉시 기본값으로 렌더링 후 Supabase 데이터로 덮어쓰기
+renderUpdateRow({});
 loadStageInfo();
 
 // ---- 월별 분석 노트 아코디언 ----
