@@ -1736,6 +1736,24 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   display: flex; align-items: center; gap: 4px;
 }
 
+/* 단계별 업데이트 뱃지 */
+.mot-update-row {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 0 10px; padding: 8px 0 4px;
+}
+.mot-update-col {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.mot-update-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 600;
+  padding: 3px 8px; border-radius: 999px;
+  background: rgba(0,182,95,0.1); color: #00843F;
+  border: 1px solid rgba(0,182,95,0.25);
+  white-space: nowrap;
+}
+.mot-update-badge::before { content: '✓'; font-size: 9px; }
+
 /* 단계별 상세 정보 */
 .mot-stage-info {
   display: grid; grid-template-columns: repeat(5, 1fr);
@@ -2058,6 +2076,22 @@ table.t               { font-size: 14px; }
             <div class="mot-sys-bar-col c-done">
               <span class="mot-sys-chip is-erp">ERP 종결처리</span>
             </div>
+          </div>
+
+          <!-- 단계별 업데이트 현황 -->
+          <div class="mot-update-row">
+            <div class="mot-update-col"></div>
+            <div class="mot-update-col">
+              <span class="mot-update-badge">5.25~5.31 업데이트 완료</span>
+            </div>
+            <div class="mot-update-col">
+              <span class="mot-update-badge">5월 CS 용역료 업데이트 완료</span>
+            </div>
+            <div class="mot-update-col">
+              <span class="mot-update-badge">5월 전국 데이터 업데이트 완료</span>
+              <span class="mot-update-badge">5월 서울/경인 데이터 업데이트 완료</span>
+            </div>
+            <div class="mot-update-col"></div>
           </div>
 
           <div class="mot-stagger-grid">
