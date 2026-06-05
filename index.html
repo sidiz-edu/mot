@@ -1871,6 +1871,46 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
 .mot-stage-save-status {
   font-size: 10px; color: var(--ink-4); text-align: right; margin-top: 6px; min-height: 14px;
 }
+/* 관련 업무 태스크 */
+.mot-task-list { display: flex; flex-direction: column; gap: 5px; }
+.mot-task-row {
+  display: flex; align-items: flex-start; gap: 5px;
+  padding: 5px 6px; border-radius: 5px;
+  background: rgba(255,255,255,0.5); border: 1px solid var(--border-soft);
+}
+.mot-task-text { flex: 1; font-size: 12px; color: var(--ink-2); line-height: 1.5; word-break: break-all; }
+.mot-task-chip {
+  font-size: 9.5px; font-weight: 700; padding: 2px 6px;
+  border-radius: 999px; white-space: nowrap; flex-shrink: 0;
+}
+.chip-imp-high  { background: rgba(239,68,68,0.12);  color: #DC2626; }
+.chip-imp-mid   { background: rgba(245,158,11,0.12); color: #D97706; }
+.chip-imp-low   { background: rgba(107,114,128,0.1); color: #6B7280; }
+.chip-urg-high  { background: rgba(239,68,68,0.12);  color: #DC2626; }
+.chip-urg-mid   { background: rgba(59,130,246,0.12); color: #2563EB; }
+.chip-urg-low   { background: rgba(107,114,128,0.1); color: #6B7280; }
+/* 태스크 에디터 */
+.mot-task-editor { display: flex; flex-direction: column; gap: 5px; margin-top: 4px; }
+.mot-task-editor-row { display: flex; gap: 4px; align-items: center; }
+.mot-task-editor-row input[type="text"] {
+  flex: 1; font-size: 11px; font-family: inherit;
+  border: 1px solid var(--border); border-radius: 5px;
+  padding: 3px 7px; background: var(--surface); color: var(--ink); outline: none;
+}
+.mot-task-editor-row input[type="text"]:focus { border-color: var(--accent); }
+.mot-task-editor-row select {
+  font-size: 10px; font-family: inherit; font-weight: 600;
+  border: 1px solid var(--border); border-radius: 5px;
+  padding: 3px 4px; background: var(--surface-2); color: var(--ink);
+  cursor: pointer; flex-shrink: 0;
+}
+.mot-task-edit-btn {
+  font-size: 10px; color: var(--ink-4); background: none; border: none;
+  cursor: pointer; padding: 2px 4px; border-radius: 4px;
+  transition: opacity .12s; opacity: 0;
+}
+.mot-stage-section:hover .mot-task-edit-btn { opacity: 1; }
+.mot-task-edit-btn:hover { background: var(--surface-3); color: var(--ink-2); }
 
 /* 통합 시스템 바 */
 .mot-sys-bar {
@@ -5688,13 +5728,14 @@ const STAGE_META = {
   done:    { label: 'AS 완료' },
 };
 
-// updates 형식: 한 줄 = "상태|내용"  상태: 완료 | 진행중 | 예정
+// updates 형식: 한 줄 = "상태|내용"
+// doing 형식: 한 줄 = "업무내용||중요도||긴급도" (중요도/긴급도: 높음|보통|낮음)
 const STAGE_DEFAULTS = {
-  pre:     { description: '고객이 AS 필요성을 인지하고 정보를 탐색하는 단계.\n검색 엔진 및 AI 검색을 통해 유입.', doing: '', todo: '', updates: '' },
-  funnel:  { description: '시디즈 닷컴 내 AS 신청 페이지를 통한 온라인 접수.\n6단계 퍼널로 전환율 추적 중.', doing: '주차별 퍼널 전환율 모니터링', todo: '', updates: '완료|5.25~5.31 업데이트 완료' },
-  contact: { description: '유선·모바일·게시판을 통한 상담 및 ERP 접수 처리.\n용역료 비용 발생 구간.', doing: '월별 용역료 추이 모니터링', todo: '', updates: '완료|5월 CS 용역료 업데이트 완료' },
-  as:      { description: '엔지니어/시공팀 현장 방문 수리.\n평균 조치기간·N차율·1차 종결률이 핵심 지표.', doing: '월별 조치기간·N차율 모니터링', todo: '', updates: '완료|5월 전국 데이터 업데이트 완료\n완료|5월 서울/경인 데이터 업데이트 완료' },
-  done:    { description: 'ERP 종결 처리 후 고객 만족 확인.\nN차 발생 시 현장 조치 재배정.', doing: '', todo: '', updates: '' },
+  pre:     { description: '고객이 AS 필요성을 인지하고 정보를 탐색하는 단계.\n검색 엔진 및 AI 검색을 통해 유입.', problems: '', doing: '', todo: '', updates: '' },
+  funnel:  { description: '시디즈 닷컴 내 AS 신청 페이지를 통한 온라인 접수.\n6단계 퍼널로 전환율 추적 중.', problems: '', doing: '주차별 퍼널 전환율 모니터링||보통||보통', todo: '', updates: '완료|5.25~5.31 업데이트 완료' },
+  contact: { description: '유선·모바일·게시판을 통한 상담 및 ERP 접수 처리.\n용역료 비용 발생 구간.', problems: '', doing: '월별 용역료 추이 모니터링||보통||보통', todo: '', updates: '완료|5월 CS 용역료 업데이트 완료' },
+  as:      { description: '엔지니어/시공팀 현장 방문 수리.\n평균 조치기간·N차율·1차 종결률이 핵심 지표.', problems: '', doing: '월별 조치기간·N차율 모니터링||보통||보통', todo: '', updates: '완료|5월 전국 데이터 업데이트 완료\n완료|5월 서울/경인 데이터 업데이트 완료' },
+  done:    { description: 'ERP 종결 처리 후 고객 만족 확인.\nN차 발생 시 현장 조치 재배정.', problems: '', doing: '', todo: '', updates: '' },
 };
 
 function escHtml(str) {
@@ -5710,10 +5751,91 @@ function autoResize(ta) {
   ta.style.height = ta.scrollHeight + 'px';
 }
 
+const IMP_MAP = { '높음': 'chip-imp-high', '보통': 'chip-imp-mid', '낮음': 'chip-imp-low' };
+const URG_MAP = { '높음': 'chip-urg-high', '보통': 'chip-urg-mid', '낮음': 'chip-urg-low' };
+
+function parseTask(line) {
+  const parts = line.split('||');
+  return { text: parts[0]?.trim() || '', imp: parts[1]?.trim() || '보통', urg: parts[2]?.trim() || '보통' };
+}
+
+function taskListHtml(raw) {
+  const lines = raw.split('\n').filter(l => l.trim());
+  if (!lines.length) return '<span class="mot-stage-empty">기록 없음</span>';
+  return '<div class="mot-task-list">' + lines.map(l => {
+    const t = parseTask(l);
+    return `<div class="mot-task-row">
+      <span class="mot-task-text">${escHtml(t.text)}</span>
+      <span class="mot-task-chip ${IMP_MAP[t.imp]||'chip-imp-mid'}">중요:${t.imp}</span>
+      <span class="mot-task-chip ${URG_MAP[t.urg]||'chip-urg-mid'}">긴급:${t.urg}</span>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function openTaskEditor(stage, currentRaw, sectionEl) {
+  if (sectionEl.querySelector('.mot-task-editor')) return;
+  const tasks = currentRaw.split('\n').filter(l => l.trim()).map(parseTask);
+  if (!tasks.length) tasks.push({ text: '', imp: '보통', urg: '보통' });
+
+  const editor = document.createElement('div');
+  editor.className = 'mot-task-editor';
+
+  const lvls = ['높음', '보통', '낮음'];
+  const renderEditor = () => {
+    editor.innerHTML = tasks.map((t, i) => `
+      <div class="mot-task-editor-row">
+        <input type="text" value="${escHtml(t.text)}" placeholder="업무 내용">
+        <select title="중요도">${lvls.map(l=>`<option${t.imp===l?' selected':''}>${l}</option>`).join('')}</select>
+        <select title="긴급도">${lvls.map(l=>`<option${t.urg===l?' selected':''}>${l}</option>`).join('')}</select>
+        <button class="mot-update-editor-del" onclick="tasks.splice(${i},1);renderEditorFn()">✕</button>
+      </div>
+    `).join('') +
+    `<button class="mot-update-editor-add" onclick="tasks.push({text:'',imp:'보통',urg:'보통'});renderEditorFn()">+ 업무 추가</button>
+     <button class="mot-update-editor-save" onclick="saveTasksFn()">저장</button>`;
+  };
+
+  // 함수를 editor에 붙여두기
+  editor._tasks = tasks;
+  const renderEditorFn = () => renderEditor();
+  const saveTasksFn = async () => {
+    const rows = editor.querySelectorAll('.mot-task-editor-row');
+    const val = Array.from(rows).map(row => {
+      const [inp, sel1, sel2] = row.querySelectorAll('input, select');
+      return inp?.value.trim() ? `${inp.value.trim()}||${sel1.value}||${sel2.value}` : null;
+    }).filter(Boolean).join('\n');
+    await saveStageField(stage, 'doing', val);
+    // 뷰 업데이트
+    const listEl = sectionEl.querySelector('.mot-task-list, .mot-stage-empty');
+    if (listEl) listEl.outerHTML = taskListHtml(val);
+    else sectionEl.querySelector('.mot-stage-section-label').insertAdjacentHTML('afterend', taskListHtml(val));
+    editor.remove();
+  };
+
+  // 스코프 연결
+  window[`_renderTaskEditor_${stage}`] = renderEditorFn;
+  window[`_saveTaskEditor_${stage}`] = saveTasksFn;
+  editor.innerHTML = ''; // placeholder
+  renderEditor();
+
+  // onclick 바인딩 재연결
+  editor.querySelectorAll('[onclick]').forEach(btn => {
+    const orig = btn.getAttribute('onclick');
+    btn.removeAttribute('onclick');
+    btn.addEventListener('click', () => {
+      if (orig.includes('tasks.splice')) { const i = parseInt(orig.match(/\d+/)[0]); tasks.splice(i,1); renderEditorFn(); }
+      else if (orig.includes('tasks.push')) { tasks.push({text:'',imp:'보통',urg:'보통'}); renderEditorFn(); }
+      else if (orig.includes('saveTasksFn')) saveTasksFn();
+    });
+  });
+
+  sectionEl.appendChild(editor);
+}
+
 function renderStageCard(el, row) {
   const stage = el.dataset.stage;
   const def   = STAGE_DEFAULTS[stage] || {};
   const desc  = (row?.description != null && row.description !== '') ? row.description : (def.description || '');
+  const prob  = (row?.problems != null && row.problems !== '')       ? row.problems     : (def.problems || '');
   const doing = (row?.doing != null && row.doing !== '')             ? row.doing        : (def.doing || '');
   const todo  = (row?.todo  != null && row.todo  !== '')             ? row.todo         : (def.todo  || '');
 
@@ -5724,9 +5846,16 @@ function renderStageCard(el, row) {
         placeholder="단계에 대한 설명을 입력하세요">${escHtml(desc)}</textarea>
     </div>
     <div class="mot-stage-section">
-      <div class="mot-stage-section-label">현재 진행 중</div>
-      <textarea class="mot-stage-textarea" data-stage="${stage}" data-field="doing"
-        placeholder="줄마다 하나씩 입력하세요">${escHtml(doing)}</textarea>
+      <div class="mot-stage-section-label">문제 상황</div>
+      <textarea class="mot-stage-textarea" data-stage="${stage}" data-field="problems"
+        placeholder="현재 문제 상황을 입력하세요">${escHtml(prob)}</textarea>
+    </div>
+    <div class="mot-stage-section" id="task-section-${stage}">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="mot-stage-section-label">관련 업무</div>
+        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', ${JSON.stringify(doing)}, document.getElementById('task-section-${stage}'))">✏</button>
+      </div>
+      ${taskListHtml(doing)}
     </div>
     <div class="mot-stage-section">
       <div class="mot-stage-section-label">추가 필요</div>
