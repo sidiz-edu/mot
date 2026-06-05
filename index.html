@@ -5808,14 +5808,14 @@ function taskListHtml(raw) {
   if (!lines.length) return '<span class="mot-stage-empty">기록 없음</span>';
   return '<div class="mot-task-list">' + lines.map(l => {
     const t = parseTask(l);
-    const lvls = ['높음','보통','낮음'];
+    const lvls = [['높음','上'],['보통','中'],['낮음','下']];
     return `<div class="mot-task-row" data-raw="${escHtml(l)}">
       <span class="mot-task-text">${escHtml(t.text)}</span>
       <span class="mot-task-chip ${IMP_MAP[t.imp]||'chip-imp-mid'}">중요 ${SHORT[t.imp]||t.imp}</span>
       <span class="mot-task-chip ${URG_MAP[t.urg]||'chip-urg-mid'}">긴급 ${SHORT[t.urg]||t.urg}</span>
       <input class="mot-task-inline-input" value="${escHtml(t.text)}" placeholder="업무 내용">
-      <select class="mot-task-inline-select" title="중요도">${lvls.map(l=>`<option${t.imp===l?' selected':''}>${l}</option>`).join('')}</select>
-      <select class="mot-task-inline-select" title="긴급도">${lvls.map(l=>`<option${t.urg===l?' selected':''}>${l}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="중요도">${lvls.map(([v,lb])=>`<option value="${v}"${t.imp===v?' selected':''}>${lb}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="긴급도">${lvls.map(([v,lb])=>`<option value="${v}"${t.urg===v?' selected':''}>${lb}</option>`).join('')}</select>
       <button class="mot-task-inline-del" title="삭제">✕</button>
     </div>`;
   }).join('') + `<button class="mot-task-add-btn">+ 업무 추가</button></div>`;
@@ -5869,7 +5869,7 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
   // 편집 모드 시작 — 항목이 없으면 빈 행 추가
   if (!list || !sectionEl.querySelector('.mot-task-row')) {
     const listEl = sectionEl.querySelector('.mot-stage-empty');
-    const lvls = ['높음','보통','낮음'];
+    const lvls = [['높음','上'],['보통','中'],['낮음','下']];
     const newRow = document.createElement('div');
     newRow.className = 'mot-task-row editing';
     newRow.innerHTML = `
@@ -5877,8 +5877,8 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
       <span class="mot-task-chip chip-imp-mid">중요 中</span>
       <span class="mot-task-chip chip-urg-mid">긴급 中</span>
       <input class="mot-task-inline-input" value="" placeholder="업무 내용">
-      <select class="mot-task-inline-select" title="중요도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
-      <select class="mot-task-inline-select" title="긴급도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="중요도">${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="긴급도">${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
       <button class="mot-task-inline-del" title="삭제">✕</button>`;
     const newList = document.createElement('div');
     newList.className = 'mot-task-list';
@@ -5902,8 +5902,8 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
       <span class="mot-task-chip chip-imp-mid">중요 中</span>
       <span class="mot-task-chip chip-urg-mid">긴급 中</span>
       <input class="mot-task-inline-input" value="" placeholder="업무 내용">
-      <select class="mot-task-inline-select" title="중요도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
-      <select class="mot-task-inline-select" title="긴급도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="중요도">${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="긴급도">${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
       <button class="mot-task-inline-del" title="삭제">✕</button>`;
     addTaskDrag(row, taskList, stage, sectionEl);
     return row;
@@ -5933,7 +5933,7 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
         saveTasksNow(stage, sectionEl);
       }
       if (e.target.classList.contains('mot-task-add-btn')) {
-        const lvls = ['높음','보통','낮음'];
+        const lvls = [['높음','上'],['보통','中'],['낮음','下']];
         const row = makeRow(lvls);
         e.target.before(row);
       }
