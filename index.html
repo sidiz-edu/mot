@@ -1779,13 +1779,43 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
 .s-done    .upd-status { background: rgba(0,182,95,0.15); }
 .s-doing   .upd-status { background: rgba(0,62,255,0.12); }
 .s-planned .upd-status { background: rgba(90,85,75,0.1); }
+.mot-update-col { align-items: center; }
+.mot-update-badges { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
 .mot-update-edit-btn {
-  font-size: 9px; color: var(--ink-4); background: none; border: none;
+  color: var(--ink-4); background: none; border: none;
   cursor: pointer; padding: 2px 4px; border-radius: 4px; opacity: 0;
-  transition: opacity .12s;
+  transition: opacity .12s, color .12s;
 }
 .mot-update-col:hover .mot-update-edit-btn { opacity: 1; }
-.mot-update-col:hover .mot-update-edit-btn:hover { background: var(--surface-3); color: var(--ink-2); }
+.mot-update-edit-btn:hover { background: var(--surface-3); color: var(--accent); }
+.mot-update-edit-btn.active { opacity: 1; color: var(--accent); }
+/* 인라인 편집 행 */
+.mot-upd-edit-row {
+  display: flex; align-items: center; gap: 4px; width: 100%;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 3px 5px;
+}
+.mot-upd-edit-row.drag-over { border-color: var(--accent); background: var(--accent-soft); }
+.mot-upd-drag { color: var(--ink-4); font-size: 11px; cursor: grab; flex-shrink: 0; user-select: none; }
+.mot-upd-edit-row select {
+  font-size: 10px; font-family: inherit; font-weight: 600;
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 1px 3px; background: var(--surface-2); color: var(--ink);
+  flex-shrink: 0; cursor: pointer;
+}
+.mot-upd-edit-row input[type="text"] {
+  flex: 1; font-size: 11px; font-family: inherit;
+  border: none; outline: none; background: transparent; color: var(--ink); min-width: 0;
+}
+.mot-upd-del { font-size: 11px; color: var(--ink-4); background: none; border: none; cursor: pointer; padding: 0 2px; flex-shrink: 0; }
+.mot-upd-del:hover { color: var(--neg); }
+.mot-upd-add {
+  font-size: 10px; font-weight: 600; color: var(--accent);
+  background: none; border: 1px dashed var(--accent);
+  border-radius: 5px; padding: 2px 8px; cursor: pointer; width: 100%;
+  display: none; margin-top: 2px;
+}
+.mot-update-col.editing .mot-upd-add { display: block; }
 .mot-update-editor {
   margin-top: 6px; display: flex; flex-direction: column; gap: 5px;
   background: var(--surface); border: 1.5px solid var(--accent);
@@ -5978,6 +6008,8 @@ function badgeHtml(line) {
   return `<span class="mot-update-badge ${m.cls}"><span class="upd-status">${m.label}</span>${escHtml(text)}</span>`;
 }
 
+const PENCIL_SVG = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+
 function renderUpdateRow(map) {
   const row = document.getElementById('mot-update-row');
   if (!row) { console.warn('mot-update-row 없음'); return; }
@@ -5987,67 +6019,127 @@ function renderUpdateRow(map) {
     const raw = (map[stage]?.updates != null && map[stage].updates !== '')
                   ? map[stage].updates : (def.updates || '');
     const badges = raw.split('\n').filter(l => l.trim()).map(badgeHtml).join('');
-    return `
-      <div class="mot-update-col" data-stage="${stage}">
+    return `<div class="mot-update-col" data-stage="${stage}" data-raw="${escHtml(raw)}">
         <div class="mot-update-badges">${badges}</div>
-        <button class="mot-update-edit-btn" onclick="openUpdateEdit('${stage}')" title="편집">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        </button>
+        <button class="mot-update-edit-btn" title="편집">${PENCIL_SVG}</button>
+        <button class="mot-upd-add">+ 추가</button>
       </div>`;
   }).join('');
-}
 
-function openUpdateEdit(stage) {
-  const col = document.querySelector(`.mot-update-col[data-stage="${stage}"]`);
-  if (!col || col.querySelector('.mot-update-editor')) return;
+  // 이벤트 바인딩
+  row.querySelectorAll('.mot-update-col').forEach(col => {
+    const stage = col.dataset.stage;
+    const editBtn = col.querySelector('.mot-update-edit-btn');
+    const addBtn  = col.querySelector('.mot-upd-add');
+    let saveTimer;
 
-  const current = Array.from(col.querySelectorAll('.mot-update-badge')).map(b => {
-    const statusLabel = b.querySelector('.upd-status')?.textContent || '완료';
-    const statusKey = Object.entries(STATUS_MAP).find(([k,v]) => v.label === statusLabel)?.[0] || '완료';
-    const text = b.textContent.replace(b.querySelector('.upd-status')?.textContent || '', '').trim();
-    return { status: statusKey, text };
-  });
-  if (current.length === 0) current.push({ status: '완료', text: '' });
-
-  const editor = document.createElement('div');
-  editor.className = 'mot-update-editor';
-
-  const renderRows = () => {
-    editor.innerHTML = current.map((item, i) => `
-      <div class="mot-update-editor-row">
-        <select onchange="(function(s){window._updEdit_${stage}[${i}].status=s.value})(this)">
-          ${Object.entries(STATUS_MAP).map(([k,v]) =>
-            `<option value="${k}"${item.status===k?' selected':''}>${v.label}</option>`
-          ).join('')}
-        </select>
-        <input type="text" value="${escHtml(item.text)}" placeholder="내용 입력"
-          oninput="window._updEdit_${stage}[${i}].text=this.value">
-        <button class="mot-update-editor-del" onclick="window._updEdit_${stage}.splice(${i},1);window._reRenderUpdEdit_${stage}()">✕</button>
-      </div>
-    `).join('') + `
-      <button class="mot-update-editor-add" onclick="window._updEdit_${stage}.push({status:'예정',text:''});window._reRenderUpdEdit_${stage}()">+ 항목 추가</button>
-      <button class="mot-update-editor-save" onclick="window._saveUpdEdit_${stage}()">저장</button>
-    `;
-  };
-
-  window[`_updEdit_${stage}`] = current;
-  window[`_reRenderUpdEdit_${stage}`] = renderRows;
-  window[`_saveUpdEdit_${stage}`] = async () => {
-    // DOM에서 직접 값 읽기 (가장 신뢰할 수 있는 방법)
-    const rows = editor.querySelectorAll('.mot-update-editor-row');
-    const val = Array.from(rows).map(row => {
-      const status = row.querySelector('select')?.value || '완료';
-      const text = row.querySelector('input[type="text"]')?.value?.trim() || '';
-      return text ? `${status}|${text}` : null;
+    const getVal = () => Array.from(col.querySelectorAll('.mot-upd-edit-row')).map(r => {
+      const s = r.querySelector('select')?.value || '완료';
+      const t = r.querySelector('input')?.value?.trim() || '';
+      return t ? `${s}|${t}` : null;
     }).filter(Boolean).join('\n');
-    await saveStageField(stage, 'updates', val);
-    const badgesEl = col.querySelector('.mot-update-badges');
-    if (badgesEl) badgesEl.innerHTML = val.split('\n').filter(l=>l.trim()).map(badgeHtml).join('');
-    editor.remove();
-  };
 
-  renderRows();
-  col.appendChild(editor);
+    const autoSave = () => {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(async () => {
+        const val = getVal();
+        await saveStageField(stage, 'updates', val);
+        col.dataset.raw = val;
+        // 뱃지 동기화
+        col.querySelectorAll('.mot-upd-edit-row').forEach(r => {
+          const s = r.querySelector('select')?.value || '완료';
+          const t = r.querySelector('input')?.value?.trim() || '';
+          const badge = r._badge;
+          if (badge && t) {
+            const m = STATUS_MAP[s] || STATUS_MAP['완료'];
+            badge.className = `mot-update-badge ${m.cls}`;
+            badge.innerHTML = `<span class="upd-status">${m.label}</span>${escHtml(t)}`;
+          }
+        });
+      }, 600);
+    };
+
+    const addEditRow = (status, text) => {
+      const editRow = document.createElement('div');
+      editRow.className = 'mot-upd-edit-row';
+      editRow.draggable = true;
+
+      const drag = document.createElement('span');
+      drag.className = 'mot-upd-drag'; drag.textContent = '⠿';
+
+      const sel = document.createElement('select');
+      Object.entries(STATUS_MAP).forEach(([k,v]) => {
+        const o = document.createElement('option'); o.value = k; o.textContent = v.label;
+        if (k === status) o.selected = true; sel.appendChild(o);
+      });
+
+      const inp = document.createElement('input');
+      inp.type = 'text'; inp.value = text; inp.placeholder = '내용 입력';
+
+      const del = document.createElement('button');
+      del.className = 'mot-upd-del'; del.textContent = '✕';
+      del.addEventListener('click', () => { editRow.remove(); autoSave(); });
+
+      sel.addEventListener('change', autoSave);
+      inp.addEventListener('input', autoSave);
+
+      editRow.append(drag, sel, inp, del);
+
+      // 드래그 앤 드롭
+      editRow.addEventListener('dragstart', e => { e.dataTransfer.effectAllowed = 'move'; editRow._dragging = true; });
+      editRow.addEventListener('dragend', () => { editRow._dragging = false; col.querySelectorAll('.mot-upd-edit-row').forEach(r => r.classList.remove('drag-over')); autoSave(); });
+      editRow.addEventListener('dragover', e => { e.preventDefault(); if (!editRow._dragging) editRow.classList.add('drag-over'); });
+      editRow.addEventListener('dragleave', () => editRow.classList.remove('drag-over'));
+      editRow.addEventListener('drop', e => {
+        e.preventDefault();
+        editRow.classList.remove('drag-over');
+        const dragging = col.querySelector('.mot-upd-edit-row[draggable="true"]._dragging') ||
+          Array.from(col.querySelectorAll('.mot-upd-edit-row')).find(r => r._dragging);
+        if (dragging && dragging !== editRow) {
+          const parent = editRow.parentNode;
+          const nodes = Array.from(parent.children);
+          if (nodes.indexOf(dragging) < nodes.indexOf(editRow)) editRow.after(dragging);
+          else editRow.before(dragging);
+          autoSave();
+        }
+      });
+
+      // 뷰 뱃지 참조
+      const badges = col.querySelectorAll('.mot-update-badge');
+      const idx = col.querySelectorAll('.mot-upd-edit-row').length;
+      editRow._badge = badges[idx] || null;
+
+      return editRow;
+    };
+
+    editBtn.addEventListener('click', () => {
+      const isEditing = col.classList.contains('editing');
+      if (isEditing) {
+        col.classList.remove('editing');
+        editBtn.classList.remove('active');
+        col.querySelectorAll('.mot-upd-edit-row').forEach(r => r.remove());
+      } else {
+        col.classList.add('editing');
+        editBtn.classList.add('active');
+        const raw = col.dataset.raw || '';
+        const badgesArea = col.querySelector('.mot-update-badges');
+        raw.split('\n').filter(l => l.trim()).forEach(line => {
+          const { status, text } = parseBadgeLine(line);
+          badgesArea.after(addEditRow(status, text));
+          // move row before addBtn
+        });
+        // 순서 재배치: 뱃지 > 편집행들 > add버튼 > 편집버튼
+        const editRows = col.querySelectorAll('.mot-upd-edit-row');
+        editRows.forEach(r => col.insertBefore(r, addBtn));
+      }
+    });
+
+    addBtn.addEventListener('click', () => {
+      const row = addEditRow('완료', '');
+      col.insertBefore(row, addBtn);
+      row.querySelector('input')?.focus();
+    });
+  });
 }
 
 async function loadStageInfo() {
