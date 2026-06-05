@@ -1857,15 +1857,17 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
 .mot-stage-empty {
   font-size: 11px; color: var(--ink-4); font-style: italic;
 }
-.mot-stage-editable {
-  cursor: text; border-radius: 4px; padding: 3px 4px; margin: -3px -4px;
-  transition: background .12s;
-  font-size: 12px; color: var(--ink-2); line-height: 1.6;
-  min-height: 20px; white-space: pre-wrap;
+.mot-stage-textarea {
+  width: 100%; border: 1px solid transparent; border-radius: 4px;
+  padding: 3px 4px; margin: 0; resize: none; overflow: hidden;
+  font-size: 12px; font-family: inherit; color: var(--ink-2);
+  line-height: 1.6; background: transparent; outline: none;
+  transition: border-color .12s, background .12s;
+  min-height: 36px;
 }
-.mot-stage-editable:hover { background: var(--surface-3); }
-.mot-stage-editable:empty::before { content: attr(data-placeholder); color: var(--ink-4); font-style: italic; font-size: 11px; }
-.mot-stage-editable:focus { outline: none; background: var(--surface); box-shadow: 0 0 0 1.5px var(--accent); }
+.mot-stage-textarea:hover { background: var(--surface-3); border-color: var(--border); }
+.mot-stage-textarea:focus { background: var(--surface); border-color: var(--accent); }
+.mot-stage-textarea::placeholder { color: var(--ink-4); font-style: italic; font-size: 11px; }
 .mot-stage-save-status {
   font-size: 10px; color: var(--ink-4); text-align: right; margin-top: 6px; min-height: 14px;
 }
@@ -5715,6 +5717,11 @@ function toHtml(str) {
   return escHtml(str).replace(/\n/g, '<br>');
 }
 
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+}
+
 function renderStageCard(el, row) {
   const stage = el.dataset.stage;
   const def   = STAGE_DEFAULTS[stage] || {};
@@ -5725,36 +5732,30 @@ function renderStageCard(el, row) {
   el.innerHTML = `
     <div class="mot-stage-section">
       <div class="mot-stage-section-label">단계 설명</div>
-      <div class="mot-stage-editable" contenteditable="true"
-           data-stage="${stage}" data-field="description"
-           data-placeholder="단계에 대한 설명을 입력하세요">${toHtml(desc)}</div>
+      <textarea class="mot-stage-textarea" data-stage="${stage}" data-field="description"
+        placeholder="단계에 대한 설명을 입력하세요">${escHtml(desc)}</textarea>
     </div>
     <div class="mot-stage-section">
       <div class="mot-stage-section-label">현재 진행 중</div>
-      <div class="mot-stage-editable" contenteditable="true"
-           data-stage="${stage}" data-field="doing"
-           data-placeholder="줄마다 하나씩 입력하세요">${toHtml(doing)}</div>
+      <textarea class="mot-stage-textarea" data-stage="${stage}" data-field="doing"
+        placeholder="줄마다 하나씩 입력하세요">${escHtml(doing)}</textarea>
     </div>
     <div class="mot-stage-section">
       <div class="mot-stage-section-label">추가 필요</div>
-      <div class="mot-stage-editable" contenteditable="true"
-           data-stage="${stage}" data-field="todo"
-           data-placeholder="줄마다 하나씩 입력하세요">${toHtml(todo)}</div>
+      <textarea class="mot-stage-textarea" data-stage="${stage}" data-field="todo"
+        placeholder="줄마다 하나씩 입력하세요">${escHtml(todo)}</textarea>
     </div>
     <div class="mot-stage-save-status" id="stage-status-${stage}"></div>
   `;
+
+  // 높이 자동 조절
+  el.querySelectorAll('.mot-stage-textarea').forEach(ta => {
+    autoResize(ta);
+    ta.addEventListener('input', () => autoResize(ta));
+  });
 }
 
 let _stageSaveTimers = {};
-
-function getTextFromEditable(el) {
-  // <br> → \n, 나머지 태그 제거
-  return el.innerHTML
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<[^>]+>/g, '')
-    .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
-    .trim();
-}
 
 const STATUS_MAP = {
   '완료':  { cls: 's-done',    label: '완료' },
@@ -5857,16 +5858,14 @@ async function loadStageInfo() {
   // 단계 카드 렌더링
   cards.forEach(el => renderStageCard(el, map[el.dataset.stage]));
 
-  // 카드 편집 이벤트 등록
-  document.querySelectorAll('.mot-stage-editable').forEach(el => {
-    el.addEventListener('input', () => {
-      const stage = el.dataset.stage;
+  // 카드 편집 이벤트 등록 (blur 시 저장)
+  document.querySelectorAll('.mot-stage-textarea').forEach(ta => {
+    ta.addEventListener('blur', async () => {
+      const stage = ta.dataset.stage;
+      const field = ta.dataset.field;
       const status = document.getElementById('stage-status-' + stage);
-      if (status) status.textContent = '수정 중...';
-      clearTimeout(_stageSaveTimers[stage + el.dataset.field]);
-      _stageSaveTimers[stage + el.dataset.field] = setTimeout(
-        () => saveStageField(stage, el.dataset.field, getTextFromEditable(el)), 1000
-      );
+      if (status) status.textContent = '저장 중...';
+      await saveStageField(stage, field, ta.value.trim());
     });
   });
 }
