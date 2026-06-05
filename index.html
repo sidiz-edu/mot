@@ -1529,7 +1529,7 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   grid-template-columns: repeat(5, 1fr);
   gap: 0 10px;
   position: relative;
-  padding: 48px 0 36px;
+  padding: 20px 0 36px;
   align-items: center;
 }
 .mot-stagger-grid::before { display: none; }
@@ -2121,7 +2121,7 @@ table.t               { font-size: 14px; }
 
           <!-- 업데이트 현황 (최상단) -->
           <div class="mot-section-title">업데이트 현황</div>
-          <div class="mot-update-row" id="mot-update-row" style="margin-bottom:4px"></div>
+          <div class="mot-update-row" id="mot-update-row" style="margin-bottom:0"></div>
 
           <div style="display:flex; align-items:center; gap:0">
             <div style="writing-mode:vertical-rl; transform:rotate(180deg); font-size:9px; font-weight:700; letter-spacing:.18em; color:var(--ink-4); text-transform:uppercase; padding:0 10px 0 0; white-space:nowrap; user-select:none;">Journey Map</div>
@@ -5827,9 +5827,13 @@ function openUpdateEdit(stage) {
   window[`_updEdit_${stage}`] = current;
   window[`_reRenderUpdEdit_${stage}`] = renderRows;
   window[`_saveUpdEdit_${stage}`] = async () => {
-    const val = window[`_updEdit_${stage}`]
-      .filter(r => r.text.trim())
-      .map(r => `${r.status}|${r.text.trim()}`).join('\n');
+    // DOM에서 직접 값 읽기 (가장 신뢰할 수 있는 방법)
+    const rows = editor.querySelectorAll('.mot-update-editor-row');
+    const val = Array.from(rows).map(row => {
+      const status = row.querySelector('select')?.value || '완료';
+      const text = row.querySelector('input[type="text"]')?.value?.trim() || '';
+      return text ? `${status}|${text}` : null;
+    }).filter(Boolean).join('\n');
     await saveStageField(stage, 'updates', val);
     const badgesEl = col.querySelector('.mot-update-badges');
     if (badgesEl) badgesEl.innerHTML = val.split('\n').filter(l=>l.trim()).map(badgeHtml).join('');
