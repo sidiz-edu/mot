@@ -2424,28 +2424,16 @@ table.t               { font-size: 14px; }
           <button class="ov-card" data-go="1" style="--card-accent:#003EFF">
             <div class="ov-card-head"><span class="ov-card-num" style="background:rgba(0,62,255,0.08);color:#003EFF">01</span><span class="ov-card-title">AS 신청 페이지</span></div>
             <div class="ov-card-desc">메인 조회 → AS 신청 클릭 → 제품 선택 → 증상 입력 단계별 전환 추이와 이탈 구간을 추적합니다.</div>
-            <div class="ov-card-stats">
-              <div><div class="ov-stat-lbl">최근 주 신청 완료</div><div class="ov-stat-val">112<span class="ov-stat-u">건</span></div></div>
-              <div><div class="ov-stat-lbl">최근 주 메인 조회</div><div class="ov-stat-val">1,390<span class="ov-stat-u">회</span></div></div>
-            </div>
             <div class="ov-card-foot"><span>주간 단위 · 단계별 전환</span><span class="ov-card-arrow" style="color:#003EFF">자세히 →</span></div>
           </button>
           <button class="ov-card" data-go="2" style="--card-accent:#FF8000">
             <div class="ov-card-head"><span class="ov-card-num" style="background:rgba(255,128,0,0.08);color:#FF8000">02</span><span class="ov-card-title">컨택센터 용역료</span></div>
             <div class="ov-card-desc">인력 구성·채널별 접수 절차·시스템 연계 구조와 용역료 비용을 함께 파악합니다.</div>
-            <div class="ov-card-stats">
-              <div><div class="ov-stat-lbl">총 용역료 (4월)</div><div class="ov-stat-val">7,388<span class="ov-stat-u">만원</span></div></div>
-              <div><div class="ov-stat-lbl">일평균 비용</div><div class="ov-stat-val">369<span class="ov-stat-u">만원</span></div></div>
-            </div>
             <div class="ov-card-foot"><span>월 단위 · 항목별 분해</span><span class="ov-card-arrow" style="color:#FF8000">자세히 →</span></div>
           </button>
           <button class="ov-card" data-go="3" style="--card-accent:#00B65F">
             <div class="ov-card-head"><span class="ov-card-num" style="background:rgba(0,182,95,0.08);color:#00B65F">03</span><span class="ov-card-title">시디즈 AS 조치 현황</span></div>
             <div class="ov-card-desc">전국·서울경인 조치 건수, 1차 종결률, N차율, 평균 조치기간을 월별/년도별 추이로 분석합니다.</div>
-            <div class="ov-card-stats">
-              <div><div class="ov-stat-lbl">서울경인 조치 건수</div><div class="ov-stat-val">736<span class="ov-stat-u">건</span></div></div>
-              <div><div class="ov-stat-lbl">평균 조치기간</div><div class="ov-stat-val">5.9<span class="ov-stat-u">일</span></div></div>
-            </div>
             <div class="ov-card-foot"><span>최근 12개월 · 월별 · 년도별</span><span class="ov-card-arrow" style="color:#00B65F">자세히 →</span></div>
           </button>
         </div>
@@ -5881,11 +5869,9 @@ async function saveStageField(stage, field, value) {
   }
 }
 
-// 즉시 기본값으로 렌더링
+// 즉시 기본값으로 렌더링 (Supabase 연결 전)
 renderUpdateRow({});
 document.querySelectorAll('.mot-stage-card[data-stage]').forEach(el => renderStageCard(el, null));
-// Supabase 데이터 로드 후 덮어쓰기
-loadStageInfo();
 
 // ---- 월별 분석 노트 아코디언 ----
 function toggleNote(btn) {
@@ -6503,6 +6489,9 @@ const _SB = supabase.createClient(
   'https://dvlrzbckneucpvlacdll.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2bHJ6YmNrbmV1Y3B2bGFjZGxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5ODE0OTUsImV4cCI6MjA5MDU1NzQ5NX0.ofzGfyjndiT-FAIcG9TCFtUSXsagTBYOnhsP91vx0sE'
 );
+
+// _SB 정의 후 Supabase 데이터 로드
+loadStageInfo();
 
 const MEMO_TAB_KEYS  = ['overview', 'as', 'funnel', 'cost'];
 const MEMO_TAB_NAMES = ['Overview', 'AS 조치 현황', 'AS 신청 페이지', '컨택센터 용역료'];
