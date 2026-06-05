@@ -5774,61 +5774,61 @@ function taskListHtml(raw) {
 
 function openTaskEditor(stage, currentRaw, sectionEl) {
   if (sectionEl.querySelector('.mot-task-editor')) return;
-  const tasks = currentRaw.split('\n').filter(l => l.trim()).map(parseTask);
+  const tasks = (currentRaw || '').split('\n').filter(l => l.trim()).map(parseTask);
   if (!tasks.length) tasks.push({ text: '', imp: '보통', urg: '보통' });
 
   const editor = document.createElement('div');
   editor.className = 'mot-task-editor';
+  sectionEl.appendChild(editor);
 
   const lvls = ['높음', '보통', '낮음'];
-  const renderEditor = () => {
-    editor.innerHTML = tasks.map((t, i) => `
-      <div class="mot-task-editor-row">
-        <input type="text" value="${escHtml(t.text)}" placeholder="업무 내용">
-        <select title="중요도">${lvls.map(l=>`<option${t.imp===l?' selected':''}>${l}</option>`).join('')}</select>
-        <select title="긴급도">${lvls.map(l=>`<option${t.urg===l?' selected':''}>${l}</option>`).join('')}</select>
-        <button class="mot-update-editor-del" onclick="tasks.splice(${i},1);renderEditorFn()">✕</button>
-      </div>
-    `).join('') +
-    `<button class="mot-update-editor-add" onclick="tasks.push({text:'',imp:'보통',urg:'보통'});renderEditorFn()">+ 업무 추가</button>
-     <button class="mot-update-editor-save" onclick="saveTasksFn()">저장</button>`;
-  };
 
-  // 함수를 editor에 붙여두기
-  editor._tasks = tasks;
-  const renderEditorFn = () => renderEditor();
-  const saveTasksFn = async () => {
-    const rows = editor.querySelectorAll('.mot-task-editor-row');
-    const val = Array.from(rows).map(row => {
-      const [inp, sel1, sel2] = row.querySelectorAll('input, select');
-      return inp?.value.trim() ? `${inp.value.trim()}||${sel1.value}||${sel2.value}` : null;
-    }).filter(Boolean).join('\n');
-    await saveStageField(stage, 'doing', val);
-    // 뷰 업데이트
-    const listEl = sectionEl.querySelector('.mot-task-list, .mot-stage-empty');
-    if (listEl) listEl.outerHTML = taskListHtml(val);
-    else sectionEl.querySelector('.mot-stage-section-label').insertAdjacentHTML('afterend', taskListHtml(val));
-    editor.remove();
-  };
+  function renderEditor() {
+    editor.innerHTML = '';
+    tasks.forEach((t, i) => {
+      const row = document.createElement('div');
+      row.className = 'mot-task-editor-row';
 
-  // 스코프 연결
-  window[`_renderTaskEditor_${stage}`] = renderEditorFn;
-  window[`_saveTaskEditor_${stage}`] = saveTasksFn;
-  editor.innerHTML = ''; // placeholder
-  renderEditor();
+      const inp = document.createElement('input');
+      inp.type = 'text'; inp.value = t.text; inp.placeholder = '업무 내용';
+      inp.addEventListener('input', () => { tasks[i].text = inp.value; });
 
-  // onclick 바인딩 재연결
-  editor.querySelectorAll('[onclick]').forEach(btn => {
-    const orig = btn.getAttribute('onclick');
-    btn.removeAttribute('onclick');
-    btn.addEventListener('click', () => {
-      if (orig.includes('tasks.splice')) { const i = parseInt(orig.match(/\d+/)[0]); tasks.splice(i,1); renderEditorFn(); }
-      else if (orig.includes('tasks.push')) { tasks.push({text:'',imp:'보통',urg:'보통'}); renderEditorFn(); }
-      else if (orig.includes('saveTasksFn')) saveTasksFn();
+      const sel1 = document.createElement('select');
+      sel1.title = '중요도';
+      lvls.forEach(l => { const o = document.createElement('option'); o.value = l; o.textContent = l; if (t.imp === l) o.selected = true; sel1.appendChild(o); });
+      sel1.addEventListener('change', () => { tasks[i].imp = sel1.value; });
+
+      const sel2 = document.createElement('select');
+      sel2.title = '긴급도';
+      lvls.forEach(l => { const o = document.createElement('option'); o.value = l; o.textContent = l; if (t.urg === l) o.selected = true; sel2.appendChild(o); });
+      sel2.addEventListener('change', () => { tasks[i].urg = sel2.value; });
+
+      const del = document.createElement('button');
+      del.className = 'mot-update-editor-del'; del.textContent = '✕';
+      del.addEventListener('click', () => { tasks.splice(i, 1); renderEditor(); });
+
+      row.append(inp, sel1, sel2, del);
+      editor.appendChild(row);
     });
-  });
 
-  sectionEl.appendChild(editor);
+    const addBtn = document.createElement('button');
+    addBtn.className = 'mot-update-editor-add'; addBtn.textContent = '+ 업무 추가';
+    addBtn.addEventListener('click', () => { tasks.push({ text: '', imp: '보통', urg: '보통' }); renderEditor(); });
+
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'mot-update-editor-save'; saveBtn.textContent = '저장';
+    saveBtn.addEventListener('click', async () => {
+      const val = tasks.filter(t => t.text.trim()).map(t => `${t.text.trim()}||${t.imp}||${t.urg}`).join('\n');
+      await saveStageField(stage, 'doing', val);
+      const listEl = sectionEl.querySelector('.mot-task-list, .mot-stage-empty');
+      if (listEl) listEl.outerHTML = taskListHtml(val);
+      editor.remove();
+    });
+
+    editor.append(addBtn, saveBtn);
+  }
+
+  renderEditor();
 }
 
 function renderStageCard(el, row) {
@@ -5838,6 +5838,8 @@ function renderStageCard(el, row) {
   const prob  = (row?.problems != null && row.problems !== '')       ? row.problems     : (def.problems || '');
   const doing = (row?.doing != null && row.doing !== '')             ? row.doing        : (def.doing || '');
   const todo  = (row?.todo  != null && row.todo  !== '')             ? row.todo         : (def.todo  || '');
+
+  window[`_taskRaw_${stage}`] = doing;
 
   el.innerHTML = `
     <div class="mot-stage-section">
@@ -5853,7 +5855,7 @@ function renderStageCard(el, row) {
     <div class="mot-stage-section" id="task-section-${stage}">
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div class="mot-stage-section-label">관련 업무</div>
-        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', ${JSON.stringify(doing)}, document.getElementById('task-section-${stage}'))">✏</button>
+        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', window._taskRaw_${stage}||'', document.getElementById('task-section-${stage}'))">✏</button>
       </div>
       ${taskListHtml(doing)}
     </div>
