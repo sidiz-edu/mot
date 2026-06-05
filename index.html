@@ -1740,7 +1740,7 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
 .mot-section-title {
   font-size: 10px; font-weight: 700; letter-spacing: .14em;
   text-transform: uppercase; color: var(--ink-4);
-  padding: 10px 0 4px;
+  padding: 6px 0 2px;
 }
 .mot-stage-info-header {
   font-size: 13px; font-weight: 700; color: var(--ink);
@@ -2081,32 +2081,9 @@ table.t               { font-size: 14px; }
 
         <div class="mot-jny-canvas">
 
-          <!-- 통합 시스템 바 (상단) -->
-          <div class="mot-sys-bar" style="padding-bottom:16px">
-            <div class="mot-sys-bar-label" style="grid-column:1/-1">사용 시스템</div>
-            <div class="mot-sys-bar-col c-pre"></div>
-            <div class="mot-sys-bar-col c-funnel">
-              <span class="mot-sys-chip">웹 로그</span>
-              <span class="mot-sys-chip is-looker">Looker Studio</span>
-            </div>
-            <div class="mot-sys-bar-col c-contact">
-              <span class="mot-sys-chip is-cti">CTI</span>
-              <span class="mot-sys-chip is-happy">해피톡</span>
-              <span class="mot-sys-chip is-board">게시판</span>
-              <span class="mot-sys-chip is-erp">ERP</span>
-            </div>
-            <div class="mot-sys-bar-col c-as">
-              <span class="mot-sys-chip is-erp">ERP</span>
-              <span class="mot-sys-chip">AS현황확인</span>
-            </div>
-            <div class="mot-sys-bar-col c-done">
-              <span class="mot-sys-chip is-erp">ERP 종결처리</span>
-            </div>
-          </div>
-
-          <!-- 단계별 업데이트 현황 (동적) -->
+          <!-- 업데이트 뱃지 (최상단) -->
           <div class="mot-section-title">업데이트 뱃지</div>
-          <div class="mot-update-row" id="mot-update-row"></div>
+          <div class="mot-update-row" id="mot-update-row" style="margin-bottom:4px"></div>
 
           <div class="mot-stagger-grid">
 
@@ -2166,6 +2143,29 @@ table.t               { font-size: 14px; }
             </div>
 
           </div><!-- /mot-stagger-grid -->
+
+          <!-- 사용 시스템 (여정 맵 아래) -->
+          <div class="mot-sys-bar" style="padding-top:8px">
+            <div class="mot-sys-bar-label" style="grid-column:1/-1">사용 시스템</div>
+            <div class="mot-sys-bar-col c-pre"></div>
+            <div class="mot-sys-bar-col c-funnel">
+              <span class="mot-sys-chip">웹 로그</span>
+              <span class="mot-sys-chip is-looker">Looker Studio</span>
+            </div>
+            <div class="mot-sys-bar-col c-contact">
+              <span class="mot-sys-chip is-cti">CTI</span>
+              <span class="mot-sys-chip is-happy">해피톡</span>
+              <span class="mot-sys-chip is-board">게시판</span>
+              <span class="mot-sys-chip is-erp">ERP</span>
+            </div>
+            <div class="mot-sys-bar-col c-as">
+              <span class="mot-sys-chip is-erp">ERP</span>
+              <span class="mot-sys-chip">AS현황확인</span>
+            </div>
+            <div class="mot-sys-bar-col c-done">
+              <span class="mot-sys-chip is-erp">ERP 종결처리</span>
+            </div>
+          </div>
 
         </div><!-- /mot-jny-canvas -->
 
