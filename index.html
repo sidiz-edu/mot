@@ -2880,15 +2880,15 @@ table.t               { font-size: 14px; }
       <div class="card">
         <div class="card-head">
           <div>
-            <div class="card-title">신청 클릭 이후 단계별 전환율</div>
-            <div class="card-sub">② AS신청클릭 = 100% 기준 · 이후 단계 누적 전환율</div>
+            <div class="card-title">메인 조회 이후 단계별 전환율</div>
+            <div class="card-sub">각 단계 → 다음 단계 전환율 (%) · 주별 추이</div>
           </div>
           <div class="lg-row" style="margin:0">
-            <span class="lg-chip"><i style="background:var(--accent)"></i>② AS신청클릭 (기준)</span>
-            <span class="lg-chip"><i style="background:#3D72D7"></i>③ 제품선택</span>
-            <span class="lg-chip"><i style="background:#6B9FE8"></i>④ 증상입력</span>
-            <span class="lg-chip"><i style="background:#95BEFF"></i>⑤ 고객정보입력</span>
-            <span class="lg-chip"><i style="background:#38BDF8"></i>⑥ 신청완료</span>
+            <span class="lg-chip"><i style="background:#003EFF"></i>①→② 메인→신청클릭</span>
+            <span class="lg-chip"><i style="background:#3D72D7"></i>②→③ 신청클릭→제품선택</span>
+            <span class="lg-chip"><i style="background:#6B9FE8"></i>③→④ 제품→증상</span>
+            <span class="lg-chip"><i style="background:#95BEFF"></i>④→⑤ 증상→고객정보</span>
+            <span class="lg-chip"><i style="background:#38BDF8"></i>⑤→⑥ 고객정보→완료</span>
           </div>
         </div>
         <div class="chart-box h-280"><canvas id="c_funnel_flow"></canvas></div>
@@ -5098,14 +5098,14 @@ function renderSec1() {
 // ---- Section 2 charts ----
 function renderSec2() {
   const F = DATA.funnel;
-  // AS신청 클릭(②)을 100% 기준으로 이후 단계 누적 전환율
-  const pct = (arr, base) => arr.map((v, i) => base[i] ? Math.round(v / base[i] * 1000) / 10 : null);
+  // 메인 조회 이후 단계별 전환율 (각 단계 → 다음 단계)
+  const stepPct = (a, b) => a.map((v, i) => b[i] ? Math.round(v / b[i] * 1000) / 10 : null);
   makeMultiLine('c_funnel_flow', [
-    {label:'② AS신청클릭 (기준)',  color: COLORS.accent, data: F.click.map(() => 100), fill: false},
-    {label:'③ 제품선택',          color: '#3D72D7',     data: pct(F.pick, F.click),  fill: false},
-    {label:'④ 증상입력',          color: '#6B9FE8',     data: pct(F.sym,  F.click),  fill: false},
-    {label:'⑤ 고객정보입력',      color: '#95BEFF',     data: pct(F.info, F.click),  fill: false},
-    {label:'⑥ 신청완료',          color: '#38BDF8',     data: pct(F.done, F.click),  fill: false},
+    {label:'① → ② 메인조회→AS신청클릭',   color: '#003EFF', data: stepPct(F.click, F.main), fill: false},
+    {label:'② → ③ AS신청클릭→제품선택',   color: '#3D72D7', data: stepPct(F.pick,  F.click), fill: false},
+    {label:'③ → ④ 제품선택→증상입력',     color: '#6B9FE8', data: stepPct(F.sym,   F.pick),  fill: false},
+    {label:'④ → ⑤ 증상입력→고객정보입력', color: '#95BEFF', data: stepPct(F.info,  F.sym),   fill: false},
+    {label:'⑤ → ⑥ 고객정보→신청완료',    color: '#38BDF8', data: stepPct(F.done,  F.info),  fill: false},
   ], F.periods, true);
 
   makeLine('c_conv12', COLORS.accent, F.conv12, F.periods, true, '유입률');
@@ -5911,11 +5911,41 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
   }
 
   sectionEl.classList.add('task-editing-mode');
-  sectionEl.querySelectorAll('.mot-task-row').forEach(r => r.classList.add('editing'));
   btnEl?.classList.add('active');
 
-  // 이벤트 위임
   const taskList = sectionEl.querySelector('.mot-task-list');
+
+  const makeRow = (lvls) => {
+    const row = document.createElement('div');
+    row.className = 'mot-task-row editing';
+    row.draggable = true;
+    row.innerHTML = `
+      <span class="mot-upd-drag" style="font-size:11px;color:var(--ink-4);cursor:grab;flex-shrink:0;user-select:none">⠿</span>
+      <span class="mot-task-text"></span>
+      <span class="mot-task-chip chip-imp-mid">중요:보통</span>
+      <span class="mot-task-chip chip-urg-mid">긴급:보통</span>
+      <input class="mot-task-inline-input" value="" placeholder="업무 내용">
+      <select class="mot-task-inline-select" title="중요도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="긴급도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
+      <button class="mot-task-inline-del" title="삭제">✕</button>`;
+    addTaskDrag(row, taskList, stage, sectionEl);
+    return row;
+  };
+
+  // 기존 행에 드래그 핸들 + draggable 추가
+  taskList.querySelectorAll('.mot-task-row').forEach(r => {
+    r.classList.add('editing');
+    r.draggable = true;
+    if (!r.querySelector('.mot-upd-drag')) {
+      const handle = document.createElement('span');
+      handle.className = 'mot-upd-drag';
+      handle.style.cssText = 'font-size:11px;color:var(--ink-4);cursor:grab;flex-shrink:0;user-select:none';
+      handle.textContent = '⠿';
+      r.prepend(handle);
+    }
+    addTaskDrag(r, taskList, stage, sectionEl);
+  });
+
   if (!taskList._bound) {
     taskList._bound = true;
     taskList.addEventListener('input',  () => saveTasksNow(stage, sectionEl));
@@ -5927,20 +5957,30 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
       }
       if (e.target.classList.contains('mot-task-add-btn')) {
         const lvls = ['높음','보통','낮음'];
-        const row = document.createElement('div');
-        row.className = 'mot-task-row editing';
-        row.innerHTML = `
-          <span class="mot-task-text"></span>
-          <span class="mot-task-chip chip-imp-mid">중요:보통</span>
-          <span class="mot-task-chip chip-urg-mid">긴급:보통</span>
-          <input class="mot-task-inline-input" value="" placeholder="업무 내용">
-          <select class="mot-task-inline-select" title="중요도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
-          <select class="mot-task-inline-select" title="긴급도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
-          <button class="mot-task-inline-del" title="삭제">✕</button>`;
+        const row = makeRow(lvls);
         e.target.before(row);
       }
     });
   }
+}
+
+function addTaskDrag(row, list, stage, sectionEl) {
+  if (row._dragBound) return;
+  row._dragBound = true;
+  row.addEventListener('dragstart', e => { row._dragging = true; e.dataTransfer.effectAllowed = 'move'; });
+  row.addEventListener('dragend', () => { row._dragging = false; list.querySelectorAll('.mot-task-row').forEach(r => r.classList.remove('drag-over')); saveTasksNow(stage, sectionEl); });
+  row.addEventListener('dragover', e => { e.preventDefault(); if (!row._dragging) row.classList.add('drag-over'); });
+  row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
+  row.addEventListener('drop', e => {
+    e.preventDefault(); row.classList.remove('drag-over');
+    const dragging = Array.from(list.querySelectorAll('.mot-task-row')).find(r => r._dragging);
+    if (dragging && dragging !== row) {
+      const nodes = Array.from(list.children);
+      if (nodes.indexOf(dragging) < nodes.indexOf(row)) row.after(dragging);
+      else row.before(dragging);
+      saveTasksNow(stage, sectionEl);
+    }
+  });
 }
 
 function renderStageCard(el, row) {
