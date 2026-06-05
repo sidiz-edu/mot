@@ -5814,7 +5814,7 @@ function autoResize(ta) {
 
 const IMP_MAP = { '높음': 'chip-imp-high', '보통': 'chip-imp-mid', '낮음': 'chip-imp-low' };
 const URG_MAP = { '높음': 'chip-urg-high', '보통': 'chip-urg-mid', '낮음': 'chip-urg-low' };
-const SHORT = { '높음': '상', '보통': '중', '낮음': '하' };
+const SHORT = { '높음': '上', '보통': '中', '낮음': '下' };
 
 function parseTask(line) {
   const parts = line.split('||');
@@ -5829,8 +5829,8 @@ function taskListHtml(raw) {
     const lvls = ['높음','보통','낮음'];
     return `<div class="mot-task-row" data-raw="${escHtml(l)}">
       <span class="mot-task-text">${escHtml(t.text)}</span>
-      <span class="mot-task-chip ${IMP_MAP[t.imp]||'chip-imp-mid'}">중요: ${SHORT[t.imp]||t.imp}</span>
-      <span class="mot-task-chip ${URG_MAP[t.urg]||'chip-urg-mid'}">긴급: ${SHORT[t.urg]||t.urg}</span>
+      <span class="mot-task-chip ${IMP_MAP[t.imp]||'chip-imp-mid'}">중요 ${SHORT[t.imp]||t.imp}</span>
+      <span class="mot-task-chip ${URG_MAP[t.urg]||'chip-urg-mid'}">긴급 ${SHORT[t.urg]||t.urg}</span>
       <input class="mot-task-inline-input" value="${escHtml(t.text)}" placeholder="업무 내용">
       <select class="mot-task-inline-select" title="중요도">${lvls.map(l=>`<option${t.imp===l?' selected':''}>${l}</option>`).join('')}</select>
       <select class="mot-task-inline-select" title="긴급도">${lvls.map(l=>`<option${t.urg===l?' selected':''}>${l}</option>`).join('')}</select>
@@ -5892,8 +5892,8 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
     newRow.className = 'mot-task-row editing';
     newRow.innerHTML = `
       <span class="mot-task-text"></span>
-      <span class="mot-task-chip chip-imp-mid">중요: 중</span>
-      <span class="mot-task-chip chip-urg-mid">긴급: 중</span>
+      <span class="mot-task-chip chip-imp-mid">중요 中</span>
+      <span class="mot-task-chip chip-urg-mid">긴급 中</span>
       <input class="mot-task-inline-input" value="" placeholder="업무 내용">
       <select class="mot-task-inline-select" title="중요도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
       <select class="mot-task-inline-select" title="긴급도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
@@ -5917,8 +5917,8 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
     row.innerHTML = `
       <span class="mot-upd-drag" style="font-size:11px;color:var(--ink-4);cursor:grab;flex-shrink:0;user-select:none">⠿</span>
       <span class="mot-task-text"></span>
-      <span class="mot-task-chip chip-imp-mid">중요: 중</span>
-      <span class="mot-task-chip chip-urg-mid">긴급: 중</span>
+      <span class="mot-task-chip chip-imp-mid">중요 中</span>
+      <span class="mot-task-chip chip-urg-mid">긴급 中</span>
       <input class="mot-task-inline-input" value="" placeholder="업무 내용">
       <select class="mot-task-inline-select" title="중요도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
       <select class="mot-task-inline-select" title="긴급도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
