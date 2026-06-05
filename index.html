@@ -5779,8 +5779,10 @@ async function saveStageField(stage, field, value) {
   }
 }
 
-// 즉시 기본값으로 렌더링 후 Supabase 데이터로 덮어쓰기
+// 즉시 기본값으로 렌더링
 renderUpdateRow({});
+document.querySelectorAll('.mot-stage-card[data-stage]').forEach(el => renderStageCard(el, null));
+// Supabase 데이터 로드 후 덮어쓰기
 loadStageInfo();
 
 // ---- 월별 분석 노트 아코디언 ----
