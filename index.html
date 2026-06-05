@@ -1736,6 +1736,18 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   display: flex; align-items: center; gap: 4px;
 }
 
+/* 여정맵 섹션 타이틀 */
+.mot-section-title {
+  font-size: 10px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--ink-4);
+  padding: 10px 0 4px;
+}
+.mot-stage-info-header {
+  font-size: 13px; font-weight: 700; color: var(--ink);
+  padding: 20px 36px 0 52px;
+  letter-spacing: -0.1px;
+}
+
 /* 단계별 업데이트 뱃지 */
 .mot-update-row {
   display: grid; grid-template-columns: repeat(5, 1fr);
@@ -2093,6 +2105,7 @@ table.t               { font-size: 14px; }
           </div>
 
           <!-- 단계별 업데이트 현황 (동적) -->
+          <div class="mot-section-title">업데이트 뱃지</div>
           <div class="mot-update-row" id="mot-update-row"></div>
 
           <div class="mot-stagger-grid">
@@ -2157,7 +2170,8 @@ table.t               { font-size: 14px; }
         </div><!-- /mot-jny-canvas -->
 
 
-      <!-- ── 단계별 상세 정보 ── -->
+      <!-- ── 운영 노트 ── -->
+      <div class="mot-stage-info-header">운영 노트</div>
       <div class="mot-stage-info">
 
         <div class="mot-stage-card c-pre"    data-stage="pre"></div>
