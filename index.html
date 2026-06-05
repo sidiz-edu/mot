@@ -5642,49 +5642,69 @@ const STAGE_META = {
   done:    { label: 'AS 완료' },
 };
 
+const STAGE_DEFAULTS = {
+  pre:     { description: '고객이 AS 필요성을 인지하고 정보를 탐색하는 단계.\n검색 엔진 및 AI 검색을 통해 유입.', doing: '', todo: '' },
+  funnel:  { description: '시디즈 닷컴 내 AS 신청 페이지를 통한 온라인 접수.\n6단계 퍼널로 전환율 추적 중.', doing: '주차별 퍼널 전환율 모니터링', todo: '' },
+  contact: { description: '유선·모바일·게시판을 통한 상담 및 ERP 접수 처리.\n용역료 비용 발생 구간.', doing: '월별 용역료 추이 모니터링', todo: '' },
+  as:      { description: '엔지니어/시공팀 현장 방문 수리.\n평균 조치기간·N차율·1차 종결률이 핵심 지표.', doing: '월별 조치기간·N차율 모니터링', todo: '' },
+  done:    { description: 'ERP 종결 처리 후 고객 만족 확인.\nN차 발생 시 현장 조치 재배정.', doing: '', todo: '' },
+};
+
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function toHtml(str) {
+  return escHtml(str).replace(/\n/g, '<br>');
+}
+
 function renderStageCard(el, row) {
   const stage = el.dataset.stage;
-  const desc  = row?.description || '';
-  const doing = row?.doing || '';
-  const todo  = row?.todo  || '';
+  const def   = STAGE_DEFAULTS[stage] || {};
+  const desc  = (row?.description != null && row.description !== '') ? row.description : (def.description || '');
+  const doing = (row?.doing != null && row.doing !== '')             ? row.doing        : (def.doing || '');
+  const todo  = (row?.todo  != null && row.todo  !== '')             ? row.todo         : (def.todo  || '');
 
   el.innerHTML = `
     <div class="mot-stage-section">
       <div class="mot-stage-section-label">단계 설명</div>
       <div class="mot-stage-editable" contenteditable="true"
            data-stage="${stage}" data-field="description"
-           data-placeholder="단계에 대한 설명을 입력하세요">${escHtml(desc)}</div>
+           data-placeholder="단계에 대한 설명을 입력하세요">${toHtml(desc)}</div>
     </div>
     <div class="mot-stage-section">
       <div class="mot-stage-section-label">현재 진행 중</div>
       <div class="mot-stage-editable" contenteditable="true"
            data-stage="${stage}" data-field="doing"
-           data-placeholder="줄마다 하나씩 입력하세요">${escHtml(doing)}</div>
+           data-placeholder="줄마다 하나씩 입력하세요">${toHtml(doing)}</div>
     </div>
     <div class="mot-stage-section">
       <div class="mot-stage-section-label">추가 필요</div>
       <div class="mot-stage-editable" contenteditable="true"
            data-stage="${stage}" data-field="todo"
-           data-placeholder="줄마다 하나씩 입력하세요">${escHtml(todo)}</div>
+           data-placeholder="줄마다 하나씩 입력하세요">${toHtml(todo)}</div>
     </div>
     <div class="mot-stage-save-status" id="stage-status-${stage}"></div>
   `;
 }
 
-function escHtml(str) {
-  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
 let _stageSaveTimers = {};
+
+function getTextFromEditable(el) {
+  // <br> → \n, 나머지 태그 제거
+  return el.innerHTML
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
+    .trim();
+}
 
 async function loadStageInfo() {
   const cards = document.querySelectorAll('.mot-stage-card[data-stage]');
   const { data, error } = await _SB.from('stage_info').select('*');
   const map = {};
   if (data) data.forEach(r => { map[r.stage_id] = r; });
-  cards.forEach(el => {
-    renderStageCard(el, map[el.dataset.stage]);
-  });
+  cards.forEach(el => renderStageCard(el, map[el.dataset.stage]));
 
   // 편집 이벤트 등록
   document.querySelectorAll('.mot-stage-editable').forEach(el => {
@@ -5693,7 +5713,9 @@ async function loadStageInfo() {
       const status = document.getElementById('stage-status-' + stage);
       if (status) status.textContent = '수정 중...';
       clearTimeout(_stageSaveTimers[stage + el.dataset.field]);
-      _stageSaveTimers[stage + el.dataset.field] = setTimeout(() => saveStageField(stage, el.dataset.field, el.innerText.trim()), 1000);
+      _stageSaveTimers[stage + el.dataset.field] = setTimeout(
+        () => saveStageField(stage, el.dataset.field, getTextFromEditable(el)), 1000
+      );
     });
   });
 }
@@ -5709,7 +5731,6 @@ async function saveStageField(stage, field, value) {
   }
 }
 
-// Overview 섹션 활성화 시 로드
 loadStageInfo();
 
 // ---- 월별 분석 노트 아코디언 ----
