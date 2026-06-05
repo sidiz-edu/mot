@@ -1905,12 +1905,42 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   cursor: pointer; flex-shrink: 0;
 }
 .mot-task-edit-btn {
-  font-size: 10px; color: var(--ink-4); background: none; border: none;
-  cursor: pointer; padding: 2px 4px; border-radius: 4px;
-  transition: opacity .12s; opacity: 0;
+  background: none; border: none; cursor: pointer;
+  padding: 2px 4px; border-radius: 4px; color: var(--ink-4);
+  transition: opacity .12s, color .12s; opacity: 0; flex-shrink: 0;
 }
 .mot-stage-section:hover .mot-task-edit-btn { opacity: 1; }
-.mot-task-edit-btn:hover { background: var(--surface-3); color: var(--ink-2); }
+.mot-task-edit-btn:hover { background: var(--surface-3); color: var(--accent); }
+.mot-task-edit-btn.active { opacity: 1; color: var(--accent); }
+/* 인라인 편집 모드 */
+.mot-task-row.editing { background: var(--surface); border-color: var(--accent); }
+.mot-task-row.editing .mot-task-text { display: none; }
+.mot-task-row.editing .mot-task-chip { display: none; }
+.mot-task-inline-input {
+  flex: 1; font-size: 12px; font-family: inherit; color: var(--ink);
+  border: none; outline: none; background: transparent; padding: 0;
+  display: none;
+}
+.mot-task-row.editing .mot-task-inline-input { display: block; }
+.mot-task-inline-select {
+  font-size: 10px; font-family: inherit; font-weight: 600;
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 1px 3px; background: var(--surface-2); color: var(--ink);
+  display: none; flex-shrink: 0;
+}
+.mot-task-row.editing .mot-task-inline-select { display: block; }
+.mot-task-inline-del {
+  font-size: 11px; color: var(--ink-4); background: none; border: none;
+  cursor: pointer; padding: 0 2px; display: none; flex-shrink: 0;
+}
+.mot-task-row.editing .mot-task-inline-del { display: block; }
+.mot-task-add-btn {
+  font-size: 11px; font-weight: 600; color: var(--accent);
+  background: none; border: 1px dashed var(--accent);
+  border-radius: 5px; padding: 3px 8px; cursor: pointer;
+  width: 100%; margin-top: 4px; display: none;
+}
+.task-editing-mode .mot-task-add-btn { display: block; }
 
 /* 통합 시스템 바 */
 .mot-sys-bar {
@@ -5764,71 +5794,116 @@ function taskListHtml(raw) {
   if (!lines.length) return '<span class="mot-stage-empty">기록 없음</span>';
   return '<div class="mot-task-list">' + lines.map(l => {
     const t = parseTask(l);
-    return `<div class="mot-task-row">
+    const lvls = ['높음','보통','낮음'];
+    return `<div class="mot-task-row" data-raw="${escHtml(l)}">
       <span class="mot-task-text">${escHtml(t.text)}</span>
       <span class="mot-task-chip ${IMP_MAP[t.imp]||'chip-imp-mid'}">중요:${t.imp}</span>
       <span class="mot-task-chip ${URG_MAP[t.urg]||'chip-urg-mid'}">긴급:${t.urg}</span>
+      <input class="mot-task-inline-input" value="${escHtml(t.text)}" placeholder="업무 내용">
+      <select class="mot-task-inline-select" title="중요도">${lvls.map(l=>`<option${t.imp===l?' selected':''}>${l}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="긴급도">${lvls.map(l=>`<option${t.urg===l?' selected':''}>${l}</option>`).join('')}</select>
+      <button class="mot-task-inline-del" title="삭제">✕</button>
     </div>`;
-  }).join('') + '</div>';
+  }).join('') + `<button class="mot-task-add-btn">+ 업무 추가</button></div>`;
 }
 
-function openTaskEditor(stage, currentRaw, sectionEl) {
-  if (sectionEl.querySelector('.mot-task-editor')) return;
-  const tasks = (currentRaw || '').split('\n').filter(l => l.trim()).map(parseTask);
-  if (!tasks.length) tasks.push({ text: '', imp: '보통', urg: '보통' });
+let _taskSaveTimer = {};
 
-  const editor = document.createElement('div');
-  editor.className = 'mot-task-editor';
-  sectionEl.appendChild(editor);
+function saveTasksNow(stage, sectionEl) {
+  const list = sectionEl.querySelector('.mot-task-list');
+  if (!list) return;
+  const val = Array.from(list.querySelectorAll('.mot-task-row')).map(row => {
+    const inp  = row.querySelector('.mot-task-inline-input');
+    const sels = row.querySelectorAll('.mot-task-inline-select');
+    const text = inp?.value.trim() || '';
+    if (!text) return null;
+    return `${text}||${sels[0]?.value||'보통'}||${sels[1]?.value||'보통'}`;
+  }).filter(Boolean).join('\n');
 
-  const lvls = ['높음', '보통', '낮음'];
-
-  function renderEditor() {
-    editor.innerHTML = '';
-    tasks.forEach((t, i) => {
-      const row = document.createElement('div');
-      row.className = 'mot-task-editor-row';
-
-      const inp = document.createElement('input');
-      inp.type = 'text'; inp.value = t.text; inp.placeholder = '업무 내용';
-      inp.addEventListener('input', () => { tasks[i].text = inp.value; });
-
-      const sel1 = document.createElement('select');
-      sel1.title = '중요도';
-      lvls.forEach(l => { const o = document.createElement('option'); o.value = l; o.textContent = l; if (t.imp === l) o.selected = true; sel1.appendChild(o); });
-      sel1.addEventListener('change', () => { tasks[i].imp = sel1.value; });
-
-      const sel2 = document.createElement('select');
-      sel2.title = '긴급도';
-      lvls.forEach(l => { const o = document.createElement('option'); o.value = l; o.textContent = l; if (t.urg === l) o.selected = true; sel2.appendChild(o); });
-      sel2.addEventListener('change', () => { tasks[i].urg = sel2.value; });
-
-      const del = document.createElement('button');
-      del.className = 'mot-update-editor-del'; del.textContent = '✕';
-      del.addEventListener('click', () => { tasks.splice(i, 1); renderEditor(); });
-
-      row.append(inp, sel1, sel2, del);
-      editor.appendChild(row);
+  clearTimeout(_taskSaveTimer[stage]);
+  _taskSaveTimer[stage] = setTimeout(async () => {
+    await saveStageField(stage, 'doing', val);
+    window[`_taskRaw_${stage}`] = val;
+    // 뷰 칩 업데이트
+    list.querySelectorAll('.mot-task-row').forEach(row => {
+      const inp  = row.querySelector('.mot-task-inline-input');
+      const sels = row.querySelectorAll('.mot-task-inline-select');
+      const text = inp?.value.trim() || '';
+      const imp  = sels[0]?.value || '보통';
+      const urg  = sels[1]?.value || '보통';
+      const txtEl = row.querySelector('.mot-task-text');
+      const chips = row.querySelectorAll('.mot-task-chip');
+      if (txtEl) txtEl.textContent = text;
+      if (chips[0]) { chips[0].className = `mot-task-chip ${IMP_MAP[imp]||'chip-imp-mid'}`; chips[0].textContent = `중요:${imp}`; }
+      if (chips[1]) { chips[1].className = `mot-task-chip ${URG_MAP[urg]||'chip-urg-mid'}`; chips[1].textContent = `긴급:${urg}`; }
     });
+  }, 600);
+}
 
-    const addBtn = document.createElement('button');
-    addBtn.className = 'mot-update-editor-add'; addBtn.textContent = '+ 업무 추가';
-    addBtn.addEventListener('click', () => { tasks.push({ text: '', imp: '보통', urg: '보통' }); renderEditor(); });
+function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
+  const list = sectionEl.querySelector('.mot-task-list');
+  const isEditing = sectionEl.classList.contains('task-editing-mode');
 
-    const saveBtn = document.createElement('button');
-    saveBtn.className = 'mot-update-editor-save'; saveBtn.textContent = '저장';
-    saveBtn.addEventListener('click', async () => {
-      const val = tasks.filter(t => t.text.trim()).map(t => `${t.text.trim()}||${t.imp}||${t.urg}`).join('\n');
-      await saveStageField(stage, 'doing', val);
-      const listEl = sectionEl.querySelector('.mot-task-list, .mot-stage-empty');
-      if (listEl) listEl.outerHTML = taskListHtml(val);
-      editor.remove();
-    });
-
-    editor.append(addBtn, saveBtn);
+  if (isEditing) {
+    // 편집 모드 종료
+    sectionEl.classList.remove('task-editing-mode');
+    sectionEl.querySelectorAll('.mot-task-row').forEach(r => r.classList.remove('editing'));
+    btnEl?.classList.remove('active');
+    return;
   }
 
-  renderEditor();
+  // 편집 모드 시작 — 항목이 없으면 빈 행 추가
+  if (!list || !sectionEl.querySelector('.mot-task-row')) {
+    const listEl = sectionEl.querySelector('.mot-stage-empty');
+    const lvls = ['높음','보통','낮음'];
+    const newRow = document.createElement('div');
+    newRow.className = 'mot-task-row editing';
+    newRow.innerHTML = `
+      <span class="mot-task-text"></span>
+      <span class="mot-task-chip chip-imp-mid">중요:보통</span>
+      <span class="mot-task-chip chip-urg-mid">긴급:보통</span>
+      <input class="mot-task-inline-input" value="" placeholder="업무 내용">
+      <select class="mot-task-inline-select" title="중요도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
+      <select class="mot-task-inline-select" title="긴급도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
+      <button class="mot-task-inline-del" title="삭제">✕</button>`;
+    const newList = document.createElement('div');
+    newList.className = 'mot-task-list';
+    newList.appendChild(newRow);
+    newList.innerHTML += `<button class="mot-task-add-btn">+ 업무 추가</button>`;
+    if (listEl) listEl.replaceWith(newList); else sectionEl.appendChild(newList);
+  }
+
+  sectionEl.classList.add('task-editing-mode');
+  sectionEl.querySelectorAll('.mot-task-row').forEach(r => r.classList.add('editing'));
+  btnEl?.classList.add('active');
+
+  // 이벤트 위임
+  const taskList = sectionEl.querySelector('.mot-task-list');
+  if (!taskList._bound) {
+    taskList._bound = true;
+    taskList.addEventListener('input',  () => saveTasksNow(stage, sectionEl));
+    taskList.addEventListener('change', () => saveTasksNow(stage, sectionEl));
+    taskList.addEventListener('click', e => {
+      if (e.target.classList.contains('mot-task-inline-del')) {
+        e.target.closest('.mot-task-row').remove();
+        saveTasksNow(stage, sectionEl);
+      }
+      if (e.target.classList.contains('mot-task-add-btn')) {
+        const lvls = ['높음','보통','낮음'];
+        const row = document.createElement('div');
+        row.className = 'mot-task-row editing';
+        row.innerHTML = `
+          <span class="mot-task-text"></span>
+          <span class="mot-task-chip chip-imp-mid">중요:보통</span>
+          <span class="mot-task-chip chip-urg-mid">긴급:보통</span>
+          <input class="mot-task-inline-input" value="" placeholder="업무 내용">
+          <select class="mot-task-inline-select" title="중요도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
+          <select class="mot-task-inline-select" title="긴급도">${lvls.map(l=>`<option>${l}</option>`).join('')}</select>
+          <button class="mot-task-inline-del" title="삭제">✕</button>`;
+        e.target.before(row);
+      }
+    });
+  }
 }
 
 function renderStageCard(el, row) {
@@ -5855,7 +5930,9 @@ function renderStageCard(el, row) {
     <div class="mot-stage-section" id="task-section-${stage}">
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div class="mot-stage-section-label">관련 업무</div>
-        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', window._taskRaw_${stage}||'', document.getElementById('task-section-${stage}'))">✏</button>
+        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', window._taskRaw_${stage}||'', document.getElementById('task-section-${stage}'), this)" title="편집">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
       </div>
       ${taskListHtml(doing)}
     </div>
