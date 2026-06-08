@@ -2923,25 +2923,6 @@ table.t               { font-size: 14px; }
       <div class="fj-wrap">
         <div class="fj-title">AS 신청 퍼널 여정 맵 <span>단계별 클릭하면 상세 확인</span></div>
 
-        <!-- 메인 페이지 분기 -->
-        <div class="fj-main">
-          <div class="fj-main-node">
-            <div class="fj-main-box">
-              <div class="fj-node-label">메인 조회</div>
-              <div class="fj-node-sub">kr.sidiz.com/pages/as-main</div>
-            </div>
-          </div>
-          <div style="display:flex;flex-direction:column;justify-content:center;gap:0;padding-top:4px">
-            <div class="fj-branches">
-              <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">🔧 EASY REPAIR</span><span class="fj-branch-note">간단한 자가 수리 가이드</span></div>
-              <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">❓ 제품 FAQ</span><span class="fj-branch-note">자주 묻는 질문 확인</span></div>
-              <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">📋 정품 등록</span><span class="fj-branch-note">구매 제품 등록</span></div>
-              <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">🛡 품질보증 안내</span><span class="fj-branch-note">보증 정책 확인</span></div>
-              <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">↩ 나가기</span><span class="fj-branch-note">페이지 이탈</span></div>
-              <div class="fj-branch-row" style="margin-top:4px"><div class="fj-branch-line" style="background:#003EFF;opacity:.4"></div><span class="fj-branch-chip fj-branch-main">★ AS 신청하기</span><span class="fj-branch-note" style="color:#003EFF;font-weight:600">→ 퍼널 진입 (추적 구간)</span></div>
-            </div>
-          </div>
-        </div>
 
         <!-- 추적 경로 5단계 -->
         <div class="fj-flow" id="fj-flow" style="grid-template-columns:repeat(5,1fr)">
@@ -2985,8 +2966,17 @@ table.t               { font-size: 14px; }
         <!-- 단계 상세 패널 -->
         <div class="fj-detail" id="fj-detail-0">
           <div class="fj-detail-head"><div class="fj-step-node" style="background:#003EFF;width:32px;height:32px;font-size:16px;font-weight:800">1</div><div class="fj-detail-title">신청페이지 접속 — 메인 조회 & 로그인</div></div>
+          <!-- 분기 경로 -->
+          <div class="fj-branches" style="margin-bottom:16px">
+            <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">🔧 EASY REPAIR</span><span class="fj-branch-note">간단한 자가 수리 가이드</span></div>
+            <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">❓ 제품 FAQ</span><span class="fj-branch-note">자주 묻는 질문 확인</span></div>
+            <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">📋 정품 등록</span><span class="fj-branch-note">구매 제품 등록</span></div>
+            <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">🛡 품질보증 안내</span><span class="fj-branch-note">보증 정책 확인</span></div>
+            <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">↩ 나가기</span><span class="fj-branch-note">페이지 이탈</span></div>
+            <div class="fj-branch-row" style="margin-top:4px"><div class="fj-branch-line" style="background:#003EFF;opacity:.4"></div><span class="fj-branch-chip fj-branch-main">★ AS 신청하기</span><span class="fj-branch-note" style="color:#003EFF;font-weight:600">→ 퍼널 진입 (추적 구간)</span></div>
+          </div>
           <div class="fj-detail-grid">
-            <div class="fj-detail-item"><div class="fj-di-label">1.1 메인 페이지 진입</div><div class="fj-di-content">EASY REPAIR / 제품 FAQ / 정품등록 / 품질보증 안내 / AS 신청하기 / 나가기 중 선택. <strong>AS 신청하기</strong>를 눌러야만 퍼널 진입.</div></div>
+            <div class="fj-detail-item"><div class="fj-di-label">1.1 메인 페이지</div><div class="fj-di-content">위 6가지 경로 중 <strong>AS 신청하기</strong>를 눌러야만 퍼널 진입. 나머지는 모두 이탈 경로.</div></div>
             <div class="fj-detail-item"><div class="fj-di-label">1.2 로그인</div><div class="fj-di-content">카카오·네이버·이메일 중 <strong>소셜 로그인</strong> 선택. 비회원은 회원가입 필요. 로그인해야만 등록 제품 조회 및 AS 접수 가능.</div></div>
             <div class="fj-detail-item"><div class="fj-di-label">이탈 포인트</div><div class="fj-di-content">EASY REPAIR·FAQ로 이탈 / 계정 미보유 or 비밀번호 분실 시 이탈. 로그인 장벽이 <strong>전환율 저하</strong>의 주요 원인.</div></div>
           </div>
