@@ -2973,14 +2973,14 @@ table.t               { font-size: 14px; }
         <!-- 단계 상세 패널 -->
         <div class="fj-detail" id="fj-detail-0">
           <div class="fj-detail-head"><div class="fj-step-node" style="background:#003EFF;width:32px;height:32px;font-size:16px;font-weight:800">1</div><div class="fj-detail-title">신청페이지 접속 — 메인 조회 & 로그인</div></div>
-          <!-- 분기 경로 -->
-          <div class="fj-branches" style="margin-bottom:16px">
-            <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">🔧 EASY REPAIR</span><span class="fj-branch-note">간단한 자가 수리 가이드</span></div>
-            <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">❓ 제품 FAQ</span><span class="fj-branch-note">자주 묻는 질문 확인</span></div>
-            <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">📋 정품 등록</span><span class="fj-branch-note">구매 제품 등록</span></div>
-            <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">🛡 품질보증 안내</span><span class="fj-branch-note">보증 정책 확인</span></div>
-            <div class="fj-branch-row"><div class="fj-branch-line"></div><span class="fj-branch-chip fj-branch-exit">↩ 나가기</span><span class="fj-branch-note">페이지 이탈</span></div>
-            <div class="fj-branch-row" style="margin-top:4px"><div class="fj-branch-line" style="background:#003EFF;opacity:.4"></div><span class="fj-branch-chip fj-branch-main">★ AS 신청하기</span><span class="fj-branch-note" style="color:#003EFF;font-weight:600">→ 퍼널 진입 (추적 구간)</span></div>
+          <!-- 분기 경로 3x2 -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+            <div class="fj-branch-row"><span class="fj-branch-chip fj-branch-exit">🔧 EASY REPAIR</span><span class="fj-branch-note">자가 수리 가이드</span></div>
+            <div class="fj-branch-row"><span class="fj-branch-chip fj-branch-exit">❓ 제품 FAQ</span><span class="fj-branch-note">자주 묻는 질문</span></div>
+            <div class="fj-branch-row"><span class="fj-branch-chip fj-branch-exit">📋 정품 등록</span><span class="fj-branch-note">구매 제품 등록</span></div>
+            <div class="fj-branch-row"><span class="fj-branch-chip fj-branch-exit">🛡 품질보증 안내</span><span class="fj-branch-note">보증 정책 확인</span></div>
+            <div class="fj-branch-row"><span class="fj-branch-chip fj-branch-exit">↩ 나가기</span><span class="fj-branch-note">페이지 이탈</span></div>
+            <div class="fj-branch-row"><span class="fj-branch-chip fj-branch-main">★ AS 신청하기</span><span class="fj-branch-note" style="color:#003EFF;font-weight:600">퍼널 진입</span></div>
           </div>
           <div class="fj-detail-grid">
             <div class="fj-detail-item"><div class="fj-di-label">1.1 메인 페이지</div><div class="fj-di-content">위 6가지 경로 중 <strong>AS 신청하기</strong>를 눌러야만 퍼널 진입. 나머지는 모두 이탈 경로.</div></div>
