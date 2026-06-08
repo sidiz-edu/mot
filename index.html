@@ -3441,7 +3441,7 @@ table.t               { font-size: 14px; }
                     <td class="change-same">—</td>
                   </tr>
                   <tr class="is-as-row">
-                    <td style="color:#994D00;font-weight:600">게시판 (AS+ON)</td><td class="unit-desc">게시글 처리 (건/월)</td>
+                    <td style="color:#994D00;font-weight:600">게시판 (AS+ON) · 외부몰</td><td class="unit-desc">게시글 처리 (건/월)</td>
                     <td class="num">5,000</td><td class="num price-down">3,000</td>
                     <td class="change-down">▼ 2,000</td>
                   </tr>
@@ -4477,8 +4477,8 @@ const CHANNELS = [
     note: 'AS·ON 합산 — 채널 자체에서 ERP 전산 처리까지 병행',
   },
   {
-    id: 'board', part: 'counsel', name: '게시판 (AS+ON)', kind: '게시글 처리',
-    desc: '자사몰 / 외부몰 1:1 문의글',
+    id: 'board', part: 'counsel', name: '게시판 (AS+ON) · 외부몰', kind: '게시글 처리',
+    desc: '외부몰 1:1 문의글 처리. 자사몰 AS 게시판 문의는 접수(AS)로 집계.',
     systems: { board: { mark: 'full', step: 2 }, erpAs: { mark: 'partial', step: 3 }, erpO: { mark: 'partial', step: 3 } },
     sysChips: ['board', 'erpAs'],
     count: 2925, amount: 878,
@@ -5405,7 +5405,7 @@ function renderSec3() {
     const NAME_MAP = {
       '유선AS':  '유선AS',
       '모바일':  '모바일 (AS+ON)',
-      '게시판':  '게시판 (AS+ON)',
+      '게시판':  '게시판 (AS+ON) · 외부몰',
       '접수AS':  '접수 (AS)'
     };
     const AS_ITEMS = new Set(['유선AS','모바일','게시판','접수AS']);
@@ -5473,7 +5473,7 @@ function renderSec3() {
     </tr><tr>${mRow}</tr>`;
 
     const CNAME = {
-      '상담 (게시판)': '게시판 (AS+ON)',
+      '상담 (게시판)': '게시판 (AS+ON) · 외부몰',
       '상담 (유선)_AS': '유선 (AS)',
       '상담 (모바일) ': '모바일 (AS+ON)',
       '접수 (AS)': '접수 (AS)',
@@ -6495,7 +6495,7 @@ const NODE_POPUPS = [
   },
   {
     title: '상담 채널 (컨택센터)', color: 'var(--warn)',
-    items: ['유선 전화 (인바운드)', '해피톡 채팅 (모바일)', '게시판 (이메일)', '타부서 이관', '접수 처리'],
+    items: ['유선 전화 (인바운드)', '해피톡 채팅 (모바일)', '게시판 (외부몰 1:1문의)', '타부서 이관', '접수 처리 (자사몰 포함)'],
     link: { label: '용역료 상세 보기 →', tab: 2 },
   },
   {
