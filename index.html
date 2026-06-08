@@ -2924,13 +2924,20 @@ table.t               { font-size: 14px; }
         <div class="fj-title">AS 신청 퍼널 여정 맵 <span>단계별 클릭하면 상세 확인</span></div>
 
 
-        <!-- 추적 경로 5단계 -->
-        <div class="fj-flow" id="fj-flow" style="grid-template-columns:repeat(5,1fr)">
+        <!-- 추적 경로 5단계 + 로그인 중간 -->
+        <div class="fj-flow" id="fj-flow" style="grid-template-columns:repeat(6,1fr)">
 
           <div class="fj-step" onclick="fjToggle(0)">
             <div class="fj-step-node" style="background:#003EFF;font-size:18px;font-weight:800">1</div>
             <div class="fj-step-label">신청페이지 접속</div>
             <div class="fj-step-rate">메인 조회</div>
+            <div class="fj-arrow">›</div>
+          </div>
+
+          <!-- 로그인 중간 단계 (작게) -->
+          <div class="fj-step" style="opacity:.7">
+            <div class="fj-step-node" style="background:#4A6FA5;width:38px;height:38px;font-size:11px;font-weight:700;margin:9px auto 0">로그인</div>
+            <div class="fj-step-label" style="font-size:10px;color:var(--ink-3)">1.2 로그인</div>
             <div class="fj-arrow">›</div>
           </div>
 
