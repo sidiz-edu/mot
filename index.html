@@ -3487,6 +3487,15 @@ table.t               { font-size: 14px; }
               </table>
             </div>
           </div>
+          <div class="card mt-16">
+            <div class="card-head"><div><div class="card-title">CS 용역료 — 항목별 건수 상세</div><div class="card-sub">단위: 건 · 상담·접수 항목</div></div></div>
+            <div class="tbl-wrap">
+              <table class="t">
+                <thead id="cs_count_table_head"><tr><th>항목</th><th>합계</th></tr></thead>
+                <tbody id="cs_count_table"></tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
         <!-- sub 3: 월별 분석 노트 -->
@@ -5446,6 +5455,53 @@ function renderSec3() {
         `<td>-</td>`;
       tbody.appendChild(trD);
     }
+  }
+
+  // ── 건수 표 렌더링 ──
+  const ctbody = document.getElementById('cs_count_table');
+  const cthead = document.getElementById('cs_count_table_head');
+  if (ctbody && cthead && DATA.contact) {
+    const months = DATA.contactMonths;
+    const y25c = months.filter(m => m.startsWith('25.')).length;
+    const y26c = months.filter(m => m.startsWith('26.')).length;
+    const mRow = months.map(m => `<th>${m.replace(/^\d+\./, '')}</th>`).join('');
+    cthead.innerHTML = `<tr>
+      <th rowspan="2" style="vertical-align:middle">항목</th>
+      ${y25c > 0 ? `<th colspan="${y25c}" class="yr-25" style="text-align:center">2025년</th>` : ''}
+      ${y26c > 0 ? `<th colspan="${y26c}" class="yr-26" style="text-align:center">2026년</th>` : ''}
+      <th rowspan="2" style="vertical-align:middle">합계</th>
+    </tr><tr>${mRow}</tr>`;
+
+    const CNAME = {
+      '상담 (게시판)': '게시판 (AS+ON)',
+      '상담 (유선)_AS': '유선 (AS)',
+      '상담 (모바일) ': '모바일 (AS+ON)',
+      '접수 (AS)': '접수 (AS)',
+    };
+    const RECV = new Set(['접수 (AS)']);
+
+    ctbody.innerHTML = '';
+    DATA.contact.forEach(item => {
+      const total = item.counts.reduce((a,b)=>a+b,0);
+      const tr = document.createElement('tr');
+      if (RECV.has(item.name)) tr.classList.add('is-recv-row');
+      else tr.classList.add('is-as-row');
+      const label = CNAME[item.name] || item.name;
+      tr.innerHTML = `<td>${label}</td>` +
+        item.counts.map(v => `<td>${v.toLocaleString()}</td>`).join('') +
+        `<td>${total.toLocaleString()}</td>`;
+      ctbody.appendChild(tr);
+    });
+
+    // 상담 3개 합계
+    const totC = Array(months.length).fill(0);
+    DATA.contact.slice(0,3).forEach(it => it.counts.forEach((v,i) => totC[i] += v));
+    const totalC = totC.reduce((a,b)=>a+b,0);
+    const trC = document.createElement('tr');
+    trC.innerHTML = `<td><b>상담 합계</b></td>` +
+      totC.map(v => `<td><b>${v.toLocaleString()}</b></td>`).join('') +
+      `<td><b>${totalC.toLocaleString()}</b></td>`;
+    ctbody.appendChild(trC);
   }
 }
 
