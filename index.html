@@ -2924,20 +2924,26 @@ table.t               { font-size: 14px; }
         <div class="fj-title">AS 신청 퍼널 여정 맵 <span>단계별 클릭하면 상세 확인</span></div>
 
 
-        <!-- 추적 경로 5단계 -->
-        <div class="fj-flow" id="fj-flow" style="grid-template-columns:repeat(5,1fr)">
+        <!-- 추적 경로 6단계 -->
+        <div class="fj-flow" id="fj-flow" style="grid-template-columns:repeat(6,1fr)">
 
           <div class="fj-step" onclick="fjToggle(0)">
             <div class="fj-step-node" style="background:#003EFF;font-size:18px;font-weight:800">1</div>
             <div class="fj-step-label">신청페이지 접속</div>
+            <div class="fj-arrow">›</div>
+          </div>
+
+          <div class="fj-step" onclick="fjToggle(1)">
+            <div class="fj-step-node" style="background:#0033CC;font-size:18px;font-weight:800">2</div>
+            <div class="fj-step-label">AS 신청하기</div>
             <div class="fj-arrow" style="display:flex;align-items:center;gap:4px;right:-36px;top:22px">
-              <span style="font-size:11px;font-weight:700;color:var(--ink-2);background:var(--surface);border:1.5px solid var(--border);padding:3px 8px;border-radius:999px;white-space:nowrap;box-shadow:var(--shadow-1)">AS 신청하기</span>
+              <span style="font-size:11px;font-weight:700;color:var(--ink-2);background:var(--surface);border:1.5px solid var(--border);padding:3px 8px;border-radius:999px;white-space:nowrap;box-shadow:var(--shadow-1)">로그인</span>
               <span style="color:var(--ink-4);font-size:14px">›</span>
             </div>
           </div>
 
-          <div class="fj-step" onclick="fjToggle(1)">
-            <div class="fj-step-node" style="background:#1A4FD8;font-size:18px;font-weight:800">2</div>
+          <div class="fj-step" onclick="fjToggle(2)">
+            <div class="fj-step-node" style="background:#1A4FD8;font-size:18px;font-weight:800">3</div>
             <div class="fj-step-label">제품 선택</div>
             <div class="fj-arrow" style="display:flex;align-items:center;gap:4px;right:-36px;top:22px">
               <span style="font-size:11px;font-weight:700;color:var(--ink-2);background:var(--surface);border:1.5px solid var(--border);padding:3px 8px;border-radius:999px;white-space:nowrap;box-shadow:var(--shadow-1)">다음</span>
@@ -2945,8 +2951,8 @@ table.t               { font-size: 14px; }
             </div>
           </div>
 
-          <div class="fj-step" onclick="fjToggle(2)">
-            <div class="fj-step-node" style="background:#3D72D7;font-size:18px;font-weight:800">3</div>
+          <div class="fj-step" onclick="fjToggle(3)">
+            <div class="fj-step-node" style="background:#3D72D7;font-size:18px;font-weight:800">4</div>
             <div class="fj-step-label">증상 입력</div>
             <div class="fj-arrow" style="display:flex;align-items:center;gap:4px;right:-36px;top:22px">
               <span style="font-size:11px;font-weight:700;color:var(--ink-2);background:var(--surface);border:1.5px solid var(--border);padding:3px 8px;border-radius:999px;white-space:nowrap;box-shadow:var(--shadow-1)">다음</span>
@@ -2954,8 +2960,8 @@ table.t               { font-size: 14px; }
             </div>
           </div>
 
-          <div class="fj-step" onclick="fjToggle(3)">
-            <div class="fj-step-node" style="background:#6B9FE8;font-size:18px;font-weight:800">4</div>
+          <div class="fj-step" onclick="fjToggle(4)">
+            <div class="fj-step-node" style="background:#6B9FE8;font-size:18px;font-weight:800">5</div>
             <div class="fj-step-label">고객 정보 입력</div>
             <div class="fj-arrow" style="display:flex;align-items:center;gap:4px;right:-36px;top:22px">
               <span style="font-size:11px;font-weight:700;color:var(--ink-2);background:var(--surface);border:1.5px solid var(--border);padding:3px 8px;border-radius:999px;white-space:nowrap;box-shadow:var(--shadow-1)">다음</span>
@@ -2963,8 +2969,8 @@ table.t               { font-size: 14px; }
             </div>
           </div>
 
-          <div class="fj-step" onclick="fjToggle(4)">
-            <div class="fj-step-node" style="background:#95BEFF;font-size:18px;font-weight:800">5</div>
+          <div class="fj-step" onclick="fjToggle(5)">
+            <div class="fj-step-node" style="background:#95BEFF;font-size:18px;font-weight:800">6</div>
             <div class="fj-step-label">신청 완료</div>
           </div>
 
@@ -2990,7 +2996,16 @@ table.t               { font-size: 14px; }
         </div>
 
         <div class="fj-detail" id="fj-detail-1">
-          <div class="fj-detail-head"><div class="fj-step-node" style="background:#1A4FD8;width:32px;height:32px;font-size:16px;font-weight:800">2</div><div class="fj-detail-title">제품 선택 — 정품 등록된 제품 중 선택</div></div>
+          <div class="fj-detail-head"><div class="fj-step-node" style="background:#0033CC;width:32px;height:32px;font-size:16px;font-weight:800">2</div><div class="fj-detail-title">AS 신청하기 — 메인 페이지에서 신청 버튼 클릭</div></div>
+          <div class="fj-detail-grid">
+            <div class="fj-detail-item"><div class="fj-di-label">고객이 보는 화면</div><div class="fj-di-content">메인 페이지 하단의 <strong>검정 "AS 신청하기" 버튼</strong> 클릭. 비로그인 상태라면 로그인 모달이 먼저 표시됨.</div></div>
+            <div class="fj-detail-item"><div class="fj-di-label">2.1 로그인</div><div class="fj-di-content">카카오·네이버·이메일 중 <strong>소셜 로그인</strong> 선택. 비회원은 회원가입 필요. 로그인 후 제품 선택 단계로 이동.</div></div>
+            <div class="fj-detail-item"><div class="fj-di-label">이탈 포인트</div><div class="fj-di-content">계정 미보유 or 비밀번호 분실 시 이탈. 소셜 로그인 미사용자는 이메일 계정 필요.</div></div>
+          </div>
+        </div>
+
+        <div class="fj-detail" id="fj-detail-2">
+          <div class="fj-detail-head"><div class="fj-step-node" style="background:#1A4FD8;width:32px;height:32px;font-size:16px;font-weight:800">3</div><div class="fj-detail-title">제품 선택 — 정품 등록된 제품 중 선택</div></div>
           <div class="fj-detail-grid">
             <div class="fj-detail-item"><div class="fj-di-label">고객이 보는 화면</div><div class="fj-di-content">계정에 <strong>정품 등록된 제품 카드</strong> 목록. 카드에는 제품명·제품코드·색상코드·출장보증완료일·사양코드 표시.</div></div>
             <div class="fj-detail-item"><div class="fj-di-label">정품 미등록 시</div><div class="fj-di-content"><strong>"새로운 정품 등록하기"</strong> 모달 → 의자 하부 품질표시 스티커의 <strong>시리얼 번호(S/N)</strong> 입력 필요. 전체 동의 + 개인정보 동의 필수.</div></div>
@@ -2998,8 +3013,8 @@ table.t               { font-size: 14px; }
           </div>
         </div>
 
-        <div class="fj-detail" id="fj-detail-2">
-          <div class="fj-detail-head"><div class="fj-step-node" style="background:#3D72D7;width:32px;height:32px;font-size:16px;font-weight:800">3</div><div class="fj-detail-title">증상 입력 — 부위·증상 선택 + 상세 설명</div></div>
+        <div class="fj-detail" id="fj-detail-3">
+          <div class="fj-detail-head"><div class="fj-step-node" style="background:#3D72D7;width:32px;height:32px;font-size:16px;font-weight:800">4</div><div class="fj-detail-title">증상 입력 — 부위·증상 선택 + 상세 설명</div></div>
           <div class="fj-detail-grid">
             <div class="fj-detail-item"><div class="fj-di-label">3.1 부위 선택 (10가지)</div><div class="fj-di-content">헤드레스트 / 팔걸이·암패드 / 럼버서포트 / 등판·틸팅 / 좌판 / 베이스·중심봉·레버 / 바퀴·글라이드 / 부품구매·누락 / 마감재교체·관리 / 기타<br><small>→ "부위별 설명 보기" 클릭 시 의자 도식 이미지 제공</small></div></div>
             <div class="fj-detail-item"><div class="fj-di-label">3.2 증상 선택 (부위마다 다름)</div><div class="fj-di-content">부위를 선택하면 <strong>해당 부위에 맞는 증상 옵션</strong>이 동적으로 표시됨.<br>부위+증상 선택 시 <strong>FAQ 자가해결 방법</strong> 자동 제안 (새 창)</div></div>
@@ -3007,8 +3022,8 @@ table.t               { font-size: 14px; }
           </div>
         </div>
 
-        <div class="fj-detail" id="fj-detail-3">
-          <div class="fj-detail-head"><div class="fj-step-node" style="background:#6B9FE8;width:32px;height:32px;font-size:16px;font-weight:800">4</div><div class="fj-detail-title">고객 정보 입력 — 방문 정보 입력</div></div>
+        <div class="fj-detail" id="fj-detail-4">
+          <div class="fj-detail-head"><div class="fj-step-node" style="background:#6B9FE8;width:32px;height:32px;font-size:16px;font-weight:800">5</div><div class="fj-detail-title">고객 정보 입력 — 방문 정보 입력</div></div>
           <div class="fj-detail-grid">
             <div class="fj-detail-item"><div class="fj-di-label">필수 입력 항목</div><div class="fj-di-content">이름 / 신청자와의 관계(본인·가족·지인 등) / 휴대폰 번호 1 / 방문지 주소(우편번호 검색 → 주소 → 상세주소 → 세대주소)</div></div>
             <div class="fj-detail-item"><div class="fj-di-label">AS 조치 장소</div><div class="fj-di-content">휴대폰 번호 2(추가 연락처) / AS 조치 희망일(날짜 선택)<br><br>개인정보 수집 및 이용 동의(필수) 체크 후 <strong>"다음"</strong></div></div>
@@ -3016,8 +3031,8 @@ table.t               { font-size: 14px; }
           </div>
         </div>
 
-        <div class="fj-detail" id="fj-detail-4">
-          <div class="fj-detail-head"><div class="fj-step-node" style="background:#95BEFF;width:32px;height:32px;font-size:16px;font-weight:800">5</div><div class="fj-detail-title">신청 완료 — 접수 확인 및 이후 안내</div></div>
+        <div class="fj-detail" id="fj-detail-5">
+          <div class="fj-detail-head"><div class="fj-step-node" style="background:#95BEFF;width:32px;height:32px;font-size:16px;font-weight:800">6</div><div class="fj-detail-title">신청 완료 — 접수 확인 및 이후 안내</div></div>
           <div class="fj-detail-grid">
             <div class="fj-detail-item"><div class="fj-di-label">신청 내용 요약 표시</div><div class="fj-di-content"><strong>AS 신청 제품 정보:</strong> 제품명·제품코드·색상코드·사양코드<br><strong>제품 증상:</strong> 부위, 증상 분류<br><strong>신청 정보:</strong> 이름, 연락처, 방문지 주소</div></div>
             <div class="fj-detail-item"><div class="fj-di-label">이후 안내사항</div><div class="fj-di-content">접수 후 <strong>1~2일 내</strong> 담당 부서 연락 예정. 출장비·수리비는 현장 확인 후 안내. 진행 상황은 마이페이지에서 확인 가능.</div></div>
@@ -6370,7 +6385,7 @@ document.querySelectorAll('.mot-stage-card[data-stage]').forEach(el => renderSta
 
 // ---- AS 신청 퍼널 여정 맵 ----
 function fjToggle(idx) {
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     const d = document.getElementById('fj-detail-' + i);
     if (!d) continue;
     if (i === idx) d.classList.toggle('open');
