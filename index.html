@@ -2014,13 +2014,6 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   cursor: pointer; padding: 0 2px; display: none; flex-shrink: 0;
 }
 .mot-task-row.editing .mot-task-inline-del { display: block; }
-.mot-task-move-btn {
-  font-size: 11px; color: var(--accent); background: none; border: 1px solid var(--accent-soft);
-  border-radius: 4px; cursor: pointer; padding: 1px 4px; display: none; flex-shrink: 0;
-  transition: background 0.15s;
-}
-.mot-task-move-btn:hover { background: var(--accent-soft); }
-.mot-task-row.editing .mot-task-move-btn { display: block; }
 .mot-task-add-btn {
   font-size: 11px; font-weight: 600; color: var(--accent);
   background: none; border: 1px dashed var(--accent);
@@ -6063,7 +6056,6 @@ function taskListHtml(raw) {
       <input class="mot-task-inline-input" value="${escHtml(t.text)}" placeholder="업무 내용">
       <select class="mot-task-inline-select" title="중요도"><option value="" disabled${!t.imp?' selected':''}>중요도</option>${lvls.map(([v,lb])=>`<option value="${v}"${t.imp===v?' selected':''}>${lb}</option>`).join('')}</select>
       <select class="mot-task-inline-select" title="긴급도"><option value="" disabled${!t.urg?' selected':''}>긴급도</option>${lvls.map(([v,lb])=>`<option value="${v}"${t.urg===v?' selected':''}>${lb}</option>`).join('')}</select>
-      <button class="mot-task-move-btn" title="섹션 이동">⇄</button>
       <button class="mot-task-inline-del" title="삭제">✕</button>
     </div>`;
   }).join('') + `<button class="mot-task-add-btn">+ 업무 추가</button></div>`;
@@ -6130,7 +6122,6 @@ function openTaskEditor(stage, fieldName, sectionEl, btnEl) {
       <input class="mot-task-inline-input" value="" placeholder="업무 내용">
       <select class="mot-task-inline-select" title="중요도"><option value="" disabled selected>중요도</option>${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
       <select class="mot-task-inline-select" title="긴급도"><option value="" disabled selected>긴급도</option>${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
-      <button class="mot-task-move-btn" title="${fieldName==='doing'?'예정으로 이동':'진행 중으로 이동'}">⇄</button>
       <button class="mot-task-inline-del" title="삭제">✕</button>`;
     const newList = document.createElement('div');
     newList.className = 'mot-task-list';
@@ -6156,7 +6147,6 @@ function openTaskEditor(stage, fieldName, sectionEl, btnEl) {
       <input class="mot-task-inline-input" value="" placeholder="업무 내용">
       <select class="mot-task-inline-select" title="중요도"><option value="" disabled selected>중요도</option>${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
       <select class="mot-task-inline-select" title="긴급도"><option value="" disabled selected>긴급도</option>${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
-      <button class="mot-task-move-btn" title="${fieldName==='doing'?'예정으로 이동':'진행 중으로 이동'}">⇄</button>
       <button class="mot-task-inline-del" title="삭제">✕</button>`;
     addTaskDrag(row, taskList, stage, sectionEl, fieldName);
     return row;
@@ -6173,14 +6163,6 @@ function openTaskEditor(stage, fieldName, sectionEl, btnEl) {
       handle.textContent = '⠿';
       r.prepend(handle);
     }
-    if (!r.querySelector('.mot-task-move-btn')) {
-      const moveBtn = document.createElement('button');
-      moveBtn.className = 'mot-task-move-btn';
-      moveBtn.title = fieldName === 'doing' ? '예정으로 이동' : '진행 중으로 이동';
-      moveBtn.textContent = '⇄';
-      const delBtn = r.querySelector('.mot-task-inline-del');
-      if (delBtn) delBtn.before(moveBtn); else r.appendChild(moveBtn);
-    }
     addTaskDrag(r, taskList, stage, sectionEl, fieldName);
   });
 
@@ -6192,35 +6174,6 @@ function openTaskEditor(stage, fieldName, sectionEl, btnEl) {
       if (e.target.classList.contains('mot-task-inline-del')) {
         e.target.closest('.mot-task-row').remove();
         saveTasksNow(stage, sectionEl, fieldName);
-      }
-      if (e.target.classList.contains('mot-task-move-btn')) {
-        const row = e.target.closest('.mot-task-row');
-        const otherFieldName = fieldName === 'doing' ? 'todo' : 'doing';
-        const otherSectionId = fieldName === 'doing' ? `todo-section-${stage}` : `task-section-${stage}`;
-        const otherSection = document.getElementById(otherSectionId);
-        if (!otherSection) return;
-        let otherList = otherSection.querySelector('.mot-task-list');
-        if (!otherList) {
-          // 빈 상태면 리스트 생성
-          const emptyEl = otherSection.querySelector('.mot-stage-empty');
-          otherList = document.createElement('div');
-          otherList.className = 'mot-task-list';
-          otherList.innerHTML = `<button class="mot-task-add-btn">+ 업무 추가</button>`;
-          if (emptyEl) emptyEl.replaceWith(otherList); else otherSection.appendChild(otherList);
-        }
-        // 이동 버튼 방향 업데이트
-        const moveBtnEl = row.querySelector('.mot-task-move-btn');
-        if (moveBtnEl) moveBtnEl.title = otherFieldName === 'doing' ? '예정으로 이동' : '진행 중으로 이동';
-        // 행 이동
-        const addBtnEl = otherList.querySelector('.mot-task-add-btn');
-        if (addBtnEl) addBtnEl.before(row); else otherList.appendChild(row);
-        // 드래그 재바인딩
-        row._dragBound = false;
-        addTaskDrag(row, otherList, stage, otherSection, otherFieldName);
-        // 양쪽 저장
-        saveTasksNow(stage, sectionEl, fieldName);
-        saveTasksNow(stage, otherSection, otherFieldName);
-        // 다른 섹션이 편집 모드면 이벤트 이미 바인딩됨, 아니면 바인딩 필요 없음
       }
       if (e.target.classList.contains('mot-task-add-btn')) {
         const lvls = [['높음','上'],['보통','中'],['낮음','下']];
@@ -6272,10 +6225,6 @@ function addTaskDrag(row, list, stage, sectionEl, fieldName) {
       // 드래그 재바인딩
       dragging._dragBound = false;
       addTaskDrag(dragging, list, stage, sectionEl, fieldName);
-      // 이동 버튼 방향 업데이트
-      const otherFieldName = fieldName === 'doing' ? 'todo' : 'doing';
-      const moveBtnEl = dragging.querySelector('.mot-task-move-btn');
-      if (moveBtnEl) moveBtnEl.title = fieldName === 'doing' ? '예정으로 이동' : '진행 중으로 이동';
       // 원본 저장
       if (dragging._dragSrcSection) saveTasksNow(stage, dragging._dragSrcSection, dragging._dragSrcField);
     }
