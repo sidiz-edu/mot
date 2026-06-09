@@ -2014,6 +2014,12 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   cursor: pointer; padding: 0 2px; display: none; flex-shrink: 0;
 }
 .mot-task-row.editing .mot-task-inline-del { display: block; }
+.mot-task-list.drag-over-list {
+  outline: 2px dashed var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--r);
+  background: var(--accent-soft);
+}
 .mot-task-add-btn {
   font-size: 11px; font-weight: 600; color: var(--accent);
   background: none; border: 1px dashed var(--accent);
@@ -6135,6 +6141,21 @@ function openTaskEditor(stage, fieldName, sectionEl, btnEl) {
 
   const taskList = sectionEl.querySelector('.mot-task-list');
 
+  // 같은 카드 내 모든 task-list를 드롭존으로 등록 (빈 섹션 포함)
+  const card = sectionEl.closest('.mot-stage-card');
+  if (card) card.querySelectorAll('.mot-stage-section[id]').forEach(sec => {
+    let tl = sec.querySelector('.mot-task-list');
+    if (!tl) {
+      // 빈 섹션이면 리스트 생성
+      const emptyEl = sec.querySelector('.mot-stage-empty');
+      tl = document.createElement('div');
+      tl.className = 'mot-task-list';
+      tl.innerHTML = `<button class="mot-task-add-btn">+ 업무 추가</button>`;
+      if (emptyEl) emptyEl.replaceWith(tl); else sec.appendChild(tl);
+    }
+    bindListDrop(tl, stage, sec, fieldFromSectionId(sec.id));
+  });
+
   const makeRow = (lvls) => {
     const row = document.createElement('div');
     row.className = 'mot-task-row editing';
@@ -6184,22 +6205,64 @@ function openTaskEditor(stage, fieldName, sectionEl, btnEl) {
   }
 }
 
+// 섹션 ID → fieldName 매핑 헬퍼
+function fieldFromSectionId(id) {
+  if (!id) return 'doing';
+  if (id.startsWith('project-')) return 'project';
+  if (id.startsWith('todo-'))    return 'todo';
+  return 'doing';
+}
+
+// 리스트 컨테이너 자체를 드롭존으로 등록 (빈 섹션 포함)
+function bindListDrop(list, stage, sectionEl, fieldName) {
+  if (list._listDragBound) return;
+  list._listDragBound = true;
+  list.addEventListener('dragover', e => {
+    e.preventDefault();
+    const dragging = Array.from(document.querySelectorAll('.mot-task-row')).find(r => r._dragging);
+    if (dragging && dragging._dragSrcList !== list) list.classList.add('drag-over-list');
+  });
+  list.addEventListener('dragleave', e => {
+    if (!list.contains(e.relatedTarget)) list.classList.remove('drag-over-list');
+  });
+  list.addEventListener('drop', e => {
+    e.preventDefault(); list.classList.remove('drag-over-list');
+    const dragging = Array.from(document.querySelectorAll('.mot-task-row')).find(r => r._dragging);
+    if (!dragging || dragging._dragSrcList === list) return;
+    // 리스트 끝(+ 버튼 앞)에 삽입
+    const addBtn = list.querySelector('.mot-task-add-btn');
+    if (addBtn) addBtn.before(dragging); else list.appendChild(dragging);
+    dragging._dragBound = false;
+    addTaskDrag(dragging, list, stage, sectionEl, fieldName);
+    if (dragging._dragSrcSection) saveTasksNow(stage, dragging._dragSrcSection, dragging._dragSrcField);
+    saveTasksNow(stage, sectionEl, fieldName);
+  });
+}
+
 function addTaskDrag(row, list, stage, sectionEl, fieldName) {
   fieldName = fieldName || 'doing';
   if (row._dragBound) return;
   row._dragBound = true;
   row.addEventListener('dragstart', e => {
     row._dragging = true;
-    row._dragSrcList = list;
+    row._dragSrcList    = list;
     row._dragSrcSection = sectionEl;
-    row._dragSrcField = fieldName;
+    row._dragSrcField   = fieldName;
     e.dataTransfer.effectAllowed = 'move';
+    // 같은 카드 내 모든 리스트를 드롭존으로 활성화
+    const card = sectionEl.closest('.mot-stage-card');
+    if (card) card.querySelectorAll('.mot-task-list').forEach(l => {
+      const sec = l.closest('.mot-stage-section');
+      if (sec && !l._listDragBound) {
+        bindListDrop(l, stage, sec, fieldFromSectionId(sec.id));
+      }
+    });
   });
   row.addEventListener('dragend', () => {
     row._dragging = false;
     document.querySelectorAll('.mot-task-row').forEach(r => r.classList.remove('drag-over'));
+    document.querySelectorAll('.mot-task-list').forEach(l => l.classList.remove('drag-over-list'));
     saveTasksNow(stage, sectionEl, fieldName);
-    // 크로스 섹션 이동 후 원본 섹션도 저장
     if (row._dragSrcList && row._dragSrcList !== list) {
       saveTasksNow(stage, row._dragSrcSection, row._dragSrcField);
     }
@@ -6208,7 +6271,6 @@ function addTaskDrag(row, list, stage, sectionEl, fieldName) {
   row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
   row.addEventListener('drop', e => {
     e.preventDefault(); row.classList.remove('drag-over');
-    // 드래그 중인 행 탐색 (같은 섹션 또는 다른 섹션)
     const dragging = Array.from(document.querySelectorAll('.mot-task-row')).find(r => r._dragging);
     if (!dragging || dragging === row) return;
     const srcList = dragging._dragSrcList || list;
@@ -6218,14 +6280,10 @@ function addTaskDrag(row, list, stage, sectionEl, fieldName) {
       if (nodes.indexOf(dragging) < nodes.indexOf(row)) row.after(dragging);
       else row.before(dragging);
     } else {
-      // 크로스 섹션 이동 — 현재 리스트에 삽입
-      const nodes = Array.from(list.children);
-      if (nodes.indexOf(row) >= 0) row.before(dragging);
-      else list.appendChild(dragging);
-      // 드래그 재바인딩
+      // 크로스 섹션 이동 — 타깃 행 앞에 삽입
+      row.before(dragging);
       dragging._dragBound = false;
       addTaskDrag(dragging, list, stage, sectionEl, fieldName);
-      // 원본 저장
       if (dragging._dragSrcSection) saveTasksNow(stage, dragging._dragSrcSection, dragging._dragSrcField);
     }
     saveTasksNow(stage, sectionEl, fieldName);
