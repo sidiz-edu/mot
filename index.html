@@ -5602,13 +5602,20 @@ function renderContactDetail() {
 
   const d = DATA.contactDetail;
   const M = d.months;
-  const W = v => v == null ? '—' : v.toLocaleString();
-  const WW = v => v == null ? '—' : '₩' + Math.round(v/10000).toLocaleString() + '만';
+  const N = M.length;
+  const W  = v => v == null ? '—' : v.toLocaleString();
+  const WW = v => v == null ? '—' : '₩' + v.toLocaleString();
+
+  // 행 번호 맵: rows 인덱스 → 표시 번호 (없으면 '')
+  // rows: [0]유선_AS=1, [1]모바일_ON='', [2]모바일_AS=2,
+  //       [3]게시판_ON='', [4]게시판_AS=3, [5]접수AS=5, [6]자사몰=6
+  const ROW_NUM = ['1', '', '2', '', '3', '5', '6'];
 
   // 헤더
   head.innerHTML = `
     <tr>
-      <th rowspan="2" style="min-width:140px;vertical-align:middle">항목</th>
+      <th rowspan="2" style="vertical-align:middle;width:28px"></th>
+      <th rowspan="2" style="min-width:160px;vertical-align:middle">항목</th>
       <th rowspan="2" style="vertical-align:middle">유형</th>
       <th rowspan="2" style="min-width:200px;vertical-align:middle;text-align:left">상세 내용</th>
       <th rowspan="2" style="vertical-align:middle">건당 비용</th>
@@ -5620,47 +5627,73 @@ function renderContactDetail() {
 
   body.innerHTML = '';
 
-  const fmtUnit = u => '₩' + u.toLocaleString();
-
-  d.rows.forEach(row => {
+  const mkRow = (numTd, nameTd, typeTd, descTd, unitTd, cellsTd, style='', cls='') => {
     const tr = document.createElement('tr');
+    if (style) tr.style.cssText = style;
+    if (cls)   tr.className = cls;
+    tr.innerHTML = numTd + nameTd + typeTd + descTd + unitTd + cellsTd;
+    return tr;
+  };
+
+  d.rows.forEach((row, ri) => {
+    const num = ROW_NUM[ri] || '';
+    const numTd = `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">${num}</td>`;
+
+    let style = '', cls = '';
     if (row.isSub) {
-      tr.style.cssText = 'background:var(--surface-2);color:var(--ink-3);font-size:11px';
+      style = 'background:var(--surface-2);font-size:11px';
     } else if (row.isAS && row.name.startsWith('접수')) {
-      tr.classList.add('is-recv-row');
+      cls = 'is-recv-row';
     } else if (row.isAS) {
-      tr.classList.add('is-as-row');
+      cls = 'is-as-row';
     }
-    const nameCell = row.isSub
-      ? `<td style="padding-left:18px;color:var(--ink-3)">↳ ${row.name}</td>`
+
+    const nameTd = row.isSub
+      ? `<td style="padding-left:16px;color:var(--ink-3)">↳ ${row.name}</td>`
       : `<td style="font-weight:600">${row.name}</td>`;
-    tr.innerHTML = nameCell +
-      `<td style="color:var(--ink-3)">${row.type}</td>` +
-      `<td style="text-align:left;color:var(--ink-2)">${row.desc}</td>` +
-      `<td class="num" style="font-weight:700">${fmtUnit(row.unit)}</td>` +
-      row.counts.map((c,i)=>
-        `<td class="num">${W(c)}</td><td class="num" style="color:var(--ink-2)">${WW(row.amounts[i])}</td>`
-      ).join('');
-    body.appendChild(tr);
+    const typeTd = `<td style="color:var(--ink-3)">${row.type}</td>`;
+    const descTd = `<td style="text-align:left;color:var(--ink-2)">${row.desc}</td>`;
+    const unitTd = row.unit
+      ? `<td class="num" style="font-weight:700">₩${row.unit.toLocaleString()}</td>`
+      : `<td></td>`;
+    const cellsTd = row.counts.map((c,i)=>
+      `<td class="num">${W(c)}</td><td class="num" style="color:var(--ink-2)">${WW(row.amounts[i])}</td>`
+    ).join('');
+
+    body.appendChild(mkRow(numTd, nameTd, typeTd, descTd, unitTd, cellsTd, style, cls));
+
+    // 게시판_AS(index 4) 다음에 상담_AS 합계(4번) 행 삽입
+    if (ri === 4) {
+      // 유선_AS[0] + 모바일_AS[2] + 게시판_AS[4] 합산
+      const sumC = Array(N).fill(0), sumA = Array(N).fill(0);
+      [0,2,4].forEach(idx => {
+        d.rows[idx].counts.forEach((v,i)  => { sumC[i] += (v||0); });
+        d.rows[idx].amounts.forEach((v,i) => { sumA[i] += (v||0); });
+      });
+      const trSum = document.createElement('tr');
+      trSum.style.cssText = 'background:var(--surface-3);font-weight:700;border-top:1px solid var(--border-strong)';
+      trSum.innerHTML =
+        `<td style="text-align:center;color:var(--ink-3);font-weight:700;font-size:11px">4</td>` +
+        `<td colspan="3" style="font-weight:700">상담_AS 합계 <span style="font-weight:400;color:var(--ink-3);font-size:10px">(1+2+3)</span></td>` +
+        `<td></td>` +
+        sumC.map((c,i)=>
+          `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--ink-2)"><b>${WW(sumA[i])}</b></td>`
+        ).join('');
+      body.appendChild(trSum);
+    }
   });
 
-  // AS 관련 합계 행
+  // 7번 — AS 관련 합계 (4+6)
   const trAS = document.createElement('tr');
-  trAS.style.cssText = 'background:rgba(0,62,255,.04);font-weight:700;border-top:2px solid var(--border-strong)';
-  trAS.innerHTML = `<td colspan="4" style="font-weight:700;color:var(--accent)">AS 관련 합계</td>` +
+  trAS.style.cssText = 'background:rgba(0,62,255,.05);font-weight:700;border-top:2px solid var(--border-strong)';
+  trAS.innerHTML =
+    `<td style="text-align:center;color:var(--accent);font-weight:700;font-size:11px">7</td>` +
+    `<td colspan="3" style="font-weight:700;color:var(--accent)">AS 관련 합계 <span style="font-weight:400;font-size:10px">(4+6)</span></td>` +
+    `<td></td>` +
     d.asTotals.counts.map((c,i)=>
-      `<td class="num" style="color:var(--accent)">${c.toLocaleString()}건</td><td class="num" style="color:var(--accent)">₩${Math.round(d.asTotals.amounts[i]/10000).toLocaleString()}만</td>`
+      `<td class="num" style="color:var(--accent)"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--accent)"><b>${WW(d.asTotals.amounts[i])}</b></td>`
     ).join('');
   body.appendChild(trAS);
-
-  // 총 합계 행
-  const trG = document.createElement('tr');
-  trG.style.cssText = 'background:var(--surface-3);font-weight:700;border-top:1px solid var(--border)';
-  trG.innerHTML = `<td colspan="4" style="font-weight:700">총 합계</td>` +
-    d.grandTotals.counts.map((c,i)=>
-      `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num"><b>₩${Math.round(d.grandTotals.amounts[i]/10000).toLocaleString()}만</b></td>`
-    ).join('');
-  body.appendChild(trG);
 }
 
 // ---- Contact Center Operations renders ----
