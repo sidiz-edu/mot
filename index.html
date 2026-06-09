@@ -2014,6 +2014,13 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   cursor: pointer; padding: 0 2px; display: none; flex-shrink: 0;
 }
 .mot-task-row.editing .mot-task-inline-del { display: block; }
+.mot-task-move-btn {
+  font-size: 11px; color: var(--accent); background: none; border: 1px solid var(--accent-soft);
+  border-radius: 4px; cursor: pointer; padding: 1px 4px; display: none; flex-shrink: 0;
+  transition: background 0.15s;
+}
+.mot-task-move-btn:hover { background: var(--accent-soft); }
+.mot-task-row.editing .mot-task-move-btn { display: block; }
 .mot-task-add-btn {
   font-size: 11px; font-weight: 600; color: var(--accent);
   background: none; border: 1px dashed var(--accent);
@@ -6056,6 +6063,7 @@ function taskListHtml(raw) {
       <input class="mot-task-inline-input" value="${escHtml(t.text)}" placeholder="업무 내용">
       <select class="mot-task-inline-select" title="중요도"><option value="" disabled${!t.imp?' selected':''}>중요도</option>${lvls.map(([v,lb])=>`<option value="${v}"${t.imp===v?' selected':''}>${lb}</option>`).join('')}</select>
       <select class="mot-task-inline-select" title="긴급도"><option value="" disabled${!t.urg?' selected':''}>긴급도</option>${lvls.map(([v,lb])=>`<option value="${v}"${t.urg===v?' selected':''}>${lb}</option>`).join('')}</select>
+      <button class="mot-task-move-btn" title="섹션 이동">⇄</button>
       <button class="mot-task-inline-del" title="삭제">✕</button>
     </div>`;
   }).join('') + `<button class="mot-task-add-btn">+ 업무 추가</button></div>`;
@@ -6063,7 +6071,8 @@ function taskListHtml(raw) {
 
 let _taskSaveTimer = {};
 
-function saveTasksNow(stage, sectionEl) {
+function saveTasksNow(stage, sectionEl, fieldName) {
+  fieldName = fieldName || 'doing';
   const list = sectionEl.querySelector('.mot-task-list');
   if (!list) return;
   const val = Array.from(list.querySelectorAll('.mot-task-row')).map(row => {
@@ -6074,10 +6083,11 @@ function saveTasksNow(stage, sectionEl) {
     return `${text}||${sels[0]?.value||'보통'}||${sels[1]?.value||'보통'}`;
   }).filter(Boolean).join('\n');
 
-  clearTimeout(_taskSaveTimer[stage]);
-  _taskSaveTimer[stage] = setTimeout(async () => {
-    await saveStageField(stage, 'doing', val);
-    window[`_taskRaw_${stage}`] = val;
+  const timerKey = stage + '_' + fieldName;
+  clearTimeout(_taskSaveTimer[timerKey]);
+  _taskSaveTimer[timerKey] = setTimeout(async () => {
+    await saveStageField(stage, fieldName, val);
+    window[`_${fieldName}Raw_${stage}`] = val;
     // 뷰 칩 업데이트
     list.querySelectorAll('.mot-task-row').forEach(row => {
       const inp  = row.querySelector('.mot-task-inline-input');
@@ -6094,7 +6104,8 @@ function saveTasksNow(stage, sectionEl) {
   }, 600);
 }
 
-function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
+function openTaskEditor(stage, fieldName, sectionEl, btnEl) {
+  fieldName = fieldName || 'doing';
   const list = sectionEl.querySelector('.mot-task-list');
   const isEditing = sectionEl.classList.contains('task-editing-mode');
 
@@ -6119,6 +6130,7 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
       <input class="mot-task-inline-input" value="" placeholder="업무 내용">
       <select class="mot-task-inline-select" title="중요도"><option value="" disabled selected>중요도</option>${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
       <select class="mot-task-inline-select" title="긴급도"><option value="" disabled selected>긴급도</option>${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
+      <button class="mot-task-move-btn" title="${fieldName==='doing'?'예정으로 이동':'진행 중으로 이동'}">⇄</button>
       <button class="mot-task-inline-del" title="삭제">✕</button>`;
     const newList = document.createElement('div');
     newList.className = 'mot-task-list';
@@ -6144,12 +6156,13 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
       <input class="mot-task-inline-input" value="" placeholder="업무 내용">
       <select class="mot-task-inline-select" title="중요도"><option value="" disabled selected>중요도</option>${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
       <select class="mot-task-inline-select" title="긴급도"><option value="" disabled selected>긴급도</option>${lvls.map(([v,lb])=>`<option value="${v}">${lb}</option>`).join('')}</select>
+      <button class="mot-task-move-btn" title="${fieldName==='doing'?'예정으로 이동':'진행 중으로 이동'}">⇄</button>
       <button class="mot-task-inline-del" title="삭제">✕</button>`;
-    addTaskDrag(row, taskList, stage, sectionEl);
+    addTaskDrag(row, taskList, stage, sectionEl, fieldName);
     return row;
   };
 
-  // 기존 행에 드래그 핸들 + draggable 추가
+  // 기존 행에 드래그 핸들 + draggable + 이동 버튼 추가
   taskList.querySelectorAll('.mot-task-row').forEach(r => {
     r.classList.add('editing');
     r.draggable = true;
@@ -6160,17 +6173,54 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
       handle.textContent = '⠿';
       r.prepend(handle);
     }
-    addTaskDrag(r, taskList, stage, sectionEl);
+    if (!r.querySelector('.mot-task-move-btn')) {
+      const moveBtn = document.createElement('button');
+      moveBtn.className = 'mot-task-move-btn';
+      moveBtn.title = fieldName === 'doing' ? '예정으로 이동' : '진행 중으로 이동';
+      moveBtn.textContent = '⇄';
+      const delBtn = r.querySelector('.mot-task-inline-del');
+      if (delBtn) delBtn.before(moveBtn); else r.appendChild(moveBtn);
+    }
+    addTaskDrag(r, taskList, stage, sectionEl, fieldName);
   });
 
   if (!taskList._bound) {
     taskList._bound = true;
-    taskList.addEventListener('input',  () => saveTasksNow(stage, sectionEl));
-    taskList.addEventListener('change', () => saveTasksNow(stage, sectionEl));
+    taskList.addEventListener('input',  () => saveTasksNow(stage, sectionEl, fieldName));
+    taskList.addEventListener('change', () => saveTasksNow(stage, sectionEl, fieldName));
     taskList.addEventListener('click', e => {
       if (e.target.classList.contains('mot-task-inline-del')) {
         e.target.closest('.mot-task-row').remove();
-        saveTasksNow(stage, sectionEl);
+        saveTasksNow(stage, sectionEl, fieldName);
+      }
+      if (e.target.classList.contains('mot-task-move-btn')) {
+        const row = e.target.closest('.mot-task-row');
+        const otherFieldName = fieldName === 'doing' ? 'todo' : 'doing';
+        const otherSectionId = fieldName === 'doing' ? `todo-section-${stage}` : `task-section-${stage}`;
+        const otherSection = document.getElementById(otherSectionId);
+        if (!otherSection) return;
+        let otherList = otherSection.querySelector('.mot-task-list');
+        if (!otherList) {
+          // 빈 상태면 리스트 생성
+          const emptyEl = otherSection.querySelector('.mot-stage-empty');
+          otherList = document.createElement('div');
+          otherList.className = 'mot-task-list';
+          otherList.innerHTML = `<button class="mot-task-add-btn">+ 업무 추가</button>`;
+          if (emptyEl) emptyEl.replaceWith(otherList); else otherSection.appendChild(otherList);
+        }
+        // 이동 버튼 방향 업데이트
+        const moveBtnEl = row.querySelector('.mot-task-move-btn');
+        if (moveBtnEl) moveBtnEl.title = otherFieldName === 'doing' ? '예정으로 이동' : '진행 중으로 이동';
+        // 행 이동
+        const addBtnEl = otherList.querySelector('.mot-task-add-btn');
+        if (addBtnEl) addBtnEl.before(row); else otherList.appendChild(row);
+        // 드래그 재바인딩
+        row._dragBound = false;
+        addTaskDrag(row, otherList, stage, otherSection, otherFieldName);
+        // 양쪽 저장
+        saveTasksNow(stage, sectionEl, fieldName);
+        saveTasksNow(stage, otherSection, otherFieldName);
+        // 다른 섹션이 편집 모드면 이벤트 이미 바인딩됨, 아니면 바인딩 필요 없음
       }
       if (e.target.classList.contains('mot-task-add-btn')) {
         const lvls = [['높음','上'],['보통','中'],['낮음','下']];
@@ -6181,22 +6231,55 @@ function openTaskEditor(stage, currentRaw, sectionEl, btnEl) {
   }
 }
 
-function addTaskDrag(row, list, stage, sectionEl) {
+function addTaskDrag(row, list, stage, sectionEl, fieldName) {
+  fieldName = fieldName || 'doing';
   if (row._dragBound) return;
   row._dragBound = true;
-  row.addEventListener('dragstart', e => { row._dragging = true; e.dataTransfer.effectAllowed = 'move'; });
-  row.addEventListener('dragend', () => { row._dragging = false; list.querySelectorAll('.mot-task-row').forEach(r => r.classList.remove('drag-over')); saveTasksNow(stage, sectionEl); });
+  row.addEventListener('dragstart', e => {
+    row._dragging = true;
+    row._dragSrcList = list;
+    row._dragSrcSection = sectionEl;
+    row._dragSrcField = fieldName;
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  row.addEventListener('dragend', () => {
+    row._dragging = false;
+    document.querySelectorAll('.mot-task-row').forEach(r => r.classList.remove('drag-over'));
+    saveTasksNow(stage, sectionEl, fieldName);
+    // 크로스 섹션 이동 후 원본 섹션도 저장
+    if (row._dragSrcList && row._dragSrcList !== list) {
+      saveTasksNow(stage, row._dragSrcSection, row._dragSrcField);
+    }
+  });
   row.addEventListener('dragover', e => { e.preventDefault(); if (!row._dragging) row.classList.add('drag-over'); });
   row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
   row.addEventListener('drop', e => {
     e.preventDefault(); row.classList.remove('drag-over');
-    const dragging = Array.from(list.querySelectorAll('.mot-task-row')).find(r => r._dragging);
-    if (dragging && dragging !== row) {
+    // 드래그 중인 행 탐색 (같은 섹션 또는 다른 섹션)
+    const dragging = Array.from(document.querySelectorAll('.mot-task-row')).find(r => r._dragging);
+    if (!dragging || dragging === row) return;
+    const srcList = dragging._dragSrcList || list;
+    if (srcList === list) {
+      // 같은 리스트 내 순서 변경
       const nodes = Array.from(list.children);
       if (nodes.indexOf(dragging) < nodes.indexOf(row)) row.after(dragging);
       else row.before(dragging);
-      saveTasksNow(stage, sectionEl);
+    } else {
+      // 크로스 섹션 이동 — 현재 리스트에 삽입
+      const nodes = Array.from(list.children);
+      if (nodes.indexOf(row) >= 0) row.before(dragging);
+      else list.appendChild(dragging);
+      // 드래그 재바인딩
+      dragging._dragBound = false;
+      addTaskDrag(dragging, list, stage, sectionEl, fieldName);
+      // 이동 버튼 방향 업데이트
+      const otherFieldName = fieldName === 'doing' ? 'todo' : 'doing';
+      const moveBtnEl = dragging.querySelector('.mot-task-move-btn');
+      if (moveBtnEl) moveBtnEl.title = fieldName === 'doing' ? '예정으로 이동' : '진행 중으로 이동';
+      // 원본 저장
+      if (dragging._dragSrcSection) saveTasksNow(stage, dragging._dragSrcSection, dragging._dragSrcField);
     }
+    saveTasksNow(stage, sectionEl, fieldName);
   });
 }
 
@@ -6208,7 +6291,10 @@ function renderStageCard(el, row) {
   const doing = (row?.doing != null && row.doing !== '')             ? row.doing        : (def.doing || '');
   const todo  = (row?.todo  != null && row.todo  !== '')             ? row.todo         : (def.todo  || '');
 
-  window[`_taskRaw_${stage}`] = doing;
+  window[`_doingRaw_${stage}`] = doing;
+  window[`_todoRaw_${stage}`]  = todo;
+
+  const PENCIL = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
 
   el.innerHTML = `
     <div class="mot-stage-section">
@@ -6224,21 +6310,21 @@ function renderStageCard(el, row) {
     <div class="mot-stage-section" id="task-section-${stage}">
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div class="mot-stage-section-label">관련 업무 - 진행 중</div>
-        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', window._taskRaw_${stage}||'', document.getElementById('task-section-${stage}'), this)" title="편집">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        </button>
+        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', 'doing', document.getElementById('task-section-${stage}'), this)" title="편집">${PENCIL}</button>
       </div>
       ${taskListHtml(doing)}
     </div>
-    <div class="mot-stage-section">
-      <div class="mot-stage-section-label">관련 업무 - 예정</div>
-      <textarea class="mot-stage-textarea" data-stage="${stage}" data-field="todo"
-        placeholder="줄마다 하나씩 입력하세요">${escHtml(todo)}</textarea>
+    <div class="mot-stage-section" id="todo-section-${stage}">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="mot-stage-section-label">관련 업무 - 예정</div>
+        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', 'todo', document.getElementById('todo-section-${stage}'), this)" title="편집">${PENCIL}</button>
+      </div>
+      ${taskListHtml(todo)}
     </div>
     <div class="mot-stage-save-status" id="stage-status-${stage}"></div>
   `;
 
-  // 높이 자동 조절
+  // 높이 자동 조절 (textarea만)
   el.querySelectorAll('.mot-stage-textarea').forEach(ta => {
     autoResize(ta);
     ta.addEventListener('input', () => autoResize(ta));
