@@ -5314,10 +5314,10 @@ function renderSec3() {
   // 상담 3채널만 범례 표시 (접수AS 제외)
   // 항목별 추이 4항목: 유선_AS / 모바일_AS / 게시판_AS / 자사몰
   const DETAIL_ITEMS = [
-    { ri: 0, name: '유선_AS',   color: CONTACT_PALETTE[1] },
-    { ri: 2, name: '모바일_AS', color: CONTACT_PALETTE[2] },
-    { ri: 4, name: '게시판_AS', color: CONTACT_PALETTE[0] },
-    { ri: 6, name: '자사몰',    color: CONTACT_PALETTE[3] },
+    { ri: 0, name: '유선_AS 상담',   color: CONTACT_PALETTE[1] },
+    { ri: 2, name: '모바일_AS 상담', color: CONTACT_PALETTE[2] },
+    { ri: 4, name: '게시판_AS 상담', color: CONTACT_PALETTE[0] },
+    { ri: 6, name: '자사몰_AS 접수', color: CONTACT_PALETTE[3] },
   ];
   const renderLegend = (elId) => {
     const el = document.getElementById(elId);
