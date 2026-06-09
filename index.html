@@ -5618,6 +5618,7 @@ function renderContactDetail() {
 
   d.rows.forEach((row, ri) => {
     const num = ROW_NUM[ri] || '';
+    if (!num) return;
     const numTd = `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">${num}</td>`;
 
     let style = '', cls = '';
