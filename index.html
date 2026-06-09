@@ -5100,6 +5100,7 @@ function makeMultiBar(id, datasets, labels, stacked=false, pctY=false, valueLabe
       plugins: {
         valueLabels: valueLabels || { enabled: false },
         tooltip: {
+          itemSort: stacked ? (a, b) => b.datasetIndex - a.datasetIndex : undefined,
           callbacks: {
             label: c => ` ${c.dataset.label}: ${pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString() + (unit ? ' '+unit : '')}`,
             footer: unit ? (items) => {
