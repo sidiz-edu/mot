@@ -3302,17 +3302,15 @@ table.t               { font-size: 14px; }
         <!-- sub 1: 항목별 추이 -->
         <div id="cost-sub-1" style="display:none">
 
+          <!-- 공용 범례 -->
+          <div class="lg-row mt-8" style="justify-content:center;gap:20px;padding:8px 12px;background:var(--surface-2);border-radius:8px;border:1px solid var(--border)">
+            <div id="lg-contact-ratio" class="lg-row" style="margin:0;gap:16px"></div>
+          </div>
+
           <!-- 상담 3채널 -->
-          <div class="card">
+          <div class="card mt-8">
             <div class="card-head">
               <div><div class="card-title">상담 채널 건수 비율 추이</div><div class="card-sub">유선·모바일·게시판_AS + 자사몰 합계 기준 · 실선 26년</div></div>
-              <div style="display:flex;gap:12px;align-items:center">
-                <div id="lg-contact-ratio" class="lg-row" style="margin:0"></div>
-                <div class="yoy-legend" style="margin-left:8px;padding-left:8px;border-left:1px solid var(--border)">
-                  <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
-                  <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
-                </div>
-              </div>
             </div>
             <div class="chart-box h-260"><canvas id="c_contact_ratio_line"></canvas></div>
           </div>
@@ -3320,26 +3318,12 @@ table.t               { font-size: 14px; }
             <div class="card">
               <div class="card-head">
                 <div><div class="card-title">상담 채널 건수 추이</div><div class="card-sub">유선·모바일·게시판_AS + 자사몰 · 실선 26년</div></div>
-                <div style="display:flex;gap:12px;align-items:center">
-                  <div id="lg-contact-count-2" class="lg-row" style="margin:0"></div>
-                  <div class="yoy-legend" style="margin-left:8px;padding-left:8px;border-left:1px solid var(--border)">
-                    <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
-                    <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
-                  </div>
-                </div>
               </div>
               <div class="chart-box h-260"><canvas id="c_contact_count_line"></canvas></div>
             </div>
             <div class="card">
               <div class="card-head">
                 <div><div class="card-title">상담 채널 금액 추이</div><div class="card-sub">유선·모바일·게시판_AS + 자사몰 · 단위: 만원</div></div>
-                <div style="display:flex;gap:12px;align-items:center">
-                  <div id="lg-contact-amount-2" class="lg-row" style="margin:0"></div>
-                  <div class="yoy-legend" style="margin-left:8px;padding-left:8px;border-left:1px solid var(--border)">
-                    <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
-                    <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
-                  </div>
-                </div>
               </div>
               <div class="chart-box h-260"><canvas id="c_contact_amount_line"></canvas></div>
             </div>
@@ -5299,9 +5283,7 @@ function renderSec3() {
       el.insertAdjacentHTML('beforeend', `<span class="lg-chip"><i style="background:${it.color}"></i>${it.name}</span>`);
     });
   };
-  renderLegend('lg-contact-count-2');
-  renderLegend('lg-contact-amount-2');
-  renderLegend('lg-contact-ratio');
+  renderLegend('lg-contact-ratio'); // 공용 범례 1개
 
   // ── [건수/금액] tab ───────────────────────────────────────
 
