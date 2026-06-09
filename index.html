@@ -5637,6 +5637,7 @@ function renderContactDetail() {
 
   d.rows.forEach((row, ri) => {
     const num = ROW_NUM[ri] || '';
+    if (!num && ri !== 4) return; // 행번호 없는 행 제외 (ri===4는 합계 삽입 트리거라 유지)
     const numTd = `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">${num}</td>`;
 
     let style = '', cls = '';
