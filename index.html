@@ -3333,11 +3333,11 @@ table.t               { font-size: 14px; }
             <div class="card">
               <div class="card-head">
                 <div>
-                  <div class="card-title">일 평균 AS 관련 비용</div>
-                  <div class="card-sub">AS 관련 총 용역료 ÷ 영업일 수 · 25년/26년 비교</div>
+                  <div class="card-title">월별 AS 관련 총 건수</div>
+                  <div class="card-sub">총합계 = 상담_AS합계 + 접수(AS) · 자사몰_AS 접수 별도 표시 · 단위: 건 · 26년</div>
                 </div>
               </div>
-              <div class="chart-box"><canvas id="c_cs_daily"></canvas></div>
+              <div class="chart-box"><canvas id="c_cs_total_count"></canvas></div>
             </div>
           </div>
           <!-- AS 통계 YoY -->
@@ -5411,6 +5411,20 @@ function renderSec3() {
       { label: '접수 (AS) — 자사몰 외',  data: recvRestAmt, color: '#A78BFA' },
       { label: '자사몰_AS 접수',         data: jasamolAmt,  color: '#7C3AED' },
     ], labels, true, false, { enabled: true, mode: 'stackTotal' }, '만원');
+
+    // 건수 차트 (동일 구조)
+    const yosenCnt    = cd.rows[0].counts.map(v => v || 0);
+    const mobileCnt   = cd.rows[2].counts.map(v => v || 0);
+    const boardCnt    = cd.rows[4].counts.map(v => v || 0);
+    const jasamolCnt  = cd.rows[6].counts.map(v => v != null ? v : 0);
+    const recvRestCnt = cd.rows[5].counts.map((v, i) => (v || 0) - (cd.rows[6].counts[i] || 0));
+    makeMultiBar('c_cs_total_count', [
+      { label: '유선_AS 상담',          data: yosenCnt,    color: '#F5B800' },
+      { label: '모바일_AS 상담',         data: mobileCnt,   color: '#DB2777' },
+      { label: '게시판_AS 상담',         data: boardCnt,    color: '#EA580C' },
+      { label: '접수 (AS) — 자사몰 외',  data: recvRestCnt, color: '#A78BFA' },
+      { label: '자사몰_AS 접수',         data: jasamolCnt,  color: '#7C3AED' },
+    ], labels, true, false, { enabled: true, mode: 'stackTotal' }, '건');
   }
 
   // 일 평균 용역료 YoY (기존 DATA.contact 기반 유지)
