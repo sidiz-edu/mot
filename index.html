@@ -5625,7 +5625,7 @@ function renderContactDetail() {
   trAS.style.cssText = 'background:rgba(0,62,255,.04);font-weight:700;border-top:2px solid var(--border-strong)';
   trAS.innerHTML = `<td colspan="4" style="font-weight:700;color:var(--accent)">AS 관련 합계</td>` +
     d.asTotals.counts.map((c,i)=>
-      `<td class="num" style="color:var(--accent)">${c.toLocaleString()}</td><td class="num" style="color:var(--accent)">₩${Math.round(d.asTotals.amounts[i]/10000).toLocaleString()}만</td>`
+      `<td class="num" style="color:var(--accent)">${c.toLocaleString()}건</td><td class="num" style="color:var(--accent)">₩${Math.round(d.asTotals.amounts[i]/10000).toLocaleString()}만</td>`
     ).join('');
   body.appendChild(trAS);
 
@@ -5634,7 +5634,7 @@ function renderContactDetail() {
   trG.style.cssText = 'background:var(--surface-3);font-weight:700;border-top:1px solid var(--border)';
   trG.innerHTML = `<td colspan="4" style="font-weight:700">총 합계</td>` +
     d.grandTotals.counts.map((c,i)=>
-      `<td class="num"><b>${c.toLocaleString()}</b></td><td class="num"><b>₩${Math.round(d.grandTotals.amounts[i]/10000).toLocaleString()}만</b></td>`
+      `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num"><b>₩${Math.round(d.grandTotals.amounts[i]/10000).toLocaleString()}만</b></td>`
     ).join('');
   body.appendChild(trG);
 }
