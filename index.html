@@ -5404,20 +5404,20 @@ function renderSec3() {
   {
     const cd = DATA.contactDetail;
     const labels = cd.months; // ['26.1월', ..., '26.5월']
-    // 상담_AS 합계 = rows[0](유선_AS) + rows[2](모바일_AS) + rows[4](게시판_AS)
-    const asAmt = labels.map((_, mi) =>
-      Math.round([0,2,4].reduce((s,ri) => s + (cd.rows[ri].amounts[mi] || 0), 0) / 10000)
-    );
-    // 자사몰 (null → 0)
-    const jasamolAmt = cd.rows[6].amounts.map(v => v != null ? Math.round(v / 10000) : 0);
-    // 접수AS 나머지 = 접수AS 전체 - 자사몰
-    const recvRestAmt = cd.rows[5].amounts.map((v, i) =>
+    const toMan = (v) => v != null ? Math.round(v / 10000) : 0;
+    const yosenAmt  = cd.rows[0].amounts.map(toMan);
+    const mobileAmt = cd.rows[2].amounts.map(toMan);
+    const boardAmt  = cd.rows[4].amounts.map(toMan);
+    const jasamolAmt   = cd.rows[6].amounts.map(v => v != null ? Math.round(v / 10000) : 0);
+    const recvRestAmt  = cd.rows[5].amounts.map((v, i) =>
       Math.round((v - (cd.rows[6].amounts[i] || 0)) / 10000)
     );
     makeMultiBar('c_cs_total', [
-      { label: '상담_AS 합계 (1+2+3)', data: asAmt,        color: '#EA580C' },
-      { label: '접수 (AS) — 자사몰 외', data: recvRestAmt, color: '#A78BFA' },
-      { label: '자사몰_AS 접수',        data: jasamolAmt,  color: '#7C3AED' },
+      { label: '유선_AS 상담',          data: yosenAmt,    color: '#F5B800' },
+      { label: '모바일_AS 상담',         data: mobileAmt,   color: '#DB2777' },
+      { label: '게시판_AS 상담',         data: boardAmt,    color: '#EA580C' },
+      { label: '접수 (AS) — 자사몰 외',  data: recvRestAmt, color: '#A78BFA' },
+      { label: '자사몰_AS 접수',         data: jasamolAmt,  color: '#7C3AED' },
     ], labels, true);
   }
 
