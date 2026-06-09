@@ -3286,16 +3286,16 @@ table.t               { font-size: 14px; }
               <div class="chart-box"><canvas id="c_cs_total_count"></canvas></div>
             </div>
           </div>
-          <!-- AS 통계 YoY -->
-          <div class="grid-2 mt-16">
-            <div class="card">
-              <div class="card-head"><div><div class="card-title">월별 AS 건수</div><div class="card-sub">AS 관련 월별 총 접수 건수 · 25년/26년 비교</div></div></div>
-              <div class="chart-box"><canvas id="c_as_count"></canvas></div>
+          <!-- 접수(AS) 채널 비율 -->
+          <div class="card mt-16">
+            <div class="card-head">
+              <div><div class="card-title">접수 (AS) 채널별 비율 추이</div><div class="card-sub">자사몰_AS 접수 vs 그 외 접수 · 26년 3~5월</div></div>
+              <div class="lg-row" style="margin:0;gap:16px">
+                <span class="lg-chip"><i style="background:#7C3AED"></i>자사몰_AS 접수</span>
+                <span class="lg-chip"><i style="background:#A78BFA"></i>그 외 접수</span>
+              </div>
             </div>
-            <div class="card">
-              <div class="card-head"><div><div class="card-title">하루 평균 AS 건수</div><div class="card-sub">AS 건수 ÷ 영업일 수 · 25년/26년 비교</div></div></div>
-              <div class="chart-box"><canvas id="c_as_count_daily"></canvas></div>
-            </div>
+            <div class="chart-box h-260"><canvas id="c_recv_ratio"></canvas></div>
           </div>
         </div>
 
@@ -5365,14 +5365,23 @@ function renderSec3() {
   const csD = yoy_c(asRelDaily.map(v => Math.round(v / 10000)));
   makeYoYBar('c_cs_daily', csD.y25, csD.y26, '#FF8000', '만원');
 
-  // AS 통계 YoY 막대
-  if (DATA.asCount) {
-    const aC  = yoy_c(DATA.asCount);
-    const aCD = yoy_c(DATA.asCountDaily);
-    const aAD = yoy_c(DATA.asAmountDaily);
-    makeYoYBar('c_as_count',        aC.y25,  aC.y26,  '#CC5500', '건');
-    makeYoYBar('c_as_count_daily',  aCD.y25, aCD.y26, '#FF8000', '건');
-    makeYoYBar('c_as_amount_daily', aAD.y25, aAD.y26, '#FFB347', '만원');
+  // 접수(AS) 채널별 비율 — 자사몰 vs 그 외 (26년 3~5월)
+  {
+    const cd = DATA.contactDetail;
+    const labels = cd.months; // ['26.1월'~'26.5월']
+    const total  = cd.rows[5].counts; // 접수(AS) 전체
+    const jasam  = cd.rows[6].counts; // 자사몰 (3월~만 존재)
+    // 비율 계산 (null이면 null 유지)
+    const jasamPct = total.map((t, i) =>
+      t && jasam[i] != null ? Math.round(jasam[i] / t * 1000) / 10 : null
+    );
+    const restPct = total.map((t, i) =>
+      t && jasam[i] != null ? Math.round((t - jasam[i]) / t * 1000) / 10 : null
+    );
+    makeMultiBar('c_recv_ratio', [
+      { label: '자사몰_AS 접수', data: jasamPct, color: '#7C3AED' },
+      { label: '그 외 접수',     data: restPct,  color: '#A78BFA' },
+    ], labels, true, true, { enabled: true, mode: 'stackTotal' });
   }
 
   // ── [항목별 추이] tab ─────────────────────────────────────
