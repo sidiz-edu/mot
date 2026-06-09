@@ -5418,7 +5418,7 @@ function renderSec3() {
       { label: '게시판_AS 상담',         data: boardAmt,    color: '#EA580C' },
       { label: '접수 (AS) — 자사몰 외',  data: recvRestAmt, color: '#A78BFA' },
       { label: '자사몰_AS 접수',         data: jasamolAmt,  color: '#7C3AED' },
-    ], labels, true);
+    ], labels, true, false, { enabled: true, mode: 'stackTotal' });
   }
 
   // 일 평균 용역료 YoY (기존 DATA.contact 기반 유지)
