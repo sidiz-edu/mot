@@ -3329,7 +3329,7 @@ table.t               { font-size: 14px; }
               <div class="card-head">
                 <div>
                   <div class="card-title">월별 AS 관련 총 용역료</div>
-                  <div class="card-sub">상담_AS 합계 + 접수(AS) · 단위: 만원 · 26년</div>
+                  <div class="card-sub">총합계 = 상담_AS합계 + 접수(AS) · 자사몰_AS 접수 별도 표시 · 단위: 만원 · 26년</div>
                 </div>
               </div>
               <div class="chart-box"><canvas id="c_cs_total"></canvas></div>
@@ -5375,10 +5375,16 @@ function renderSec3() {
     const asAmt = labels.map((_, mi) =>
       Math.round([0,2,4].reduce((s,ri) => s + (cd.rows[ri].amounts[mi] || 0), 0) / 10000)
     );
-    const recvAmt = cd.rows[5].amounts.map(v => Math.round(v / 10000));
+    // 자사몰 (null → 0)
+    const jasamolAmt = cd.rows[6].amounts.map(v => v != null ? Math.round(v / 10000) : 0);
+    // 접수AS 나머지 = 접수AS 전체 - 자사몰
+    const recvRestAmt = cd.rows[5].amounts.map((v, i) =>
+      Math.round((v - (cd.rows[6].amounts[i] || 0)) / 10000)
+    );
     makeMultiBar('c_cs_total', [
-      { label: '상담_AS 합계', data: asAmt,   color: '#EA580C' },
-      { label: '접수 (AS)',   data: recvAmt,  color: '#7C3AED' },
+      { label: '상담_AS 합계 (1+2+3)', data: asAmt,        color: '#EA580C' },
+      { label: '접수 (AS) — 자사몰 외', data: recvRestAmt, color: '#A78BFA' },
+      { label: '자사몰_AS 접수',        data: jasamolAmt,  color: '#7C3AED' },
     ], labels, true);
   }
 
