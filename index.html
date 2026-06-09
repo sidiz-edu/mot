@@ -4883,8 +4883,25 @@ function yoy_cs(arr) {
   };
 }
 
+// 최소자승법 추세선 계산 (null 무시, 데이터 범위 내만 반환)
+function lsqTrend(data) {
+  const pts = data.map((v, i) => [i, v]).filter(([, v]) => v != null);
+  if (pts.length < 2) return data.map(() => null);
+  const n = pts.length;
+  const sx  = pts.reduce((s, [x])    => s + x,     0);
+  const sy  = pts.reduce((s, [, y])  => s + y,     0);
+  const sxy = pts.reduce((s, [x, y]) => s + x * y, 0);
+  const sxx = pts.reduce((s, [x])    => s + x * x, 0);
+  const slope     = (n * sxy - sx * sy) / (n * sxx - sx * sx);
+  const intercept = (sy - slope * sx) / n;
+  const minX = pts[0][0], maxX = pts[pts.length - 1][0];
+  return data.map((_, i) =>
+    i >= minX && i <= maxX ? Math.round((slope * i + intercept) * 10) / 10 : null
+  );
+}
+
 // YoY 라인 차트 (단일 항목, 25년 점선 / 26년 실선)
-function makeYoYLine(id, y25, y26, color, isPct=false) {
+function makeYoYLine(id, y25, y26, color, isPct=false, showTrend=false) {
   const el = document.getElementById(id);
   if (!el) return;
   const ctx = el.getContext('2d');
@@ -4906,7 +4923,13 @@ function makeYoYLine(id, y25, y26, color, isPct=false) {
           borderWidth: 1.8, borderDash: [5, 4],
           pointRadius: 2, pointBackgroundColor: 'transparent',
           pointBorderColor: hexToRgba(color, 0.4), tension: 0.35,
-        }
+        },
+        ...(showTrend ? [{
+          label: '추세 (26년)', data: lsqTrend(y26),
+          borderColor: hexToRgba(color, 0.55), backgroundColor: 'transparent',
+          borderWidth: 1.5, borderDash: [4, 3],
+          pointRadius: 0, pointHoverRadius: 0, tension: 0,
+        }] : [])
       ]
     },
     options: {
@@ -4970,7 +4993,7 @@ function makeYoYBar(id, y25, y26, color, label='') {
 }
 
 // YoY 멀티 라인 차트 (항목별 추이, 25년 점선 / 26년 실선)
-function makeYoYMultiLine(id, items, pctY=false) {
+function makeYoYMultiLine(id, items, pctY=false, showTrend=false) {
   const el = document.getElementById(id);
   if (!el) return;
   const datasets = [];
@@ -4989,6 +5012,16 @@ function makeYoYMultiLine(id, items, pctY=false) {
       pointBorderColor: hexToRgba(item.color, 0.38),
       fill: false, tension: 0.35,
     });
+    if (showTrend) {
+      datasets.push({
+        label: item.label + ' 추세',
+        data: lsqTrend(item.y26),
+        borderColor: hexToRgba(item.color, 0.55), backgroundColor: 'transparent',
+        borderWidth: 1.5, borderDash: [4, 3],
+        pointRadius: 0, pointHoverRadius: 0, tension: 0,
+        fill: false,
+      });
+    }
   });
   CHARTS[id] = new Chart(el.getContext('2d'), {
     type: 'line',
@@ -5363,7 +5396,7 @@ function renderSec3() {
       const { y25: d25, y26: d26 } = yoy_c(denom);
       const r25 = y25.map((v, mi) => (v != null && d25[mi]) ? Math.round(v / d25[mi] * 1000) / 10 : null);
       const r26 = y26.map((v, mi) => (v != null && d26[mi]) ? Math.round(v / d26[mi] * 1000) / 10 : null);
-      makeYoYLine(CC_IDS[idx], r25, r26, CONTACT_PALETTE[idx], true);
+      makeYoYLine(CC_IDS[idx], r25, r26, CONTACT_PALETTE[idx], true, true);
     });
   }
 
@@ -5437,21 +5470,21 @@ function renderSec3() {
         y26: y26.map((v, mi) => (v != null && d26[mi]) ? Math.round(v / d26[mi] * 1000) / 10 : null),
       };
     });
-    makeYoYMultiLine('c_contact_ratio_line', ratioItems, true);
+    makeYoYMultiLine('c_contact_ratio_line', ratioItems, true, true);
 
     // 건수
     const countItems = DETAIL_ITEMS.map((it, idx) => {
       const { y26 } = yoy_c(detailCounts[idx]);
       return { label: it.name, color: it.color, y25: Array(12).fill(null), y26 };
     });
-    makeYoYMultiLine('c_contact_count_line', countItems, false);
+    makeYoYMultiLine('c_contact_count_line', countItems, false, true);
 
     // 금액
     const amountItems = DETAIL_ITEMS.map((it, idx) => {
       const { y26 } = yoy_c(detailAmounts[idx]);
       return { label: it.name, color: it.color, y25: Array(12).fill(null), y26 };
     });
-    makeYoYMultiLine('c_contact_amount_line', amountItems, false);
+    makeYoYMultiLine('c_contact_amount_line', amountItems, false, true);
   }
 
   // table
