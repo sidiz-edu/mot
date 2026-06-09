@@ -1919,6 +1919,26 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   font-size: 9.5px; font-weight: 700; letter-spacing: .12em;
   text-transform: uppercase; color: var(--ink-4);
 }
+/* 태스크 섹션 헤더 — 유형별 색상 */
+.mot-task-sec-hd {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 8px; border-radius: 6px;
+  border-left: 3px solid;
+}
+.mot-task-sec-hd.routine { border-color: #00B65F; background: rgba(0,182,95,.07); }
+.mot-task-sec-hd.active  { border-color: #003EFF; background: rgba(0,62,255,.07); }
+.mot-task-sec-hd.planned { border-color: #FF8000; background: rgba(255,128,0,.07); }
+.mot-task-sec-badge {
+  font-size: 8.5px; font-weight: 700; letter-spacing: .08em;
+  padding: 1px 6px; border-radius: 3px; flex-shrink: 0;
+}
+.routine .mot-task-sec-badge { background: rgba(0,182,95,.15); color: #00904A; }
+.active  .mot-task-sec-badge { background: rgba(0,62,255,.12);  color: #003EFF; }
+.planned .mot-task-sec-badge { background: rgba(255,128,0,.15); color: #CC6600; }
+.mot-task-sec-name {
+  font-size: 11px; font-weight: 600; letter-spacing: .02em; color: var(--ink-2);
+}
+.mot-task-sec-hd .mot-task-edit-btn { margin-left: auto; }
 .mot-stage-section-body {
   font-size: 12px; color: var(--ink-2); line-height: 1.6;
 }
@@ -1989,7 +2009,8 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   padding: 2px 4px; border-radius: 4px; color: var(--ink-4);
   transition: opacity .12s, color .12s; opacity: 0; flex-shrink: 0;
 }
-.mot-stage-section:hover .mot-task-edit-btn { opacity: 1; }
+.mot-stage-section:hover .mot-task-edit-btn,
+.mot-task-sec-hd:hover .mot-task-edit-btn { opacity: 1; }
 .mot-task-edit-btn:hover { background: var(--surface-3); color: var(--accent); }
 .mot-task-edit-btn.active { opacity: 1; color: var(--accent); }
 /* 인라인 편집 모드 */
@@ -2010,10 +2031,12 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
 }
 .mot-task-row.editing .mot-task-inline-select { display: block; }
 .mot-task-inline-del {
-  font-size: 11px; color: var(--ink-4); background: none; border: none;
-  cursor: pointer; padding: 0 2px; display: none; flex-shrink: 0;
+  font-size: 10px; color: var(--ink-4); background: none; border: none;
+  cursor: pointer; padding: 0 3px; flex-shrink: 0; opacity: 0;
+  transition: opacity .15s, color .15s;
 }
-.mot-task-row.editing .mot-task-inline-del { display: block; }
+.mot-task-row:hover .mot-task-inline-del { opacity: 1; }
+.mot-task-row:hover .mot-task-inline-del:hover { color: var(--neg); }
 .mot-task-list.drag-over-list {
   outline: 2px dashed var(--accent);
   outline-offset: 2px;
@@ -6317,22 +6340,25 @@ function renderStageCard(el, row) {
         placeholder="현재 문제 상황을 입력하세요">${escHtml(prob)}</textarea>
     </div>
     <div class="mot-stage-section" id="task-section-${stage}">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div class="mot-stage-section-label">정기 운영 <span style="font-weight:400;color:var(--ink-3);font-size:10px">Routine</span></div>
+      <div class="mot-task-sec-hd routine">
+        <span class="mot-task-sec-badge">Routine</span>
+        <span class="mot-task-sec-name">정기 운영</span>
         <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', 'doing', document.getElementById('task-section-${stage}'), this)" title="편집">${PENCIL}</button>
       </div>
       ${taskListHtml(doing)}
     </div>
     <div class="mot-stage-section" id="project-section-${stage}">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div class="mot-stage-section-label">프로젝트 진행 <span style="font-weight:400;color:var(--ink-3);font-size:10px">Active</span></div>
+      <div class="mot-task-sec-hd active">
+        <span class="mot-task-sec-badge">Active</span>
+        <span class="mot-task-sec-name">프로젝트 진행</span>
         <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', 'project', document.getElementById('project-section-${stage}'), this)" title="편집">${PENCIL}</button>
       </div>
       ${taskListHtml(project)}
     </div>
     <div class="mot-stage-section" id="todo-section-${stage}">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div class="mot-stage-section-label">프로젝트 예정 <span style="font-weight:400;color:var(--ink-3);font-size:10px">Planned</span></div>
+      <div class="mot-task-sec-hd planned">
+        <span class="mot-task-sec-badge">Planned</span>
+        <span class="mot-task-sec-name">프로젝트 예정</span>
         <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', 'todo', document.getElementById('todo-section-${stage}'), this)" title="편집">${PENCIL}</button>
       </div>
       ${taskListHtml(todo)}
@@ -6540,6 +6566,19 @@ async function saveStageField(stage, field, value) {
 // 즉시 기본값으로 렌더링 (Supabase 연결 전)
 renderUpdateRow({});
 document.querySelectorAll('.mot-stage-card[data-stage]').forEach(el => renderStageCard(el, null));
+
+// 전역 태스크 삭제 핸들러 (편집 모드 여부 무관)
+document.addEventListener('click', e => {
+  const delBtn = e.target.closest('.mot-task-inline-del');
+  if (!delBtn) return;
+  const row  = delBtn.closest('.mot-task-row');
+  const sec  = delBtn.closest('.mot-stage-section');
+  const card = delBtn.closest('[data-stage]');
+  if (!row || !card) return;
+  row.remove();
+  const stage = card.dataset.stage;
+  if (sec) saveTasksNow(stage, sec, fieldFromSectionId(sec.id));
+});
 
 // ---- AS 신청 퍼널 여정 맵 ----
 function fjToggle(idx) {
