@@ -1909,32 +1909,37 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
   background: var(--surface-2); border: 1px solid var(--border-soft);
   display: flex; flex-direction: column; gap: 10px;
 }
-.mot-stage-card.c-pre    { background: rgba(90,85,75,0.05); }
-.mot-stage-card.c-funnel { background: rgba(0,62,255,0.04); }
-.mot-stage-card.c-contact{ background: rgba(255,128,0,0.05); }
-.mot-stage-card.c-as     { background: rgba(0,182,95,0.05); }
-.mot-stage-card.c-done   { background: rgba(60,57,48,0.05); }
+.mot-stage-card.c-pre    { background: rgba(90,85,75,0.05);   --sc: 90,85,75;    --sc-hex: #5A5548; }
+.mot-stage-card.c-funnel { background: rgba(0,62,255,0.04);   --sc: 0,62,255;    --sc-hex: #003EFF; }
+.mot-stage-card.c-contact{ background: rgba(255,128,0,0.05);  --sc: 255,128,0;   --sc-hex: #FF8000; }
+.mot-stage-card.c-as     { background: rgba(0,182,95,0.05);   --sc: 0,182,95;    --sc-hex: #00B65F; }
+.mot-stage-card.c-done   { background: rgba(60,57,48,0.05);   --sc: 60,57,48;    --sc-hex: #3C3930; }
 .mot-stage-section { display: flex; flex-direction: column; gap: 5px; }
 .mot-stage-section-label {
   font-size: 9.5px; font-weight: 700; letter-spacing: .12em;
   text-transform: uppercase; color: var(--ink-4);
 }
-/* 태스크 섹션 헤더 — 유형별 색상 */
+/* 태스크 섹션 헤더 — 스테이지 색상(--sc) 기반 */
 .mot-task-sec-hd {
   display: flex; align-items: center; gap: 7px;
   padding: 5px 8px; border-radius: 6px;
-  border-left: 3px solid;
+  border-left: 3px solid rgba(var(--sc), 0.9);
 }
-.mot-task-sec-hd.routine { border-color: #00B65F; background: rgba(0,182,95,.07); }
-.mot-task-sec-hd.active  { border-color: #003EFF; background: rgba(0,62,255,.07); }
-.mot-task-sec-hd.planned { border-color: #FF8000; background: rgba(255,128,0,.07); }
+/* Routine: 진한 배경 */
+.mot-task-sec-hd.routine { background: rgba(var(--sc), .10); }
+/* Active: 중간 배경 */
+.mot-task-sec-hd.active  { background: rgba(var(--sc), .06); }
+/* Planned: 연한 배경 + 점선 */
+.mot-task-sec-hd.planned {
+  background: rgba(var(--sc), .03);
+  border-left-style: dashed;
+}
 .mot-task-sec-badge {
   font-size: 8.5px; font-weight: 700; letter-spacing: .08em;
   padding: 1px 6px; border-radius: 3px; flex-shrink: 0;
+  background: rgba(var(--sc), .15);
+  color: var(--sc-hex);
 }
-.routine .mot-task-sec-badge { background: rgba(0,182,95,.15); color: #00904A; }
-.active  .mot-task-sec-badge { background: rgba(0,62,255,.12);  color: #003EFF; }
-.planned .mot-task-sec-badge { background: rgba(255,128,0,.15); color: #CC6600; }
 .mot-task-sec-name {
   font-size: 11px; font-weight: 600; letter-spacing: .02em; color: var(--ink-2);
 }
