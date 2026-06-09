@@ -3417,7 +3417,7 @@ table.t               { font-size: 14px; }
           <div class="grid-2 mt-16">
             <div class="card">
               <div class="card-head">
-                <div><div class="card-title">접수 (AS) 건수 추이</div><div class="card-sub">상담 채널과 별도 · 실선 26년 · 점선 25년</div></div>
+                <div><div class="card-title">접수 (AS) 중 자사몰 건수 추이</div><div class="card-sub">자사몰 게시판으로 접수된 건 · 실선 26년</div></div>
                 <div class="yoy-legend">
                   <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
                   <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
@@ -5453,13 +5453,23 @@ function renderSec3() {
   });
   makeYoYMultiLine('c_contact_amount_line', amountItems, false);
 
-  // 접수(AS) 별도 차트
+  // 접수(AS) 금액 차트 — DATA.contact[3] 유지
   const recv = DATA.contact[3];
   if (recv) {
-    const rc = yoy_c(recv.counts);
     const ra = yoy_c(recv.amounts.map(v => Math.round(v / 10000)));
-    makeYoYLine('c_contact_recv_count',  rc.y25, rc.y26, CONTACT_PALETTE[3], false);
     makeYoYLine('c_contact_recv_amount', ra.y25, ra.y26, CONTACT_PALETTE[3], false);
+  }
+
+  // 접수(AS) 건수 차트 — 자사몰 데이터(contactDetail rows[6])로 교체
+  {
+    const jasamol = DATA.contactDetail?.rows?.[6];
+    if (jasamol) {
+      // contactMonths 17개 중 26.1~26.5 = index 12~16
+      const counts17 = Array(17).fill(null);
+      jasamol.counts.forEach((v, i) => { counts17[12 + i] = v; });
+      const jc = yoy_c(counts17);
+      makeYoYLine('c_contact_recv_count', jc.y25, jc.y26, CONTACT_PALETTE[3], false);
+    }
   }
 
   // table
