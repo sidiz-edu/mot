@@ -5082,7 +5082,7 @@ function makeMultiLine(id, datasets, labels, pctY=false) {
   });
 }
 
-function makeMultiBar(id, datasets, labels, stacked=false, pctY=false, valueLabels=null) {
+function makeMultiBar(id, datasets, labels, stacked=false, pctY=false, valueLabels=null, unit='') {
   const el = document.getElementById(id);
   if (!el) return;
   const ds = datasets.map(d => ({
@@ -5107,7 +5107,13 @@ function makeMultiBar(id, datasets, labels, stacked=false, pctY=false, valueLabe
       plugins: {
         valueLabels: valueLabels || { enabled: false },
         tooltip: {
-          callbacks: { label: c => ` ${c.dataset.label}: ${pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString()}` }
+          callbacks: {
+            label: c => ` ${c.dataset.label}: ${pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString() + (unit ? ' '+unit : '')}`,
+            footer: unit ? (items) => {
+              const total = items.reduce((s, c) => s + (c.parsed.y || 0), 0);
+              return `합계: ${total.toLocaleString()} ${unit}`;
+            } : undefined,
+          }
         }
       }
     }
@@ -5418,7 +5424,7 @@ function renderSec3() {
       { label: '게시판_AS 상담',         data: boardAmt,    color: '#EA580C' },
       { label: '접수 (AS) — 자사몰 외',  data: recvRestAmt, color: '#A78BFA' },
       { label: '자사몰_AS 접수',         data: jasamolAmt,  color: '#7C3AED' },
-    ], labels, true, false, { enabled: true, mode: 'stackTotal' });
+    ], labels, true, false, { enabled: true, mode: 'stackTotal' }, '만원');
   }
 
   // 일 평균 용역료 YoY (기존 DATA.contact 기반 유지)
