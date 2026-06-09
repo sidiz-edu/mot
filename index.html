@@ -3441,8 +3441,37 @@ table.t               { font-size: 14px; }
 
         <!-- sub 2: 상세 표 -->
         <div id="cost-sub-2" style="display:none">
+          <!-- 26년 청구 내역 통합 상세 -->
+          <div class="card mt-16">
+            <div class="card-head"><div><div class="card-title">AS 관련 컨택센터 청구 비용 — 26년 상세</div><div class="card-sub">건당 비용 × 건수 = 청구 금액 · 상담(AS) / 접수(AS) 구분</div></div></div>
+            <div class="tbl-wrap">
+              <table class="t" id="cs_detail_table" style="min-width:900px">
+                <thead id="cs_detail_head"></thead>
+                <tbody id="cs_detail_body"></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- 월별 금액 상세 -->
+          <div class="card mt-16">
+            <div class="card-head"><div><div class="card-title">CS 용역료 — 항목별 금액 상세</div><div class="card-sub">단위: 만원 · 합계 포함</div></div></div>
+            <div class="tbl-wrap">
+              <table class="t">
+                <thead id="cs_table_head"><tr><th>항목</th><th>합계</th></tr></thead>
+                <tbody id="cs_table"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card mt-16">
+            <div class="card-head"><div><div class="card-title">CS 용역료 — 항목별 건수 상세</div><div class="card-sub">단위: 건 · 상담·접수 항목</div></div></div>
+            <div class="tbl-wrap">
+              <table class="t">
+                <thead id="cs_count_table_head"><tr><th>항목</th><th>합계</th></tr></thead>
+                <tbody id="cs_count_table"></tbody>
+              </table>
+            </div>
+          </div>
           <!-- 단가표 -->
-          <div class="card">
+          <div class="card mt-16">
             <div class="card-head"><div><div class="card-title">CS 용역료 — 항목별 단가표</div><div class="card-sub">단위: 원/건(또는 콜) · 연도별 단가 비교</div></div></div>
             <div class="tbl-wrap">
               <table class="t unit-price-tbl">
@@ -3508,35 +3537,6 @@ table.t               { font-size: 14px; }
                     <td class="change-same">—</td>
                   </tr>
                 </tbody>
-              </table>
-            </div>
-          </div>
-          <!-- 26년 청구 내역 통합 상세 -->
-          <div class="card mt-16">
-            <div class="card-head"><div><div class="card-title">AS 관련 컨택센터 청구 비용 — 26년 상세</div><div class="card-sub">건당 비용 × 건수 = 청구 금액 · 상담(AS) / 접수(AS) 구분</div></div></div>
-            <div class="tbl-wrap">
-              <table class="t" id="cs_detail_table" style="min-width:900px">
-                <thead id="cs_detail_head"></thead>
-                <tbody id="cs_detail_body"></tbody>
-              </table>
-            </div>
-          </div>
-          <!-- 월별 금액 상세 -->
-          <div class="card mt-16">
-            <div class="card-head"><div><div class="card-title">CS 용역료 — 항목별 금액 상세</div><div class="card-sub">단위: 만원 · 합계 포함</div></div></div>
-            <div class="tbl-wrap">
-              <table class="t">
-                <thead id="cs_table_head"><tr><th>항목</th><th>합계</th></tr></thead>
-                <tbody id="cs_table"></tbody>
-              </table>
-            </div>
-          </div>
-          <div class="card mt-16">
-            <div class="card-head"><div><div class="card-title">CS 용역료 — 항목별 건수 상세</div><div class="card-sub">단위: 건 · 상담·접수 항목</div></div></div>
-            <div class="tbl-wrap">
-              <table class="t">
-                <thead id="cs_count_table_head"><tr><th>항목</th><th>합계</th></tr></thead>
-                <tbody id="cs_count_table"></tbody>
               </table>
             </div>
           </div>
