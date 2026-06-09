@@ -3294,7 +3294,7 @@ table.t               { font-size: 14px; }
           <!-- 항목별 건수 비율 YoY 비교 -->
           <div class="card mt-16">
             <div class="card-head">
-              <div><div class="card-title">항목별 건수 비율 — 전년 동월 비교</div><div class="card-sub">상담 3채널(유선·모바일·게시판) 합계 기준 비율 · 접수(AS)는 건수 절대값 표시</div></div>
+              <div><div class="card-title">항목별 건수 비율 — 전년 동월 비교</div><div class="card-sub">AS 상담 3채널(유선·모바일·게시판) _AS 건수 합계 기준 비율 · 26년 데이터</div></div>
               <div class="yoy-legend">
                 <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
                 <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
@@ -3302,17 +3302,17 @@ table.t               { font-size: 14px; }
             </div>
             <div class="grid-2">
               <div class="chart-inner">
-                <div class="chart-inner-title">상담 (유선)_AS 비율</div>
+                <div class="chart-inner-title">상담 (유선)_AS</div>
                 <div class="chart-box h-160"><canvas id="c_cc_yoy_0"></canvas></div>
                 <p class="chart-insight">25년 7~9월 고점 이후 <strong>26년 들어 비율 하락세</strong>. 전체 채널 내 유선 의존도가 점진적으로 줄어드는 추세.</p>
               </div>
               <div class="chart-inner">
-                <div class="chart-inner-title">상담 (모바일) 비율</div>
+                <div class="chart-inner-title">상담 (모바일)_AS</div>
                 <div class="chart-box h-160"><canvas id="c_cc_yoy_1"></canvas></div>
                 <p class="chart-insight">25년 대비 26년 비율이 <span class="lo">뚜렷하게 감소</span>. AS 온라인 신청 확대로 사전 문의 수요 자체가 줄어든 것으로 추정.</p>
               </div>
               <div class="chart-inner">
-                <div class="chart-inner-title">상담 (게시판) 비율</div>
+                <div class="chart-inner-title">상담 (게시판)_AS</div>
                 <div class="chart-box h-160"><canvas id="c_cc_yoy_2"></canvas></div>
                 <p class="chart-insight">26년 1~3월 단가 인하(5,000→3,000원) 이후 <strong>비율 변동 주목</strong>. 건수 자체는 유지되는 편.</p>
               </div>
@@ -5370,24 +5370,38 @@ function renderSec3() {
   // ── [건수/금액] tab ───────────────────────────────────────
 
   // 항목별 건수 비율 YoY 라인
-  // - 상담 3개(유선·모바일·게시판): 3개 합계 기준 비율
-  // - 접수(AS): 별도 절대 건수 라인
+  // - _AS 3채널(유선·모바일·게시판): _AS 건수 합계 기준 비율
+  // - 26년(contactDetail)만 _AS 분리 데이터 존재 → 25년은 null 처리
   const CC_IDS = ['c_cc_yoy_0','c_cc_yoy_1','c_cc_yoy_2','c_cc_yoy_3'];
   {
-    // 상담 3개(index 0~2)만 합산
-    const t25 = Array(12).fill(0), t26 = Array(12).fill(0);
-    DATA.contact.slice(0, 3).forEach(it => {
-      const { y25, y26 } = yoy_c(it.counts);
-      y25.forEach((v, mi) => { t25[mi] += (v || 0); });
-      y26.forEach((v, mi) => { if (v != null) t26[mi] += v; });
+    const cd = DATA.contactDetail;
+    // _AS 항목 3개: 유선_AS[0], 모바일_AS[2], 게시판_AS[4]
+    const AS_IDX = [0, 2, 4];
+
+    // 17개월 배열 구성 (25년 12개 = null, 26년 5개 = contactDetail 값)
+    const asCounts = AS_IDX.map(ri => {
+      const arr = Array(17).fill(null);
+      cd.rows[ri].counts.forEach((v, i) => { arr[12 + i] = v; });
+      return arr;
     });
-    // 상담 3개 — 3개 합 대비 비율
-    DATA.contact.slice(0, 3).forEach((it, i) => {
-      const { y25, y26 } = yoy_c(it.counts);
-      const r25 = y25.map((v, mi) => t25[mi] ? Math.round(v / t25[mi] * 1000) / 10 : 0);
-      const r26 = y26.map((v, mi) => (v != null && t26[mi]) ? Math.round(v / t26[mi] * 1000) / 10 : null);
-      makeYoYLine(CC_IDS[i], r25, r26, CONTACT_PALETTE[i], true);
+
+    // 분모: 3개 _AS 합산 (월별)
+    const denom = Array(17).fill(null);
+    asCounts.forEach(arr => {
+      arr.forEach((v, i) => {
+        if (v != null) denom[i] = (denom[i] || 0) + v;
+      });
     });
+
+    // yoy_c로 y25/y26 분리 후 비율 계산
+    asCounts.forEach((arr, idx) => {
+      const { y25, y26 } = yoy_c(arr);
+      const { y25: d25, y26: d26 } = yoy_c(denom);
+      const r25 = y25.map((v, mi) => (v != null && d25[mi]) ? Math.round(v / d25[mi] * 1000) / 10 : null);
+      const r26 = y26.map((v, mi) => (v != null && d26[mi]) ? Math.round(v / d26[mi] * 1000) / 10 : null);
+      makeYoYLine(CC_IDS[idx], r25, r26, CONTACT_PALETTE[idx], true);
+    });
+
     // 접수(AS) — 절대 건수 라인 (별도 기준)
     const recv = DATA.contact[3];
     if (recv) {
