@@ -3183,11 +3183,11 @@ table.t               { font-size: 14px; }
           <div class="card-head" style="margin-bottom: 8px">
             <div>
               <div class="card-title">고객 인입 → 시스템 → 처리 결과</div>
-              <div class="card-sub">2026-04 기준 · 흐름 두께는 건수 비율</div>
+              <div class="card-sub">26.5월 기준 · 흐름 두께는 건수 비율 · 합계 8,014건</div>
             </div>
             <div class="lg-row" style="margin:0">
               <span class="lg-chip"><i style="background:var(--ink)"></i>상담</span>
-              <span class="lg-chip"><i style="background:var(--accent)"></i>접수 · 수주</span>
+              <span class="lg-chip"><i style="background:var(--accent)"></i>접수 · 등록</span>
             </div>
           </div>
           <div id="sankey-host"></div>
@@ -5770,59 +5770,53 @@ function renderSankey() {
   if (!host) return;
 
   // Columns: 채널(인입) → 시스템 → 처리 결과
-  const W = 1100, H = 560, PAD = 24, COL_W = 160, NODE_W = 14;
+  const W = 1100, H = 580, PAD = 24, COL_W = 160, NODE_W = 14;
 
-  // node groups
+  // node groups — 26.5월 기준 (contactDetail rows 사용)
+  // rows[0] 유선_AS:1929 / rows[1] 모바일_ON:548 / rows[2] 모바일_AS:398
+  // rows[3] 게시판_ON:2769 / rows[4] 게시판_AS:233
+  // rows[5] 접수AS 자사몰외:1290 / rows[6] 자사몰_AS:847
   const channels = [
-    { id: 'phone-as', label: '유선 (AS)',     vol: 1833, kind: 'counsel' },
-    { id: 'phone-on', label: '유선 (온라인)', vol: 1008, kind: 'counsel' },
-    { id: 'mobile',   label: '모바일',         vol: 966,  kind: 'counsel' },
-    { id: 'board',    label: '게시판',         vol: 2925, kind: 'counsel' },
-    { id: 'off-reg',  label: '오프라인 발생',  vol: 185+592, kind: 'order' },
-    { id: 'on-reg',   label: '온라인 발생',    vol: 302+1460, kind: 'order' },
-    { id: 'as-recv',  label: '접수 (AS)',      vol: 2126, kind: 'receive' },
+    { id: 'phone-as',  label: '유선_AS 상담',      vol: 1929, kind: 'counsel' },
+    { id: 'mobile-as', label: '모바일_AS 상담',     vol: 398,  kind: 'counsel' },
+    { id: 'mobile-on', label: '모바일_ON 상담',     vol: 548,  kind: 'counsel' },
+    { id: 'board-as',  label: '게시판_AS 상담',     vol: 233,  kind: 'counsel' },
+    { id: 'board-on',  label: '게시판_ON 상담',     vol: 2769, kind: 'counsel' },
+    { id: 'recv-rest', label: '접수(AS) 자사몰 외', vol: 1290, kind: 'receive' },
+    { id: 'recv-jas',  label: '자사몰_AS 접수',     vol: 847,  kind: 'receive' },
   ];
   const systems = [
-    { id: 'cti',   label: 'CTI' },
-    { id: 'happy', label: '해피톡' },
-    { id: 'board', label: '게시판' },
-    { id: 'erpAs', label: 'ERP — AS' },
-    { id: 'erpO',  label: 'ERP — 수주' },
+    { id: 'cti',     label: 'CTI' },
+    { id: 'happy',   label: '해피톡' },
+    { id: 'board',   label: '게시판시스템' },
+    { id: 'jasamol', label: '자사몰(홈페이지)' },
+    { id: 'erpAs',   label: 'ERP — AS' },
   ];
   const outcomes = [
-    { id: 'reply',   label: '답변·통화 종결' },
-    { id: 'online',  label: '온라인 처리' },
-    { id: 'asReg',   label: 'AS 접수' },
-    { id: 'orderReg',label: '수주 등록 / 변경' },
+    { id: 'reply',  label: '답변·통화 종결' },
+    { id: 'online', label: '온라인 처리' },
+    { id: 'asReg',  label: 'AS 접수 등록' },
   ];
 
-  // links: channel → system, system → outcome
-  // 단순화: 각 채널의 vol을 시스템들로 분배, 시스템에서 결과로 분배
+  // links: channel → system
   const cs = [
-    { c: 'phone-as', s: 'cti',   v: 1833 },
-    { c: 'phone-as', s: 'erpAs', v: 1400 }, // AS 일부가 ERP까지
-    { c: 'phone-on', s: 'cti',   v: 1008 },
-    { c: 'mobile',   s: 'happy', v: 966 },
-    { c: 'mobile',   s: 'erpAs', v: 400 },
-    { c: 'mobile',   s: 'erpO',  v: 300 },
-    { c: 'board',    s: 'board', v: 2925 },
-    { c: 'board',    s: 'erpAs', v: 800 },
-    { c: 'board',    s: 'erpO',  v: 600 },
-    { c: 'off-reg',  s: 'erpO',  v: 185+592 },
-    { c: 'on-reg',   s: 'erpO',  v: 302+1460 },
-    { c: 'as-recv',  s: 'erpAs', v: 2126 },
+    { c: 'phone-as',  s: 'cti',     v: 1929 },
+    { c: 'mobile-as', s: 'happy',   v: 398  },
+    { c: 'mobile-on', s: 'happy',   v: 548  },
+    { c: 'board-as',  s: 'board',   v: 233  },
+    { c: 'board-on',  s: 'board',   v: 2769 },
+    { c: 'recv-rest', s: 'erpAs',   v: 1290 },
+    { c: 'recv-jas',  s: 'jasamol', v: 847  },
   ];
+  // links: system → outcome
   const so = [
-    { s: 'cti',   o: 'reply',    v: 1500 },
-    { s: 'cti',   o: 'asReg',    v: 1341 }, // 1833+1008-1500
-    { s: 'happy', o: 'reply',    v: 200 },
-    { s: 'happy', o: 'online',   v: 300 },
-    { s: 'happy', o: 'asReg',    v: 466 },
-    { s: 'board', o: 'reply',    v: 1525 },
-    { s: 'board', o: 'online',   v: 600 },
-    { s: 'board', o: 'asReg',    v: 800 },
-    { s: 'erpAs', o: 'asReg',    v: 4726 },
-    { s: 'erpO',  o: 'orderReg', v: 185+302+592+1460+300+600 },
+    { s: 'cti',     o: 'reply',  v: 1929 }, // 유선AS 상담 → 답변·통화 종결
+    { s: 'happy',   o: 'reply',  v: 398  }, // 모바일AS → 답변
+    { s: 'happy',   o: 'online', v: 548  }, // 모바일ON → 온라인 처리
+    { s: 'board',   o: 'reply',  v: 233  }, // 게시판AS → 답변
+    { s: 'board',   o: 'online', v: 2769 }, // 게시판ON → 온라인 처리
+    { s: 'erpAs',   o: 'asReg',  v: 1290 }, // 자사몰외 접수 → AS 등록
+    { s: 'jasamol', o: 'asReg',  v: 847  }, // 자사몰 접수 → AS 등록
   ];
 
   // helpers
