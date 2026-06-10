@@ -5738,11 +5738,6 @@ function renderChannelDetail(chId, hostEl) {
       </div>`;
   }).join('');
   const sys = (ch.sysChips || []).map(sysChipHtml).join('');
-  const note = ch.note ? `
-    <div class="ch-side-block">
-      <div class="ks">참고</div>
-      <div class="kv">${ch.note}</div>
-    </div>` : '';
   hostEl.innerHTML = `
     <div class="ch-detail">
       <div>
@@ -5752,9 +5747,6 @@ function renderChannelDetail(chId, hostEl) {
         </div>
         <div class="ch-card-sys" style="margin-top:6px">${sys}</div>
         <div class="steps">${steps}</div>
-      </div>
-      <div class="ch-side">
-        ${note}
       </div>
     </div>`;
 }
