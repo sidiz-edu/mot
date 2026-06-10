@@ -5330,9 +5330,7 @@ function renderSec3() {
     const mobileAmt = cd.rows[2].amounts.map(toMan);
     const boardAmt  = cd.rows[4].amounts.map(toMan);
     const jasamolAmt   = cd.rows[6].amounts.map(v => v != null ? Math.round(v / 10000) : 0);
-    const recvRestAmt  = cd.rows[5].amounts.map((v, i) =>
-      Math.round((v - (cd.rows[6].amounts[i] || 0)) / 10000)
-    );
+    const recvRestAmt  = cd.rows[5].amounts.map(v => Math.round(v / 10000)); // 이미 자사몰 제외된 값
     makeMultiBar('c_cs_total', [
       { label: '유선_AS 상담',          data: yosenAmt,    color: '#F5B800' },
       { label: '모바일_AS 상담',         data: mobileAmt,   color: '#DB2777' },
@@ -5346,7 +5344,7 @@ function renderSec3() {
     const mobileCnt   = cd.rows[2].counts.map(v => v || 0);
     const boardCnt    = cd.rows[4].counts.map(v => v || 0);
     const jasamolCnt  = cd.rows[6].counts.map(v => v != null ? v : 0);
-    const recvRestCnt = cd.rows[5].counts.map((v, i) => (v || 0) - (cd.rows[6].counts[i] || 0));
+    const recvRestCnt = cd.rows[5].counts.map(v => v || 0); // 이미 자사몰 제외된 값
     makeMultiBar('c_cs_total_count', [
       { label: '유선_AS 상담',          data: yosenCnt,    color: '#F5B800' },
       { label: '모바일_AS 상담',         data: mobileCnt,   color: '#DB2777' },
