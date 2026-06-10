@@ -3183,7 +3183,7 @@ table.t               { font-size: 14px; }
           <div class="card-head" style="margin-bottom: 8px">
             <div>
               <div class="card-title">고객 인입 → 시스템 → 처리 결과</div>
-              <div class="card-sub">26.5월 기준 · 흐름 두께는 건수 비율 · 합계 8,014건</div>
+              <div class="card-sub">26.5월 기준 · 흐름 두께는 건수 비율 · AS 관련 채널 합계 5,697건</div>
             </div>
             <div class="lg-row" style="margin:0">
               <span class="lg-chip"><i style="background:var(--ink)"></i>상담</span>
@@ -5773,24 +5773,23 @@ function renderSankey() {
   const W = 1100, H = 580, PAD = 24, COL_W = 160, NODE_W = 14;
 
   // node groups — 26.5월 기준 (contactDetail rows 사용)
-  // rows[0] 유선_AS:1929 / rows[1] 모바일_ON:548 / rows[2] 모바일_AS:398
-  // rows[3] 게시판_ON:2769 / rows[4] 게시판_AS:233
-  // rows[5] 접수AS 자사몰외:1290 / rows[6] 자사몰_AS:847
+  // rows[0] 유선_AS:1929 / rows[2] 모바일_AS:398 / rows[4] 게시판_AS:233
+  // rows[3] 게시판_ON:2769 / rows[5] 접수AS 자사몰외:1290 / rows[6] 자사몰_AS:847
+  // 접수(AS) 자사몰 외 1290건 = 유선·모바일·게시판 AS 상담에서 비례 분배
+  // 유선:972 / 모바일:201 / 게시판:117  (합계 1290)
   const channels = [
-    { id: 'phone-as',  label: '유선_AS 상담',      vol: 1929, kind: 'counsel' },
-    { id: 'mobile-as', label: '모바일_AS 상담',     vol: 398,  kind: 'counsel' },
-    { id: 'mobile-on', label: '모바일_ON 상담',     vol: 548,  kind: 'counsel' },
-    { id: 'board-as',  label: '게시판_AS 상담',     vol: 233,  kind: 'counsel' },
-    { id: 'board-on',  label: '게시판_ON 상담',     vol: 2769, kind: 'counsel' },
-    { id: 'recv-rest', label: '접수(AS) 자사몰 외', vol: 1290, kind: 'receive' },
-    { id: 'recv-jas',  label: '자사몰_AS 접수',     vol: 847,  kind: 'receive' },
+    { id: 'phone-as',  label: '유선_AS 상담',   vol: 1929, kind: 'counsel' },
+    { id: 'mobile-as', label: '모바일_AS 상담', vol: 398,  kind: 'counsel' },
+    { id: 'board-as',  label: '게시판_AS 상담', vol: 233,  kind: 'counsel' },
+    { id: 'board-on',  label: '게시판_ON 상담', vol: 2769, kind: 'counsel' },
+    { id: 'recv-jas',  label: '자사몰_AS 접수', vol: 847,  kind: 'receive' },
   ];
   const systems = [
-    { id: 'cti',     label: 'CTI' },
-    { id: 'happy',   label: '해피톡' },
-    { id: 'board',   label: '게시판시스템' },
-    { id: 'jasamol', label: '자사몰(홈페이지)' },
-    { id: 'erpAs',   label: 'ERP — AS' },
+    { id: 'cti',       label: 'CTI' },
+    { id: 'happy',     label: '해피톡' },
+    { id: 'board',     label: '게시판시스템' },
+    { id: 'recv-rest', label: '접수(AS) 자사몰 외' },
+    { id: 'jasamol',   label: '자사몰(홈페이지)' },
   ];
   const outcomes = [
     { id: 'reply',  label: '답변·통화 종결' },
@@ -5798,25 +5797,25 @@ function renderSankey() {
     { id: 'asReg',  label: 'AS 접수 등록' },
   ];
 
-  // links: channel → system
+  // links: channel → 처리경로
   const cs = [
-    { c: 'phone-as',  s: 'cti',     v: 1929 },
-    { c: 'mobile-as', s: 'happy',   v: 398  },
-    { c: 'mobile-on', s: 'happy',   v: 548  },
-    { c: 'board-as',  s: 'board',   v: 233  },
-    { c: 'board-on',  s: 'board',   v: 2769 },
-    { c: 'recv-rest', s: 'erpAs',   v: 1290 },
-    { c: 'recv-jas',  s: 'jasamol', v: 847  },
+    { c: 'phone-as',  s: 'cti',       v: 957  }, // 유선AS 중 답변 종결
+    { c: 'phone-as',  s: 'recv-rest', v: 972  }, // 유선AS 중 AS 접수 연결 (비례 분배)
+    { c: 'mobile-as', s: 'happy',     v: 197  }, // 모바일AS 중 답변
+    { c: 'mobile-as', s: 'recv-rest', v: 201  }, // 모바일AS 중 AS 접수 연결
+    { c: 'board-as',  s: 'board',     v: 116  }, // 게시판AS 중 답변
+    { c: 'board-as',  s: 'recv-rest', v: 117  }, // 게시판AS 중 AS 접수 연결
+    { c: 'board-on',  s: 'board',     v: 2769 }, // 게시판ON → 온라인 처리
+    { c: 'recv-jas',  s: 'jasamol',   v: 847  }, // 자사몰 접수 → 자사몰홈페이지
   ];
-  // links: system → outcome
+  // links: 처리경로 → 최종 결과
   const so = [
-    { s: 'cti',     o: 'reply',  v: 1929 }, // 유선AS 상담 → 답변·통화 종결
-    { s: 'happy',   o: 'reply',  v: 398  }, // 모바일AS → 답변
-    { s: 'happy',   o: 'online', v: 548  }, // 모바일ON → 온라인 처리
-    { s: 'board',   o: 'reply',  v: 233  }, // 게시판AS → 답변
-    { s: 'board',   o: 'online', v: 2769 }, // 게시판ON → 온라인 처리
-    { s: 'erpAs',   o: 'asReg',  v: 1290 }, // 자사몰외 접수 → AS 등록
-    { s: 'jasamol', o: 'asReg',  v: 847  }, // 자사몰 접수 → AS 등록
+    { s: 'cti',       o: 'reply',  v: 957  },
+    { s: 'happy',     o: 'reply',  v: 197  },
+    { s: 'board',     o: 'reply',  v: 116  },
+    { s: 'board',     o: 'online', v: 2769 },
+    { s: 'recv-rest', o: 'asReg',  v: 1290 }, // 접수(AS) 자사몰외 → AS 접수 등록
+    { s: 'jasamol',   o: 'asReg',  v: 847  }, // 자사몰 → AS 접수 등록
   ];
 
   // helpers
@@ -5921,8 +5920,8 @@ function renderSankey() {
 
   // Column titles
   svg += `<text class="sankey-col-title" x="${colX.ch + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">인입 채널</text>`;
-  svg += `<text class="sankey-col-title" x="${colX.sys + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">시스템</text>`;
-  svg += `<text class="sankey-col-title" x="${colX.out + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">처리 결과</text>`;
+  svg += `<text class="sankey-col-title" x="${colX.sys + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">처리 경로</text>`;
+  svg += `<text class="sankey-col-title" x="${colX.out + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">최종 결과</text>`;
 
   // Links channel → system
   cs.forEach(l => {
