@@ -5366,16 +5366,22 @@ function renderSec3() {
   // 접수(AS) 채널별 비율 — 자사몰 vs 그 외 (26년 3~5월)
   {
     const cd = DATA.contactDetail;
-    const labels = cd.months; // ['26.1월'~'26.5월']
-    const total  = cd.rows[5].counts; // 접수(AS) 전체
-    const jasam  = cd.rows[6].counts; // 자사몰 (3월~만 존재)
-    // 비율 계산 (null이면 null 유지)
-    const jasamPct = total.map((t, i) =>
-      t && jasam[i] != null ? Math.round(jasam[i] / t * 1000) / 10 : null
-    );
-    const restPct = total.map((t, i) =>
-      t && jasam[i] != null ? Math.round((t - jasam[i]) / t * 1000) / 10 : null
-    );
+    const labels = cd.months;
+    const restCnt = cd.rows[5].counts;        // 자사몰 제외 접수AS
+    const jasam   = cd.rows[6].counts;        // 자사몰
+    // 실제 접수AS 전체 = rows[5] + rows[6]
+    const jasamPct = restCnt.map((r, i) => {
+      const j = jasam[i];
+      if (j == null) return null;
+      const tot = r + j;
+      return tot ? Math.round(j / tot * 1000) / 10 : null;
+    });
+    const restPct = restCnt.map((r, i) => {
+      const j = jasam[i];
+      if (j == null) return null;
+      const tot = r + j;
+      return tot ? Math.round(r / tot * 1000) / 10 : null;
+    });
     makeMultiBar('c_recv_ratio', [
       { label: '자사몰_AS 접수', data: jasamPct, color: '#7C3AED' },
       { label: '그 외 접수',     data: restPct,  color: '#A78BFA' },
