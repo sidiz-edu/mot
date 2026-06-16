@@ -2267,6 +2267,11 @@ table.t               { font-size: 14px; }
         <strong id="crumb-page">Overview</strong>
       </div>
       <div class="tb-right">
+        <button class="tb-btn" id="btn-fullscreen">
+          <svg class="ic" id="ic-fullscreen-enter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+          <svg class="ic" id="ic-fullscreen-exit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></svg>
+          전체보기
+        </button>
         <button class="tb-btn" id="btn-export-top">
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           내보내기
@@ -7108,6 +7113,21 @@ document.getElementById('btn-settings').addEventListener('click', () => {
   openOverlay('overlay-settings');
 });
 document.getElementById('btn-export-top').addEventListener('click', () => { showToast('인쇄 창을 엽니다…'); setTimeout(doPrint, 400); });
+document.getElementById('btn-fullscreen').addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+});
+document.addEventListener('fullscreenchange', () => {
+  const isFs = !!document.fullscreenElement;
+  document.getElementById('ic-fullscreen-enter').style.display = isFs ? 'none' : '';
+  document.getElementById('ic-fullscreen-exit').style.display  = isFs ? '' : 'none';
+  document.getElementById('btn-fullscreen').querySelector('.ic + .ic, .ic').nextSibling;
+  const btn = document.getElementById('btn-fullscreen');
+  btn.childNodes.forEach(n => { if (n.nodeType === 3) n.textContent = isFs ? '나가기' : '전체보기'; });
+});
 document.getElementById('btn-notif').addEventListener('click', () => openOverlay('overlay-notif'));
 document.getElementById('btn-search').addEventListener('click', () => {
   openOverlay('overlay-search');
