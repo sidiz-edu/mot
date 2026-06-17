@@ -1901,13 +1901,16 @@ html[data-theme="dark"] #sec-cost .note-title { color: #F5C55A; }
 /* 단계별 상세 정보 */
 .mot-stage-info {
   display: grid; grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, auto);
   gap: 0 10px; padding: 6px 36px 24px 52px;
   background: var(--bg); border-top: 1px solid var(--border);
 }
 .mot-stage-card {
   border-radius: var(--r-lg); padding: 14px 14px 12px;
   background: var(--surface-2); border: 1px solid var(--border-soft);
-  display: flex; flex-direction: column; gap: 10px;
+  grid-row: 1 / -1;
+  display: grid; grid-template-rows: subgrid;
+  gap: 10px;
 }
 .mot-stage-card.c-pre    { background: rgba(90,85,75,0.05);   --sc: 90,85,75;    --sc-hex: #5A5548; }
 .mot-stage-card.c-funnel { background: rgba(0,62,255,0.04);   --sc: 0,62,255;    --sc-hex: #003EFF; }
