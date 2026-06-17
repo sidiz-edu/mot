@@ -5820,14 +5820,19 @@ function renderSankey() {
   const host = document.getElementById('sankey-host');
   if (!host) return;
 
-  // Columns: 채널(인입) → 처리경로 → 접수 세분화 → 최종결과 (4컬럼)
-  const W = 1380, H = 580, PAD = 24, COL_W = 160, NODE_W = 14, COL_STEP = 310;
+  // Columns: 채널(인입) → 시스템 → 처리 결과
+  const W = 1200, H = 580, PAD = 24, COL_W = 160, NODE_W = 14;
 
+  // node groups — 26.5월 기준 (contactDetail rows 사용)
+  // rows[0] 유선_AS:1929 / rows[2] 모바일_AS:398 / rows[4] 게시판_AS:233
+  // rows[3] 게시판_ON:2769 / rows[5] 접수AS 자사몰외:1290 / rows[6] 자사몰_AS:847
+  // 접수(AS) 자사몰 외 1290건 = 유선·모바일·게시판 AS 상담에서 비례 분배
+  // 유선:972 / 모바일:201 / 게시판:117  (합계 1290)
   const channels = [
-    { id: 'phone-as',  label: '유선 - 전화통화 (CTI)',         vol: 1929, kind: 'counsel' },
-    { id: 'mobile-as', label: '모바일 - AI챗봇 (해피톡)',      vol: 398,  kind: 'counsel' },
+    { id: 'phone-as',  label: '유선 - 전화통화 (CTI)',       vol: 1929, kind: 'counsel' },
+    { id: 'mobile-as', label: '모바일 - AI챗봇 (해피톡)',    vol: 398,  kind: 'counsel' },
     { id: 'board-as',  label: 'AS 상담 - 외부쇼핑몰 (게시판)', vol: 233,  kind: 'counsel' },
-    { id: 'recv-jas',  label: 'AS접수 - 자사몰',               vol: 847,  kind: 'receive' },
+    { id: 'recv-jas',  label: 'AS접수 - 자사몰',          vol: 847,  kind: 'receive' },
   ];
   const systems = [
     { id: 'cti',       label: 'CTI' },
@@ -5835,17 +5840,12 @@ function renderSankey() {
     { id: 'board',     label: '게시판시스템' },
     { id: 'recv-rest', label: 'AS접수 - 자사몰 제외' },
   ];
-  // 접수 세분화 컬럼 (새 추가)
-  const subs = [
-    { id: 'sub-rest', label: 'AS접수 - 자사몰 제외', vol: 1290 },
-    { id: 'sub-jas',  label: 'AS접수 - 자사몰',      vol: 847  },
-  ];
   const outcomes = [
     { id: 'reply',  label: '답변·통화 종결' },
     { id: 'asReg',  label: 'AS 접수 등록' },
   ];
 
-  // links: ch → sys
+  // links: channel → 처리경로
   const cs = [
     { c: 'phone-as',  s: 'cti',       v: 957  },
     { c: 'phone-as',  s: 'recv-rest', v: 972  },
@@ -5854,20 +5854,16 @@ function renderSankey() {
     { c: 'board-as',  s: 'board',     v: 116  },
     { c: 'board-as',  s: 'recv-rest', v: 117  },
   ];
-  // links: sys → out 직접 (답변 종결 — sub 컬럼 건너뜀)
-  const sd = [
-    { s: 'cti',   o: 'reply', v: 957 },
-    { s: 'happy', o: 'reply', v: 197 },
-    { s: 'board', o: 'reply', v: 116 },
+  // links: 처리경로 → 최종 결과
+  const so = [
+    { s: 'cti',       o: 'reply',  v: 957  },
+    { s: 'happy',     o: 'reply',  v: 197  },
+    { s: 'board',     o: 'reply',  v: 116  },
+    { s: 'recv-rest', o: 'asReg',  v: 1290 },
   ];
-  // links: sys → sub
-  const sy = [{ s: 'recv-rest', b: 'sub-rest', v: 1290 }];
-  // links: ch → sub 직접 (자사몰)
-  const cb = [{ c: 'recv-jas', b: 'sub-jas', v: 847 }];
-  // links: sub → out
-  const su = [
-    { b: 'sub-rest', o: 'asReg', v: 1290 },
-    { b: 'sub-jas',  o: 'asReg', v: 847  },
+  // links: 인입채널 → 최종결과 직접 (자사몰 접수)
+  const co = [
+    { c: 'recv-jas',  o: 'asReg', v: 847  },
   ];
 
   // helpers
@@ -5878,15 +5874,16 @@ function renderSankey() {
     return m;
   };
 
-  const totalCh  = sum(channels.map(c => c.vol));
+  // Heights: scale total to chart height
+  const totalCh = sum(channels.map(c => c.vol));
   const totalSys = sum(Object.values(colTotal(cs, 's')));
-  const totalSub = sum(subs.map(n => n.vol));
-  const totalOut = sum(Object.values(colTotal(sd, 'o'))) + totalSub;
-  const baseTotal = Math.max(totalCh, totalSys, totalSub, totalOut);
+  const totalOut = sum(Object.values(colTotal(so, 'o'))) + sum(Object.values(colTotal(co, 'o')));
+  const baseTotal = Math.max(totalCh, totalSys, totalOut);
   const gapPx = 8;
-  const usableH = H - PAD*2 - gapPx * (Math.max(channels.length, systems.length, subs.length, outcomes.length) - 1);
+  const usableH = H - PAD*2 - gapPx * (Math.max(channels.length, systems.length, outcomes.length) - 1);
   const scale = usableH / baseTotal;
 
+  // Position nodes vertically
   function positionNodes(nodes, getVol) {
     let y = PAD;
     return nodes.map(n => {
@@ -5896,170 +5893,158 @@ function renderSankey() {
       return node;
     });
   }
-  const chCol  = positionNodes(channels, n => n.vol);
+  const chCol = positionNodes(channels, n => n.vol);
+  const chTotals = colTotal(cs, 'c');
   const sysTotals = colTotal(cs, 's');
-  const sdTotals  = colTotal(sd, 's');
-  const syTotals  = colTotal(sy, 's');
-  const sysCol = positionNodes(systems, n => Math.max(sysTotals[n.id]||0, (sdTotals[n.id]||0)+(syTotals[n.id]||0)));
-  const subCol = positionNodes(subs, n => n.vol);
-  const outTotals = colTotal(sd, 'o');
-  su.forEach(l => { outTotals[l.o] = (outTotals[l.o]||0) + l.v; });
-  const outCol = positionNodes(outcomes, n => outTotals[n.id]||0);
+  const sysOutTotals = colTotal(so, 's');
+  const outTotals = colTotal(so, 'o');
+  co.forEach(l => { outTotals[l.o] = (outTotals[l.o] || 0) + l.v; });
+  const sysCol = positionNodes(systems, n => Math.max(sysTotals[n.id] || 0, sysOutTotals[n.id] || 0));
+  const outCol = positionNodes(outcomes, n => outTotals[n.id] || 0);
 
   const colX = {
-    ch:  PAD + 160,
-    sys: PAD + 160 + COL_STEP,
-    sub: PAD + 160 + COL_STEP * 2,
-    out: PAD + 160 + COL_STEP * 3,
+    ch:  PAD + 190,
+    sys: PAD + 190 + COL_W + 200,
+    out: PAD + 190 + (COL_W + 200) * 2,
   };
 
+  // Build link paths — channel→system
   function linkPath(x1, y1, x2, y2) {
     const cx = (x1 + x2) / 2;
     return `M${x1},${y1} C${cx},${y1} ${cx},${y2} ${x2},${y2}`;
   }
-  function buildOut(nodes, links, key) {
-    const m = {}; nodes.forEach(n => m[n.id]=[]);
-    links.forEach(l => { if (nodes.find(n=>n.id===l[key])) m[l[key]].push(l); });
-    return m;
+
+  // For each channel, distribute its volume vertically among outgoing links
+  function buildOutgoing(nodes, links, idKey) {
+    const out = {};
+    nodes.forEach(n => out[n.id] = []);
+    links.forEach(l => {
+      const node = nodes.find(n => n.id === l[idKey]);
+      if (!node) return;
+      out[l[idKey]].push(l);
+    });
+    return out;
   }
-  function buildIn(nodes, links, key) {
-    const m = {}; nodes.forEach(n => m[n.id]=[]);
-    links.forEach(l => { if (nodes.find(n=>n.id===l[key])) m[l[key]].push(l); });
-    return m;
+  function buildIncoming(nodes, links, idKey) {
+    const inc = {};
+    nodes.forEach(n => inc[n.id] = []);
+    links.forEach(l => {
+      const node = nodes.find(n => n.id === l[idKey]);
+      if (!node) return;
+      inc[l[idKey]].push(l);
+    });
+    return inc;
   }
-  function layoutL(nodes, map, side) {
+
+  const csOut = buildOutgoing(chCol, cs, 'c');
+  const csIn  = buildIncoming(sysCol, cs, 's');
+  const soOut = buildOutgoing(sysCol, so, 's');
+  const soIn  = buildIncoming(outCol, so, 'o');
+  const coOut = buildOutgoing(chCol, co, 'c');
+  const coIn  = buildIncoming(outCol, co, 'o');
+
+  // Compute per-link y positions on source/target
+  function layoutLinks(nodes, linkMap, side) {
     nodes.forEach(n => {
       let y = n.y;
-      (map[n.id]||[]).forEach(l => {
-        const h = Math.max(l.v*scale,1);
-        if (side==='src') { l._srcY=y+h/2; l._srcH=h; } else { l._tgtY=y+h/2; l._tgtH=h; }
+      const node = n;
+      (linkMap[n.id] || []).forEach(l => {
+        const h = Math.max(l.v * scale, 1);
+        if (side === 'src') { l._srcY = y + h/2; l._srcH = h; }
+        else                { l._tgtY = y + h/2; l._tgtH = h; }
         y += h;
       });
     });
   }
+  layoutLinks(chCol, csOut, 'src');
+  layoutLinks(sysCol, csIn, 'tgt');
+  layoutLinks(sysCol, soOut, 'src');
+  layoutLinks(outCol, soIn, 'tgt');
 
-  const csOut = buildOut(chCol, cs, 'c');
-  const csIn  = buildIn(sysCol, cs, 's');
-  const sdOut = buildOut(sysCol, sd, 's');
-  const sdIn  = buildIn(outCol, sd, 'o');
-  const syOut = buildOut(sysCol, sy, 's');
-  const syIn  = buildIn(subCol, sy, 'b');
-  const cbOut = buildOut(chCol, cb, 'c');
-  const cbIn  = buildIn(subCol, cb, 'b');
-  const suOut = buildOut(subCol, su, 'b');
-  const suIn  = buildIn(outCol, su, 'o');
-
-  layoutL(chCol, csOut, 'src');
-  layoutL(sysCol, csIn, 'tgt');
-  // sys 출구: sd 먼저, sy 뒤
-  sysCol.forEach(n => {
-    let y = n.y;
-    (sdOut[n.id]||[]).forEach(l => { const h=Math.max(l.v*scale,1); l._srcY=y+h/2; l._srcH=h; y+=h; });
-    (syOut[n.id]||[]).forEach(l => { const h=Math.max(l.v*scale,1); l._srcY=y+h/2; l._srcH=h; y+=h; });
-  });
-  layoutL(outCol, sdIn, 'tgt');
-  layoutL(subCol, syIn, 'tgt');
-  // sub 입구: sy 뒤에 cb 이어서
-  subCol.forEach(n => {
-    const syH = (syIn[n.id]||[]).reduce((a,l)=>a+Math.max(l.v*scale,1),0);
-    let y = n.y + syH;
-    (cbIn[n.id]||[]).forEach(l => { const h=Math.max(l.v*scale,1); l._tgtY=y+h/2; l._tgtH=h; y+=h; });
-  });
-  layoutL(subCol, suOut, 'src');
-  // ch 출구: cs 뒤에 cb 이어서
+  // co: 채널 → 결과 직접 (cs 링크 이후 y 위치 이어서 계산)
   chCol.forEach(n => {
-    const csH = (csOut[n.id]||[]).reduce((a,l)=>a+Math.max(l.v*scale,1),0);
+    const csH = (csOut[n.id] || []).reduce((a, l) => a + Math.max(l.v * scale, 1), 0);
     let y = n.y + csH;
-    (cbOut[n.id]||[]).forEach(l => { const h=Math.max(l.v*scale,1); l._srcY=y+h/2; l._srcH=h; y+=h; });
+    (coOut[n.id] || []).forEach(l => { const h = Math.max(l.v * scale, 1); l._srcY = y + h/2; l._srcH = h; y += h; });
   });
-  // out 입구: sd 뒤에 su 이어서
   outCol.forEach(n => {
-    const sdH = (sdIn[n.id]||[]).reduce((a,l)=>a+Math.max(l.v*scale,1),0);
-    let y = n.y + sdH;
-    (suIn[n.id]||[]).forEach(l => { const h=Math.max(l.v*scale,1); l._tgtY=y+h/2; l._tgtH=h; y+=h; });
+    const soH = (soIn[n.id] || []).reduce((a, l) => a + Math.max(l.v * scale, 1), 0);
+    let y = n.y + soH;
+    (coIn[n.id] || []).forEach(l => { const h = Math.max(l.v * scale, 1); l._tgtY = y + h/2; l._tgtH = h; y += h; });
   });
 
   const ACCENT = cssVar('--accent');
-  const INK    = cssVar('--ink');
-  const INK3   = cssVar('--ink-3');
-  const GREEN  = '#48B47A';
+  const INK = cssVar('--ink');
+  const INK3 = cssVar('--ink-3');
+  const SURF3 = cssVar('--surface-3');
+  const GREEN = '#48B47A';
 
+  // 시스템 → 최종결과 매핑 (흐름선 색상 결정용)
+  const sysToOutcome = {};
+  so.forEach(l => { sysToOutcome[l.s] = l.o; });
+
+  // SVG
   let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img">`;
 
-  // 컬럼 타이틀
-  svg += `<text class="sankey-col-title" x="${colX.ch+NODE_W/2}"  y="${PAD-8}" text-anchor="middle">인입 채널</text>`;
-  svg += `<text class="sankey-col-title" x="${colX.sys+NODE_W/2}" y="${PAD-8}" text-anchor="middle">처리 경로</text>`;
-  svg += `<text class="sankey-col-title" x="${colX.sub+NODE_W/2}" y="${PAD-8}" text-anchor="middle">접수 세분화</text>`;
-  svg += `<text class="sankey-col-title" x="${colX.out+NODE_W/2}" y="${PAD-8}" text-anchor="middle">최종 결과</text>`;
+  // Column titles
+  svg += `<text class="sankey-col-title" x="${colX.ch + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">인입 채널</text>`;
+  svg += `<text class="sankey-col-title" x="${colX.sys + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">처리 경로</text>`;
+  svg += `<text class="sankey-col-title" x="${colX.out + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">최종 결과</text>`;
 
-  // AS 상담 그룹 레이블
-  const _gT = chCol.find(n=>n.id==='phone-as'), _gB = chCol.find(n=>n.id==='board-as');
-  if (_gT && _gB) {
-    const gy1=_gT.y, gy2=_gB.y+_gB.h, gm=(gy1+gy2)/2, bx=18;
-    svg += `<line x1="${bx+10}" y1="${gy1}" x2="${bx+10}" y2="${gy2}" stroke="${INK3}" stroke-width="1.5"/>`;
-    svg += `<line x1="${bx+10}" y1="${gy1}" x2="${bx+18}" y2="${gy1}" stroke="${INK3}" stroke-width="1.5"/>`;
-    svg += `<line x1="${bx+10}" y1="${gy2}" x2="${bx+18}" y2="${gy2}" stroke="${INK3}" stroke-width="1.5"/>`;
-    svg += `<text class="sankey-group-label" x="${bx}" y="${gm}" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90,${bx},${gm})">AS 상담</text>`;
+  // AS 상담 그룹 레이블 (유선·모바일·게시판 3채널 묶음)
+  const _gsTop = chCol.find(n => n.id === 'phone-as');
+  const _gsBot = chCol.find(n => n.id === 'board-as');
+  if (_gsTop && _gsBot) {
+    const gy1 = _gsTop.y, gy2 = _gsBot.y + _gsBot.h, gmid = (gy1 + gy2) / 2;
+    const bx = 18;
+    svg += `<line x1="${bx+10}" y1="${gy1}" x2="${bx+10}" y2="${gy2}" stroke="${INK3}" stroke-width="1.5" />`;
+    svg += `<line x1="${bx+10}" y1="${gy1}" x2="${bx+18}" y2="${gy1}" stroke="${INK3}" stroke-width="1.5" />`;
+    svg += `<line x1="${bx+10}" y1="${gy2}" x2="${bx+18}" y2="${gy2}" stroke="${INK3}" stroke-width="1.5" />`;
+    svg += `<text class="sankey-group-label" x="${bx}" y="${gmid}" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90,${bx},${gmid})">AS 상담</text>`;
   }
 
-  // 흐름선 — sd 먼저 그려서 뒤에 깔기 (긴 호)
-  sd.forEach(l => {
-    const s=sysCol.find(n=>n.id===l.s), o=outCol.find(n=>n.id===l.o);
-    if (!s||!o) return;
-    svg += `<path d="${linkPath(colX.sys+NODE_W,l._srcY,colX.out,l._tgtY)}" fill="none" stroke="${INK}" stroke-opacity="0.3" stroke-width="${l._srcH}"/>`;
-  });
-  // cs: ch → sys
+  // Links channel → system
   cs.forEach(l => {
-    const c=chCol.find(n=>n.id===l.c), s=sysCol.find(n=>n.id===l.s);
-    if (!c||!s) return;
-    const col = l.s==='recv-rest' ? GREEN : INK;
-    svg += `<path d="${linkPath(colX.ch+NODE_W,l._srcY,colX.sys,l._tgtY)}" fill="none" stroke="${col}" stroke-opacity="0.35" stroke-width="${l._srcH}"/>`;
-  });
-  // sy: sys → sub (초록)
-  sy.forEach(l => {
-    const s=sysCol.find(n=>n.id===l.s), b=subCol.find(n=>n.id===l.b);
-    if (!s||!b) return;
-    svg += `<path d="${linkPath(colX.sys+NODE_W,l._srcY,colX.sub,l._tgtY)}" fill="none" stroke="${GREEN}" stroke-opacity="0.35" stroke-width="${l._srcH}"/>`;
-  });
-  // cb: ch → sub 직접 (파랑 — 자사몰)
-  cb.forEach(l => {
-    const c=chCol.find(n=>n.id===l.c), b=subCol.find(n=>n.id===l.b);
-    if (!c||!b) return;
-    svg += `<path d="${linkPath(colX.ch+NODE_W,l._srcY,colX.sub,l._tgtY)}" fill="none" stroke="${ACCENT}" stroke-opacity="0.35" stroke-width="${l._srcH}"/>`;
-  });
-  // su: sub → out
-  su.forEach(l => {
-    const b=subCol.find(n=>n.id===l.b), o=outCol.find(n=>n.id===l.o);
-    if (!b||!o) return;
-    const col = l.b==='sub-jas' ? ACCENT : GREEN;
-    svg += `<path d="${linkPath(colX.sub+NODE_W,l._srcY,colX.out,l._tgtY)}" fill="none" stroke="${col}" stroke-opacity="0.35" stroke-width="${l._srcH}"/>`;
+    const c = chCol.find(n => n.id === l.c);
+    const s = sysCol.find(n => n.id === l.s);
+    if (!c || !s) return;
+    const color = sysToOutcome[l.s] === 'asReg' ? GREEN : INK;
+    const opacity = 0.35;
+    svg += `<path d="${linkPath(colX.ch + NODE_W, l._srcY, colX.sys, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
   });
 
-  // 노드 렌더링
-  function drawNodes(nodes, x, anchor) {
-    nodes.forEach(n => {
-      const rectCol = n.kind==='receive' ? ACCENT : INK;
-      svg += `<rect x="${x}" y="${n.y}" width="${NODE_W}" height="${n.h}" fill="${rectCol}" rx="2"/>`;
-      const lx = anchor==='end' ? x-10 : x+NODE_W+10;
-      svg += `<text class="sankey-node-label" x="${lx}" y="${n.mid-2}" text-anchor="${anchor}" dominant-baseline="middle">${n.label}</text>`;
-      const vol = n.vol != null ? n.vol : (sysTotals[n.id]||outTotals[n.id]||0);
-      svg += `<text class="sankey-node-sub" x="${lx}" y="${n.mid+14}" text-anchor="${anchor}" dominant-baseline="middle">${vol.toLocaleString()}건</text>`;
-    });
-  }
-  // sub 노드는 색상 별도 처리 (초록/파랑 구분)
-  function drawSubNodes(nodes, x) {
-    nodes.forEach(n => {
-      const rectCol = n.id==='sub-jas' ? ACCENT : GREEN;
-      svg += `<rect x="${x}" y="${n.y}" width="${NODE_W}" height="${n.h}" fill="${rectCol}" rx="2"/>`;
-      const lx = x-10;
-      svg += `<text class="sankey-node-label" x="${lx}" y="${n.mid-2}" text-anchor="end" dominant-baseline="middle">${n.label}</text>`;
-      svg += `<text class="sankey-node-sub" x="${lx}" y="${n.mid+14}" text-anchor="end" dominant-baseline="middle">${n.vol.toLocaleString()}건</text>`;
-    });
-  }
+  // Links system → outcome
+  so.forEach(l => {
+    const s = sysCol.find(n => n.id === l.s);
+    const o = outCol.find(n => n.id === l.o);
+    if (!s || !o) return;
+    const color = l.o === 'asReg' ? GREEN : INK;
+    const opacity = 0.35;
+    svg += `<path d="${linkPath(colX.sys + NODE_W, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
+  });
 
-  drawNodes(chCol,  colX.ch,  'end');
+  // Links channel → outcome (자사몰 직접 연결 — 파란색 구분)
+  co.forEach(l => {
+    const c = chCol.find(n => n.id === l.c);
+    const o = outCol.find(n => n.id === l.o);
+    if (!c || !o) return;
+    svg += `<path d="${linkPath(colX.ch + NODE_W, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${ACCENT}" stroke-opacity="0.35" stroke-width="${l._srcH}" />`;
+  });
+
+  // Nodes
+  function drawNodes(nodes, x, anchor='start', labelOffset=20) {
+    nodes.forEach(n => {
+      const color = (n.kind === 'order' || n.kind === 'receive') ? ACCENT : INK;
+      svg += `<rect x="${x}" y="${n.y}" width="${NODE_W}" height="${n.h}" fill="${color}" rx="2" />`;
+      const lx = anchor === 'end' ? x - 10 : x + NODE_W + 10;
+      svg += `<text class="sankey-node-label" x="${lx}" y="${n.mid - 2}" text-anchor="${anchor}" dominant-baseline="middle">${n.label}</text>`;
+      // sub volume
+      const vol = (n.vol != null) ? n.vol : (sysTotals[n.id] || outTotals[n.id] || 0);
+      svg += `<text class="sankey-node-sub" x="${lx}" y="${n.mid + 14}" text-anchor="${anchor}" dominant-baseline="middle">${vol.toLocaleString()}건</text>`;
+    });
+  }
+  drawNodes(chCol, colX.ch, 'end');
   drawNodes(sysCol, colX.sys, 'end');
-  drawSubNodes(subCol, colX.sub);
   drawNodes(outCol, colX.out, 'start');
 
   svg += '</svg>';
