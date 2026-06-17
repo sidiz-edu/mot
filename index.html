@@ -4653,30 +4653,38 @@ const ValueLabelsPlugin = {
         if (!label) return;
 
         if (mode === 'center' && !isLine) {
-          // Pill-on-bar: small rounded chip with the value, vertically
-          // centered inside the segment so it sits on top of the bar color
-          // with strong contrast regardless of the underlying fill.
           const segHeight = Math.abs(el.base - el.y);
-          if (segHeight < 16) return; // too thin to read
+          const countArr = ds._counts;
+          const countVal = countArr ? countArr[i] : null;
+          const hasCount = countVal != null;
+          const minH = hasCount ? 30 : 16;
+          if (segHeight < minH) return;
 
-          const y = (el.y + el.base) / 2;
-          const padX = 6;
-          const textW = ctx.measureText(label).width;
-          const pillW = textW + padX * 2;
-          const pillH = 16;
+          const yMid = (el.y + el.base) / 2;
+          const line1 = hasCount ? countVal.toLocaleString() + '건' : null;
+          const line2 = label;
+          const lineGap = 13;
+          const padX = 6, padY = 3;
+          const maxTW = Math.max(
+            line1 ? ctx.measureText(line1).width : 0,
+            ctx.measureText(line2).width
+          );
+          const pillW = maxTW + padX * 2;
+          const pillH = (hasCount ? lineGap * 2 : lineGap) + padY * 2;
           const rx = pillH / 2;
+          const yTop = yMid - pillH / 2;
 
           ctx.fillStyle = surfaceColor;
           ctx.beginPath();
           if (ctx.roundRect) {
-            ctx.roundRect(x - pillW / 2, y - pillH / 2, pillW, pillH, rx);
+            ctx.roundRect(x - pillW / 2, yTop, pillW, pillH, rx);
           } else {
-            const left = x - pillW / 2, top = y - pillH / 2;
-            ctx.moveTo(left + rx, top);
-            ctx.arcTo(left + pillW, top, left + pillW, top + pillH, rx);
-            ctx.arcTo(left + pillW, top + pillH, left, top + pillH, rx);
-            ctx.arcTo(left, top + pillH, left, top, rx);
-            ctx.arcTo(left, top, left + pillW, top, rx);
+            const left = x - pillW / 2;
+            ctx.moveTo(left + rx, yTop);
+            ctx.arcTo(left + pillW, yTop, left + pillW, yTop + pillH, rx);
+            ctx.arcTo(left + pillW, yTop + pillH, left, yTop + pillH, rx);
+            ctx.arcTo(left, yTop + pillH, left, yTop, rx);
+            ctx.arcTo(left, yTop, left + pillW, yTop, rx);
             ctx.closePath();
           }
           ctx.fill();
@@ -4686,7 +4694,12 @@ const ValueLabelsPlugin = {
 
           ctx.textBaseline = 'middle';
           ctx.fillStyle = inkColor;
-          ctx.fillText(label, x, y + 0.5);
+          if (line1) {
+            ctx.fillText(line1, x, yMid - lineGap / 2 + 0.5);
+            ctx.fillText(line2, x, yMid + lineGap / 2 + 0.5);
+          } else {
+            ctx.fillText(line2, x, yMid + 0.5);
+          }
         } else {
           // Above-the-mark default
           const y = el.y - (isLine ? 9 : 6);
@@ -5026,6 +5039,7 @@ function makeMultiBar(id, datasets, labels, stacked=false, pctY=false, valueLabe
   if (!el) return;
   const ds = datasets.map(d => ({
     label: d.label, data: d.data,
+    _counts: d._counts || null,
     backgroundColor: hexToRgba(d.color, 0.88),
     hoverBackgroundColor: d.color,
     borderRadius: 3,
@@ -5406,9 +5420,9 @@ function renderSec3() {
       return tot ? Math.round(r / tot * 1000) / 10 : null;
     });
     makeMultiBar('c_recv_ratio', [
-      { label: '자사몰_AS 접수', data: jasamPct, color: '#7C3AED' },
-      { label: '그 외 접수',     data: restPct,  color: '#A78BFA' },
-    ], labels, true, true, { enabled: true, mode: 'stackTotal' });
+      { label: '자사몰_AS 접수', data: jasamPct, color: '#7C3AED', _counts: jasam },
+      { label: '그 외 접수',     data: restPct,  color: '#A78BFA', _counts: restCnt },
+    ], labels, true, true, { enabled: true, mode: 'center' });
   }
 
   // ── [항목별 추이] tab ─────────────────────────────────────
