@@ -5002,6 +5002,7 @@ function makeMultiLine(id, datasets, labels, pctY=false) {
   const ctx = el.getContext('2d');
   const ds = datasets.map(d => ({
     label: d.label, data: d.data,
+    _counts: d._counts || null,
     borderColor: d.color,
     backgroundColor: d.fill ? gradFill(ctx, d.color, 0.10, 0) : 'transparent',
     fill: !!d.fill,
@@ -5026,7 +5027,13 @@ function makeMultiLine(id, datasets, labels, pctY=false) {
         valueLabels: { enabled: false },
         tooltip: {
           callbacks: {
-            label: c => ` ${c.dataset.label}: ${pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString()}`
+            label: c => {
+              const cnt = c.dataset._counts ? c.dataset._counts[c.dataIndex] : null;
+              const val = pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString();
+              return cnt != null
+                ? ` ${c.dataset.label}: ${cnt.toLocaleString()}건  ${val}`
+                : ` ${c.dataset.label}: ${val}`;
+            }
           }
         }
       }
@@ -5241,9 +5248,11 @@ function renderSec1() {
     const total = DATA.seEng.map((v, i) => v + (DATA.seSig[i] || 0));
     const engRatio = DATA.seEng.map((v, i) => total[i] ? Math.round(v / total[i] * 1000) / 10 : null);
     const sigRatio = DATA.seSig.map((v, i) => total[i] ? Math.round(v / total[i] * 1000) / 10 : null);
+    const engCounts = DATA.seEng.map((v, i) => Math.round(DATA.seCount[i] * v / 100));
+    const sigCounts = DATA.seSig.map((v, i) => Math.round(DATA.seCount[i] * v / 100));
     makeMultiLine('c_se_team', [
-      {label: '엔지니어', color: '#073D20', data: engRatio, fill: false},
-      {label: '시공팀',   color: '#48B47A', data: sigRatio, fill: false},
+      {label: '엔지니어', color: '#073D20', data: engRatio, fill: false, _counts: engCounts},
+      {label: '시공팀',   color: '#48B47A', data: sigRatio, fill: false, _counts: sigCounts},
     ], DATA.natMonths, true);
   }
 
