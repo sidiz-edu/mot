@@ -1231,6 +1231,10 @@ table.t {
   font-size: 10.5px; fill: var(--ink-3);
   font-variant-numeric: tabular-nums;
 }
+.sankey-group-label {
+  font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+  font-size: 11px; font-weight: 700; fill: var(--ink);
+}
 .sankey-col-title {
   font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
   font-size: 10.5px; fill: var(--ink-3);
@@ -5827,9 +5831,9 @@ function renderSankey() {
   // 접수(AS) 자사몰 외 1290건 = 유선·모바일·게시판 AS 상담에서 비례 분배
   // 유선:972 / 모바일:201 / 게시판:117  (합계 1290)
   const channels = [
-    { id: 'phone-as',  label: 'AS 상담 - 유선 (CTI) - 통화',      vol: 1929, kind: 'counsel' },
-    { id: 'mobile-as', label: 'AS 상담 - 모바일 (해피톡) - AI챗봇', vol: 398,  kind: 'counsel' },
-    { id: 'board-as',  label: 'AS 상담 - 게시판 - 쇼핑몰',         vol: 233,  kind: 'counsel' },
+    { id: 'phone-as',  label: '유선 - 전화통화 (CTI)',       vol: 1929, kind: 'counsel' },
+    { id: 'mobile-as', label: '모바일 - AI챗봇 (해피톡)',    vol: 398,  kind: 'counsel' },
+    { id: 'board-as',  label: 'AS 상담 - 외부쇼핑몰 (게시판)', vol: 233,  kind: 'counsel' },
     { id: 'recv-jas',  label: '자사몰_AS 접수 (자사몰)', vol: 847,  kind: 'receive' },
   ];
   const systems = [
@@ -5988,6 +5992,18 @@ function renderSankey() {
   svg += `<text class="sankey-col-title" x="${colX.ch + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">인입 채널</text>`;
   svg += `<text class="sankey-col-title" x="${colX.sys + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">처리 경로</text>`;
   svg += `<text class="sankey-col-title" x="${colX.out + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">최종 결과</text>`;
+
+  // AS 상담 그룹 레이블 (유선·모바일·게시판 3채널 묶음)
+  const _gsTop = chCol.find(n => n.id === 'phone-as');
+  const _gsBot = chCol.find(n => n.id === 'board-as');
+  if (_gsTop && _gsBot) {
+    const gy1 = _gsTop.y, gy2 = _gsBot.y + _gsBot.h, gmid = (gy1 + gy2) / 2;
+    const bx = 18;
+    svg += `<line x1="${bx+10}" y1="${gy1}" x2="${bx+10}" y2="${gy2}" stroke="${INK3}" stroke-width="1.5" />`;
+    svg += `<line x1="${bx+10}" y1="${gy1}" x2="${bx+18}" y2="${gy1}" stroke="${INK3}" stroke-width="1.5" />`;
+    svg += `<line x1="${bx+10}" y1="${gy2}" x2="${bx+18}" y2="${gy2}" stroke="${INK3}" stroke-width="1.5" />`;
+    svg += `<text class="sankey-group-label" x="${bx}" y="${gmid}" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90,${bx},${gmid})">AS 상담</text>`;
+  }
 
   // Links channel → system
   cs.forEach(l => {
