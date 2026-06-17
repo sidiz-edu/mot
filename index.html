@@ -5835,9 +5835,6 @@ function renderSankey() {
     { id: 'recv-jas',  label: 'AS접수 - 자사몰',          vol: 847,  kind: 'receive' },
   ];
   const systems = [
-    { id: 'cti',       label: 'CTI' },
-    { id: 'happy',     label: '해피톡' },
-    { id: 'board',     label: '게시판시스템' },
     { id: 'recv-rest', label: 'AS접수 - 자사몰 제외' },
   ];
   const outcomes = [
@@ -5847,22 +5844,19 @@ function renderSankey() {
 
   // links: channel → 처리경로
   const cs = [
-    { c: 'phone-as',  s: 'cti',       v: 957  },
     { c: 'phone-as',  s: 'recv-rest', v: 972  },
-    { c: 'mobile-as', s: 'happy',     v: 197  },
     { c: 'mobile-as', s: 'recv-rest', v: 201  },
-    { c: 'board-as',  s: 'board',     v: 116  },
     { c: 'board-as',  s: 'recv-rest', v: 117  },
   ];
   // links: 처리경로 → 최종 결과
   const so = [
-    { s: 'cti',       o: 'reply',  v: 957  },
-    { s: 'happy',     o: 'reply',  v: 197  },
-    { s: 'board',     o: 'reply',  v: 116  },
-    { s: 'recv-rest', o: 'asReg',  v: 1290 },
+    { s: 'recv-rest', o: 'asReg', v: 1290 },
   ];
-  // links: 인입채널 → 최종결과 직접 (자사몰 접수)
+  // links: 인입채널 → 최종결과 직접
   const co = [
+    { c: 'phone-as',  o: 'reply', v: 957  },
+    { c: 'mobile-as', o: 'reply', v: 197  },
+    { c: 'board-as',  o: 'reply', v: 116  },
     { c: 'recv-jas',  o: 'asReg', v: 847  },
   ];
 
