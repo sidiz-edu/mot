@@ -6009,13 +6009,12 @@ function renderSankey() {
     svg += `<path d="${linkPath(colX.sys + NODE_W, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
   });
 
-  // Links channel → outcome (자사몰 직접 연결)
+  // Links channel → outcome (자사몰 직접 연결 — 파란색 구분)
   co.forEach(l => {
     const c = chCol.find(n => n.id === l.c);
     const o = outCol.find(n => n.id === l.o);
     if (!c || !o) return;
-    const color = l.o === 'asReg' ? GREEN : INK;
-    svg += `<path d="${linkPath(colX.ch + NODE_W, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="0.35" stroke-width="${l._srcH}" />`;
+    svg += `<path d="${linkPath(colX.ch + NODE_W, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${ACCENT}" stroke-opacity="0.35" stroke-width="${l._srcH}" />`;
   });
 
   // Nodes
