@@ -5975,6 +5975,11 @@ function renderSankey() {
   const INK = cssVar('--ink');
   const INK3 = cssVar('--ink-3');
   const SURF3 = cssVar('--surface-3');
+  const GREEN = '#48B47A';
+
+  // 시스템 → 최종결과 매핑 (흐름선 색상 결정용)
+  const sysToOutcome = {};
+  so.forEach(l => { sysToOutcome[l.s] = l.o; });
 
   // SVG
   let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img">`;
@@ -5989,8 +5994,8 @@ function renderSankey() {
     const c = chCol.find(n => n.id === l.c);
     const s = sysCol.find(n => n.id === l.s);
     if (!c || !s) return;
-    const color = (c.kind === 'order' || c.kind === 'receive') ? ACCENT : INK;
-    const opacity = 0.18;
+    const color = sysToOutcome[l.s] === 'asReg' ? GREEN : INK;
+    const opacity = 0.35;
     svg += `<path d="${linkPath(colX.ch + NODE_W, l._srcY, colX.sys, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
   });
 
@@ -5999,17 +6004,18 @@ function renderSankey() {
     const s = sysCol.find(n => n.id === l.s);
     const o = outCol.find(n => n.id === l.o);
     if (!s || !o) return;
-    const color = l.o === 'asReg' ? ACCENT : (l.o === 'orderReg' ? ACCENT : INK);
-    const opacity = 0.16;
+    const color = l.o === 'asReg' ? GREEN : INK;
+    const opacity = 0.35;
     svg += `<path d="${linkPath(colX.sys + NODE_W, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
   });
 
-  // Links channel → outcome (직접 답변 종결 — 처리경로 우회)
+  // Links channel → outcome (자사몰 직접 연결)
   co.forEach(l => {
     const c = chCol.find(n => n.id === l.c);
     const o = outCol.find(n => n.id === l.o);
     if (!c || !o) return;
-    svg += `<path d="${linkPath(colX.ch + NODE_W, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${INK}" stroke-opacity="0.18" stroke-width="${l._srcH}" />`;
+    const color = l.o === 'asReg' ? GREEN : INK;
+    svg += `<path d="${linkPath(colX.ch + NODE_W, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="0.35" stroke-width="${l._srcH}" />`;
   });
 
   // Nodes
