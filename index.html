@@ -5988,7 +5988,6 @@ function renderSankey() {
 
   // Column titles
   svg += `<text class="sankey-col-title" x="${colX.ch + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">인입 채널</text>`;
-  svg += `<text class="sankey-col-title" x="${colX.sys + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">처리 경로</text>`;
   svg += `<text class="sankey-col-title" x="${colX.out + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">최종 결과</text>`;
 
   // AS 상담 그룹 레이블 (유선·모바일·게시판 3채널 묶음)
@@ -6035,12 +6034,13 @@ function renderSankey() {
   function drawNodes(nodes, x, anchor='start', labelOffset=20) {
     nodes.forEach(n => {
       const color = (n.kind === 'order' || n.kind === 'receive') ? ACCENT : INK;
-      svg += `<rect x="${x}" y="${n.y}" width="${NODE_W}" height="${n.h}" fill="${color}" rx="2" />`;
-      const lx = anchor === 'end' ? x - 10 : x + NODE_W + 10;
-      svg += `<text class="sankey-node-label" x="${lx}" y="${n.mid - 2}" text-anchor="${anchor}" dominant-baseline="middle">${n.label}</text>`;
-      // sub volume
-      const vol = (n.vol != null) ? n.vol : (sysTotals[n.id] || outTotals[n.id] || 0);
-      svg += `<text class="sankey-node-sub" x="${lx}" y="${n.mid + 14}" text-anchor="${anchor}" dominant-baseline="middle">${vol.toLocaleString()}건</text>`;
+      if (n.label !== '') {
+        svg += `<rect x="${x}" y="${n.y}" width="${NODE_W}" height="${n.h}" fill="${color}" rx="2" />`;
+        const lx = anchor === 'end' ? x - 10 : x + NODE_W + 10;
+        svg += `<text class="sankey-node-label" x="${lx}" y="${n.mid - 2}" text-anchor="${anchor}" dominant-baseline="middle">${n.label}</text>`;
+        const vol = (n.vol != null) ? n.vol : (sysTotals[n.id] || outTotals[n.id] || 0);
+        svg += `<text class="sankey-node-sub" x="${lx}" y="${n.mid + 14}" text-anchor="${anchor}" dominant-baseline="middle">${vol.toLocaleString()}건</text>`;
+      }
     });
   }
   drawNodes(chCol, colX.ch, 'end');
