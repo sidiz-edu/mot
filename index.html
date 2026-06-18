@@ -5849,12 +5849,12 @@ function renderSankey() {
   const scale = usableH / baseTotal;
 
   // Position nodes vertically
-  function positionNodes(nodes, getVol) {
+  function positionNodes(nodes, getVol, gap=gapPx) {
     let y = PAD;
     return nodes.map(n => {
       const h = Math.max(getVol(n) * scale, 6);
       const node = { ...n, h, y, mid: y + h/2 };
-      y += h + gapPx;
+      y += h + gap;
       return node;
     });
   }
@@ -5864,7 +5864,7 @@ function renderSankey() {
   const sysOutTotals = colTotal(so, 's');
   const outTotals = colTotal(so, 'o');
   co.forEach(l => { outTotals[l.o] = (outTotals[l.o] || 0) + l.v; });
-  const sysCol = positionNodes(systems, n => Math.max(sysTotals[n.id] || 0, sysOutTotals[n.id] || 0));
+  const sysCol = positionNodes(systems, n => Math.max(sysTotals[n.id] || 0, sysOutTotals[n.id] || 0), 0);
   const outCol = positionNodes(outcomes, n => outTotals[n.id] || 0);
 
   const colX = {
