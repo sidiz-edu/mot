@@ -3344,12 +3344,7 @@ table.t               { font-size: 14px; }
 
       <!-- view 3 : 비용 추이 -->
       <div id="cost-3" style="display:none">
-        <div class="seg" style="margin-bottom: 16px">
-          <button class="seg-btn active" data-cost-sub="0">건수 / 금액</button>
-          <button class="seg-btn" data-cost-sub="1">항목별 추이</button>
-        </div>
-
-        <!-- sub 0: 건수/금액 + 총비용 -->
+        <!-- 비용 추이 콘텐츠 -->
         <div id="cost-sub-0">
 
           <!-- 항목별 건수 비율 YoY 비교 -->
@@ -3419,13 +3414,9 @@ table.t               { font-size: 14px; }
             </div>
             <div class="chart-box h-260"><canvas id="c_recv_ratio"></canvas></div>
           </div>
-        </div>
-
-        <!-- sub 1: 항목별 추이 -->
-        <div id="cost-sub-1" style="display:none">
 
           <!-- 공용 범례 -->
-          <div class="lg-row mt-8" style="justify-content:center;gap:20px;padding:8px 12px;background:var(--surface-2);border-radius:8px;border:1px solid var(--border)">
+          <div class="lg-row mt-16" style="justify-content:center;gap:20px;padding:8px 12px;background:var(--surface-2);border-radius:8px;border:1px solid var(--border)">
             <div id="lg-contact-ratio" class="lg-row" style="margin:0;gap:16px"></div>
           </div>
 
@@ -3450,7 +3441,6 @@ table.t               { font-size: 14px; }
               <div class="chart-box h-260"><canvas id="c_contact_amount_line"></canvas></div>
             </div>
           </div>
-
 
         </div>
 
