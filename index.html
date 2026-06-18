@@ -3151,7 +3151,6 @@ table.t               { font-size: 14px; }
           <button class="seg-btn active" data-cost="1">AS 접수 흐름</button>
           <button class="seg-btn" data-cost="3">비용 추이</button>
           <button class="seg-btn" data-cost="0">운영 개요</button>
-          <button class="seg-btn" data-cost="2">시스템 매트릭스</button>
         </div>
       </div>
 
@@ -3288,30 +3287,6 @@ table.t               { font-size: 14px; }
               </tbody>
             </table>
           </div>
-        </div>
-      </div>
-
-      <!-- view 2 : 시스템 매트릭스 -->
-      <div id="cost-2" style="display:none">
-        <div class="mtx-wrap">
-          <div class="card-head" style="margin-bottom: 14px">
-            <div>
-              <div class="card-title">채널 ↔ 시스템 매트릭스</div>
-              <div class="card-sub">각 채널이 어떤 시스템을 어떤 단계에서 사용하는지</div>
-            </div>
-          </div>
-          <div style="overflow-x: auto">
-            <table class="mtx" id="mtx-table"></table>
-          </div>
-          <div class="mtx-legend">
-            <span class="mtx-legend-chip"><span class="mtx-mark full">●</span> 주 사용</span>
-            <span class="mtx-legend-chip"><span class="mtx-mark partial">◐</span> 조건부 사용</span>
-            <span class="mtx-legend-chip"><span class="mtx-mark none">—</span> 미사용</span>
-            <span style="margin-left:auto; color:var(--ink-3); font-size:11.5px">행을 클릭하면 채널 상세가 펼쳐집니다</span>
-          </div>
-        </div>
-        <div id="mtx-detail-host">
-          <div class="ch-detail-empty" style="margin-top:16px">위 표의 채널 행을 클릭하면 단계별 절차가 표시됩니다.</div>
         </div>
       </div>
 
@@ -6205,9 +6180,7 @@ document.querySelectorAll('.seg-btn[data-cost]').forEach(btn => {
     });
     const active = document.getElementById('cost-' + idx);
     if (active) requestAnimationFrame(() => reflowChartsIn(active));
-    // First open of 처리 흐름 / 시스템 매트릭스 — render once
     if (idx === 1 && !window.__sankeyRendered) { renderSankey(); window.__sankeyRendered = true; }
-    if (idx === 2 && !window.__matrixRendered) { renderMatrix(); window.__matrixRendered = true; }
   });
 });
 
@@ -6251,7 +6224,6 @@ function rebuildAll() {
   renderTeams();
   renderChannels();
   if (window.__sankeyRendered) renderSankey();
-  if (window.__matrixRendered) renderMatrix();
 
   document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s === initialActive));
   hidden.forEach(el => { el.style.display = 'none'; });
