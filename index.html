@@ -3405,11 +3405,11 @@ table.t               { font-size: 14px; }
           </div>
           <!-- CS 용역료 YoY -->
           <div class="lg-row mt-16" style="justify-content:center;gap:20px;padding:8px 12px;background:var(--surface-2);border-radius:8px;border:1px solid var(--border)">
-            <span class="lg-chip"><i style="background:#F5B800"></i>AS상담 - 유선 - 전화통화 (CTI)</span>
-            <span class="lg-chip"><i style="background:#DB2777"></i>AS상담 - 모바일 - AI챗봇 (해피톡)</span>
-            <span class="lg-chip"><i style="background:#EA580C"></i>AS상담 - 외부쇼핑몰 (게시판)</span>
-            <span class="lg-chip"><i style="background:#A78BFA"></i>접수 (AS) — 자사몰 외</span>
-            <span class="lg-chip"><i style="background:#7C3AED"></i>AS접수 - 자사몰</span>
+            <span class="lg-chip"><i style="background:#90EE90"></i>AS상담 - 유선 - 전화통화 (CTI)</span>
+            <span class="lg-chip"><i style="background:#D4FF00"></i>AS상담 - 모바일 - AI챗봇 (해피톡)</span>
+            <span class="lg-chip"><i style="background:#7D9B6A"></i>AS상담 - 외부쇼핑몰 (게시판)</span>
+            <span class="lg-chip"><i style="background:#48B47A"></i>접수 (AS) — 자사몰 외</span>
+            <span class="lg-chip"><i style="background:#003EFF"></i>AS접수 - 자사몰</span>
           </div>
           <div class="grid-2 mt-8">
             <div class="card">
@@ -3436,8 +3436,8 @@ table.t               { font-size: 14px; }
             <div class="card-head">
               <div><div class="card-title">접수 (AS) 채널별 비율 추이</div><div class="card-sub">AS접수 - 자사몰 vs 그 외 접수 · 26년 3~5월</div></div>
               <div class="lg-row" style="margin:0;gap:16px">
-                <span class="lg-chip"><i style="background:#7C3AED"></i>AS접수 - 자사몰</span>
-                <span class="lg-chip"><i style="background:#A78BFA"></i>그 외 접수</span>
+                <span class="lg-chip"><i style="background:#003EFF"></i>AS접수 - 자사몰</span>
+                <span class="lg-chip"><i style="background:#48B47A"></i>그 외 접수</span>
               </div>
             </div>
             <div class="chart-box h-260"><canvas id="c_recv_ratio"></canvas></div>
@@ -5267,8 +5267,8 @@ function renderSec2() {
 }
 
 // ---- Section 3 charts + table ----
-const CONTACT_PALETTE = ['#EA580C', '#F5B800', '#DB2777', '#7C3AED'];
-// 게시판=주황(#EA580C), 유선=노란계열(#F5B800), 모바일=핑크(#DB2777), 접수=보라(#7C3AED)
+const CONTACT_PALETTE = ['#7D9B6A', '#90EE90', '#D4FF00', '#003EFF'];
+// 게시판=쑥색(#7D9B6A), 유선=연두(#90EE90), 모바일=형광노랑(#D4FF00), 자사몰=파란(#003EFF)
 
 function renderSec3() {
   // 항목별 추이 범례 (색상만 표시, 실선=26년/점선=25년 구분)
@@ -5337,11 +5337,11 @@ function renderSec3() {
     const jasamolAmt   = cd.rows[6].amounts.map(v => v != null ? Math.round(v / 10000) : 0);
     const recvRestAmt  = cd.rows[5].amounts.map(v => Math.round(v / 10000)); // 이미 자사몰 제외된 값
     makeMultiBar('c_cs_total', [
-      { label: 'AS상담 - 유선 - 전화통화 (CTI)',          data: yosenAmt,    color: '#F5B800' },
-      { label: 'AS상담 - 모바일 - AI챗봇 (해피톡)',         data: mobileAmt,   color: '#DB2777' },
-      { label: 'AS상담 - 외부쇼핑몰 (게시판)',         data: boardAmt,    color: '#EA580C' },
-      { label: '접수 (AS) — 자사몰 외',  data: recvRestAmt, color: '#A78BFA' },
-      { label: 'AS접수 - 자사몰',         data: jasamolAmt,  color: '#7C3AED' },
+      { label: 'AS상담 - 유선 - 전화통화 (CTI)',          data: yosenAmt,    color: '#90EE90' },
+      { label: 'AS상담 - 모바일 - AI챗봇 (해피톡)',         data: mobileAmt,   color: '#D4FF00' },
+      { label: 'AS상담 - 외부쇼핑몰 (게시판)',         data: boardAmt,    color: '#7D9B6A' },
+      { label: '접수 (AS) — 자사몰 외',  data: recvRestAmt, color: '#48B47A' },
+      { label: 'AS접수 - 자사몰',         data: jasamolAmt,  color: '#003EFF' },
     ], labels, true, false, { enabled: true, mode: 'stackTotal' }, '만원');
 
     // 건수 차트 (동일 구조)
@@ -5351,11 +5351,11 @@ function renderSec3() {
     const jasamolCnt  = cd.rows[6].counts.map(v => v != null ? v : 0);
     const recvRestCnt = cd.rows[5].counts.map(v => v || 0); // 이미 자사몰 제외된 값
     makeMultiBar('c_cs_total_count', [
-      { label: 'AS상담 - 유선 - 전화통화 (CTI)',          data: yosenCnt,    color: '#F5B800' },
-      { label: 'AS상담 - 모바일 - AI챗봇 (해피톡)',         data: mobileCnt,   color: '#DB2777' },
-      { label: 'AS상담 - 외부쇼핑몰 (게시판)',         data: boardCnt,    color: '#EA580C' },
-      { label: '접수 (AS) — 자사몰 외',  data: recvRestCnt, color: '#A78BFA' },
-      { label: 'AS접수 - 자사몰',         data: jasamolCnt,  color: '#7C3AED' },
+      { label: 'AS상담 - 유선 - 전화통화 (CTI)',          data: yosenCnt,    color: '#90EE90' },
+      { label: 'AS상담 - 모바일 - AI챗봇 (해피톡)',         data: mobileCnt,   color: '#D4FF00' },
+      { label: 'AS상담 - 외부쇼핑몰 (게시판)',         data: boardCnt,    color: '#7D9B6A' },
+      { label: '접수 (AS) — 자사몰 외',  data: recvRestCnt, color: '#48B47A' },
+      { label: 'AS접수 - 자사몰',         data: jasamolCnt,  color: '#003EFF' },
     ], labels, true, false, { enabled: true, mode: 'stackTotal' }, '건');
   }
 
@@ -5388,8 +5388,8 @@ function renderSec3() {
       return tot ? Math.round(r / tot * 1000) / 10 : null;
     });
     makeMultiBar('c_recv_ratio', [
-      { label: 'AS접수 - 자사몰', data: jasamPct, color: '#7C3AED', _counts: jasam },
-      { label: '그 외 접수',     data: restPct,  color: '#A78BFA', _counts: restCnt },
+      { label: 'AS접수 - 자사몰', data: jasamPct, color: '#003EFF', _counts: jasam },
+      { label: '그 외 접수',     data: restPct,  color: '#48B47A', _counts: restCnt },
     ], labels, true, true, { enabled: true, mode: 'center' });
   }
 
@@ -5569,7 +5569,7 @@ function renderContactDetail() {
   head.innerHTML = `
     <tr>
       <th rowspan="2" style="vertical-align:middle;width:28px"></th>
-      <th rowspan="2" style="min-width:160px;vertical-align:middle">항목</th>
+      <th rowspan="2" style="min-width:160px;vertical-align:middle;text-align:center">항목</th>
       <th rowspan="2" style="vertical-align:middle">유형</th>
       <th rowspan="2" style="min-width:200px;vertical-align:middle;text-align:left">상세 내용</th>
       <th rowspan="2" style="vertical-align:middle">건당 비용</th>
@@ -5594,8 +5594,12 @@ function renderContactDetail() {
     if (!num) return;
     const numTd = `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">${num}</td>`;
 
+    const ROW_BG = { 0:'rgba(144,238,144,0.22)', 2:'rgba(212,255,0,0.22)', 4:'rgba(125,155,106,0.20)', 6:'rgba(0,62,255,0.08)' };
+
     let style = '', cls = '';
-    if (row.isSub) {
+    if (ROW_BG[ri]) {
+      style = `background:${ROW_BG[ri]}` + (row.isSub ? ';font-size:11px' : '');
+    } else if (row.isSub) {
       style = 'background:var(--surface-2);font-size:11px';
     } else if (row.isAS && row.name.startsWith('접수')) {
       cls = 'is-recv-row';
@@ -5604,8 +5608,8 @@ function renderContactDetail() {
     }
 
     const nameTd = row.isSub
-      ? `<td style="padding-left:16px;color:var(--ink-3)">${row.name}</td>`
-      : `<td style="font-weight:600">${row.name}</td>`;
+      ? `<td style="padding-left:16px;color:var(--ink-3);text-align:center">${row.name}</td>`
+      : `<td style="font-weight:600;text-align:center">${row.name}</td>`;
     const typeTd = `<td style="color:var(--ink-3)">${row.type}</td>`;
     const descTd = `<td style="text-align:left;color:var(--ink-2)">${row.desc}</td>`;
     const unitTd = row.unit
@@ -5639,10 +5643,10 @@ function renderContactDetail() {
       // 상담_AS 합계 직후 — 접수(AS) 행 삽입 (번호 없음, 구분용)
       const recvRow = d.rows[5];
       const trRecv = document.createElement('tr');
-      trRecv.style.cssText = 'border-top:1px dashed var(--border)';
+      trRecv.style.cssText = 'border-top:1px dashed var(--border);background:rgba(72,180,122,0.20)';
       trRecv.innerHTML =
         `<td></td>` +
-        `<td style="font-weight:600">${recvRow.name}</td>` +
+        `<td style="font-weight:600;text-align:center">${recvRow.name}</td>` +
         `<td style="color:var(--ink-3)">${recvRow.type}</td>` +
         `<td style="text-align:left;color:var(--ink-2)">${recvRow.desc}</td>` +
         `<td class="num" style="font-weight:700">₩${recvRow.unit.toLocaleString()}</td>` +
@@ -5657,11 +5661,11 @@ function renderContactDetail() {
   const trAS = document.createElement('tr');
   trAS.style.cssText = 'background:rgba(0,62,255,.05);font-weight:700;border-top:2px solid var(--border-strong)';
   trAS.innerHTML =
-    `<td style="text-align:center;color:var(--accent);font-weight:700;font-size:11px">6</td>` +
-    `<td colspan="3" style="font-weight:700;color:var(--accent)">AS 관련 합계 <span style="font-weight:400;font-size:10px">(4+5)</span></td>` +
+    `<td style="text-align:center;color:#111;font-weight:700;font-size:11px">6</td>` +
+    `<td colspan="3" style="font-weight:700;color:#111">AS 관련 합계 <span style="font-weight:400;font-size:10px">(4+5)</span></td>` +
     `<td></td>` +
     d.asTotals.counts.map((c,i)=>
-      `<td class="num" style="color:var(--accent)"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--accent)"><b>${WW(d.asTotals.amounts[i])}</b></td>`
+      `<td class="num" style="color:#111"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:#111"><b>${WW(d.asTotals.amounts[i])}</b></td>`
     ).join('');
   body.appendChild(trAS);
 
@@ -5676,11 +5680,11 @@ function renderContactDetail() {
   const trTotal = document.createElement('tr');
   trTotal.style.cssText = 'background:rgba(0,62,255,.10);font-weight:700;border-top:2px solid var(--border-strong)';
   trTotal.innerHTML =
-    `<td style="text-align:center;color:var(--accent);font-weight:700;font-size:11px">7</td>` +
-    `<td colspan="3" style="font-weight:700;color:var(--accent)">총합계 <span style="font-weight:400;font-size:10px">(4 + 접수 (AS))</span></td>` +
+    `<td style="text-align:center;color:#111;font-weight:700;font-size:11px">7</td>` +
+    `<td colspan="3" style="font-weight:700;color:#111">총합계 <span style="font-weight:400;font-size:10px">(4 + 접수 (AS))</span></td>` +
     `<td></td>` +
     sumC7.map((c,i)=>
-      `<td class="num" style="color:var(--accent)"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--accent)"><b>${WW(sumA7[i])}</b></td>`
+      `<td class="num" style="color:#111"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:#111"><b>${WW(sumA7[i])}</b></td>`
     ).join('');
   body.appendChild(trTotal);
 }
