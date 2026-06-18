@@ -5987,7 +5987,7 @@ function renderSankey() {
     if (!s || !o) return;
     const color = l.o === 'out-rest' ? GREEN : INK;
     const opacity = 0.35;
-    svg += `<path d="${linkPath(colX.sys + NODE_W, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
+    svg += `<path d="${linkPath(colX.sys, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
   });
 
   // Links channel → outcome (자사몰 직접 연결 — 파란색 구분)
