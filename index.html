@@ -5552,7 +5552,7 @@ function renderContactDetail() {
       const trRecv = document.createElement('tr');
       trRecv.style.cssText = 'border-top:1px dashed var(--border);background:rgba(72,180,122,0.20)';
       trRecv.innerHTML =
-        `<td rowspan="2" style="text-align:center;vertical-align:middle;font-weight:700;font-size:12px;background:rgba(0,0,0,0.06)">접수</td>` +
+        `<td rowspan="3" style="text-align:center;vertical-align:middle;font-weight:700;font-size:12px;background:rgba(0,0,0,0.06)">접수</td>` +
         `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">5</td>` +
         `<td style="font-weight:600;text-align:center">${recvRow.name}</td>` +
         `<td style="text-align:left;color:var(--ink-2)">${recvRow.desc}</td>` +
@@ -5564,7 +5564,24 @@ function renderContactDetail() {
     }
   });
 
-  // 7번 — 종합 총합계 (4+5+6)
+  // 7번 — AS 접수 건 합계 (5+6)
+  const recvC = Array(N).fill(0), recvA = Array(N).fill(0);
+  [5, 6].forEach(ri => {
+    d.rows[ri].counts.forEach((v, i)  => { recvC[i] += (v || 0); });
+    d.rows[ri].amounts.forEach((v, i) => { recvA[i] += (v || 0); });
+  });
+  const trRecvSum = document.createElement('tr');
+  trRecvSum.style.cssText = 'background:var(--surface-3);font-weight:700;border-top:1px solid var(--border-strong)';
+  trRecvSum.innerHTML =
+    `<td style="text-align:center;color:var(--ink-3);font-weight:700;font-size:11px">7</td>` +
+    `<td colspan="2" style="font-weight:700">AS 접수 건 합계 <span style="font-weight:400;color:var(--ink-3);font-size:10px">(5+6)</span></td>` +
+    `<td></td>` +
+    recvC.map((c, i) =>
+      `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--ink-2)"><b>${WW(recvA[i])}</b></td>`
+    ).join('');
+  body.appendChild(trRecvSum);
+
+  // 8번 — 종합 총합계 (4+5+6)
   const totC = Array(N).fill(0), totA = Array(N).fill(0);
   [0, 2, 4, 5, 6].forEach(ri => {
     d.rows[ri].counts.forEach((v, i)  => { totC[i] += (v || 0); });
@@ -5574,7 +5591,7 @@ function renderContactDetail() {
   trTot.style.cssText = 'background:rgba(0,0,0,0.06);font-weight:700;border-top:2px solid var(--border-strong)';
   trTot.innerHTML =
     `<td style="text-align:center;vertical-align:middle;font-weight:700;font-size:12px;background:rgba(0,0,0,0.10)">종합</td>` +
-    `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">7</td>` +
+    `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">8</td>` +
     `<td style="font-weight:600;text-align:center">총합계</td>` +
     `<td style="text-align:left;color:var(--ink-2)">AS 상담 + AS 접수 총 합계 (4+5+6)</td>` +
     `<td></td>` +
