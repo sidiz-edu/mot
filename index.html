@@ -5951,6 +5951,9 @@ function renderSankey() {
   // SVG
   let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img">`;
 
+  // Chart title
+  svg += `<text x="0" y="18" style="font-family:'Pretendard Variable',Pretendard,system-ui,sans-serif;font-size:15px;font-weight:700;fill:var(--ink)">AS 접수 흐름도</text>`;
+
   // Column titles
   svg += `<text class="sankey-col-title" x="${colX.ch + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">인입 채널</text>`;
   svg += `<text class="sankey-col-title" x="${colX.out + NODE_W/2}" y="${PAD - 8}" text-anchor="middle">최종 결과</text>`;
