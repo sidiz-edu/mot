@@ -4656,10 +4656,12 @@ function gradFill(ctx, color, top=0.16, bot=0) {
   return g;
 }
 
-function makeLine(id, color, data, labels, pctY=false, label='') {
+function makeLine(id, color, data, labels, pctY=false, label='', yRange=null) {
   const el = document.getElementById(id);
   if (!el) return;
   const ctx = el.getContext('2d');
+  const scales = baseScales(pctY);
+  if (yRange) { scales.y.min = yRange.min; scales.y.max = yRange.max; }
   CHARTS[id] = new Chart(ctx, {
     type: 'line',
     data: {
@@ -4682,7 +4684,7 @@ function makeLine(id, color, data, labels, pctY=false, label='') {
       responsive: true, maintainAspectRatio: false,
       interaction: { intersect: false, mode: 'index' },
       layout: { padding: { top: 18 } },
-      scales: baseScales(pctY),
+      scales,
       plugins: {
         valueLabels: { enabled: true, pctY },
         tooltip: {
@@ -5210,8 +5212,8 @@ function renderSec2() {
     {label:'⑤ → ⑥ 고객정보→신청완료',    color: '#38BDF8', data: stepPct(F.done,  F.info),  fill: false},
   ], F.periods, true);
 
-  makeLine('c_conv12', COLORS.accent, F.conv12, F.periods, true, '유입률');
-  makeLine('c_conv45', '#3D72D7',     F.conv45, F.periods, true, '유입률');
+  makeLine('c_conv12', COLORS.accent, F.conv12, F.periods, true, '유입률', { min: 10, max: 50 });
+  makeLine('c_conv45', '#3D72D7',     F.conv45, F.periods, true, '유입률', { min: 50, max: 100 });
   makeBar ('c_product_reg', COLORS.accent, F.productReg, F.periods, false, '등록 수');
   fjInitMetrics();
 }
