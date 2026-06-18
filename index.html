@@ -5562,8 +5562,8 @@ function renderContactDetail() {
 
   // 행 번호 맵: rows 인덱스 → 표시 번호 (없으면 '')
   // rows: [0]유선_AS=1, [1]모바일_ON='', [2]모바일_AS=2,
-  //       [3]게시판_ON='', [4]게시판_AS=3, [5]접수AS='', [6]자사몰=5
-  const ROW_NUM = ['1', '', '2', '', '3', '', '5'];
+  //       [3]게시판_ON='', [4]게시판_AS=3, [5]접수AS='', [6]자사몰=6
+  const ROW_NUM = ['1', '', '2', '', '3', '', '6'];
 
   // 헤더
   head.innerHTML = `
@@ -5607,7 +5607,7 @@ function renderContactDetail() {
     }
 
     const nameTd = row.isSub
-      ? `<td style="padding-left:16px;color:var(--ink-3);text-align:center">${row.name}</td>`
+      ? `<td style="padding-left:16px;color:var(--ink-3);text-align:center;font-weight:600">${row.name}</td>`
       : `<td style="font-weight:600;text-align:center">${row.name}</td>`;
     const descTd = `<td style="text-align:left;color:var(--ink-2)">${row.desc}</td>`;
     const unitTd = row.unit
@@ -5643,7 +5643,7 @@ function renderContactDetail() {
       const trRecv = document.createElement('tr');
       trRecv.style.cssText = 'border-top:1px dashed var(--border);background:rgba(72,180,122,0.20)';
       trRecv.innerHTML =
-        `<td></td>` +
+        `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">5</td>` +
         `<td style="font-weight:600;text-align:center">${recvRow.name}</td>` +
         `<td style="text-align:left;color:var(--ink-2)">${recvRow.desc}</td>` +
         `<td class="num" style="font-weight:700">₩${recvRow.unit.toLocaleString()}</td>` +
@@ -5654,36 +5654,6 @@ function renderContactDetail() {
     }
   });
 
-  // 6번 — AS 관련 합계 (4+5)
-  const trAS = document.createElement('tr');
-  trAS.style.cssText = 'background:rgba(0,62,255,.05);font-weight:700;border-top:2px solid var(--border-strong)';
-  trAS.innerHTML =
-    `<td style="text-align:center;color:#111;font-weight:700;font-size:11px">6</td>` +
-    `<td colspan="2" style="font-weight:700;color:#111">AS 관련 합계 <span style="font-weight:400;font-size:10px">(4+5)</span></td>` +
-    `<td></td>` +
-    d.asTotals.counts.map((c,i)=>
-      `<td class="num" style="color:#111"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:#111"><b>${WW(d.asTotals.amounts[i])}</b></td>`
-    ).join('');
-  body.appendChild(trAS);
-
-  // 7번 — 총합계 (4 + 접수AS)
-  const sumC7 = Array(N).fill(0), sumA7 = Array(N).fill(0);
-  [0,2,4].forEach(ri => {
-    d.rows[ri].counts.forEach((v,i)  => { sumC7[i] += (v||0); });
-    d.rows[ri].amounts.forEach((v,i) => { sumA7[i] += (v||0); });
-  });
-  d.rows[5].counts.forEach((v,i)  => { sumC7[i] += (v||0); });
-  d.rows[5].amounts.forEach((v,i) => { sumA7[i] += (v||0); });
-  const trTotal = document.createElement('tr');
-  trTotal.style.cssText = 'background:rgba(0,62,255,.10);font-weight:700;border-top:2px solid var(--border-strong)';
-  trTotal.innerHTML =
-    `<td style="text-align:center;color:#111;font-weight:700;font-size:11px">7</td>` +
-    `<td colspan="2" style="font-weight:700;color:#111">총합계 <span style="font-weight:400;font-size:10px">(4 + 접수 (AS))</span></td>` +
-    `<td></td>` +
-    sumC7.map((c,i)=>
-      `<td class="num" style="color:#111"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:#111"><b>${WW(sumA7[i])}</b></td>`
-    ).join('');
-  body.appendChild(trTotal);
 }
 
 // ---- Contact Center Operations renders ----
