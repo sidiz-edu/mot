@@ -5821,7 +5821,7 @@ function renderSankey() {
   if (!host) return;
 
   // Columns: 채널(인입) → 시스템 → 처리 결과
-  const W = 1200, H = 580, PAD = 24, COL_W = 160, NODE_W = 14;
+  const W = 1320, H = 580, PAD = 24, COL_W = 160, NODE_W = 14;
 
   // node groups — 26.5월 기준 (contactDetail rows 사용)
   // rows[0] 유선_AS:1929 / rows[2] 모바일_AS:398 / rows[4] 게시판_AS:233
@@ -5838,11 +5838,12 @@ function renderSankey() {
     { id: 'cti',       label: '' },
     { id: 'happy',     label: '' },
     { id: 'board',     label: '' },
-    { id: 'recv-rest', label: 'AS접수 - 자사몰 제외' },
+    { id: 'recv-rest', label: '' },
   ];
   const outcomes = [
-    { id: 'reply',  label: '답변·통화 종결' },
-    { id: 'asReg',  label: 'AS 접수 등록' },
+    { id: 'reply',    label: '답변·통화 종결' },
+    { id: 'out-rest', label: 'AS접수 - 자사몰 제외' },
+    { id: 'out-jas',  label: 'AS접수 - 자사몰' },
   ];
 
   // links: channel → 처리경로
@@ -5856,14 +5857,14 @@ function renderSankey() {
   ];
   // links: 처리경로 → 최종 결과
   const so = [
-    { s: 'cti',       o: 'reply',  v: 957  },
-    { s: 'happy',     o: 'reply',  v: 197  },
-    { s: 'board',     o: 'reply',  v: 116  },
-    { s: 'recv-rest', o: 'asReg',  v: 1290 },
+    { s: 'cti',       o: 'reply',    v: 957  },
+    { s: 'happy',     o: 'reply',    v: 197  },
+    { s: 'board',     o: 'reply',    v: 116  },
+    { s: 'recv-rest', o: 'out-rest', v: 1290 },
   ];
   // links: 인입채널 → 최종결과 직접 (자사몰 접수)
   const co = [
-    { c: 'recv-jas',  o: 'asReg', v: 847  },
+    { c: 'recv-jas', o: 'out-jas', v: 847 },
   ];
 
   // helpers
@@ -6007,7 +6008,7 @@ function renderSankey() {
     const c = chCol.find(n => n.id === l.c);
     const s = sysCol.find(n => n.id === l.s);
     if (!c || !s) return;
-    const color = sysToOutcome[l.s] === 'asReg' ? GREEN : INK;
+    const color = sysToOutcome[l.s] === 'out-rest' ? GREEN : INK;
     const opacity = 0.35;
     svg += `<path d="${linkPath(colX.ch + NODE_W, l._srcY, colX.sys, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
   });
@@ -6017,7 +6018,7 @@ function renderSankey() {
     const s = sysCol.find(n => n.id === l.s);
     const o = outCol.find(n => n.id === l.o);
     if (!s || !o) return;
-    const color = l.o === 'asReg' ? GREEN : INK;
+    const color = l.o === 'out-rest' ? GREEN : INK;
     const opacity = 0.35;
     svg += `<path d="${linkPath(colX.sys + NODE_W, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
   });
@@ -6031,9 +6032,11 @@ function renderSankey() {
   });
 
   // Nodes
-  function drawNodes(nodes, x, anchor='start', labelOffset=20) {
+  function drawNodes(nodes, x, anchor='start') {
     nodes.forEach(n => {
-      const color = (n.kind === 'order' || n.kind === 'receive') ? ACCENT : INK;
+      const color = n.id === 'out-rest' ? GREEN
+                  : (n.id === 'out-jas' ? ACCENT
+                  : ((n.kind === 'order' || n.kind === 'receive') ? ACCENT : INK));
       if (n.label !== '') {
         svg += `<rect x="${x}" y="${n.y}" width="${NODE_W}" height="${n.h}" fill="${color}" rx="2" />`;
         const lx = anchor === 'end' ? x - 10 : x + NODE_W + 10;
@@ -6046,6 +6049,19 @@ function renderSankey() {
   drawNodes(chCol, colX.ch, 'end');
   drawNodes(sysCol, colX.sys, 'end');
   drawNodes(outCol, colX.out, 'start');
+
+  // AS 접수 등록 묶음 브래킷
+  const _arTop = outCol.find(n => n.id === 'out-rest');
+  const _arBot = outCol.find(n => n.id === 'out-jas');
+  if (_arTop && _arBot) {
+    const ay1 = _arTop.y, ay2 = _arBot.y + _arBot.h, amid = (ay1 + ay2) / 2;
+    const bx = colX.out + NODE_W + 148;
+    svg += `<line x1="${bx}" y1="${ay1}" x2="${bx+8}" y2="${ay1}" stroke="${INK3}" stroke-width="1.5" />`;
+    svg += `<line x1="${bx+8}" y1="${ay1}" x2="${bx+8}" y2="${ay2}" stroke="${INK3}" stroke-width="1.5" />`;
+    svg += `<line x1="${bx}" y1="${ay2}" x2="${bx+8}" y2="${ay2}" stroke="${INK3}" stroke-width="1.5" />`;
+    svg += `<text class="sankey-group-label" x="${bx+16}" y="${amid - 6}" text-anchor="start" dominant-baseline="middle">AS 접수 등록</text>`;
+    svg += `<text class="sankey-node-sub" x="${bx+16}" y="${amid + 10}" text-anchor="start" dominant-baseline="middle">${(1290+847).toLocaleString()}건</text>`;
+  }
 
   svg += '</svg>';
   host.innerHTML = svg;
