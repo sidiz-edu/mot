@@ -3198,7 +3198,7 @@ table.t               { font-size: 14px; }
         <div class="sankey-wrap">
           <div class="card-head" style="margin-bottom: 8px">
             <div>
-              <div class="card-eyebrow" style="font-size:18px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">AS 접수 흐름도</div>
+              <div class="card-eyebrow" style="font-size:18px;font-weight:700;color:#111;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">AS 접수 흐름도</div>
               <div class="card-title">고객 인입 → 시스템 → 처리 결과</div>
               <div class="card-sub" id="sankey-card-sub">흐름 두께는 건수 비율</div>
             </div>
@@ -3210,7 +3210,7 @@ table.t               { font-size: 14px; }
         <!-- 26년 청구 내역 통합 상세 -->
         <div class="card mt-16">
           <div class="card-head"><div>
-            <div class="card-eyebrow" style="font-size:18px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">시디즈 AS 접수 현황표</div>
+            <div class="card-eyebrow" style="font-size:18px;font-weight:700;color:#111;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">시디즈 AS 접수 현황표</div>
             <div class="card-title">AS 관련 컨택센터 청구 비용 — 26년 상세</div><div class="card-sub">건당 비용 × 건수 = 청구 금액 · 상담(AS) / 접수(AS) 구분</div></div></div>
           <div class="tbl-wrap">
             <table class="t" id="cs_detail_table" style="min-width:900px">
@@ -3808,7 +3808,7 @@ const DATA = {
         "counts":[2877,3007,4222,2666,2769],"amounts":[15823500,16538500,23221000,14663000,15229500] },
       { "name":"외부쇼핑몰 (게시판)",       "type":"게시글",          "desc":"외부몰 AS 게시글 답변 처리 건 수",                                    "unit":5500,  "isAS":true,  "isSub":false,
         "counts":[330,315,395,245,233],     "amounts":[1815000,1732500,2172500,1347500,1281500] },
-      { "name":"AS접수 (자사몰 제외)",      "type":"무 / 유",         "desc":"AS 조치를 위한 접수 건 수 (자사몰 게시판 건수 제외)",                  "unit":6700,  "isAS":true,  "isSub":false,
+      { "name":"AS접수 (자사몰 제외)",      "type":"무 / 유",         "desc":"1, 2, 3에서 AS 접수로 흘러간 건들",                  "unit":6700,  "isAS":true,  "isSub":false,
         "counts":[2567,2186,2327,1358,1290],"amounts":[17198900,14646200,15590900,9098600,8643000] },
       { "name":"AS접수 (자사몰)",          "type":"홈페이지 게시글", "desc":"접수 (AS) 중 자사몰 게시판으로 접수된 건 (별도 집계)",               "unit":6700,  "isAS":true,  "isSub":true,
         "counts":[null,null,369,768,847],   "amounts":[null,null,2472300,5145600,5674900] }
@@ -5570,7 +5570,6 @@ function renderContactDetail() {
     <tr>
       <th rowspan="2" style="vertical-align:middle;width:28px"></th>
       <th rowspan="2" style="min-width:160px;vertical-align:middle;text-align:center">항목</th>
-      <th rowspan="2" style="vertical-align:middle">유형</th>
       <th rowspan="2" style="min-width:200px;vertical-align:middle;text-align:left">상세 내용</th>
       <th rowspan="2" style="vertical-align:middle">건당 비용</th>
       ${M.map(m=>`<th colspan="2" style="text-align:center">${m}</th>`).join('')}
@@ -5581,11 +5580,11 @@ function renderContactDetail() {
 
   body.innerHTML = '';
 
-  const mkRow = (numTd, nameTd, typeTd, descTd, unitTd, cellsTd, style='', cls='') => {
+  const mkRow = (numTd, nameTd, descTd, unitTd, cellsTd, style='', cls='') => {
     const tr = document.createElement('tr');
     if (style) tr.style.cssText = style;
     if (cls)   tr.className = cls;
-    tr.innerHTML = numTd + nameTd + typeTd + descTd + unitTd + cellsTd;
+    tr.innerHTML = numTd + nameTd + descTd + unitTd + cellsTd;
     return tr;
   };
 
@@ -5610,7 +5609,6 @@ function renderContactDetail() {
     const nameTd = row.isSub
       ? `<td style="padding-left:16px;color:var(--ink-3);text-align:center">${row.name}</td>`
       : `<td style="font-weight:600;text-align:center">${row.name}</td>`;
-    const typeTd = `<td style="color:var(--ink-3)">${row.type}</td>`;
     const descTd = `<td style="text-align:left;color:var(--ink-2)">${row.desc}</td>`;
     const unitTd = row.unit
       ? `<td class="num" style="font-weight:700">₩${row.unit.toLocaleString()}</td>`
@@ -5619,7 +5617,7 @@ function renderContactDetail() {
       `<td class="num">${W(c)}</td><td class="num" style="color:var(--ink-2)">${WW(row.amounts[i])}</td>`
     ).join('');
 
-    body.appendChild(mkRow(numTd, nameTd, typeTd, descTd, unitTd, cellsTd, style, cls));
+    body.appendChild(mkRow(numTd, nameTd, descTd, unitTd, cellsTd, style, cls));
 
     // 게시판_AS(index 4) 다음에 상담_AS 합계(4번) 행 삽입
     if (ri === 4) {
@@ -5633,7 +5631,7 @@ function renderContactDetail() {
       trSum.style.cssText = 'background:var(--surface-3);font-weight:700;border-top:1px solid var(--border-strong)';
       trSum.innerHTML =
         `<td style="text-align:center;color:var(--ink-3);font-weight:700;font-size:11px">4</td>` +
-        `<td colspan="3" style="font-weight:700">상담_AS 합계 <span style="font-weight:400;color:var(--ink-3);font-size:10px">(1+2+3)</span></td>` +
+        `<td colspan="2" style="font-weight:700">AS 상담 건 합계 <span style="font-weight:400;color:var(--ink-3);font-size:10px">(1+2+3)</span></td>` +
         `<td></td>` +
         sumC.map((c,i)=>
           `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--ink-2)"><b>${WW(sumA[i])}</b></td>`
@@ -5647,7 +5645,6 @@ function renderContactDetail() {
       trRecv.innerHTML =
         `<td></td>` +
         `<td style="font-weight:600;text-align:center">${recvRow.name}</td>` +
-        `<td style="color:var(--ink-3)">${recvRow.type}</td>` +
         `<td style="text-align:left;color:var(--ink-2)">${recvRow.desc}</td>` +
         `<td class="num" style="font-weight:700">₩${recvRow.unit.toLocaleString()}</td>` +
         recvRow.counts.map((c,i)=>
@@ -5662,7 +5659,7 @@ function renderContactDetail() {
   trAS.style.cssText = 'background:rgba(0,62,255,.05);font-weight:700;border-top:2px solid var(--border-strong)';
   trAS.innerHTML =
     `<td style="text-align:center;color:#111;font-weight:700;font-size:11px">6</td>` +
-    `<td colspan="3" style="font-weight:700;color:#111">AS 관련 합계 <span style="font-weight:400;font-size:10px">(4+5)</span></td>` +
+    `<td colspan="2" style="font-weight:700;color:#111">AS 관련 합계 <span style="font-weight:400;font-size:10px">(4+5)</span></td>` +
     `<td></td>` +
     d.asTotals.counts.map((c,i)=>
       `<td class="num" style="color:#111"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:#111"><b>${WW(d.asTotals.amounts[i])}</b></td>`
@@ -5681,7 +5678,7 @@ function renderContactDetail() {
   trTotal.style.cssText = 'background:rgba(0,62,255,.10);font-weight:700;border-top:2px solid var(--border-strong)';
   trTotal.innerHTML =
     `<td style="text-align:center;color:#111;font-weight:700;font-size:11px">7</td>` +
-    `<td colspan="3" style="font-weight:700;color:#111">총합계 <span style="font-weight:400;font-size:10px">(4 + 접수 (AS))</span></td>` +
+    `<td colspan="2" style="font-weight:700;color:#111">총합계 <span style="font-weight:400;font-size:10px">(4 + 접수 (AS))</span></td>` +
     `<td></td>` +
     sumC7.map((c,i)=>
       `<td class="num" style="color:#111"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:#111"><b>${WW(sumA7[i])}</b></td>`
