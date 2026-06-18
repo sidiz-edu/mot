@@ -5560,8 +5560,8 @@ function renderContactDetail() {
   // 헤더
   head.innerHTML = `
     <tr>
-      <th rowspan="2" style="vertical-align:middle;width:28px"></th>
       <th rowspan="2" style="vertical-align:middle;text-align:center">단계</th>
+      <th rowspan="2" style="vertical-align:middle;text-align:center;width:28px">번호</th>
       <th rowspan="2" style="min-width:160px;vertical-align:middle;text-align:center">항목</th>
       <th rowspan="2" style="min-width:200px;vertical-align:middle;text-align:left">상세 내용</th>
       <th rowspan="2" style="vertical-align:middle">건당 비용</th>
@@ -5577,7 +5577,7 @@ function renderContactDetail() {
     const tr = document.createElement('tr');
     if (style) tr.style.cssText = style;
     if (cls)   tr.className = cls;
-    tr.innerHTML = numTd + stageTd + nameTd + descTd + unitTd + cellsTd;
+    tr.innerHTML = stageTd + numTd + nameTd + descTd + unitTd + cellsTd;
     return tr;
   };
 
@@ -5599,7 +5599,7 @@ function renderContactDetail() {
       cls = 'is-as-row';
     }
 
-    const STAGE_CELL = 'text-align:center;vertical-align:middle;font-weight:700;font-size:12px';
+    const STAGE_CELL = 'text-align:center;vertical-align:middle;font-weight:700;font-size:12px;background:rgba(0,0,0,0.06)';
     const stageTd = ri === 0
       ? `<td rowspan="4" style="${STAGE_CELL}">상담</td>`
       : '';
@@ -5641,8 +5641,8 @@ function renderContactDetail() {
       const trRecv = document.createElement('tr');
       trRecv.style.cssText = 'border-top:1px dashed var(--border);background:rgba(72,180,122,0.20)';
       trRecv.innerHTML =
+        `<td rowspan="2" style="text-align:center;vertical-align:middle;font-weight:700;font-size:12px;background:rgba(0,0,0,0.06)">접수</td>` +
         `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">5</td>` +
-        `<td rowspan="2" style="text-align:center;vertical-align:middle;font-weight:700;font-size:12px">접수</td>` +
         `<td style="font-weight:600;text-align:center">${recvRow.name}</td>` +
         `<td style="text-align:left;color:var(--ink-2)">${recvRow.desc}</td>` +
         `<td class="num" style="font-weight:700">₩${recvRow.unit.toLocaleString()}</td>` +
