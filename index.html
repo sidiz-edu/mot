@@ -3353,34 +3353,6 @@ table.t               { font-size: 14px; }
             <div class="chart-box h-260"><canvas id="c_contact_ratio_line"></canvas></div>
           </div>
 
-          <!-- 항목별 건수 비율 YoY 비교 -->
-          <div class="card mt-16">
-            <div class="card-head">
-              <div><div class="card-title">항목별 건수 비율 (2026년)</div><div class="card-sub">AS 상담 3채널(유선·모바일·게시판), AS 접수 건수 중 자사몰 AS 건수 합계 기준 비율 · 26년 데이터</div></div>
-              <div class="yoy-legend">
-                <div class="yoy-legend-item"><div class="yoy-line-solid"></div>26년</div>
-                <div class="yoy-legend-item"><div class="yoy-line-dashed"></div>25년</div>
-              </div>
-            </div>
-            <div class="grid-2">
-              <div class="chart-inner">
-                <div class="chart-inner-title">AS상담 - 유선 - 전화통화 (CTI)</div>
-                <div class="chart-box h-160"><canvas id="c_cc_yoy_0"></canvas></div>
-              </div>
-              <div class="chart-inner">
-                <div class="chart-inner-title">AS상담 - 모바일 - AI챗봇 (해피톡)</div>
-                <div class="chart-box h-160"><canvas id="c_cc_yoy_1"></canvas></div>
-              </div>
-              <div class="chart-inner">
-                <div class="chart-inner-title">AS상담 - 외부쇼핑몰 (게시판)</div>
-                <div class="chart-box h-160"><canvas id="c_cc_yoy_2"></canvas></div>
-              </div>
-              <div class="chart-inner">
-                <div class="chart-inner-title">AS접수 - 자사몰</div>
-                <div class="chart-box h-160"><canvas id="c_cc_yoy_3"></canvas></div>
-              </div>
-            </div>
-          </div>
           <!-- CS 용역료 YoY -->
           <div class="lg-row mt-16" style="justify-content:center;gap:20px;padding:8px 12px;background:var(--surface-2);border-radius:8px;border:1px solid var(--border)">
             <span class="lg-chip"><i style="background:#90EE90"></i>AS상담 - 유선 - 전화통화 (CTI)</span>
@@ -5267,42 +5239,6 @@ function renderSec3() {
     });
   };
   renderLegend('lg-contact-ratio'); // 공용 범례 1개
-
-  // ── [건수/금액] tab ───────────────────────────────────────
-
-  // 항목별 건수 비율 YoY 라인
-  // - _AS 3채널(유선·모바일·게시판): _AS 건수 합계 기준 비율
-  // - 26년(contactDetail)만 _AS 분리 데이터 존재 → 25년은 null 처리
-  const CC_IDS = ['c_cc_yoy_0','c_cc_yoy_1','c_cc_yoy_2','c_cc_yoy_3'];
-  {
-    const cd = DATA.contactDetail;
-    // 4항목: 유선_AS[0], 모바일_AS[2], 게시판_AS[4], 자사몰[6]
-    const AS_IDX = [0, 2, 4, 6];
-
-    // 17개월 배열 구성 (25년 12개 = null, 26년 5개 = contactDetail 값)
-    const asCounts = AS_IDX.map(ri => {
-      const arr = Array(17).fill(null);
-      cd.rows[ri].counts.forEach((v, i) => { arr[12 + i] = v; });
-      return arr;
-    });
-
-    // 분모: AS 관련 합계 (4+5) = 4항목 합산
-    const denom = Array(17).fill(null);
-    asCounts.forEach(arr => {
-      arr.forEach((v, i) => {
-        if (v != null) denom[i] = (denom[i] || 0) + v;
-      });
-    });
-
-    // yoy_c로 y25/y26 분리 후 비율 계산
-    asCounts.forEach((arr, idx) => {
-      const { y25, y26 } = yoy_c(arr);
-      const { y25: d25, y26: d26 } = yoy_c(denom);
-      const r25 = y25.map((v, mi) => (v != null && d25[mi]) ? Math.round(v / d25[mi] * 1000) / 10 : null);
-      const r26 = y26.map((v, mi) => (v != null && d26[mi]) ? Math.round(v / d26[mi] * 1000) / 10 : null);
-      makeYoYLine(CC_IDS[idx], r25, r26, CONTACT_PALETTE[idx], true, true);
-    });
-  }
 
   // AS 관련 총 용역료 stacked bar — contactDetail 기반 (26년)
   {
