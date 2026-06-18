@@ -2246,11 +2246,7 @@ table.t               { font-size: 14px; }
     <div class="sb-section">
       <div class="sb-label">바로가기</div>
       <div class="sb-nav">
-<button class="sb-item" id="btn-export">
-          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span>리포트 내보내기</span>
-        </button>
-        <button class="sb-item" id="btn-settings">
+<button class="sb-item" id="btn-settings">
           <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
           <span>설정</span>
         </button>
@@ -2284,11 +2280,7 @@ table.t               { font-size: 14px; }
           <svg class="ic" id="ic-fullscreen-exit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></svg>
           전체보기
         </button>
-        <button class="tb-btn" id="btn-export-top">
-          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          내보내기
-        </button>
-        <div class="tb-divider"></div>
+<div class="tb-divider"></div>
         <button class="tb-icon-btn" id="btn-notif" title="알림">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
           <span class="tb-dot" style="background:var(--accent)"></span>
@@ -5569,6 +5561,7 @@ function renderContactDetail() {
   head.innerHTML = `
     <tr>
       <th rowspan="2" style="vertical-align:middle;width:28px"></th>
+      <th rowspan="2" style="vertical-align:middle;text-align:center">단계</th>
       <th rowspan="2" style="min-width:160px;vertical-align:middle;text-align:center">항목</th>
       <th rowspan="2" style="min-width:200px;vertical-align:middle;text-align:left">상세 내용</th>
       <th rowspan="2" style="vertical-align:middle">건당 비용</th>
@@ -5580,11 +5573,11 @@ function renderContactDetail() {
 
   body.innerHTML = '';
 
-  const mkRow = (numTd, nameTd, descTd, unitTd, cellsTd, style='', cls='') => {
+  const mkRow = (numTd, stageTd, nameTd, descTd, unitTd, cellsTd, style='', cls='') => {
     const tr = document.createElement('tr');
     if (style) tr.style.cssText = style;
     if (cls)   tr.className = cls;
-    tr.innerHTML = numTd + nameTd + descTd + unitTd + cellsTd;
+    tr.innerHTML = numTd + stageTd + nameTd + descTd + unitTd + cellsTd;
     return tr;
   };
 
@@ -5606,6 +5599,11 @@ function renderContactDetail() {
       cls = 'is-as-row';
     }
 
+    const STAGE_CELL = 'text-align:center;vertical-align:middle;font-weight:700;font-size:12px';
+    const stageTd = ri === 0
+      ? `<td rowspan="4" style="${STAGE_CELL}">상담</td>`
+      : '';
+
     const nameTd = row.isSub
       ? `<td style="padding-left:16px;color:var(--ink-3);text-align:center;font-weight:600">${row.name}</td>`
       : `<td style="font-weight:600;text-align:center">${row.name}</td>`;
@@ -5617,7 +5615,7 @@ function renderContactDetail() {
       `<td class="num">${W(c)}</td><td class="num" style="color:var(--ink-2)">${WW(row.amounts[i])}</td>`
     ).join('');
 
-    body.appendChild(mkRow(numTd, nameTd, descTd, unitTd, cellsTd, style, cls));
+    body.appendChild(mkRow(numTd, stageTd, nameTd, descTd, unitTd, cellsTd, style, cls));
 
     // 게시판_AS(index 4) 다음에 상담_AS 합계(4번) 행 삽입
     if (ri === 4) {
@@ -5644,6 +5642,7 @@ function renderContactDetail() {
       trRecv.style.cssText = 'border-top:1px dashed var(--border);background:rgba(72,180,122,0.20)';
       trRecv.innerHTML =
         `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">5</td>` +
+        `<td rowspan="2" style="text-align:center;vertical-align:middle;font-weight:700;font-size:12px">접수</td>` +
         `<td style="font-weight:600;text-align:center">${recvRow.name}</td>` +
         `<td style="text-align:left;color:var(--ink-2)">${recvRow.desc}</td>` +
         `<td class="num" style="font-weight:700">₩${recvRow.unit.toLocaleString()}</td>` +
@@ -7116,10 +7115,6 @@ window.addEventListener('resize', drawMotArrows);
       <div class="settings-row">
         <div><div class="settings-label">데이터 기준</div><div class="settings-sub" id="settings-data-date">최신 데이터: —</div></div>
       </div>
-      <div class="settings-row">
-        <div><div class="settings-label">리포트 내보내기</div><div class="settings-sub">현재 화면을 PDF로 저장</div></div>
-        <button class="seg-pill on" onclick="doPrint()">인쇄 / PDF</button>
-      </div>
     </div>
   </div>
 </div>
@@ -7185,14 +7180,12 @@ function setTheme(theme) {
 }
 
 // ── 버튼 바인딩 ──────────────────────────────────────────────
-document.getElementById('btn-export').addEventListener('click', () => { showToast('인쇄 창을 엽니다…'); setTimeout(doPrint, 400); });
 document.getElementById('btn-settings').addEventListener('click', () => {
   const months = DATA.natMonths;
   const latest = months.length ? months[months.length-1] : '—';
   document.getElementById('settings-data-date').textContent = '최신 데이터: ' + latest;
   openOverlay('overlay-settings');
 });
-document.getElementById('btn-export-top').addEventListener('click', () => { showToast('인쇄 창을 엽니다…'); setTimeout(doPrint, 400); });
 document.getElementById('btn-fullscreen').addEventListener('click', () => {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen();
