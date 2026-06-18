@@ -5947,6 +5947,11 @@ function renderSankey(mi) {
   const INK3 = cssVar('--ink-3');
   const SURF3 = cssVar('--surface-3');
   const GREEN = '#48B47A';
+  const LIME   = '#90EE90';  // 연두색 (유선)
+  const FLUOR  = '#D4FF00';  // 노란형광색 (모바일)
+  const SAGE   = '#7D9B6A';  // 쑥색 (게시판)
+
+  const CH_RECV_COLOR = { 'phone-as': LIME, 'mobile-as': FLUOR, 'board-as': SAGE };
 
   // 시스템 → 최종결과 매핑 (흐름선 색상 결정용)
   const sysToOutcome = {};
@@ -5954,6 +5959,24 @@ function renderSankey(mi) {
 
   // SVG
   let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img">`;
+
+  // 그라데이션 defs (채널별 AS接수 흐름: 채널색 → GREEN)
+  const gx1 = colX.ch + NODE_W, gx2 = colX.out;
+  svg += `<defs>
+    <linearGradient id="grad-phone-recv" gradientUnits="userSpaceOnUse" x1="${gx1}" y1="0" x2="${gx2}" y2="0">
+      <stop offset="0%" stop-color="${LIME}"  stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="${GREEN}" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="grad-mobile-recv" gradientUnits="userSpaceOnUse" x1="${gx1}" y1="0" x2="${gx2}" y2="0">
+      <stop offset="0%" stop-color="${FLUOR}" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="${GREEN}" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="grad-board-recv" gradientUnits="userSpaceOnUse" x1="${gx1}" y1="0" x2="${gx2}" y2="0">
+      <stop offset="0%" stop-color="${SAGE}"  stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="${GREEN}" stop-opacity="0.45"/>
+    </linearGradient>
+  </defs>`;
+  const RECV_GRAD = { 'phone-as': 'grad-phone-recv', 'mobile-as': 'grad-mobile-recv', 'board-as': 'grad-board-recv' };
 
   // Chart title
   svg += `<text x="0" y="18" style="font-family:'Pretendard Variable',Pretendard,system-ui,sans-serif;font-size:15px;font-weight:700;fill:var(--ink)">AS 접수 흐름도</text>`;
@@ -5979,9 +6002,10 @@ function renderSankey(mi) {
     const c = chCol.find(n => n.id === l.c);
     const s = sysCol.find(n => n.id === l.s);
     if (!c || !s) return;
-    const color = sysToOutcome[l.s] === 'out-rest' ? GREEN : INK;
-    const opacity = 0.35;
-    svg += `<path d="${linkPath(colX.ch + NODE_W, l._srcY, colX.sys, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
+    const isRecv = sysToOutcome[l.s] === 'out-rest';
+    const stroke  = isRecv ? `url(#${RECV_GRAD[l.c]})` : INK;
+    const opacity = isRecv ? 1 : 0.35;
+    svg += `<path d="${linkPath(colX.ch + NODE_W, l._srcY, colX.sys, l._tgtY)}" fill="none" stroke="${stroke}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
   });
 
   // Links system → outcome
