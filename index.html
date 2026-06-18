@@ -3145,12 +3145,12 @@ table.t               { font-size: 14px; }
         <div class="page-h-left">
           <div class="page-eyebrow">Contact Center · Service Fee</div>
           <h1 class="page-title">컨택센터 용역료</h1>
-          <div class="page-sub">월별 용역료 비용 추이 · 운영 인원 구성 · 채널별 접수 절차 · 시스템 연계 구조</div>
+          <div class="page-sub">월별 용역료 추이 그래프 · 운영 인원 구성 · 채널별 접수 절차 · 시스템 연계 구조</div>
           <div class="page-sub" style="margin-top:4px;font-size:11px;color:var(--ink-4)">출처: 브랜드 용역료 청구 현황 (월별 자료)</div>
         </div>
         <div class="seg" role="tablist" aria-label="용역료 보기">
           <button class="seg-btn active" data-cost="1">AS 접수 흐름</button>
-          <button class="seg-btn" data-cost="3">비용 추이</button>
+          <button class="seg-btn" data-cost="3">추이 그래프</button>
           <button class="seg-btn" data-cost="0">운영 개요</button>
         </div>
       </div>
@@ -3340,9 +3340,9 @@ table.t               { font-size: 14px; }
         </div>
       </div>
 
-      <!-- view 3 : 비용 추이 -->
+      <!-- view 3 : 추이 그래프 -->
       <div id="cost-3" style="display:none">
-        <!-- 비용 추이 콘텐츠 -->
+        <!-- 추이 그래프 콘텐츠 -->
         <div id="cost-sub-0">
 
           <!-- 항목별 건수 비율 YoY 비교 -->
@@ -6196,7 +6196,7 @@ document.querySelectorAll('.seg-btn[data-cost]').forEach(btn => {
   });
 });
 
-// 비용 추이 내부 sub-tabs
+// 추이 그래프 내부 sub-tabs
 document.querySelectorAll('.seg-btn[data-cost-sub]').forEach(btn => {
   btn.addEventListener('click', () => {
     const idx = +btn.dataset.costSub;
