@@ -3199,8 +3199,9 @@ table.t               { font-size: 14px; }
           <div class="card-head" style="margin-bottom: 8px">
             <div>
               <div class="card-title">고객 인입 → 시스템 → 처리 결과</div>
-              <div class="card-sub">26.5월 기준 · 흐름 두께는 건수 비율</div>
+              <div class="card-sub" id="sankey-card-sub">흐름 두께는 건수 비율</div>
             </div>
+            <div id="sankey-month-sel" style="display:flex;gap:6px;flex-wrap:wrap"></div>
           </div>
           <div id="sankey-host"></div>
         </div>
@@ -5765,23 +5766,42 @@ function bindChannelClicks() {
 }
 
 // ---- Sankey-lite (Tab 2) ----
-function renderSankey() {
+function renderSankey(mi) {
   const host = document.getElementById('sankey-host');
   if (!host) return;
+
+  // 월 인덱스 기본값: 마지막 월
+  const cd = DATA.contactDetail;
+  if (mi == null) mi = cd.months.length - 1;
+
+  // 월별 데이터 추출 (rows: 0=유선AS, 2=모바일AS, 4=게시판AS, 5=접수자사몰외, 6=자사몰)
+  const phoneVol  = cd.rows[0].counts[mi] || 0;
+  const mobileVol = cd.rows[2].counts[mi] || 0;
+  const boardVol  = cd.rows[4].counts[mi] || 0;
+  const recvRest  = cd.rows[5].counts[mi] || 0;
+  const recvJas   = cd.rows[6].counts[mi] || 0;
+
+  // AS接수(자사몰 제외)를 채널 볼륨 비율로 분배
+  const totalCounsel = phoneVol + mobileVol + boardVol;
+  const phoneRecv  = totalCounsel ? Math.round(recvRest * phoneVol  / totalCounsel) : 0;
+  const mobileRecv = totalCounsel ? Math.round(recvRest * mobileVol / totalCounsel) : 0;
+  const boardRecv  = recvRest - phoneRecv - mobileRecv;
+  const phoneReply  = phoneVol  - phoneRecv;
+  const mobileReply = mobileVol - mobileRecv;
+  const boardReply  = boardVol  - boardRecv;
+
+  // 서브타이틀 업데이트
+  const subEl = document.getElementById('sankey-card-sub');
+  if (subEl) subEl.textContent = `${cd.months[mi]} 기준 · 흐름 두께는 건수 비율`;
 
   // Columns: 채널(인입) → 시스템 → 처리 결과
   const W = 1320, H = 580, PAD = 24, COL_W = 160, NODE_W = 14;
 
-  // node groups — 26.5월 기준 (contactDetail rows 사용)
-  // rows[0] 유선_AS:1929 / rows[2] 모바일_AS:398 / rows[4] 게시판_AS:233
-  // rows[3] 게시판_ON:2769 / rows[5] 접수AS 자사몰외:1290 / rows[6] 자사몰_AS:847
-  // 접수(AS) 자사몰 외 1290건 = 유선·모바일·게시판 AS 상담에서 비례 분배
-  // 유선:972 / 모바일:201 / 게시판:117  (합계 1290)
   const channels = [
-    { id: 'phone-as',  label: '유선 - 전화통화 (CTI)',       vol: 1929, kind: 'counsel', costPer: '건당 13,500원' },
-    { id: 'mobile-as', label: '모바일 - AI챗봇 (해피톡)',    vol: 398,  kind: 'counsel', costPer: '건당 5,500원' },
-    { id: 'board-as',  label: '외부쇼핑몰 (게시판)',           vol: 233,  kind: 'counsel', costPer: '건당 3,000원' },
-    { id: 'recv-jas',  label: 'AS접수 (자사몰)',          vol: 847,  kind: 'receive' },
+    { id: 'phone-as',  label: '유선 - 전화통화 (CTI)',    vol: phoneVol,  kind: 'counsel', costPer: '건당 13,500원' },
+    { id: 'mobile-as', label: '모바일 - AI챗봇 (해피톡)', vol: mobileVol, kind: 'counsel', costPer: '건당 5,500원' },
+    { id: 'board-as',  label: '외부쇼핑몰 (게시판)',        vol: boardVol,  kind: 'counsel', costPer: '건당 3,000원' },
+    { id: 'recv-jas',  label: 'AS접수 (자사몰)',            vol: recvJas,   kind: 'receive' },
   ];
   const systems = [
     { id: 'cti',       label: '' },
@@ -5797,24 +5817,22 @@ function renderSankey() {
 
   // links: channel → 처리경로
   const cs = [
-    { c: 'phone-as',  s: 'cti',       v: 957  },
-    { c: 'phone-as',  s: 'recv-rest', v: 972  },
-    { c: 'mobile-as', s: 'happy',     v: 197  },
-    { c: 'mobile-as', s: 'recv-rest', v: 201  },
-    { c: 'board-as',  s: 'board',     v: 116  },
-    { c: 'board-as',  s: 'recv-rest', v: 117  },
+    { c: 'phone-as',  s: 'cti',       v: phoneReply  },
+    { c: 'phone-as',  s: 'recv-rest', v: phoneRecv   },
+    { c: 'mobile-as', s: 'happy',     v: mobileReply },
+    { c: 'mobile-as', s: 'recv-rest', v: mobileRecv  },
+    { c: 'board-as',  s: 'board',     v: boardReply  },
+    { c: 'board-as',  s: 'recv-rest', v: boardRecv   },
   ];
   // links: 처리경로 → 최종 결과
   const so = [
-    { s: 'cti',       o: 'reply',    v: 957  },
-    { s: 'happy',     o: 'reply',    v: 197  },
-    { s: 'board',     o: 'reply',    v: 116  },
-    { s: 'recv-rest', o: 'out-rest', v: 1290 },
+    { s: 'cti',       o: 'reply',    v: phoneReply  },
+    { s: 'happy',     o: 'reply',    v: mobileReply },
+    { s: 'board',     o: 'reply',    v: boardReply  },
+    { s: 'recv-rest', o: 'out-rest', v: recvRest    },
   ];
   // links: 인입채널 → 최종결과 직접 (자사몰 접수)
-  const co = [
-    { c: 'recv-jas', o: 'out-jas', v: 847 },
-  ];
+  const co = recvJas > 0 ? [{ c: 'recv-jas', o: 'out-jas', v: recvJas }] : [];
 
   // helpers
   const sum = arr => arr.reduce((a,b)=>a+(typeof b === 'number' ? b : b.v), 0);
@@ -6014,7 +6032,7 @@ function renderSankey() {
     svg += `<line x1="${bx+8}" y1="${ay1}" x2="${bx+8}" y2="${ay2}" stroke="${INK3}" stroke-width="1.5" />`;
     svg += `<line x1="${bx}" y1="${ay2}" x2="${bx+8}" y2="${ay2}" stroke="${INK3}" stroke-width="1.5" />`;
     svg += `<text class="sankey-group-label" x="${bx+16}" y="${amid - 6}" text-anchor="start" dominant-baseline="middle">AS 접수 등록</text>`;
-    svg += `<text class="sankey-node-sub" x="${bx+16}" y="${amid + 10}" text-anchor="start" dominant-baseline="middle">${(1290+847).toLocaleString()}건</text>`;
+    svg += `<text class="sankey-node-sub" x="${bx+16}" y="${amid + 10}" text-anchor="start" dominant-baseline="middle">${(recvRest + recvJas).toLocaleString()}건</text>`;
   }
 
   svg += '</svg>';
@@ -6073,6 +6091,24 @@ renderSec3();
 renderTeams();
 renderChannels();
 renderContactDetail();
+// 월 선택 버튼 생성
+(function() {
+  const sel = document.getElementById('sankey-month-sel');
+  if (!sel || !DATA.contactDetail) return;
+  const months = DATA.contactDetail.months;
+  const lastMi = months.length - 1;
+  months.forEach((m, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'seg-btn' + (i === lastMi ? ' active' : '');
+    btn.textContent = m;
+    btn.addEventListener('click', () => {
+      sel.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderSankey(i);
+    });
+    sel.appendChild(btn);
+  });
+})();
 renderSankey(); window.__sankeyRendered = true;
 bindChannelClicks();
 
