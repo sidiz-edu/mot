@@ -1231,6 +1231,11 @@ table.t {
   font-size: 10.5px; fill: var(--ink-3);
   font-variant-numeric: tabular-nums;
 }
+.sankey-node-cost {
+  font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+  font-size: 10px; fill: var(--accent); font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
 .sankey-group-label {
   font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
   font-size: 11px; font-weight: 700; fill: var(--ink);
@@ -3143,7 +3148,7 @@ table.t               { font-size: 14px; }
           <div class="page-sub">월별 용역료 비용 추이 · 운영 인원 구성 · 채널별 접수 절차 · 시스템 연계 구조</div>
         </div>
         <div class="seg" role="tablist" aria-label="용역료 보기">
-          <button class="seg-btn active" data-cost="1">처리 흐름</button>
+          <button class="seg-btn active" data-cost="1">AS 접수 흐름</button>
           <button class="seg-btn" data-cost="3">비용 추이</button>
           <button class="seg-btn" data-cost="0">운영 개요</button>
           <button class="seg-btn" data-cost="2">시스템 매트릭스</button>
@@ -3188,7 +3193,7 @@ table.t               { font-size: 14px; }
         <div class="cc-team-foot" id="cc-team-row"></div>
       </div>
 
-      <!-- view 1 : 처리 흐름 (Sankey-lite) -->
+      <!-- view 1 : AS 접수 흐름 (Sankey-lite) -->
       <div id="cost-1">
         <div class="sankey-wrap">
           <div class="card-head" style="margin-bottom: 8px">
@@ -3202,6 +3207,87 @@ table.t               { font-size: 14px; }
             </div>
           </div>
           <div id="sankey-host"></div>
+        </div>
+
+        <!-- 26년 청구 내역 통합 상세 -->
+        <div class="card mt-16">
+          <div class="card-head"><div><div class="card-title">AS 관련 컨택센터 청구 비용 — 26년 상세</div><div class="card-sub">건당 비용 × 건수 = 청구 금액 · 상담(AS) / 접수(AS) 구분</div></div></div>
+          <div class="tbl-wrap">
+            <table class="t" id="cs_detail_table" style="min-width:900px">
+              <thead id="cs_detail_head"></thead>
+              <tbody id="cs_detail_body"></tbody>
+            </table>
+          </div>
+        </div>
+        <!-- 단가표 -->
+        <div class="card mt-16">
+          <div class="card-head"><div><div class="card-title">CS 용역료 — 항목별 단가표</div><div class="card-sub">단위: 원/건(또는 콜) · 연도별 단가 비교</div></div></div>
+          <div class="tbl-wrap">
+            <table class="t unit-price-tbl">
+              <colgroup>
+                <col class="c-cat"><col class="c-part"><col class="c-item">
+                <col class="c-unit"><col class="c-y25"><col class="c-y26"><col class="c-chg">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>대분류</th><th>Part</th><th>항목</th><th>단위</th>
+                  <th>2025년</th><th>2026년</th><th>변동</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="is-as-row">
+                  <td rowspan="5" class="cat-cell">상담</td>
+                  <td rowspan="4" class="part-cell">상담 Part</td>
+                  <td style="text-align:left;color:#994D00;font-weight:600">유선 (AS)</td><td class="unit-desc">인바운드 (콜/월)</td>
+                  <td class="num">13,500</td><td class="num">13,500</td>
+                  <td class="change-same">—</td>
+                </tr>
+                <tr>
+                  <td>유선 (온라인)</td><td class="unit-desc">인바운드 (콜/월)</td>
+                  <td class="num">13,500</td><td class="num">13,500</td>
+                  <td class="change-same">—</td>
+                </tr>
+                <tr class="is-as-row">
+                  <td style="color:#994D00;font-weight:600">모바일 (AS+ON)</td><td class="unit-desc">해피톡 채팅 (건/월)</td>
+                  <td class="num">5,500</td><td class="num">5,500</td>
+                  <td class="change-same">—</td>
+                </tr>
+                <tr class="is-as-row">
+                  <td style="color:#994D00;font-weight:600">게시판 (AS+ON) · 외부몰</td><td class="unit-desc">게시글 처리 (건/월)</td>
+                  <td class="num">5,000</td><td class="num price-down">3,000</td>
+                  <td class="change-down">▼ 2,000</td>
+                </tr>
+                <tr class="is-recv-row">
+                  <td class="part-cell">접수 Part</td>
+                  <td style="text-align:left;color:#5B21B6;font-weight:600">접수 (AS)</td><td class="unit-desc">유상/무상 (건/월)</td>
+                  <td class="num">6,700</td><td class="num">6,700</td>
+                  <td class="change-same">—</td>
+                </tr>
+                <tr>
+                  <td rowspan="4" class="cat-cell">수주</td>
+                  <td rowspan="4" class="part-cell">수주 Part</td>
+                  <td style="text-align:left">오프라인 (수기등록)</td><td class="unit-desc">수기등록 (건/월)</td>
+                  <td class="num">1,600</td><td class="num">1,600</td>
+                  <td class="change-same">—</td>
+                </tr>
+                <tr>
+                  <td>온라인 (수기등록)</td><td class="unit-desc">—</td>
+                  <td class="num">2,600</td><td class="num">2,600</td>
+                  <td class="change-same">—</td>
+                </tr>
+                <tr>
+                  <td>오프라인 (수기변경)</td><td class="unit-desc">수기변경 (건/월)</td>
+                  <td class="num">1,700</td><td class="num">1,700</td>
+                  <td class="change-same">—</td>
+                </tr>
+                <tr>
+                  <td>온라인 (수기변경)</td><td class="unit-desc">—</td>
+                  <td class="num">3,500</td><td class="num">3,500</td>
+                  <td class="change-same">—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -3234,7 +3320,6 @@ table.t               { font-size: 14px; }
         <div class="seg" style="margin-bottom: 16px">
           <button class="seg-btn active" data-cost-sub="0">건수 / 금액</button>
           <button class="seg-btn" data-cost-sub="1">항목별 추이</button>
-          <button class="seg-btn" data-cost-sub="2">상세 표</button>
           <button class="seg-btn" data-cost-sub="3">월별 분석 노트</button>
         </div>
 
@@ -3341,90 +3426,6 @@ table.t               { font-size: 14px; }
           </div>
 
 
-        </div>
-
-        <!-- sub 2: 상세 표 -->
-        <div id="cost-sub-2" style="display:none">
-          <!-- 26년 청구 내역 통합 상세 -->
-          <div class="card mt-16">
-            <div class="card-head"><div><div class="card-title">AS 관련 컨택센터 청구 비용 — 26년 상세</div><div class="card-sub">건당 비용 × 건수 = 청구 금액 · 상담(AS) / 접수(AS) 구분</div></div></div>
-            <div class="tbl-wrap">
-              <table class="t" id="cs_detail_table" style="min-width:900px">
-                <thead id="cs_detail_head"></thead>
-                <tbody id="cs_detail_body"></tbody>
-              </table>
-            </div>
-          </div>
-          <!-- 단가표 -->
-          <div class="card mt-16">
-            <div class="card-head"><div><div class="card-title">CS 용역료 — 항목별 단가표</div><div class="card-sub">단위: 원/건(또는 콜) · 연도별 단가 비교</div></div></div>
-            <div class="tbl-wrap">
-              <table class="t unit-price-tbl">
-                <colgroup>
-                  <col class="c-cat"><col class="c-part"><col class="c-item">
-                  <col class="c-unit"><col class="c-y25"><col class="c-y26"><col class="c-chg">
-                </colgroup>
-                <thead>
-                  <tr>
-                    <th>대분류</th><th>Part</th><th>항목</th><th>단위</th>
-                    <th>2025년</th><th>2026년</th><th>변동</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="is-as-row">
-                    <td rowspan="5" class="cat-cell">상담</td>
-                    <td rowspan="4" class="part-cell">상담 Part</td>
-                    <td style="text-align:left;color:#994D00;font-weight:600">유선 (AS)</td><td class="unit-desc">인바운드 (콜/월)</td>
-                    <td class="num">13,500</td><td class="num">13,500</td>
-                    <td class="change-same">—</td>
-                  </tr>
-                  <tr>
-                    <td>유선 (온라인)</td><td class="unit-desc">인바운드 (콜/월)</td>
-                    <td class="num">13,500</td><td class="num">13,500</td>
-                    <td class="change-same">—</td>
-                  </tr>
-                  <tr class="is-as-row">
-                    <td style="color:#994D00;font-weight:600">모바일 (AS+ON)</td><td class="unit-desc">해피톡 채팅 (건/월)</td>
-                    <td class="num">5,500</td><td class="num">5,500</td>
-                    <td class="change-same">—</td>
-                  </tr>
-                  <tr class="is-as-row">
-                    <td style="color:#994D00;font-weight:600">게시판 (AS+ON) · 외부몰</td><td class="unit-desc">게시글 처리 (건/월)</td>
-                    <td class="num">5,000</td><td class="num price-down">3,000</td>
-                    <td class="change-down">▼ 2,000</td>
-                  </tr>
-                  <tr class="is-recv-row">
-                    <td class="part-cell">접수 Part</td>
-                    <td style="text-align:left;color:#5B21B6;font-weight:600">접수 (AS)</td><td class="unit-desc">유상/무상 (건/월)</td>
-                    <td class="num">6,700</td><td class="num">6,700</td>
-                    <td class="change-same">—</td>
-                  </tr>
-                  <tr>
-                    <td rowspan="4" class="cat-cell">수주</td>
-                    <td rowspan="4" class="part-cell">수주 Part</td>
-                    <td style="text-align:left">오프라인 (수기등록)</td><td class="unit-desc">수기등록 (건/월)</td>
-                    <td class="num">1,600</td><td class="num">1,600</td>
-                    <td class="change-same">—</td>
-                  </tr>
-                  <tr>
-                    <td>온라인 (수기등록)</td><td class="unit-desc">—</td>
-                    <td class="num">2,600</td><td class="num">2,600</td>
-                    <td class="change-same">—</td>
-                  </tr>
-                  <tr>
-                    <td>오프라인 (수기변경)</td><td class="unit-desc">수기변경 (건/월)</td>
-                    <td class="num">1,700</td><td class="num">1,700</td>
-                    <td class="change-same">—</td>
-                  </tr>
-                  <tr>
-                    <td>온라인 (수기변경)</td><td class="unit-desc">—</td>
-                    <td class="num">3,500</td><td class="num">3,500</td>
-                    <td class="change-same">—</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
 
         <!-- sub 3: 월별 분석 노트 -->
@@ -5829,10 +5830,10 @@ function renderSankey() {
   // 접수(AS) 자사몰 외 1290건 = 유선·모바일·게시판 AS 상담에서 비례 분배
   // 유선:972 / 모바일:201 / 게시판:117  (합계 1290)
   const channels = [
-    { id: 'phone-as',  label: '유선 - 전화통화 (CTI)',       vol: 1929, kind: 'counsel' },
-    { id: 'mobile-as', label: '모바일 - AI챗봇 (해피톡)',    vol: 398,  kind: 'counsel' },
-    { id: 'board-as',  label: '외부쇼핑몰 (게시판)',           vol: 233,  kind: 'counsel' },
-    { id: 'recv-jas',  label: 'AS접수 - 자사몰',          vol: 847,  kind: 'receive' },
+    { id: 'phone-as',  label: '유선 - 전화통화 (CTI)',       vol: 1929, kind: 'counsel', costPer: '건당 13,500원' },
+    { id: 'mobile-as', label: '모바일 - AI챗봇 (해피톡)',    vol: 398,  kind: 'counsel', costPer: '건당 5,500원' },
+    { id: 'board-as',  label: '외부쇼핑몰 (게시판)',           vol: 233,  kind: 'counsel', costPer: '건당 3,000원' },
+    { id: 'recv-jas',  label: 'AS접수 (자사몰)',          vol: 847,  kind: 'receive' },
   ];
   const systems = [
     { id: 'cti',       label: '' },
@@ -5842,8 +5843,8 @@ function renderSankey() {
   ];
   const outcomes = [
     { id: 'reply',    label: '답변·통화 종결' },
-    { id: 'out-rest', label: 'AS접수 - 자사몰 제외' },
-    { id: 'out-jas',  label: 'AS접수 - 자사몰' },
+    { id: 'out-rest', label: 'AS접수 (자사몰 제외)', costPer: '건당 6,700원' },
+    { id: 'out-jas',  label: 'AS접수 (자사몰)',      costPer: '건당 6,700원' },
   ];
 
   // links: channel → 처리경로
@@ -6042,7 +6043,9 @@ function renderSankey() {
         const lx = anchor === 'end' ? x - 10 : x + NODE_W + 10;
         svg += `<text class="sankey-node-label" x="${lx}" y="${n.mid - 2}" text-anchor="${anchor}" dominant-baseline="middle">${n.label}</text>`;
         const vol = (n.vol != null) ? n.vol : (sysTotals[n.id] || outTotals[n.id] || 0);
-        svg += `<text class="sankey-node-sub" x="${lx}" y="${n.mid + 14}" text-anchor="${anchor}" dominant-baseline="middle">${vol.toLocaleString()}건</text>`;
+        const subY = n.costPer ? n.mid + 10 : n.mid + 14;
+        svg += `<text class="sankey-node-sub" x="${lx}" y="${subY}" text-anchor="${anchor}" dominant-baseline="middle">${vol.toLocaleString()}건</text>`;
+        if (n.costPer) svg += `<text class="sankey-node-cost" x="${lx}" y="${n.mid + 24}" text-anchor="${anchor}" dominant-baseline="middle">${n.costPer}</text>`;
       }
     });
   }
@@ -6119,6 +6122,7 @@ renderSec3();
 renderTeams();
 renderChannels();
 renderContactDetail();
+renderSankey(); window.__sankeyRendered = true;
 bindChannelClicks();
 
 // Restore initial visibility
@@ -7246,7 +7250,7 @@ const SEARCH_INDEX = [
   {label:'제품 등록 수',       sub:'퍼널 분석', tab:2},
   {label:'컨택센터 용역료',    sub:'비용 분석', tab:3},
   {label:'CS 용역료 상세',     sub:'비용 분석', tab:3},
-  {label:'처리 흐름',          sub:'비용 분석', tab:3},
+  {label:'AS 접수 흐름',       sub:'비용 분석', tab:3},
 ];
 
 document.getElementById('search-input').addEventListener('input', function() {
