@@ -3356,37 +3356,37 @@ table.t               { font-size: 14px; }
             </div>
             <div class="grid-2">
               <div class="chart-inner">
-                <div class="chart-inner-title">상담 (유선)_AS</div>
+                <div class="chart-inner-title">AS상담 - 유선 - 전화통화 (CTI)</div>
                 <div class="chart-box h-160"><canvas id="c_cc_yoy_0"></canvas></div>
               </div>
               <div class="chart-inner">
-                <div class="chart-inner-title">상담 (모바일)_AS</div>
+                <div class="chart-inner-title">AS상담 - 모바일 - AI챗봇 (해피톡)</div>
                 <div class="chart-box h-160"><canvas id="c_cc_yoy_1"></canvas></div>
               </div>
               <div class="chart-inner">
-                <div class="chart-inner-title">상담 (게시판)_AS</div>
+                <div class="chart-inner-title">AS상담 - 외부쇼핑몰 (게시판)</div>
                 <div class="chart-box h-160"><canvas id="c_cc_yoy_2"></canvas></div>
               </div>
               <div class="chart-inner">
-                <div class="chart-inner-title">자사몰_AS 접수</div>
+                <div class="chart-inner-title">AS접수 - 자사몰</div>
                 <div class="chart-box h-160"><canvas id="c_cc_yoy_3"></canvas></div>
               </div>
             </div>
           </div>
           <!-- CS 용역료 YoY -->
           <div class="lg-row mt-16" style="justify-content:center;gap:20px;padding:8px 12px;background:var(--surface-2);border-radius:8px;border:1px solid var(--border)">
-            <span class="lg-chip"><i style="background:#F5B800"></i>유선_AS 상담</span>
-            <span class="lg-chip"><i style="background:#DB2777"></i>모바일_AS 상담</span>
-            <span class="lg-chip"><i style="background:#EA580C"></i>게시판_AS 상담</span>
+            <span class="lg-chip"><i style="background:#F5B800"></i>AS상담 - 유선 - 전화통화 (CTI)</span>
+            <span class="lg-chip"><i style="background:#DB2777"></i>AS상담 - 모바일 - AI챗봇 (해피톡)</span>
+            <span class="lg-chip"><i style="background:#EA580C"></i>AS상담 - 외부쇼핑몰 (게시판)</span>
             <span class="lg-chip"><i style="background:#A78BFA"></i>접수 (AS) — 자사몰 외</span>
-            <span class="lg-chip"><i style="background:#7C3AED"></i>자사몰_AS 접수</span>
+            <span class="lg-chip"><i style="background:#7C3AED"></i>AS접수 - 자사몰</span>
           </div>
           <div class="grid-2 mt-8">
             <div class="card">
               <div class="card-head">
                 <div>
                   <div class="card-title">월별 AS 관련 총 용역료</div>
-                  <div class="card-sub">총합계 = 상담_AS합계 + 접수(AS) · 자사몰_AS 접수 별도 표시 · 단위: 만원 · 26년</div>
+                  <div class="card-sub">총합계 = 상담_AS합계 + 접수(AS) · AS접수 - 자사몰 별도 표시 · 단위: 만원 · 26년</div>
                 </div>
               </div>
               <div class="chart-box"><canvas id="c_cs_total"></canvas></div>
@@ -3395,7 +3395,7 @@ table.t               { font-size: 14px; }
               <div class="card-head">
                 <div>
                   <div class="card-title">월별 AS 관련 총 건수</div>
-                  <div class="card-sub">총합계 = 상담_AS합계 + 접수(AS) · 자사몰_AS 접수 별도 표시 · 단위: 건 · 26년</div>
+                  <div class="card-sub">총합계 = 상담_AS합계 + 접수(AS) · AS접수 - 자사몰 별도 표시 · 단위: 건 · 26년</div>
                 </div>
               </div>
               <div class="chart-box"><canvas id="c_cs_total_count"></canvas></div>
@@ -3404,9 +3404,9 @@ table.t               { font-size: 14px; }
           <!-- 접수(AS) 채널 비율 -->
           <div class="card mt-16">
             <div class="card-head">
-              <div><div class="card-title">접수 (AS) 채널별 비율 추이</div><div class="card-sub">자사몰_AS 접수 vs 그 외 접수 · 26년 3~5월</div></div>
+              <div><div class="card-title">접수 (AS) 채널별 비율 추이</div><div class="card-sub">AS접수 - 자사몰 vs 그 외 접수 · 26년 3~5월</div></div>
               <div class="lg-row" style="margin:0;gap:16px">
-                <span class="lg-chip"><i style="background:#7C3AED"></i>자사몰_AS 접수</span>
+                <span class="lg-chip"><i style="background:#7C3AED"></i>AS접수 - 자사몰</span>
                 <span class="lg-chip"><i style="background:#A78BFA"></i>그 외 접수</span>
               </div>
             </div>
@@ -3668,7 +3668,7 @@ const DATA = {
         ]
     },
     {
-        "name": "상담 (유선)_AS",
+        "name": "AS상담 - 유선 - 전화통화 (CTI)",
         "counts": [
             1743,
             2354,
@@ -5271,10 +5271,10 @@ function renderSec3() {
   // 상담 3채널만 범례 표시 (접수AS 제외)
   // 항목별 추이 4항목: 유선_AS / 모바일_AS / 게시판_AS / 자사몰
   const DETAIL_ITEMS = [
-    { ri: 0, name: '유선_AS 상담',   color: CONTACT_PALETTE[1] },
-    { ri: 2, name: '모바일_AS 상담', color: CONTACT_PALETTE[2] },
-    { ri: 4, name: '게시판_AS 상담', color: CONTACT_PALETTE[0] },
-    { ri: 6, name: '자사몰_AS 접수', color: CONTACT_PALETTE[3] },
+    { ri: 0, name: 'AS상담 - 유선 - 전화통화 (CTI)',   color: CONTACT_PALETTE[1] },
+    { ri: 2, name: 'AS상담 - 모바일 - AI챗봇 (해피톡)', color: CONTACT_PALETTE[2] },
+    { ri: 4, name: 'AS상담 - 외부쇼핑몰 (게시판)', color: CONTACT_PALETTE[0] },
+    { ri: 6, name: 'AS접수 - 자사몰', color: CONTACT_PALETTE[3] },
   ];
   const renderLegend = (elId) => {
     const el = document.getElementById(elId);
@@ -5333,11 +5333,11 @@ function renderSec3() {
     const jasamolAmt   = cd.rows[6].amounts.map(v => v != null ? Math.round(v / 10000) : 0);
     const recvRestAmt  = cd.rows[5].amounts.map(v => Math.round(v / 10000)); // 이미 자사몰 제외된 값
     makeMultiBar('c_cs_total', [
-      { label: '유선_AS 상담',          data: yosenAmt,    color: '#F5B800' },
-      { label: '모바일_AS 상담',         data: mobileAmt,   color: '#DB2777' },
-      { label: '게시판_AS 상담',         data: boardAmt,    color: '#EA580C' },
+      { label: 'AS상담 - 유선 - 전화통화 (CTI)',          data: yosenAmt,    color: '#F5B800' },
+      { label: 'AS상담 - 모바일 - AI챗봇 (해피톡)',         data: mobileAmt,   color: '#DB2777' },
+      { label: 'AS상담 - 외부쇼핑몰 (게시판)',         data: boardAmt,    color: '#EA580C' },
       { label: '접수 (AS) — 자사몰 외',  data: recvRestAmt, color: '#A78BFA' },
-      { label: '자사몰_AS 접수',         data: jasamolAmt,  color: '#7C3AED' },
+      { label: 'AS접수 - 자사몰',         data: jasamolAmt,  color: '#7C3AED' },
     ], labels, true, false, { enabled: true, mode: 'stackTotal' }, '만원');
 
     // 건수 차트 (동일 구조)
@@ -5347,11 +5347,11 @@ function renderSec3() {
     const jasamolCnt  = cd.rows[6].counts.map(v => v != null ? v : 0);
     const recvRestCnt = cd.rows[5].counts.map(v => v || 0); // 이미 자사몰 제외된 값
     makeMultiBar('c_cs_total_count', [
-      { label: '유선_AS 상담',          data: yosenCnt,    color: '#F5B800' },
-      { label: '모바일_AS 상담',         data: mobileCnt,   color: '#DB2777' },
-      { label: '게시판_AS 상담',         data: boardCnt,    color: '#EA580C' },
+      { label: 'AS상담 - 유선 - 전화통화 (CTI)',          data: yosenCnt,    color: '#F5B800' },
+      { label: 'AS상담 - 모바일 - AI챗봇 (해피톡)',         data: mobileCnt,   color: '#DB2777' },
+      { label: 'AS상담 - 외부쇼핑몰 (게시판)',         data: boardCnt,    color: '#EA580C' },
       { label: '접수 (AS) — 자사몰 외',  data: recvRestCnt, color: '#A78BFA' },
-      { label: '자사몰_AS 접수',         data: jasamolCnt,  color: '#7C3AED' },
+      { label: 'AS접수 - 자사몰',         data: jasamolCnt,  color: '#7C3AED' },
     ], labels, true, false, { enabled: true, mode: 'stackTotal' }, '건');
   }
 
@@ -5384,7 +5384,7 @@ function renderSec3() {
       return tot ? Math.round(r / tot * 1000) / 10 : null;
     });
     makeMultiBar('c_recv_ratio', [
-      { label: '자사몰_AS 접수', data: jasamPct, color: '#7C3AED', _counts: jasam },
+      { label: 'AS접수 - 자사몰', data: jasamPct, color: '#7C3AED', _counts: jasam },
       { label: '그 외 접수',     data: restPct,  color: '#A78BFA', _counts: restCnt },
     ], labels, true, true, { enabled: true, mode: 'center' });
   }
@@ -5513,7 +5513,7 @@ function renderSec3() {
 
     const CNAME = {
       '상담 (게시판)': '게시판 (AS+ON) · 외부몰',
-      '상담 (유선)_AS': '유선 (AS)',
+      'AS상담 - 유선 - 전화통화 (CTI)': '유선 (AS)',
       '상담 (모바일) ': '모바일 (AS+ON)',
       '접수 (AS)': '접수 (AS)',
     };
