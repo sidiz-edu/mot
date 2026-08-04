@@ -3328,6 +3328,7 @@ table.t               { font-size: 14px; }
           <button class="seg-btn active" data-cost="1">AS 접수 흐름</button>
           <button class="seg-btn" data-cost="3">추이 그래프</button>
           <button class="seg-btn" data-cost="0">운영 개요</button>
+          <button class="seg-btn" data-cost="2">CS 용역료 정리</button>
         </div>
       </div>
 
@@ -3517,6 +3518,43 @@ table.t               { font-size: 14px; }
             </table>
           </div>
         </div>
+      </div>
+
+      <!-- view 2 : CS 용역료 정리 -->
+      <div id="cost-2" style="display:none">
+
+        <!-- 브랜드 용역료 금액 표 -->
+        <div class="card mt-16">
+          <div class="card-head">
+            <div>
+              <div class="card-title">브랜드 용역료 항목별 월 청구 금액</div>
+              <div class="card-sub">단위: 만원 · 출처: 브랜드 용역료 청구 현황</div>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="t" style="min-width:900px">
+              <thead id="cs_table_head"></thead>
+              <tbody id="cs_table"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 채널별 인입 건수 표 -->
+        <div class="card mt-16">
+          <div class="card-head">
+            <div>
+              <div class="card-title">채널별 인입 건수</div>
+              <div class="card-sub">건수 기준 · 출처: 브랜드 용역료 청구 현황</div>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="t" style="min-width:900px">
+              <thead id="cs_count_table_head"></thead>
+              <tbody id="cs_count_table"></tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
 
       <!-- view 3 : 추이 그래프 -->
