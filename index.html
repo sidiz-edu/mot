@@ -5737,7 +5737,7 @@ function renderSec3() {
         <th rowspan="2" style="vertical-align:middle">항목</th>
         ${y25cols > 0 ? `<th colspan="${y25cols}" class="yr-25" style="text-align:center">2025년</th>` : ''}
         ${y26cols > 0 ? `<th colspan="${y26cols}" class="yr-26" style="text-align:center">2026년</th>` : ''}
-        <th rowspan="2" style="vertical-align:middle">AS 관련 합계</th>
+        <th rowspan="2" style="vertical-align:middle">총 합계</th>
       </tr>
       <tr>${monthRow}</tr>`;
 
@@ -5754,12 +5754,11 @@ function renderSec3() {
       tbody.appendChild(tr);
     });
 
-    // AS 관련 합계 (AS_ITEMS 기준)
-    const tot = Array(n).fill(0);
-    DATA.cs.filter(it => AS_ITEMS.has(it.name)).forEach(it => it.amounts.forEach((v,i) => tot[i] += v));
+    // 총 합계 (csTotals 기준)
+    const tot = DATA.csTotals;
     const totalAll = tot.reduce((a,b)=>a+b, 0);
     const trT = document.createElement('tr');
-    trT.innerHTML = `<td><b>AS 관련 합계</b></td>` + tot.map(v => `<td><b>${Math.round(v/10000).toLocaleString()}</b></td>`).join('')
+    trT.innerHTML = `<td><b>총 합계</b></td>` + tot.map(v => `<td><b>${Math.round(v/10000).toLocaleString()}</b></td>`).join('')
                     + `<td><b>${Math.round(totalAll/10000).toLocaleString()}</b></td>`;
     tbody.appendChild(trT);
 
