@@ -5056,16 +5056,20 @@ const MONTHS12 = ['1월','2월','3월','4월','5월','6월','7월','8월','9월'
 
 // contactMonths(18): [0..11]=25년 1~12월, [12..17]=26년 1~6월
 function yoy_c(arr) {
+  const y26data = arr.slice(12);
+  const pad = Math.max(0, 12 - y26data.length);
   return {
     y25: arr.slice(0, 12),
-    y26: [...arr.slice(12, 18), null,null,null,null,null,null]
+    y26: [...y26data, ...Array(pad).fill(null)]
   };
 }
-// csMonths(18): [0..11]=25년 1~12월, [12..17]=26년 1~6월
+// csMonths: [0..11]=25년 1~12월, [12..]=26년 월별
 function yoy_cs(arr) {
+  const y26data = arr.slice(12);
+  const pad = Math.max(0, 12 - y26data.length);
   return {
     y25: arr.slice(0, 12),
-    y26: [...arr.slice(12, 18), null,null,null,null,null,null]
+    y26: [...y26data, ...Array(pad).fill(null)]
   };
 }
 
@@ -5640,20 +5644,21 @@ function renderSec3() {
   // 4항목: 유선_AS(0) / 모바일_AS(2) / 게시판_AS(4) / 자사몰(6)
   {
     const cd = DATA.contactDetail;
-    // 18개월 배열 구성 (0~11: null, 12~17: contactDetail 26년)
+    // 배열 구성 (0~11: null, 12~: contactDetail 26년)
+    const nMonths = 12 + cd.months.length;
     const detailCounts  = DETAIL_ITEMS.map(it => {
-      const arr = Array(18).fill(null);
+      const arr = Array(nMonths).fill(null);
       cd.rows[it.ri].counts.forEach((v, i) => { arr[12 + i] = v; });
       return arr;
     });
     const detailAmounts = DETAIL_ITEMS.map(it => {
-      const arr = Array(18).fill(null);
+      const arr = Array(nMonths).fill(null);
       cd.rows[it.ri].amounts.forEach((v, i) => { arr[12 + i] = v != null ? Math.round(v / 10000) : null; });
       return arr;
     });
 
     // 분모: 4항목 합산
-    const denom = Array(18).fill(null);
+    const denom = Array(nMonths).fill(null);
     detailCounts.forEach(arr => arr.forEach((v, i) => { if (v != null) denom[i] = (denom[i] || 0) + v; }));
 
     // 비율
