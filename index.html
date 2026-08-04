@@ -5762,14 +5762,6 @@ function renderSec3() {
                     + `<td><b>${Math.round(totalAll/10000).toLocaleString()}</b></td>`;
     tbody.appendChild(trT);
 
-    if (DATA.csDaily && DATA.csDaily.length) {
-      const trD = document.createElement('tr');
-      trD.style.color = 'var(--ink-3)';
-      trD.innerHTML = `<td>AS 관련 일 평균 비용 (원)</td>` +
-        DATA.csDaily.map(v => `<td>${Math.round(v).toLocaleString()}</td>`).join('') +
-        `<td>-</td>`;
-      tbody.appendChild(trD);
-    }
   }
 
   // ── 건수 표 렌더링 ──
