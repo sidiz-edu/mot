@@ -461,8 +461,10 @@ button { font-family: inherit; cursor: pointer; }
 .unit-price-tbl .unit-desc { color: var(--ink-3); font-size: 12px; text-align: center; }
 .unit-price-tbl .num { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; }
 .unit-price-tbl .price-down { color: var(--neg); font-weight: 700; }
+.unit-price-tbl .price-up   { color: var(--pos); font-weight: 700; }
 .unit-price-tbl .change-same { color: var(--ink-4); font-size: 12px; }
 .unit-price-tbl .change-down { color: var(--neg); font-size: 12px; font-weight: 600; }
+.unit-price-tbl .change-up   { color: var(--pos); font-size: 12px; font-weight: 600; }
 .unit-price-tbl { table-layout: fixed; }
 .unit-price-tbl col.c-cat  { width: 72px; }
 .unit-price-tbl col.c-part { width: 90px; }
@@ -1228,7 +1230,7 @@ table.t {
 }
 .sankey-node-sub {
   font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
-  font-size: 10.5px; fill: var(--ink-3);
+  font-size: 12.5px; fill: var(--ink-2);
   font-variant-numeric: tabular-nums;
 }
 .sankey-node-cost {
@@ -1435,6 +1437,61 @@ table.mtx {
 .fj-dm { text-align: center; }
 .fj-dm-val { font-size: 22px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
 .fj-dm-label { font-size: 10px; color: var(--ink-3); margin-top: 2px; }
+
+/* 브랜드 UX 비교 프레임 */
+.bx-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 24px 26px; box-shadow: var(--shadow-1); margin-bottom: 24px; }
+.bx-wrap .bx-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
+.bx-wrap .bx-title span { font-size: 11px; font-weight: 400; color: var(--ink-3); margin-left: 8px; }
+.bx-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.bx-tab { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface-2); font-size: 12px; font-weight: 500; color: var(--ink-2); cursor: pointer; transition: all .15s; }
+.bx-tab:hover { border-color: var(--accent); color: var(--accent); }
+.bx-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.bx-panel { display: none; }
+.bx-panel.active { display: block; animation: popFadeIn .15s ease; }
+.bx-brands { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+.bx-brand-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-soft); }
+.bx-brand-name { font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+.bx-brand-name::after { content: '↗'; font-size: 11px; opacity: .6; }
+.bx-brand-name.sidiz { color: #003EFF; }
+.bx-brand-name.lg { color: #A50034; }
+.bx-brand-name.samsung { color: #1428A0; }
+.bx-brand-name.apple { color: #1d1d1f; }
+.bx-img-slot { border: 2px dashed var(--border); border-radius: var(--r-md); height: 300px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--surface-2); position: relative; }
+.bx-img-slot img { width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: var(--r-md); display: block; }
+.bx-img-placeholder { color: var(--ink-3); font-size: 12px; text-align: center; padding: 16px; line-height: 1.6; pointer-events: none; user-select: none; }
+.bx-img-placeholder::before { content: '📷'; display: block; font-size: 28px; margin-bottom: 8px; }
+.bx-slot-num { position: absolute; top: 8px; left: 8px; background: var(--accent); color: #fff; font-size: 10px; font-weight: 700; border-radius: 4px; padding: 2px 7px; line-height: 1.5; }
+.bx-img-slot img { cursor: zoom-in; }
+#bx-lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.82); z-index: 9999; align-items: center; justify-content: center; padding: 24px; }
+#bx-lightbox.open { display: flex; animation: popFadeIn .15s ease; }
+#bx-lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 8px; box-shadow: 0 24px 64px rgba(0,0,0,.6); cursor: zoom-out; }
+/* 용어 비교 테이블 */
+.bx-terms { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-soft); }
+.bx-terms-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.bx-terms-head-label { font-size: 12px; font-weight: 700; color: var(--ink-2); }
+.bx-terms-add-btn { font-size: 11px; font-weight: 600; color: var(--accent); background: none; border: 1px solid var(--accent); border-radius: 4px; padding: 3px 10px; cursor: pointer; }
+.bx-terms-add-btn:hover { background: var(--accent); color: #fff; }
+.bx-terms-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.bx-terms-table thead th { padding: 6px 10px; font-size: 11px; font-weight: 700; text-align: left; border-bottom: 2px solid var(--border); white-space: nowrap; }
+.bx-terms-table thead th.col-concept { color: var(--ink-3); }
+.bx-terms-table thead th.col-sidiz   { color: #003EFF; }
+.bx-terms-table thead th.col-lg      { color: #A50034; }
+.bx-terms-table thead th.col-samsung { color: #1428A0; }
+.bx-terms-table thead th.col-apple   { color: #1d1d1f; }
+.bx-terms-table tbody td { padding: 5px 10px; border-bottom: 1px solid var(--border-soft); color: var(--ink); vertical-align: middle; min-width: 80px; }
+.bx-terms-table tbody td[contenteditable] { cursor: text; outline: none; border-radius: 3px; }
+.bx-terms-table tbody td[contenteditable]:focus { background: var(--surface-2); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.bx-terms-table tbody td[contenteditable]:empty:before { content: attr(data-ph); color: var(--ink-4); pointer-events: none; font-style: italic; }
+.bx-terms-table tbody td.col-concept { font-weight: 600; }
+.bx-terms-table tbody td.col-del { width: 28px; padding: 0; text-align: center; }
+.bx-terms-del-btn { background: none; border: none; color: var(--ink-4); font-size: 16px; cursor: pointer; padding: 4px 6px; border-radius: 4px; line-height: 1; }
+.bx-terms-del-btn:hover { color: var(--neg); background: color-mix(in srgb, var(--neg) 10%, transparent); }
+.bx-terms-empty { text-align: center; color: var(--ink-4); font-size: 12px; padding: 14px; font-style: italic; }
+
+.bx-brand-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+.bx-path { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.bx-path-crumb { font-size: 11px; color: var(--ink-3); background: var(--surface-2); border: 1px solid var(--border-soft); border-radius: 4px; padding: 1px 7px; line-height: 1.8; }
+.bx-path-sep { font-size: 11px; color: var(--ink-4); }
 
 /* 차트 인사이트 한 줄 */
 .chart-insight {
@@ -2165,7 +2222,8 @@ table.t               { font-size: 14px; }
 .unit-price-tbl .unit-desc { font-size: 13px; }
 .unit-price-tbl .num  { font-size: 14px; }
 .unit-price-tbl .change-same,
-.unit-price-tbl .change-down { font-size: 13px; }
+.unit-price-tbl .change-down,
+.unit-price-tbl .change-up   { font-size: 13px; }
 
 /* 노트/데이터출처 */
 .note-body            { font-size: 13.5px; }
@@ -2474,19 +2532,19 @@ table.t               { font-size: 14px; }
           <div class="jny-metrics">
             <div class="jny-metric">
               <div class="jny-m-label">월 AS 관련 건수</div>
-              <div class="jny-m-val">7,850<span class="jny-m-u">건/월</span></div>
+              <div class="jny-m-val">9,172<span class="jny-m-u">건/월</span></div>
             </div>
             <div class="jny-metric">
               <div class="jny-m-label">하루 평균 처리</div>
-              <div class="jny-m-val">392<span class="jny-m-u">건/일</span></div>
+              <div class="jny-m-val">399<span class="jny-m-u">건/일</span></div>
             </div>
             <div class="jny-metric">
               <div class="jny-m-label">유선 AS 상담</div>
-              <div class="jny-m-val">1,833<span class="jny-m-u">건</span></div>
+              <div class="jny-m-val">2,278<span class="jny-m-u">건</span></div>
             </div>
             <div class="jny-metric">
               <div class="jny-m-label">접수 처리</div>
-              <div class="jny-m-val">2,126<span class="jny-m-u">건</span></div>
+              <div class="jny-m-val">2,421<span class="jny-m-u">건</span></div>
             </div>
           </div>
           <div class="jny-cost jny-cost-active">
@@ -2643,7 +2701,7 @@ table.t               { font-size: 14px; }
     <section class="page section" id="sec-as" data-screen-label="01 AS 조치 현황">
       <div class="page-head">
         <div class="page-h-left">
-          <div class="page-eyebrow">Operations · May 2026</div>
+          <div class="page-eyebrow">Operations · Jun 2026</div>
           <h1 class="page-title">시디즈 AS 조치 현황</h1>
           <div class="page-sub">전국 / 서울경인 조치 건수, 1차 종결률, N차율, 평균 조치기간 — 월별 추이 및 년도별 동월 비교</div>
         </div>
@@ -2700,6 +2758,26 @@ table.t               { font-size: 14px; }
               <span class="tag down">목표 ↓</span>
             </div>
             <div class="chart-box"><canvas id="c_nat_days"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">2차 종결률</div>
+                <div class="card-sub">전국 · 낮을수록 좋음</div>
+              </div>
+              <span class="tag down">목표 ↓</span>
+            </div>
+            <div class="chart-box"><canvas id="c_nat_2nd"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">3차 종결률</div>
+                <div class="card-sub">전국 · 낮을수록 좋음</div>
+              </div>
+              <span class="tag down">목표 ↓</span>
+            </div>
+            <div class="chart-box"><canvas id="c_nat_3rd"></canvas></div>
           </div>
         </div>
       </div>
@@ -2893,15 +2971,21 @@ table.t               { font-size: 14px; }
 
 
         <!-- 추적 경로 6단계 -->
-        <div class="fj-flow" id="fj-flow" style="grid-template-columns:repeat(6,1fr)">
+        <div class="fj-flow" id="fj-flow" style="grid-template-columns:repeat(7,1fr)">
 
           <div class="fj-step" onclick="fjToggle(0)">
+            <div class="fj-step-node" style="background:#94A3B8;font-size:18px;font-weight:800">0</div>
+            <div class="fj-step-label">홈페이지 접속</div>
+            <div class="fj-arrow">›</div>
+          </div>
+
+          <div class="fj-step" onclick="fjToggle(1)">
             <div class="fj-step-node" style="background:#003EFF;font-size:18px;font-weight:800">1</div>
             <div class="fj-step-label">신청페이지 접속</div>
             <div class="fj-arrow">›</div>
           </div>
 
-          <div class="fj-step" onclick="fjToggle(1)">
+          <div class="fj-step" onclick="fjToggle(2)">
             <div class="fj-step-node" style="background:#0033CC;font-size:18px;font-weight:800">2</div>
             <div class="fj-step-label">AS 신청하기</div>
             <div class="fj-arrow" style="display:flex;align-items:center;gap:4px;right:-36px;top:22px">
@@ -2910,7 +2994,7 @@ table.t               { font-size: 14px; }
             </div>
           </div>
 
-          <div class="fj-step" onclick="fjToggle(2)">
+          <div class="fj-step" onclick="fjToggle(3)">
             <div class="fj-step-node" style="background:#1A4FD8;font-size:18px;font-weight:800">3</div>
             <div class="fj-step-label">제품 선택</div>
             <div class="fj-arrow" style="display:flex;align-items:center;gap:4px;right:-36px;top:22px">
@@ -2919,7 +3003,7 @@ table.t               { font-size: 14px; }
             </div>
           </div>
 
-          <div class="fj-step" onclick="fjToggle(3)">
+          <div class="fj-step" onclick="fjToggle(4)">
             <div class="fj-step-node" style="background:#3D72D7;font-size:18px;font-weight:800">4</div>
             <div class="fj-step-label">증상 입력</div>
             <div class="fj-arrow" style="display:flex;align-items:center;gap:4px;right:-36px;top:22px">
@@ -2928,7 +3012,7 @@ table.t               { font-size: 14px; }
             </div>
           </div>
 
-          <div class="fj-step" onclick="fjToggle(4)">
+          <div class="fj-step" onclick="fjToggle(5)">
             <div class="fj-step-node" style="background:#6B9FE8;font-size:18px;font-weight:800">5</div>
             <div class="fj-step-label">고객 정보 입력</div>
             <div class="fj-arrow" style="display:flex;align-items:center;gap:4px;right:-36px;top:22px">
@@ -2937,7 +3021,7 @@ table.t               { font-size: 14px; }
             </div>
           </div>
 
-          <div class="fj-step" onclick="fjToggle(5)">
+          <div class="fj-step" onclick="fjToggle(6)">
             <div class="fj-step-node" style="background:#95BEFF;font-size:18px;font-weight:800">6</div>
             <div class="fj-step-label">신청 완료</div>
           </div>
@@ -2946,6 +3030,14 @@ table.t               { font-size: 14px; }
 
         <!-- 단계 상세 패널 -->
         <div class="fj-detail" id="fj-detail-0">
+          <div class="fj-detail-head"><div class="fj-step-node" style="background:#94A3B8;width:32px;height:32px;font-size:16px;font-weight:800">0</div><div class="fj-detail-title">홈페이지 접속 — 시디즈 닷컴 메인 페이지</div></div>
+          <div class="fj-detail-grid">
+            <div class="fj-detail-item"><div class="fj-di-label">고객이 보는 화면</div><div class="fj-di-content">시디즈 닷컴 메인 페이지. 상단 GNB에 <strong>SUPPORT</strong> 메뉴 노출.</div></div>
+            <div class="fj-detail-item"><div class="fj-di-label">AS 신청 진입 경로</div><div class="fj-di-content">GNB <strong>SUPPORT → AS 상담/신청</strong> 클릭 → AS 신청 페이지로 이동.</div></div>
+            <div class="fj-detail-item"><div class="fj-di-label">이탈 포인트</div><div class="fj-di-content">메뉴 미인지 or 검색·다른 경로로 이탈.</div></div>
+          </div>
+        </div>
+        <div class="fj-detail" id="fj-detail-1">
           <div class="fj-detail-head"><div class="fj-step-node" style="background:#003EFF;width:32px;height:32px;font-size:16px;font-weight:800">1</div><div class="fj-detail-title">신청페이지 접속</div></div>
           <!-- 분기 경로 3x2 -->
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
@@ -2961,7 +3053,7 @@ table.t               { font-size: 14px; }
           </div>
         </div>
 
-        <div class="fj-detail" id="fj-detail-1">
+        <div class="fj-detail" id="fj-detail-2">
           <div class="fj-detail-head"><div class="fj-step-node" style="background:#0033CC;width:32px;height:32px;font-size:16px;font-weight:800">2</div><div class="fj-detail-title">AS 신청하기 — 메인 페이지에서 신청 버튼 클릭</div></div>
           <div class="fj-detail-grid">
             <div class="fj-detail-item"><div class="fj-di-label">고객이 보는 화면</div><div class="fj-di-content">메인 페이지 하단의 <strong>검정 "AS 신청하기" 버튼</strong> 클릭. 비로그인 상태라면 로그인 모달이 먼저 표시됨.</div></div>
@@ -2970,7 +3062,7 @@ table.t               { font-size: 14px; }
           </div>
         </div>
 
-        <div class="fj-detail" id="fj-detail-2">
+        <div class="fj-detail" id="fj-detail-3">
           <div class="fj-detail-head"><div class="fj-step-node" style="background:#1A4FD8;width:32px;height:32px;font-size:16px;font-weight:800">3</div><div class="fj-detail-title">제품 선택 — 정품 등록된 제품 중 선택</div></div>
           <div class="fj-detail-grid">
             <div class="fj-detail-item"><div class="fj-di-label">고객이 보는 화면</div><div class="fj-di-content">계정에 <strong>정품 등록된 제품 카드</strong> 목록. 카드에는 제품명·제품코드·색상코드·출장보증완료일·사양코드 표시.</div></div>
@@ -2979,7 +3071,7 @@ table.t               { font-size: 14px; }
           </div>
         </div>
 
-        <div class="fj-detail" id="fj-detail-3">
+        <div class="fj-detail" id="fj-detail-4">
           <div class="fj-detail-head"><div class="fj-step-node" style="background:#3D72D7;width:32px;height:32px;font-size:16px;font-weight:800">4</div><div class="fj-detail-title">증상 입력 — 부위·증상 선택 + 상세 설명</div></div>
           <div class="fj-detail-grid">
             <div class="fj-detail-item"><div class="fj-di-label">3.1 부위 선택 (10가지)</div><div class="fj-di-content">헤드레스트 / 팔걸이·암패드 / 럼버서포트 / 등판·틸팅 / 좌판 / 베이스·중심봉·레버 / 바퀴·글라이드 / 부품구매·누락 / 마감재교체·관리 / 기타<br><small>→ "부위별 설명 보기" 클릭 시 의자 도식 이미지 제공</small></div></div>
@@ -2988,7 +3080,7 @@ table.t               { font-size: 14px; }
           </div>
         </div>
 
-        <div class="fj-detail" id="fj-detail-4">
+        <div class="fj-detail" id="fj-detail-5">
           <div class="fj-detail-head"><div class="fj-step-node" style="background:#6B9FE8;width:32px;height:32px;font-size:16px;font-weight:800">5</div><div class="fj-detail-title">고객 정보 입력 — 방문 정보 입력</div></div>
           <div class="fj-detail-grid">
             <div class="fj-detail-item"><div class="fj-di-label">필수 입력 항목</div><div class="fj-di-content">이름 / 신청자와의 관계(본인·가족·지인 등) / 휴대폰 번호 1 / 방문지 주소(우편번호 검색 → 주소 → 상세주소 → 세대주소)</div></div>
@@ -2997,7 +3089,7 @@ table.t               { font-size: 14px; }
           </div>
         </div>
 
-        <div class="fj-detail" id="fj-detail-5">
+        <div class="fj-detail" id="fj-detail-6">
           <div class="fj-detail-head"><div class="fj-step-node" style="background:#95BEFF;width:32px;height:32px;font-size:16px;font-weight:800">6</div><div class="fj-detail-title">신청 완료 — 접수 확인 및 이후 안내</div></div>
           <div class="fj-detail-grid">
             <div class="fj-detail-item"><div class="fj-di-label">신청 내용 요약 표시</div><div class="fj-di-content"><strong>AS 신청 제품 정보:</strong> 제품명·제품코드·색상코드·사양코드<br><strong>제품 증상:</strong> 부위, 증상 분류<br><strong>신청 정보:</strong> 이름, 연락처, 방문지 주소</div></div>
@@ -3006,6 +3098,174 @@ table.t               { font-size: 14px; }
           </div>
         </div>
 
+      </div>
+
+      <!-- ── 브랜드 UX 비교 프레임 ── -->
+      <div class="bx-wrap">
+        <div class="bx-title">단계별 UX 비교 <span>브랜드별 AS 신청 화면 비교 · 클릭하면 실제 사이트로 이동</span></div>
+        <div class="bx-tabs" id="bx-tabs">
+          <button class="bx-tab active" onclick="bxSwitch(0)">0. 홈페이지 접속</button>
+          <button class="bx-tab" onclick="bxSwitch(1)">1. 신청페이지 접속</button>
+          <button class="bx-tab" onclick="bxSwitch(2)">2. AS 신청하기</button>
+          <button class="bx-tab" onclick="bxSwitch(3)">3. 제품 선택</button>
+          <button class="bx-tab" onclick="bxSwitch(4)">4. 증상 입력</button>
+          <button class="bx-tab" onclick="bxSwitch(5)">5. 고객 정보 입력</button>
+          <button class="bx-tab" onclick="bxSwitch(6)">6. 신청 완료</button>
+        </div>
+        <div id="bx-panels">
+          <div class="bx-panel active" id="bx-panel-0">
+            <div class="bx-brands">
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://kr.sidiz.com/" target="_blank" class="bx-brand-name sidiz">시디즈 닷컴</a></div>
+                <div class="bx-img-slot"><img src="https://dvlrzbckneucpvlacdll.supabase.co/storage/v1/object/public/mot-screenshots/0-1.png" alt="0-1 시디즈 홈페이지"></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.lge.co.kr" target="_blank" class="bx-brand-name lg">LG전자</a></div>
+                <div class="bx-img-slot"><img src="https://dvlrzbckneucpvlacdll.supabase.co/storage/v1/object/public/mot-screenshots/0-2.png" alt="0-2 LG전자 고객지원"></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.samsungsvc.co.kr/" target="_blank" class="bx-brand-name samsung">삼성전자서비스</a></div>
+                <div class="bx-img-slot"><img src="https://dvlrzbckneucpvlacdll.supabase.co/storage/v1/object/public/mot-screenshots/0-3.png" alt="0-3 삼성전자서비스 홈페이지"></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.apple.com/kr/" target="_blank" class="bx-brand-name apple">Apple</a></div>
+                <div class="bx-img-slot"><img src="https://dvlrzbckneucpvlacdll.supabase.co/storage/v1/object/public/mot-screenshots/0-4.png" alt="0-4 Apple 고객지원"></div>
+              </div>
+            </div>
+          </div>
+          <div class="bx-panel" id="bx-panel-1">
+            <div class="bx-brands">
+              <div class="bx-brand">
+                <div class="bx-brand-head">
+                  <a href="https://kr.sidiz.com/" target="_blank" class="bx-brand-name sidiz">시디즈 닷컴</a>
+                  <div class="bx-path"><span class="bx-path-crumb">SUPPORT</span><span class="bx-path-sep">›</span><span class="bx-path-crumb">AS 상담/신청</span></div>
+                </div>
+                <div class="bx-img-slot"><img src="https://dvlrzbckneucpvlacdll.supabase.co/storage/v1/object/public/mot-screenshots/1-1.png" alt="1-1 시디즈 AS 신청 페이지"></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head">
+                  <a href="https://www.lge.co.kr" target="_blank" class="bx-brand-name lg">LG전자</a>
+                  <div class="bx-path"><span class="bx-path-crumb">고객지원</span></div>
+                </div>
+                <div class="bx-img-slot"><img src="https://dvlrzbckneucpvlacdll.supabase.co/storage/v1/object/public/mot-screenshots/1-2.jpg" alt="1-2 LG전자 고객지원"></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head">
+                  <a href="https://www.samsungsvc.co.kr/" target="_blank" class="bx-brand-name samsung">삼성전자서비스</a>
+                  <div class="bx-path"><span class="bx-path-crumb">자체 홈페이지</span></div>
+                </div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">1단계 · 신청페이지 접속<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head">
+                  <a href="https://www.apple.com/kr/" target="_blank" class="bx-brand-name apple">Apple</a>
+                  <div class="bx-path"><span class="bx-path-crumb">고객지원</span><span class="bx-path-sep">›</span><span class="bx-path-crumb">도움 받기</span><span class="bx-path-sep">›</span><span class="bx-path-crumb">수리</span></div>
+                </div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">1단계 · 신청페이지 접속<br>스크린샷을 추가하세요</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="bx-panel" id="bx-panel-1">
+            <div class="bx-brands">
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://kr.sidiz.com/" target="_blank" class="bx-brand-name sidiz">시디즈 닷컴</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">2단계 · AS 신청하기<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.lge.co.kr" target="_blank" class="bx-brand-name lg">LG전자</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">2단계 · AS 신청하기<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.samsungsvc.co.kr/" target="_blank" class="bx-brand-name samsung">삼성전자서비스</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">2단계 · AS 신청하기<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.apple.com/kr/" target="_blank" class="bx-brand-name apple">Apple</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">2단계 · AS 신청하기<br>스크린샷을 추가하세요</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="bx-panel" id="bx-panel-2">
+            <div class="bx-brands">
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://kr.sidiz.com/" target="_blank" class="bx-brand-name sidiz">시디즈 닷컴</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">3단계 · 제품 선택<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.lge.co.kr" target="_blank" class="bx-brand-name lg">LG전자</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">3단계 · 제품 선택<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.samsungsvc.co.kr/" target="_blank" class="bx-brand-name samsung">삼성전자서비스</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">3단계 · 제품 선택<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.apple.com/kr/" target="_blank" class="bx-brand-name apple">Apple</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">3단계 · 제품 선택<br>스크린샷을 추가하세요</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="bx-panel" id="bx-panel-3">
+            <div class="bx-brands">
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://kr.sidiz.com/" target="_blank" class="bx-brand-name sidiz">시디즈 닷컴</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">4단계 · 증상 입력<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.lge.co.kr" target="_blank" class="bx-brand-name lg">LG전자</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">4단계 · 증상 입력<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.samsungsvc.co.kr/" target="_blank" class="bx-brand-name samsung">삼성전자서비스</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">4단계 · 증상 입력<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.apple.com/kr/" target="_blank" class="bx-brand-name apple">Apple</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">4단계 · 증상 입력<br>스크린샷을 추가하세요</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="bx-panel" id="bx-panel-4">
+            <div class="bx-brands">
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://kr.sidiz.com/" target="_blank" class="bx-brand-name sidiz">시디즈 닷컴</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">5단계 · 고객 정보 입력<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.lge.co.kr" target="_blank" class="bx-brand-name lg">LG전자</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">5단계 · 고객 정보 입력<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.samsungsvc.co.kr/" target="_blank" class="bx-brand-name samsung">삼성전자서비스</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">5단계 · 고객 정보 입력<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.apple.com/kr/" target="_blank" class="bx-brand-name apple">Apple</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">5단계 · 고객 정보 입력<br>스크린샷을 추가하세요</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="bx-panel" id="bx-panel-5">
+            <div class="bx-brands">
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://kr.sidiz.com/" target="_blank" class="bx-brand-name sidiz">시디즈 닷컴</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">6단계 · 신청 완료<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.lge.co.kr" target="_blank" class="bx-brand-name lg">LG전자</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">6단계 · 신청 완료<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.samsungsvc.co.kr/" target="_blank" class="bx-brand-name samsung">삼성전자서비스</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">6단계 · 신청 완료<br>스크린샷을 추가하세요</div></div>
+              </div>
+              <div class="bx-brand">
+                <div class="bx-brand-head"><a href="https://www.apple.com/kr/" target="_blank" class="bx-brand-name apple">Apple</a></div>
+                <div class="bx-img-slot"><div class="bx-img-placeholder">6단계 · 신청 완료<br>스크린샷을 추가하세요</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="grid-3 mt-16">
@@ -3129,7 +3389,7 @@ table.t               { font-size: 14px; }
             <div class="card-eyebrow" style="font-size:18px;font-weight:700;color:#111;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">시디즈 AS 접수 현황표</div>
             <div class="card-title">AS 관련 컨택센터 청구 비용 — 26년 상세</div><div class="card-sub">건당 비용 × 건수 = 청구 금액 · 상담(AS) / 접수(AS) 구분</div></div></div>
           <div class="tbl-wrap">
-            <table class="t" id="cs_detail_table" style="min-width:900px">
+            <table class="t" id="cs_detail_table" style="min-width:1050px">
               <thead id="cs_detail_head"></thead>
               <tbody id="cs_detail_body"></tbody>
             </table>
@@ -3222,8 +3482,8 @@ table.t               { font-size: 14px; }
                 </tr>
                 <tr class="is-as-row">
                   <td style="color:#994D00;font-weight:600">게시판 (AS+ON) · 외부몰</td><td class="unit-desc">게시글 처리 (건/월)</td>
-                  <td class="num">5,000</td><td class="num price-down">3,000</td>
-                  <td class="change-down">▼ 2,000</td>
+                  <td class="num">5,000</td><td class="num price-up">5,500</td>
+                  <td class="change-up">▲ 500</td>
                 </tr>
                 <tr class="is-recv-row">
                   <td class="part-cell">접수 Part</td>
@@ -3308,7 +3568,7 @@ table.t               { font-size: 14px; }
           <!-- 접수(AS) 채널 비율 -->
           <div class="card mt-16">
             <div class="card-head">
-              <div><div class="card-title">접수 (AS) 채널별 비율 추이</div><div class="card-sub">AS접수 - 자사몰 vs 그 외 접수 · 26년 3~5월</div></div>
+              <div><div class="card-title">접수 (AS) 채널별 비율 추이</div><div class="card-sub">AS접수 - 자사몰 vs 그 외 접수 · 26년 3~6월</div></div>
               <div class="lg-row" style="margin:0;gap:16px">
                 <span class="lg-chip"><i style="background:#003EFF"></i>AS접수 - 자사몰</span>
                 <span class="lg-chip"><i style="background:#48B47A"></i>그 외 접수</span>
@@ -3349,7 +3609,9 @@ const DATA = {
     "2026-02",
     "2026-03",
     "2026-04",
-    "2026-05"
+    "2026-05",
+    "2026-06",
+    "2026-07"
   ],
   "natCount": [
     1482,
@@ -3364,37 +3626,43 @@ const DATA = {
     1217,
     1693,
     1464,
-    1326
+    1326,
+    1423,
+    1560
   ],
   "natClose": [
-    73.5,
-    77.7,
+    76.2,
+    80.6,
+    80.4,
+    80.5,
+    76.8,
+    80.1,
+    74.0,
+    77.4,
+    75.9,
     77.5,
-    78.3,
-    74.2,
-    77.8,
-    71.5,
-    74.3,
-    72.3,
-    72.7,
-    71.8,
-    74.5,
-    75.8
+    77.3,
+    79.4,
+    79.8,
+    81.3,
+    82.2
   ],
   "natN": [
-    26.5,
-    22.3,
+    23.8,
+    19.4,
+    19.6,
+    19.5,
+    23.2,
+    19.9,
+    26.0,
+    22.6,
+    24.1,
     22.5,
-    21.7,
-    25.8,
-    22.2,
-    28.5,
-    25.7,
-    27.7,
-    27.3,
-    28.2,
-    25.5,
-    24.2
+    22.7,
+    20.6,
+    20.2,
+    18.7,
+    17.8
   ],
   "natDays": [
     8.52,
@@ -3409,7 +3677,43 @@ const DATA = {
     5.83,
     5.96,
     5.95,
-    6.59
+    6.59,
+    6.24,
+    6.47
+  ],
+  "nat2nd": [
+    18.4,
+    16.6,
+    16.5,
+    17.1,
+    19.2,
+    16.2,
+    21.4,
+    18.7,
+    20.3,
+    17.5,
+    19.0,
+    16.4,
+    17.2,
+    16.0,
+    15.1
+  ],
+  "nat3rd": [
+    3.9,
+    1.8,
+    2.4,
+    1.6,
+    3.2,
+    3.2,
+    3.2,
+    3.0,
+    3.1,
+    4.2,
+    2.9,
+    3.6,
+    2.6,
+    1.8,
+    1.8
   ],
   "seCount": [
     982,
@@ -3424,7 +3728,8 @@ const DATA = {
     813,
     841,
     736,
-    634
+    634,
+    737
   ],
   "seClose": [
     75.6,
@@ -3439,7 +3744,8 @@ const DATA = {
     78.1,
     76.9,
     78.9,
-    81.7
+    81.7,
+    79.8
   ],
   "seN": [
     24.4,
@@ -3454,7 +3760,8 @@ const DATA = {
     21.9,
     23.1,
     21.1,
-    18.3
+    18.3,
+    20.2
   ],
   "seDays": [
     9.06,
@@ -3469,7 +3776,8 @@ const DATA = {
     6.01,
     5.81,
     5.89,
-    6.22
+    6.22,
+    6.25
   ],
   "seEng": [
     70.5,
@@ -3484,7 +3792,8 @@ const DATA = {
     80.1,
     82.5,
     82.3,
-    81.9
+    81.9,
+    86.6
   ],
   "seSig": [
     33.9,
@@ -3499,10 +3808,11 @@ const DATA = {
     22.4,
     19.6,
     20.7,
-    20.3
+    20.3,
+    16.3
   ],
-  "contactMonths": ["25.1월","25.2월","25.3월","25.4월","25.5월","25.6월","25.7월","25.8월","25.9월","25.10월","25.11월","25.12월","26.1월","26.2월","26.3월","26.4월","26.5월"],
-  "workingDays": [18,20,20,22,20,19,23,20,22,18,20,22,21,17,21,20,20],
+  "contactMonths": ["25.1월","25.2월","25.3월","25.4월","25.5월","25.6월","25.7월","25.8월","25.9월","25.10월","25.11월","25.12월","26.1월","26.2월","26.3월","26.4월","26.5월","26.6월","26.7월"],
+  "workingDays": [18,20,20,22,20,19,23,20,22,18,20,22,21,17,21,20,20,22,23],
   "contact": [
     {
         "name": "상담 (게시판)",
@@ -3523,7 +3833,9 @@ const DATA = {
             3322,
             4634,
             2925,
-            3023
+            3023,
+            3679,
+            3439
         ],
         "amounts": [
             22445000,
@@ -3542,7 +3854,9 @@ const DATA = {
             9966000,
             13902000,
             8775000,
-            9069000
+            9069000,
+            11037000,
+            10317000
         ]
     },
     {
@@ -3564,7 +3878,9 @@ const DATA = {
             1847,
             2358,
             1833,
-            1929
+            1929,
+            2216,
+            2278
         ],
         "amounts": [
             23530500,
@@ -3583,7 +3899,9 @@ const DATA = {
             24934500,
             31833000,
             24745500,
-            26041500
+            26041500,
+            29916000,
+            30753000
         ]
     },
     {
@@ -3605,7 +3923,9 @@ const DATA = {
             1092,
             1308,
             966,
-            946
+            946,
+            1080,
+            1034
         ],
         "amounts": [
             13161500,
@@ -3624,7 +3944,9 @@ const DATA = {
             6006000,
             7194000,
             5313000,
-            5203000
+            5203000,
+            5940000,
+            5687000
         ]
     },
     {
@@ -3646,7 +3968,9 @@ const DATA = {
             2186,
             2696,
             2126,
-            2137
+            2137,
+            2272,
+            2421
         ],
         "amounts": [
             12281100,
@@ -3665,37 +3989,39 @@ const DATA = {
             14646200,
             18063200,
             14244200,
-            14317900
+            14317900,
+            15222400,
+            16220700
         ]
     }
 ],
   "contactDetail": {
-    "months": ["26.1월","26.2월","26.3월","26.4월","26.5월"],
+    "months": ["26.1월","26.2월","26.3월","26.4월","26.5월","26.6월","26.7월"],
     "rows": [
       { "name":"유선 - 전화통화 (CTI)",    "type":"인바운드",        "desc":"고객 인입 시 컨택센터가 응대하는 콜 건 수",                          "unit":13500, "isAS":true,  "isSub":false,
-        "counts":[2292,1847,2358,1833,1929], "amounts":[30942000,24934500,31833000,24745500,26041500] },
+        "counts":[2292,1847,2358,1833,1929,2216,2278], "amounts":[30942000,24934500,31833000,24745500,26041500,29916000,30753000] },
       { "name":"상담 (모바일)_ON",        "type":"채팅",            "desc":"채팅 상담 건 수 (구매 상담)",                                        "unit":5500,  "isAS":false, "isSub":false,
-        "counts":[734,663,755,550,548],     "amounts":[4037000,3646500,4152500,3025000,3014000] },
+        "counts":[734,663,755,550,548,646,619],     "amounts":[4037000,3646500,4152500,3025000,3014000,3553000,3404500] },
       { "name":"모바일 - AI챗봇 (해피톡)", "type":"채팅",            "desc":"채팅 상담 건 수 (서비스 상담)",                                      "unit":5500,  "isAS":true,  "isSub":false,
-        "counts":[472,429,553,416,398],     "amounts":[2596000,2359500,3041500,2288000,2189000] },
+        "counts":[472,429,553,416,398,434,415],     "amounts":[2596000,2359500,3041500,2288000,2189000,2387000,2282500] },
       { "name":"상담 (게시판)_ON",        "type":"게시글",          "desc":"외부몰 구매 게시글 답변 처리 건 수",                                  "unit":5500,  "isAS":false, "isSub":false,
-        "counts":[2877,3007,4222,2666,2769],"amounts":[15823500,16538500,23221000,14663000,15229500] },
+        "counts":[2877,3007,4222,2666,2769,3366,3147],"amounts":[15823500,16538500,23221000,14663000,15229500,18513000,17308500] },
       { "name":"외부쇼핑몰 (게시판)",       "type":"게시글",          "desc":"외부몰 AS 게시글 답변 처리 건 수",                                    "unit":5500,  "isAS":true,  "isSub":false,
-        "counts":[330,315,395,245,233],     "amounts":[1815000,1732500,2172500,1347500,1281500] },
+        "counts":[330,315,395,245,233,283,265],     "amounts":[1815000,1732500,2172500,1347500,1281500,1556500,1457500] },
       { "name":"AS접수 (자사몰 제외)",      "type":"무 / 유",         "desc":"1, 2, 3에서 AS 접수로 흘러간 건들",                  "unit":6700,  "isAS":true,  "isSub":false,
-        "counts":[2567,2186,2327,1358,1290],"amounts":[17198900,14646200,15590900,9098600,8643000] },
+        "counts":[2567,2186,2327,1358,1290,1488,1586],"amounts":[17198900,14646200,15590900,9098600,8643000,9969600,10626200] },
       { "name":"AS접수 (자사몰)",          "type":"홈페이지 게시글", "desc":"접수 (AS) 중 자사몰 게시판으로 접수된 건 (별도 집계)",               "unit":6700,  "isAS":true,  "isSub":true,
-        "counts":[null,null,369,768,847],   "amounts":[null,null,2472300,5145600,5674900] }
+        "counts":[null,null,369,768,847,784,835],   "amounts":[null,null,2472300,5145600,5674900,5252800,5594500] }
     ],
-    "asTotals":   { "counts":[3094,2591,3675,3262,3407],   "amounts":[35353000,29026500,39519300,33526600,35186900] },
-    "grandTotals":{ "counts":[9272,8447,10979,7836,8014],  "amounts":[72412400,63857700,82483700,60313200,62073400] }
+    "asTotals":   { "counts":[3094,2591,3675,3262,3407,3717,2958],   "amounts":[35353000,29026500,39519300,33526600,35186900,39112300,34493000] },
+    "grandTotals":{ "counts":[9272,8447,10979,7836,8014,9217,9145],  "amounts":[72412400,63857700,82483700,60313200,62073400,71147900,71426700] }
   },
-  "csMonths": ["25.1월","25.2월","25.3월","25.4월","25.5월","25.6월","25.7월","25.8월","25.9월","25.10월","25.11월","25.12월","26.1월","26.2월","26.3월","26.4월","26.5월"],
-  "csTotals": [99123500, 137973800, 125952800, 99388200, 84581100, 87479900, 107566700, 107956400, 107500300, 89680900, 88568100, 94133900, 89938800, 79067100, 98908400, 73883300, 74214600],
-  "csDaily": [5506861, 6898690, 6297640, 4517645, 4229055, 4604205, 4676813, 5397820, 4886377, 4982272, 4428405, 4278814, 4282800.0, 4651005.882352941, 4709923.809523810, 3694165.0, 3710730.0],
-  "asCount": [10458,13508,13229,10111,8433,8695,10343,10551,9876,8649,8340,8510,9303,8447,10996,7850,8035],
-  "asCountDaily": [581,675,661,460,422,458,450,528,449,481,417,387,443,497,524,393,402],
-  "asAmountDaily": [396.8,466.8,461.7,337.0,313.3,347.9,356.9,412.8,358.8,375.0,319.2,296.8,307.1,326.8,338.1,265.4,273.2],
+  "csMonths": ["25.1월","25.2월","25.3월","25.4월","25.5월","25.6월","25.7월","25.8월","25.9월","25.10월","25.11월","25.12월","26.1월","26.2월","26.3월","26.4월","26.5월","26.6월","26.7월"],
+  "csTotals": [99123500, 137973800, 125952800, 99388200, 84581100, 87479900, 107566700, 107956400, 107500300, 89680900, 88568100, 94133900, 89938800, 79067100, 98908400, 73883300, 74214600, 85080300, 86172400],
+  "csDaily": [5506861, 6898690, 6297640, 4517645, 4229055, 4604205, 4676813, 5397820, 4886377, 4982272, 4428405, 4278814, 4282800.0, 4651005.882352941, 4709923.809523810, 3694165.0, 3710730.0, 3867286.363636364, 3746626.086956522],
+  "asCount": [10458,13508,13229,10111,8433,8695,10343,10551,9876,8649,8340,8510,9303,8447,10996,7850,8035,9247,9172],
+  "asCountDaily": [581,675,661,460,422,458,450,528,449,481,417,387,443,497,524,393,402,420,399],
+  "asAmountDaily": [396.8,466.8,461.7,337.0,313.3,347.9,356.9,412.8,358.8,375.0,319.2,296.8,307.1,326.8,338.1,265.4,273.2,282.3,273.8],
   "cs": [
     {
         "name": "유선AS",
@@ -3716,7 +4042,9 @@ const DATA = {
             24934500,
             31833000,
             24745500,
-            26041500
+            26041500,
+            29916000,
+            30753000
         ]
     },
     {
@@ -3738,7 +4066,9 @@ const DATA = {
             15633000,
             18036000,
             13608000,
-            12825000
+            12825000,
+            14647500,
+            15093000
         ]
     },
     {
@@ -3760,7 +4090,9 @@ const DATA = {
             6006000,
             7194000,
             5313000,
-            5203000
+            5203000,
+            5940000,
+            5687000
         ]
     },
     {
@@ -3782,7 +4114,9 @@ const DATA = {
             9966000,
             13902000,
             8775000,
-            9069000
+            9069000,
+            11037000,
+            10317000
         ]
     },
     {
@@ -3804,7 +4138,9 @@ const DATA = {
             14646200,
             18063200,
             14244200,
-            14317900
+            14317900,
+            15222400,
+            16220700
         ]
     },
     {
@@ -3826,7 +4162,9 @@ const DATA = {
             187200,
             115200,
             296000,
-            116800
+            116800,
+            187200,
+            275200
         ]
     },
     {
@@ -3848,7 +4186,9 @@ const DATA = {
             728000,
             949000,
             785200,
-            884000
+            884000,
+            767000,
+            751400
         ]
     },
     {
@@ -3870,7 +4210,9 @@ const DATA = {
             1149200,
             1088000,
             1006400,
-            895900
+            895900,
+            1574200,
+            1849600
         ]
     },
     {
@@ -3892,7 +4234,9 @@ const DATA = {
             5817000,
             7728000,
             5110000,
-            4861500
+            4861500,
+            5789000,
+            5225500
         ]
     }
 ],
@@ -3909,7 +4253,12 @@ const DATA = {
       "5.18~5.24",
       "5.25~5.31",
       "6.1~6.7",
-      "6.8~6.14"
+      "6.8~6.14",
+      "6.15~6.21",
+      "6.22~6.28",
+      "6.29~7.5",
+      "7.6~7.12",
+      "7.13~7.19"
     ],
     "productReg": [
       2910,
@@ -3923,7 +4272,12 @@ const DATA = {
       2272,
       2176,
       1785,
-      2969
+      2969,
+      2021,
+      2114,
+      2630,
+      2873,
+      2113
     ],
     "main": [
       1228,
@@ -3937,7 +4291,12 @@ const DATA = {
       1390,
       1610,
       1304,
-      1521
+      1521,
+      1495,
+      1604,
+      1823,
+      1918,
+      1764
     ],
     "click": [
       324,
@@ -3951,7 +4310,12 @@ const DATA = {
       375,
       460,
       331,
-      367
+      367,
+      338,
+      400,
+      467,
+      457,
+      432
     ],
     "pick": [
       266,
@@ -3965,7 +4329,12 @@ const DATA = {
       325,
       335,
       276,
-      308
+      308,
+      283,
+      299,
+      355,
+      381,
+      365
     ],
     "sym": [
       168,
@@ -3979,7 +4348,12 @@ const DATA = {
       196,
       214,
       175,
-      189
+      189,
+      185,
+      198,
+      223,
+      229,
+      244
     ],
     "info": [
       136,
@@ -3993,7 +4367,12 @@ const DATA = {
       169,
       198,
       167,
-      169
+      169,
+      176,
+      188,
+      195,
+      212,
+      210
     ],
     "done": [
       136,
@@ -4007,7 +4386,12 @@ const DATA = {
       112,
       137,
       167,
-      170
+      170,
+      176,
+      188,
+      195,
+      212,
+      209
     ],
     "conv12": [
       26.4,
@@ -4021,7 +4405,12 @@ const DATA = {
       27.0,
       28.6,
       25.4,
-      24.1
+      24.1,
+      22.6,
+      24.9,
+      25.6,
+      23.8,
+      24.5
     ],
     "conv34": [
       63.2,
@@ -4035,7 +4424,12 @@ const DATA = {
       60.3,
       63.9,
       63.4,
-      61.4
+      61.4,
+      65.4,
+      11.0,
+      62.8,
+      60.1,
+      66.8
     ],
     "conv45": [
       81.0,
@@ -4049,7 +4443,12 @@ const DATA = {
       86.2,
       92.5,
       95.4,
-      89.4
+      89.4,
+      95.1,
+      94.9,
+      87.4,
+      92.6,
+      86.1
     ]
   },
   "yoyMonths": [
@@ -4087,9 +4486,9 @@ const DATA = {
         1217,
         1693,
         1464,
-        null,
-        null,
-        null,
+        1326,
+        1423,
+        1560,
         null,
         null,
         null,
@@ -4103,23 +4502,23 @@ const DATA = {
         null,
         null,
         null,
-        73.5,
-        77.7,
-        77.5,
-        78.3,
-        74.2,
-        77.8,
-        71.5,
-        74.3
+        76.2,
+        80.6,
+        80.4,
+        80.5,
+        76.8,
+        80.1,
+        74.0,
+        77.4
       ],
       "2026": [
-        72.3,
-        72.7,
-        71.8,
-        74.5,
-        null,
-        null,
-        null,
+        75.9,
+        77.5,
+        77.3,
+        79.4,
+        79.8,
+        81.3,
+        82.2,
         null,
         null,
         null,
@@ -4133,23 +4532,23 @@ const DATA = {
         null,
         null,
         null,
-        26.5,
-        22.3,
-        22.5,
-        21.7,
-        25.8,
-        22.2,
-        28.5,
-        25.7
+        23.8,
+        19.4,
+        19.6,
+        19.5,
+        23.2,
+        19.9,
+        26.0,
+        22.6
       ],
       "2026": [
-        27.7,
-        27.3,
-        28.2,
-        25.5,
-        null,
-        null,
-        null,
+        24.1,
+        22.5,
+        22.7,
+        20.6,
+        20.2,
+        18.7,
+        17.8,
         null,
         null,
         null,
@@ -4177,9 +4576,9 @@ const DATA = {
         5.83,
         5.96,
         5.95,
-        null,
-        null,
-        null,
+        6.59,
+        6.24,
+        6.47,
         null,
         null,
         null,
@@ -4355,14 +4754,14 @@ const CHANNELS = [
 ];
 
 const KPIS = [
-  {label: "전국 조치 건수",       value: 1326,  unit: "건",  trend: -9.4,   dir: "down", comp: "전월 대비",                   series: DATA.natCount,  cls: "is-pos"},
-  {label: "전국 1차 종결률",      value: 75.8,  unit: "%",   trend: 1.3,    dir: "up",   comp: "전월 대비",                   series: DATA.natClose,  cls: "is-pos"},
-  {label: "전국 N차율",           value: 24.2,  unit: "%",   trend: -5.1,   dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.natN,      cls: "is-pos"},
-  {label: "전국 평균 조치기간",   value: 6.59,  unit: "일",  trend: 10.7,   dir: "down", comp: "전월 대비 (낮을수록 좋음)", series: DATA.natDays,  cls: "is-pos"},
-  {label: "서울경인 조치 건수",   value: 634,  unit: "건",  trend: -13.9,  dir: "down", comp: "전월 대비",                   series: DATA.seCount,   cls: ""},
-  {label: "서울경인 1차 종결률",  value: 81.7, unit: "%",   trend: 2.8, dir: "up",comp: "전월 대비",                   series: DATA.seClose,   cls: "is-pos"},
-  {label: "서울경인 N차율",       value: 18.3,     unit: "%",   trend: -2.8,  dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.seN,       cls: "is-pos"},
-  {label: "서울경인 평균 조치",   value: 6.22, unit: "일", trend: 0.33, dir: "down", comp: "전월 대비 (낮을수록 좋음)", series: DATA.seDays, cls: ""},
+  {label: "전국 조치 건수",       value: 1560,  unit: "건",  trend: 9.6,    dir: "up",   comp: "전월 대비",                   series: DATA.natCount,  cls: "is-pos"},
+  {label: "전국 1차 종결률",      value: 82.2,  unit: "%",   trend: 0.9,    dir: "up",   comp: "전월 대비",                   series: DATA.natClose,  cls: "is-pos"},
+  {label: "전국 N차율",           value: 17.8,  unit: "%",   trend: -0.9,   dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.natN,      cls: "is-pos"},
+  {label: "전국 평균 조치기간",   value: 6.47,  unit: "일",  trend: 3.7,    dir: "down", comp: "전월 대비 (낮을수록 좋음)", series: DATA.natDays,  cls: "is-pos"},
+  {label: "서울경인 조치 건수",   value: 737,  unit: "건",  trend: 16.2,   dir: "down", comp: "전월 대비",                   series: DATA.seCount,   cls: ""},
+  {label: "서울경인 1차 종결률",  value: 79.8, unit: "%",   trend: -1.9,  dir: "up",   comp: "전월 대비",                   series: DATA.seClose,   cls: "is-pos"},
+  {label: "서울경인 N차율",       value: 20.2, unit: "%",   trend: 1.9,   dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.seN,       cls: "is-pos"},
+  {label: "서울경인 평균 조치",   value: 6.25, unit: "일",  trend: 0.03,  dir: "down", comp: "전월 대비 (낮을수록 좋음)", series: DATA.seDays, cls: ""},
 ];
 </script>
 
@@ -4613,7 +5012,7 @@ function makeLine(id, color, data, labels, pctY=false, label='', yRange=null) {
         valueLabels: { enabled: true, pctY },
         tooltip: {
           callbacks: {
-            label: c => ` ${label}: ${pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString()}`
+            label: c => ` ${label}: ${c.parsed.y == null ? '-' : pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString()}`
           }
         }
       }
@@ -4645,7 +5044,7 @@ function makeBar(id, color, data, labels, pctY=false, label='') {
       plugins: {
         valueLabels: { enabled: true, pctY },
         tooltip: {
-          callbacks: { label: c => ` ${label}: ${pctY ? c.parsed.y+'%' : c.parsed.y.toLocaleString()}` }
+          callbacks: { label: c => ` ${label}: ${c.parsed.y == null ? '-' : pctY ? c.parsed.y+'%' : c.parsed.y.toLocaleString()}` }
         }
       }
     }
@@ -4655,18 +5054,18 @@ function makeBar(id, color, data, labels, pctY=false, label='') {
 // ── YoY helpers ──────────────────────────────────────────────
 const MONTHS12 = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
 
-// contactMonths(17): [0..11]=25년 1~12월, [12..16]=26년 1~5월
+// contactMonths(18): [0..11]=25년 1~12월, [12..17]=26년 1~6월
 function yoy_c(arr) {
   return {
     y25: arr.slice(0, 12),
-    y26: [...arr.slice(12, 17), null,null,null,null,null,null,null]
+    y26: [...arr.slice(12, 18), null,null,null,null,null,null]
   };
 }
-// csMonths(17): [0..11]=25년 1~12월, [12..16]=26년 1~5월
+// csMonths(18): [0..11]=25년 1~12월, [12..17]=26년 1~6월
 function yoy_cs(arr) {
   return {
     y25: arr.slice(0, 12),
-    y26: [...arr.slice(12, 17), null,null,null,null,null,null,null]
+    y26: [...arr.slice(12, 18), null,null,null,null,null,null]
   };
 }
 
@@ -4864,7 +5263,7 @@ function makeMultiLine(id, datasets, labels, pctY=false) {
           callbacks: {
             label: c => {
               const cnt = c.dataset._counts ? c.dataset._counts[c.dataIndex] : null;
-              const val = pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString();
+              const val = c.parsed.y == null ? '-' : pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString();
               return cnt != null
                 ? ` ${c.dataset.label}: ${cnt.toLocaleString()}건  ${val}`
                 : ` ${c.dataset.label}: ${val}`;
@@ -4904,7 +5303,7 @@ function makeMultiBar(id, datasets, labels, stacked=false, pctY=false, valueLabe
         tooltip: {
           itemSort: stacked ? (a, b) => b.datasetIndex - a.datasetIndex : undefined,
           callbacks: {
-            label: c => ` ${c.dataset.label}: ${pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString() + (unit ? ' '+unit : '')}`,
+            label: c => ` ${c.dataset.label}: ${c.parsed.y == null ? '-' : pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString() + (unit ? ' '+unit : '')}`,
             footer: unit ? (items) => {
               const total = items.reduce((s, c) => s + (c.parsed.y || 0), 0);
               return `합계: ${total.toLocaleString()} ${unit}`;
@@ -4945,7 +5344,7 @@ function makeDottedLine(id, datasets, labels, pctY=false) {
       plugins: {
         valueLabels: { enabled: false },
         tooltip: {
-          callbacks: { label: c => ` ${c.dataset.label}: ${pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString()+'건'}` }
+          callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y == null ? '-' : pctY ? c.parsed.y.toFixed(1)+'%' : c.parsed.y.toLocaleString()+'건'}` }
         }
       }
     }
@@ -5070,8 +5469,10 @@ function renderSec1() {
   // 전국
   makeBar  ('c_nat_count', '#00B65F',   DATA.natCount, DATA.natMonths, false, '조치 건수');
   makeLine ('c_nat_close', '#073D20',   DATA.natClose, DATA.natMonths, true,  '1차 종결률');
-  makeLine ('c_nat_n',     '#48B47A',   DATA.natN,     DATA.natMonths, true,  'N차율');
+  makeLine ('c_nat_n',     '#48B47A',   DATA.natN,     DATA.natMonths, true,  'N차율',        { min: 0, max: 50 });
   makeLine ('c_nat_days',  '#1A7A45',   DATA.natDays,  DATA.natMonths, false, '평균 조치 (일)');
+  makeLine ('c_nat_2nd',   '#1565C0',   DATA.nat2nd,   DATA.natMonths, true,  '2차 종결률',   { min: 0, max: 50 });
+  makeLine ('c_nat_3rd',   '#C62828',   DATA.nat3rd,   DATA.natMonths, true,  '3차 종결률',   { min: 0, max: 10 });
 
   // 서울경인
   makeBar  ('c_se_count', '#00B65F',    DATA.seCount, DATA.natMonths, false, '조치 건수');
@@ -5140,6 +5541,8 @@ function renderSec2() {
   makeLine('c_conv45', '#3D72D7',     F.conv45, F.periods, true, '유입률', { min: 50, max: 100 });
   makeBar ('c_product_reg', COLORS.accent, F.productReg, F.periods, false, '등록 수');
   fjInitMetrics();
+  bxInitSlotNums();
+  bxTermsInit();
 }
 
 // ---- Section 3 charts + table ----
@@ -5237,20 +5640,20 @@ function renderSec3() {
   // 4항목: 유선_AS(0) / 모바일_AS(2) / 게시판_AS(4) / 자사몰(6)
   {
     const cd = DATA.contactDetail;
-    // 17개월 배열 구성 (0~11: null, 12~16: contactDetail 26년)
+    // 18개월 배열 구성 (0~11: null, 12~17: contactDetail 26년)
     const detailCounts  = DETAIL_ITEMS.map(it => {
-      const arr = Array(17).fill(null);
+      const arr = Array(18).fill(null);
       cd.rows[it.ri].counts.forEach((v, i) => { arr[12 + i] = v; });
       return arr;
     });
     const detailAmounts = DETAIL_ITEMS.map(it => {
-      const arr = Array(17).fill(null);
+      const arr = Array(18).fill(null);
       cd.rows[it.ri].amounts.forEach((v, i) => { arr[12 + i] = v != null ? Math.round(v / 10000) : null; });
       return arr;
     });
 
     // 분모: 4항목 합산
-    const denom = Array(17).fill(null);
+    const denom = Array(18).fill(null);
     detailCounts.forEach(arr => arr.forEach((v, i) => { if (v != null) denom[i] = (denom[i] || 0) + v; }));
 
     // 비율
@@ -5387,6 +5790,22 @@ function renderContactDetail() {
   const W  = v => v == null ? '—' : v.toLocaleString();
   const WW = v => v == null ? '—' : '₩' + v.toLocaleString();
 
+  // 26년 하반기 목표 데이터 (rows 인덱스 기준)
+  const TARGET_COUNTS = [765, null, 155, null, 100, 420, 1680];
+  const tAmt = ri => TARGET_COUNTS[ri] != null ? TARGET_COUNTS[ri] * d.rows[ri].unit : null;
+  const TBLUE = '2px solid rgba(59,100,255,0.55)';
+  const tCell = (c, a, bold=false) => {
+    const vC = c != null ? (bold ? `<b>${c.toLocaleString()}건</b>` : W(c)) : '—';
+    const vA = a != null ? (bold ? `<b>${WW(a)}</b>` : WW(a)) : '—';
+    return `<td class="num" style="border-left:${TBLUE}">${vC}</td><td class="num" style="color:var(--ink-2)">${vA}</td>`;
+  };
+  const tCellRow = ri => tCell(TARGET_COUNTS[ri], tAmt(ri));
+  const tCellAgg = indices => {
+    const c = indices.reduce((s,i)=>s+(TARGET_COUNTS[i]||0),0);
+    const a = indices.reduce((s,i)=>s+(tAmt(i)||0),0);
+    return tCell(c, a, true);
+  };
+
   // 행 번호 맵: rows 인덱스 → 표시 번호 (없으면 '')
   // rows: [0]유선_AS=1, [1]모바일_ON='', [2]모바일_AS=2,
   //       [3]게시판_ON='', [4]게시판_AS=3, [5]접수AS='', [6]자사몰=6
@@ -5401,9 +5820,11 @@ function renderContactDetail() {
       <th rowspan="2" style="min-width:200px;vertical-align:middle;text-align:left">상세 내용</th>
       <th rowspan="2" style="vertical-align:middle">건당 비용</th>
       ${M.map(m=>`<th colspan="2" style="text-align:center">${m}</th>`).join('')}
+      <th colspan="2" style="text-align:center;border-left:2px solid rgba(59,100,255,0.55)">26년 하반기 목표</th>
     </tr>
     <tr>
       ${M.map(()=>'<th style="color:var(--ink-3);font-weight:600">건수</th><th style="color:var(--ink-3);font-weight:600">금액</th>').join('')}
+      <th style="color:var(--ink-3);font-weight:600;border-left:2px solid rgba(59,100,255,0.55)">건수</th><th style="color:var(--ink-3);font-weight:600">금액</th>
     </tr>`;
 
   body.innerHTML = '';
@@ -5448,7 +5869,7 @@ function renderContactDetail() {
       : `<td></td>`;
     const cellsTd = row.counts.map((c,i)=>
       `<td class="num">${W(c)}</td><td class="num" style="color:var(--ink-2)">${WW(row.amounts[i])}</td>`
-    ).join('');
+    ).join('') + tCellRow(ri);
 
     body.appendChild(mkRow(numTd, stageTd, nameTd, descTd, unitTd, cellsTd, style, cls));
 
@@ -5468,7 +5889,7 @@ function renderContactDetail() {
         `<td></td>` +
         sumC.map((c,i)=>
           `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--ink-2)"><b>${WW(sumA[i])}</b></td>`
-        ).join('');
+        ).join('') + tCellAgg([0,2,4]);
       body.appendChild(trSum);
 
       // 상담_AS 합계 직후 — 접수(AS) 행 삽입 (번호 없음, 구분용)
@@ -5483,7 +5904,7 @@ function renderContactDetail() {
         `<td class="num" style="font-weight:700">₩${recvRow.unit.toLocaleString()}</td>` +
         recvRow.counts.map((c,i)=>
           `<td class="num">${W(c)}</td><td class="num" style="color:var(--ink-2)">${WW(recvRow.amounts[i])}</td>`
-        ).join('');
+        ).join('') + tCellRow(5);
       body.appendChild(trRecv);
     }
   });
@@ -5502,7 +5923,7 @@ function renderContactDetail() {
     `<td></td>` +
     recvC.map((c, i) =>
       `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--ink-2)"><b>${WW(recvA[i])}</b></td>`
-    ).join('');
+    ).join('') + tCellAgg([5,6]);
   body.appendChild(trRecvSum);
 
   // 8번 — 종합 총합계 (4+5+6)
@@ -5521,7 +5942,7 @@ function renderContactDetail() {
     `<td></td>` +
     totC.map((c, i) =>
       `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--ink-2)"><b>${WW(totA[i])}</b></td>`
-    ).join('');
+    ).join('') + tCellAgg([0,2,4,5,6]);
   body.appendChild(trTot);
 
 }
@@ -5611,6 +6032,69 @@ function bindChannelClicks() {
 }
 
 // ---- Sankey-lite (Tab 2) ----
+// ---- Sankey morph animation ----
+function _interpNums(d1, d2, t) {
+  const n1 = d1.match(/[-\d.]+/g).map(Number);
+  const n2 = d2.match(/[-\d.]+/g).map(Number);
+  if (!n1 || !n2 || n1.length !== n2.length) return d2;
+  let i = 0;
+  return d1.replace(/[-\d.]+/g, () => (n1[i] + (n2[i] - n1[i]) * t).toFixed(1) + (++i, ''));
+}
+function morphToNewSankey(renderFn, duration = 420) {
+  const host = document.getElementById('sankey-host');
+  if (!host) { renderFn(); return; }
+  const ease = t => t < .5 ? 2*t*t : -1+(4-2*t)*t;
+
+  // 1. 현재 path/rect 상태 저장
+  const oldP = new Map(), oldR = new Map();
+  host.querySelectorAll('path[data-mid]').forEach(p =>
+    oldP.set(p.dataset.mid, { d: p.getAttribute('d'), sw: +p.getAttribute('stroke-width') }));
+  host.querySelectorAll('rect[data-mid]').forEach(r =>
+    oldR.set(r.dataset.mid, { y: +r.getAttribute('y'), h: +r.getAttribute('height') }));
+
+  // 2. 새 SVG 렌더링
+  renderFn();
+
+  // 3. 새 값 읽기 + 이전 값에서 시작
+  const targets = [];
+  host.querySelectorAll('path[data-mid]').forEach(p => {
+    const id = p.dataset.mid;
+    const nD = p.getAttribute('d'), nSW = +p.getAttribute('stroke-width');
+    const old = oldP.get(id);
+    if (!old) return;
+    p.setAttribute('d', old.d);
+    p.setAttribute('stroke-width', old.sw);
+    targets.push({ el: p, type: 'path', oldD: old.d, newD: nD, oldSW: old.sw, newSW: nSW });
+  });
+  host.querySelectorAll('rect[data-mid]').forEach(r => {
+    const id = r.dataset.mid;
+    const nY = +r.getAttribute('y'), nH = +r.getAttribute('height');
+    const old = oldR.get(id);
+    if (!old) return;
+    r.setAttribute('y', old.y);
+    r.setAttribute('height', old.h);
+    targets.push({ el: r, type: 'rect', oldY: old.y, newY: nY, oldH: old.h, newH: nH });
+  });
+
+  if (!targets.length) return;
+
+  // 4. rAF 애니메이션
+  const start = performance.now();
+  (function frame(now) {
+    const t = ease(Math.min((now - start) / duration, 1));
+    targets.forEach(({ el, type, oldD, newD, oldSW, newSW, oldY, newY, oldH, newH }) => {
+      if (type === 'path') {
+        el.setAttribute('d', _interpNums(oldD, newD, t));
+        el.setAttribute('stroke-width', (oldSW + (newSW - oldSW) * t).toFixed(2));
+      } else {
+        el.setAttribute('y', (oldY + (newY - oldY) * t).toFixed(2));
+        el.setAttribute('height', (oldH + (newH - oldH) * t).toFixed(2));
+      }
+    });
+    if (t < 1) requestAnimationFrame(frame);
+  })(start);
+}
+
 function renderSankey(mi) {
   const host = document.getElementById('sankey-host');
   if (!host) return;
@@ -5645,7 +6129,7 @@ function renderSankey(mi) {
   const channels = [
     { id: 'phone-as',  label: '유선 - 전화통화 (CTI)',    vol: phoneVol,  kind: 'counsel', costPer: '건당 13,500원' },
     { id: 'mobile-as', label: '모바일 - AI챗봇 (해피톡)', vol: mobileVol, kind: 'counsel', costPer: '건당 5,500원' },
-    { id: 'board-as',  label: '외부쇼핑몰 (게시판)',        vol: boardVol,  kind: 'counsel', costPer: '건당 3,000원' },
+    { id: 'board-as',  label: '외부쇼핑몰 (게시판)',        vol: boardVol,  kind: 'counsel', costPer: '건당 5,500원' },
     { id: 'recv-jas',  label: 'AS접수 (자사몰)',            vol: recvJas,   kind: 'receive' },
   ];
   const systems = [
@@ -5846,7 +6330,7 @@ function renderSankey(mi) {
     const isRecv = sysToOutcome[l.s] === 'out-rest';
     const stroke  = isRecv ? `url(#${RECV_GRAD[l.c]})` : INK;
     const opacity = isRecv ? 1 : 0.35;
-    svg += `<path d="${linkPath(colX.ch + NODE_W, l._srcY, colX.sys, l._tgtY)}" fill="none" stroke="${stroke}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
+    svg += `<path data-mid="cs-${l.c}-${l.s}" d="${linkPath(colX.ch + NODE_W, l._srcY, colX.sys, l._tgtY)}" fill="none" stroke="${stroke}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
   });
 
   // Links system → outcome
@@ -5856,7 +6340,7 @@ function renderSankey(mi) {
     if (!s || !o) return;
     const color = l.o === 'out-rest' ? GREEN : INK;
     const opacity = 0.35;
-    svg += `<path d="${linkPath(colX.sys, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
+    svg += `<path data-mid="so-${l.s}-${l.o}" d="${linkPath(colX.sys, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${l._srcH}" />`;
   });
 
   // Links channel → outcome (자사몰 직접 연결 — 파란색 구분)
@@ -5864,29 +6348,31 @@ function renderSankey(mi) {
     const c = chCol.find(n => n.id === l.c);
     const o = outCol.find(n => n.id === l.o);
     if (!c || !o) return;
-    svg += `<path d="${linkPath(colX.ch + NODE_W, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${ACCENT}" stroke-opacity="0.35" stroke-width="${l._srcH}" />`;
+    svg += `<path data-mid="co-${l.c}-${l.o}" d="${linkPath(colX.ch + NODE_W, l._srcY, colX.out, l._tgtY)}" fill="none" stroke="${ACCENT}" stroke-opacity="0.35" stroke-width="${l._srcH}" />`;
   });
 
   // Nodes
-  function drawNodes(nodes, x, anchor='start') {
+  function drawNodes(nodes, x, anchor='start', colKey='') {
     nodes.forEach(n => {
       const color = n.id === 'out-rest' ? GREEN
                   : (n.id === 'out-jas' ? ACCENT
                   : ((n.kind === 'order' || n.kind === 'receive') ? ACCENT : INK));
       if (n.label !== '') {
-        svg += `<rect x="${x}" y="${n.y}" width="${NODE_W}" height="${n.h}" fill="${color}" rx="2" />`;
+        svg += `<rect data-mid="node-${colKey}-${n.id}" x="${x}" y="${n.y}" width="${NODE_W}" height="${n.h}" fill="${color}" rx="2" />`;
         const lx = anchor === 'end' ? x - 10 : x + NODE_W + 10;
         svg += `<text class="sankey-node-label" x="${lx}" y="${n.mid - 2}" text-anchor="${anchor}" dominant-baseline="middle">${n.label}</text>`;
         const vol = (n.vol != null) ? n.vol : (sysTotals[n.id] || outTotals[n.id] || 0);
-        const subY = n.costPer ? n.mid + 10 : n.mid + 14;
-        svg += `<text class="sankey-node-sub" x="${lx}" y="${subY}" text-anchor="${anchor}" dominant-baseline="middle">${vol.toLocaleString()}건</text>`;
-        if (n.costPer) svg += `<text class="sankey-node-cost" x="${lx}" y="${n.mid + 24}" text-anchor="${anchor}" dominant-baseline="middle">${n.costPer}</text>`;
+        if (n.costPer) {
+          svg += `<text x="${lx}" y="${n.mid+14}" text-anchor="${anchor}" dominant-baseline="middle" font-family="'Pretendard Variable',Pretendard,system-ui,sans-serif" font-variant-numeric="tabular-nums"><tspan font-size="12.5" fill="var(--ink-2)">${vol.toLocaleString()}건</tspan><tspan font-size="10" fill="var(--accent)" font-weight="500"> (${n.costPer})</tspan></text>`;
+        } else {
+          svg += `<text class="sankey-node-sub" x="${lx}" y="${n.mid+14}" text-anchor="${anchor}" dominant-baseline="middle">${vol.toLocaleString()}건</text>`;
+        }
       }
     });
   }
-  drawNodes(chCol, colX.ch, 'end');
-  drawNodes(sysCol, colX.sys, 'end');
-  drawNodes(outCol, colX.out, 'start');
+  drawNodes(chCol, colX.ch, 'end', 'ch');
+  drawNodes(sysCol, colX.sys, 'end', 'sys');
+  drawNodes(outCol, colX.out, 'start', 'out');
 
   // AS 접수 등록 묶음 브래킷
   const _arTop = outCol.find(n => n.id === 'out-rest');
@@ -5903,6 +6389,205 @@ function renderSankey(mi) {
 
   svg += '</svg>';
   host.innerHTML = svg;
+}
+
+// ---- Sankey-lite TARGET (26년 하반기 목표) ----
+function renderSankeyTarget() {
+  const host = document.getElementById('sankey-host');
+  if (!host) return;
+
+  const subEl = document.getElementById('sankey-card-sub');
+  if (subEl) subEl.textContent = '26년 하반기 목표 · 흐름 두께는 건수 비율';
+
+  // 목표: 자사몰 80%(1,680건) / 컨택센터 20%(420건) / 단순문의 600건
+  // 컨택센터 채널 비율은 현행 유지 (CTI 75% / 해피톡 15.2% / 게시판 9.8%)
+  const phoneVol  = 765;
+  const mobileVol = 155;
+  const boardVol  = 100;
+  const recvRest  = 420;
+  const recvJas   = 1680;
+
+  const totalCounsel = phoneVol + mobileVol + boardVol;
+  const phoneRecv  = Math.round(recvRest * phoneVol  / totalCounsel);
+  const mobileRecv = Math.round(recvRest * mobileVol / totalCounsel);
+  const boardRecv  = recvRest - phoneRecv - mobileRecv;
+  const phoneReply  = phoneVol  - phoneRecv;
+  const mobileReply = mobileVol - mobileRecv;
+  const boardReply  = boardVol  - boardRecv;
+
+  const W = 1320, H = 580, PAD = 24, COL_W = 160, NODE_W = 14;
+
+  const channels = [
+    { id: 'phone-as',  label: '유선 - 전화통화 (CTI)',    vol: phoneVol,  kind: 'counsel', costPer: '건당 13,500원' },
+    { id: 'mobile-as', label: '모바일 - AI챗봇 (해피톡)', vol: mobileVol, kind: 'counsel', costPer: '건당 5,500원' },
+    { id: 'board-as',  label: '외부쇼핑몰 (게시판)',        vol: boardVol,  kind: 'counsel', costPer: '건당 5,500원' },
+    { id: 'recv-jas',  label: 'AS접수 (자사몰)',            vol: recvJas,   kind: 'receive' },
+  ];
+  const systems = [
+    { id: 'cti',       label: '' },
+    { id: 'happy',     label: '' },
+    { id: 'board',     label: '' },
+    { id: 'recv-rest', label: '' },
+  ];
+  const outcomes = [
+    { id: 'reply',    label: '답변·통화 종결' },
+    { id: 'out-rest', label: 'AS접수 (자사몰 제외)', costPer: '건당 6,700원' },
+    { id: 'out-jas',  label: 'AS접수 (자사몰)',      costPer: '건당 6,700원' },
+  ];
+
+  const cs = [
+    { c: 'phone-as',  s: 'cti',       v: phoneReply  },
+    { c: 'phone-as',  s: 'recv-rest', v: phoneRecv   },
+    { c: 'mobile-as', s: 'happy',     v: mobileReply },
+    { c: 'mobile-as', s: 'recv-rest', v: mobileRecv  },
+    { c: 'board-as',  s: 'board',     v: boardReply  },
+    { c: 'board-as',  s: 'recv-rest', v: boardRecv   },
+  ];
+  const so = [
+    { s: 'cti',       o: 'reply',    v: phoneReply  },
+    { s: 'happy',     o: 'reply',    v: mobileReply },
+    { s: 'board',     o: 'reply',    v: boardReply  },
+    { s: 'recv-rest', o: 'out-rest', v: recvRest    },
+  ];
+  const co = [{ c: 'recv-jas', o: 'out-jas', v: recvJas }];
+
+  const sum = arr => arr.reduce((a,b)=>a+(typeof b==='number'?b:b.v),0);
+  const colTotal = (links, key) => {
+    const m={};
+    links.forEach(l=>{m[l[key]]=(m[l[key]]||0)+l.v;});
+    return m;
+  };
+
+  const totalCh  = sum(channels.map(c=>c.vol));
+  const sysTotals    = colTotal(cs,'s');
+  const sysOutTotals = colTotal(so,'s');
+  const outTotals    = colTotal(so,'o');
+  co.forEach(l=>{outTotals[l.o]=(outTotals[l.o]||0)+l.v;});
+  const totalOut = sum(Object.values(outTotals));
+  const baseTotal = Math.max(totalCh, totalOut);
+  const gapPx = 8;
+  const usableH = H - PAD*2 - gapPx * (Math.max(channels.length, systems.length, outcomes.length)-1);
+  const scale = usableH / baseTotal;
+
+  function positionNodes(nodes, getVol, gap=gapPx) {
+    let y=PAD;
+    return nodes.map(n=>{
+      const h=Math.max(getVol(n)*scale,6);
+      const node={...n,h,y,mid:y+h/2};
+      y+=h+gap; return node;
+    });
+  }
+  const chCol  = positionNodes(channels, n=>n.vol);
+  const sysCol = positionNodes(systems,  n=>Math.max(sysTotals[n.id]||0,sysOutTotals[n.id]||0), 0);
+  const outCol = positionNodes(outcomes, n=>outTotals[n.id]||0);
+
+  const colX = { ch: PAD+190, sys: PAD+190+COL_W+200, out: PAD+190+(COL_W+200)*2 };
+
+  function linkPath(x1,y1,x2,y2){const cx=(x1+x2)/2;return `M${x1},${y1} C${cx},${y1} ${cx},${y2} ${x2},${y2}`;}
+
+  function buildOutgoing(nodes,links,key){const out={};nodes.forEach(n=>out[n.id]=[]);links.forEach(l=>{const nd=nodes.find(n=>n.id===l[key]);if(!nd)return;out[l[key]].push(l);});return out;}
+  function buildIncoming(nodes,links,key){const inc={};nodes.forEach(n=>inc[n.id]=[]);links.forEach(l=>{const nd=nodes.find(n=>n.id===l[key]);if(!nd)return;inc[l[key]].push(l);});return inc;}
+
+  const csOut=buildOutgoing(chCol,cs,'c'), csIn=buildIncoming(sysCol,cs,'s');
+  const soOut=buildOutgoing(sysCol,so,'s'), soIn=buildIncoming(outCol,so,'o');
+  const coOut=buildOutgoing(chCol,co,'c'), coIn=buildIncoming(outCol,co,'o');
+
+  function layoutLinks(nodes,linkMap,side){
+    nodes.forEach(n=>{let y=n.y;(linkMap[n.id]||[]).forEach(l=>{const h=Math.max(l.v*scale,1);if(side==='src'){l._srcY=y+h/2;l._srcH=h;}else{l._tgtY=y+h/2;l._tgtH=h;}y+=h;});});
+  }
+  layoutLinks(chCol,csOut,'src'); layoutLinks(sysCol,csIn,'tgt');
+  layoutLinks(sysCol,soOut,'src'); layoutLinks(outCol,soIn,'tgt');
+  chCol.forEach(n=>{const csH=(csOut[n.id]||[]).reduce((a,l)=>a+Math.max(l.v*scale,1),0);let y=n.y+csH;(coOut[n.id]||[]).forEach(l=>{const h=Math.max(l.v*scale,1);l._srcY=y+h/2;l._srcH=h;y+=h;});});
+  outCol.forEach(n=>{const soH=(soIn[n.id]||[]).reduce((a,l)=>a+Math.max(l.v*scale,1),0);let y=n.y+soH;(coIn[n.id]||[]).forEach(l=>{const h=Math.max(l.v*scale,1);l._tgtY=y+h/2;l._tgtH=h;y+=h;});});
+
+  const ACCENT=cssVar('--accent'), INK=cssVar('--ink'), INK3=cssVar('--ink-3');
+  const GREEN='#48B47A', LIME='#90EE90', FLUOR='#D4FF00', SAGE='#7D9B6A';
+  const sysToOutcome={}; so.forEach(l=>{sysToOutcome[l.s]=l.o;});
+
+  let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img">`;
+
+  const gx1=colX.ch+NODE_W, gx2=colX.out;
+  svg+=`<defs>
+    <linearGradient id="tgt-grad-phone-recv" gradientUnits="userSpaceOnUse" x1="${gx1}" y1="0" x2="${gx2}" y2="0">
+      <stop offset="0%" stop-color="${LIME}"  stop-opacity="0.55"/><stop offset="100%" stop-color="${GREEN}" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="tgt-grad-mobile-recv" gradientUnits="userSpaceOnUse" x1="${gx1}" y1="0" x2="${gx2}" y2="0">
+      <stop offset="0%" stop-color="${FLUOR}" stop-opacity="0.55"/><stop offset="100%" stop-color="${GREEN}" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="tgt-grad-board-recv" gradientUnits="userSpaceOnUse" x1="${gx1}" y1="0" x2="${gx2}" y2="0">
+      <stop offset="0%" stop-color="${SAGE}"  stop-opacity="0.55"/><stop offset="100%" stop-color="${GREEN}" stop-opacity="0.45"/>
+    </linearGradient>
+  </defs>`;
+  const RECV_GRAD={'phone-as':'tgt-grad-phone-recv','mobile-as':'tgt-grad-mobile-recv','board-as':'tgt-grad-board-recv'};
+
+  svg+=`<text class="sankey-col-title" x="${colX.ch+NODE_W/2}" y="${PAD-8}" text-anchor="middle">인입 채널</text>`;
+  svg+=`<text class="sankey-col-title" x="${colX.out+NODE_W/2}" y="${PAD-8}" text-anchor="middle">최종 결과</text>`;
+
+  // AS 상담 그룹 브래킷 (좌측)
+  const _gsTop=chCol.find(n=>n.id==='phone-as'), _gsBot=chCol.find(n=>n.id==='board-as');
+  if(_gsTop&&_gsBot){
+    const gy1=_gsTop.y,gy2=_gsBot.y+_gsBot.h,gmid=(gy1+gy2)/2,bx=18;
+    svg+=`<line x1="${bx+10}" y1="${gy1}" x2="${bx+10}" y2="${gy2}" stroke="${INK3}" stroke-width="1.5"/>`;
+    svg+=`<line x1="${bx+10}" y1="${gy1}" x2="${bx+18}" y2="${gy1}" stroke="${INK3}" stroke-width="1.5"/>`;
+    svg+=`<line x1="${bx+10}" y1="${gy2}" x2="${bx+18}" y2="${gy2}" stroke="${INK3}" stroke-width="1.5"/>`;
+    svg+=`<text class="sankey-group-label" x="${bx}" y="${gmid}" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90,${bx},${gmid})">AS 상담</text>`;
+  }
+
+  // channel → system 링크
+  cs.forEach(l=>{
+    const c=chCol.find(n=>n.id===l.c),s=sysCol.find(n=>n.id===l.s);
+    if(!c||!s)return;
+    const isRecv=sysToOutcome[l.s]==='out-rest';
+    const stroke=isRecv?`url(#${RECV_GRAD[l.c]})`:INK;
+    svg+=`<path data-mid="cs-${l.c}-${l.s}" d="${linkPath(colX.ch+NODE_W,l._srcY,colX.sys,l._tgtY)}" fill="none" stroke="${stroke}" stroke-opacity="${isRecv?1:0.35}" stroke-width="${l._srcH}"/>`;
+  });
+  // system → outcome 링크
+  so.forEach(l=>{
+    const s=sysCol.find(n=>n.id===l.s),o=outCol.find(n=>n.id===l.o);
+    if(!s||!o)return;
+    svg+=`<path data-mid="so-${l.s}-${l.o}" d="${linkPath(colX.sys,l._srcY,colX.out,l._tgtY)}" fill="none" stroke="${l.o==='out-rest'?GREEN:INK}" stroke-opacity="0.35" stroke-width="${l._srcH}"/>`;
+  });
+  // 자사몰 직접 연결 (파란색)
+  co.forEach(l=>{
+    const c=chCol.find(n=>n.id===l.c),o=outCol.find(n=>n.id===l.o);
+    if(!c||!o)return;
+    svg+=`<path data-mid="co-${l.c}-${l.o}" d="${linkPath(colX.ch+NODE_W,l._srcY,colX.out,l._tgtY)}" fill="none" stroke="${ACCENT}" stroke-opacity="0.35" stroke-width="${l._srcH}"/>`;
+  });
+
+  // 노드 그리기
+  function drawNodes(nodes,x,anchor='start',colKey=''){
+    nodes.forEach(n=>{
+      const color=n.id==='out-rest'?GREEN:(n.id==='out-jas'?ACCENT:((n.kind==='order'||n.kind==='receive')?ACCENT:INK));
+      if(n.label!==''){
+        svg+=`<rect data-mid="node-${colKey}-${n.id}" x="${x}" y="${n.y}" width="${NODE_W}" height="${n.h}" fill="${color}" rx="2"/>`;
+        const lx=anchor==='end'?x-10:x+NODE_W+10;
+        svg+=`<text class="sankey-node-label" x="${lx}" y="${n.mid-2}" text-anchor="${anchor}" dominant-baseline="middle">${n.label}</text>`;
+        const vol=(n.vol!=null)?n.vol:(sysTotals[n.id]||outTotals[n.id]||0);
+        if(n.costPer){
+          svg+=`<text x="${lx}" y="${n.mid+14}" text-anchor="${anchor}" dominant-baseline="middle" font-family="'Pretendard Variable',Pretendard,system-ui,sans-serif" font-variant-numeric="tabular-nums"><tspan font-size="12.5" fill="var(--ink-2)">${vol.toLocaleString()}건</tspan><tspan font-size="10" fill="var(--accent)" font-weight="500"> (${n.costPer})</tspan></text>`;
+        }else{
+          svg+=`<text class="sankey-node-sub" x="${lx}" y="${n.mid+14}" text-anchor="${anchor}" dominant-baseline="middle">${vol.toLocaleString()}건</text>`;
+        }
+      }
+    });
+  }
+  drawNodes(chCol, colX.ch,  'end',   'ch');
+  drawNodes(sysCol,colX.sys, 'end',   'sys');
+  drawNodes(outCol,colX.out, 'start', 'out');
+
+  // AS 접수 등록 묶음 브래킷 (우측)
+  const _arTop=outCol.find(n=>n.id==='out-rest'),_arBot=outCol.find(n=>n.id==='out-jas');
+  if(_arTop&&_arBot){
+    const ay1=_arTop.y,ay2=_arBot.y+_arBot.h,amid=(ay1+ay2)/2,bx=colX.out+NODE_W+148;
+    svg+=`<line x1="${bx}" y1="${ay1}" x2="${bx+8}" y2="${ay1}" stroke="${INK3}" stroke-width="1.5"/>`;
+    svg+=`<line x1="${bx+8}" y1="${ay1}" x2="${bx+8}" y2="${ay2}" stroke="${INK3}" stroke-width="1.5"/>`;
+    svg+=`<line x1="${bx}" y1="${ay2}" x2="${bx+8}" y2="${ay2}" stroke="${INK3}" stroke-width="1.5"/>`;
+    svg+=`<text class="sankey-group-label" x="${bx+16}" y="${amid-6}" text-anchor="start" dominant-baseline="middle">AS 접수 등록</text>`;
+    svg+=`<text class="sankey-node-sub" x="${bx+16}" y="${amid+10}" text-anchor="start" dominant-baseline="middle">${(recvRest+recvJas).toLocaleString()}건</text>`;
+  }
+
+  svg+='</svg>';
+  host.innerHTML=svg;
 }
 
 // ---- System matrix (Tab 3) ----
@@ -5970,10 +6655,23 @@ renderContactDetail();
     btn.addEventListener('click', () => {
       sel.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      renderSankey(i);
+      window.__sankeyTarget = false;
+      morphToNewSankey(() => renderSankey(i));
     });
     sel.appendChild(btn);
   });
+  // 26년 하반기 목표 탭
+  const targetBtn = document.createElement('button');
+  targetBtn.className = 'seg-btn';
+  targetBtn.textContent = '26년 하반기 목표';
+  targetBtn.style.cssText = 'color:var(--accent);border-color:var(--accent-soft)';
+  targetBtn.addEventListener('click', () => {
+    sel.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+    targetBtn.classList.add('active');
+    window.__sankeyTarget = true;
+    morphToNewSankey(() => renderSankeyTarget());
+  });
+  sel.appendChild(targetBtn);
 })();
 renderSankey(); window.__sankeyRendered = true;
 bindChannelClicks();
@@ -6059,6 +6757,7 @@ document.querySelectorAll('.seg-btn[data-cost]').forEach(btn => {
     const active = document.getElementById('cost-' + idx);
     if (active) requestAnimationFrame(() => reflowChartsIn(active));
     if (idx === 1 && !window.__sankeyRendered) { renderSankey(); window.__sankeyRendered = true; }
+    if (idx === 2 && !window.__matrixRendered) { renderMatrix(); window.__matrixRendered = true; }
   });
 });
 
@@ -6101,7 +6800,8 @@ function rebuildAll() {
   renderSec3();
   renderTeams();
   renderChannels();
-  if (window.__sankeyRendered) renderSankey();
+  if (window.__sankeyRendered) { if (window.__sankeyTarget) renderSankeyTarget(); else renderSankey(); }
+  if (window.__matrixRendered) renderMatrix();
 
   document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s === initialActive));
   hidden.forEach(el => { el.style.display = 'none'; });
@@ -6658,8 +7358,131 @@ document.addEventListener('click', e => {
 });
 
 // ---- AS 신청 퍼널 여정 맵 ----
+function bxSwitch(i) {
+  document.querySelectorAll('.bx-tab').forEach((t, j) => t.classList.toggle('active', j === i));
+  document.querySelectorAll('.bx-panel').forEach((p, j) => p.classList.toggle('active', j === i));
+}
+
+function bxLightboxOpen(src) {
+  document.getElementById('bx-lightbox-img').src = src;
+  document.getElementById('bx-lightbox').classList.add('open');
+}
+function bxLightboxClose() {
+  document.getElementById('bx-lightbox').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') bxLightboxClose(); });
+
+// ── bx_terms 용어 비교 ──────────────────────────────────────
+let _bxTerms = [];
+
+function bxTermsInit() {
+  document.querySelectorAll('.bx-panel').forEach((panel, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'bx-terms';
+    wrap.id = `bx-terms-${i}`;
+    wrap.dataset.panel = i;
+    wrap.innerHTML = `
+      <div class="bx-terms-head">
+        <span class="bx-terms-head-label">용어 비교</span>
+        <button class="bx-terms-add-btn" onclick="bxTermsAdd(${i})">+ 행 추가</button>
+      </div>
+      <table class="bx-terms-table">
+        <thead><tr>
+          <th class="col-concept">개념</th>
+          <th class="col-sidiz">시디즈</th>
+          <th class="col-lg">LG전자</th>
+          <th class="col-samsung">삼성전자서비스</th>
+          <th class="col-apple">Apple</th>
+          <th style="width:28px"></th>
+        </tr></thead>
+        <tbody id="bx-tbody-${i}"></tbody>
+      </table>`;
+    const brands = panel.querySelector('.bx-brands');
+    if (brands) brands.after(wrap);
+  });
+}
+
+async function bxTermsLoad() {
+  const { data } = await _SB.from('bx_terms').select('*').order('created_at');
+  _bxTerms = data || [];
+  for (let i = 0; i < 7; i++) bxTermsRender(i);
+}
+
+function bxTermsRender(panel) {
+  const tbody = document.getElementById(`bx-tbody-${panel}`);
+  if (!tbody) return;
+  const rows = _bxTerms.filter(r => r.panel === panel);
+  tbody.innerHTML = '';
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="bx-terms-empty">+ 행 추가를 눌러 용어를 비교해보세요</td></tr>';
+    return;
+  }
+  rows.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.dataset.id = row.id;
+    [['concept','개념'],['sidiz','시디즈'],['lg','LG'],['samsung','삼성'],['apple','Apple']].forEach(([field, ph]) => {
+      const td = document.createElement('td');
+      td.className = field === 'concept' ? 'col-concept' : '';
+      td.contentEditable = true;
+      td.dataset.ph = ph;
+      td.textContent = row[field] || '';
+      td.addEventListener('blur', () => bxTermsSave(row.id, field, td.textContent.trim()));
+      td.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); td.blur(); } });
+      tr.appendChild(td);
+    });
+    const tdDel = document.createElement('td');
+    tdDel.className = 'col-del';
+    const btn = document.createElement('button');
+    btn.className = 'bx-terms-del-btn';
+    btn.textContent = '×';
+    btn.addEventListener('click', () => bxTermsDelete(row.id, panel));
+    tdDel.appendChild(btn);
+    tr.appendChild(tdDel);
+    tbody.appendChild(tr);
+  });
+}
+
+async function bxTermsSave(id, field, value) {
+  const { error } = await _SB.from('bx_terms').update({ [field]: value }).eq('id', id);
+  if (!error) {
+    const row = _bxTerms.find(r => r.id === id);
+    if (row) row[field] = value;
+  }
+}
+
+async function bxTermsAdd(panel) {
+  const { data } = await _SB.from('bx_terms')
+    .insert({ panel, concept: '', sidiz: '', lg: '', samsung: '', apple: '' })
+    .select().single();
+  if (data) {
+    _bxTerms.push(data);
+    bxTermsRender(panel);
+    const tbody = document.getElementById(`bx-tbody-${panel}`);
+    if (tbody) tbody.lastElementChild?.querySelector('td[contenteditable]')?.focus();
+  }
+}
+
+async function bxTermsDelete(id, panel) {
+  await _SB.from('bx_terms').delete().eq('id', id);
+  _bxTerms = _bxTerms.filter(r => r.id !== id);
+  bxTermsRender(panel);
+}
+
+function bxInitSlotNums() {
+  document.querySelectorAll('.bx-panel').forEach((panel, si) => {
+    panel.querySelectorAll('.bx-img-slot').forEach((slot, bi) => {
+      const num = document.createElement('div');
+      num.className = 'bx-slot-num';
+      num.textContent = `${si}-${bi + 1}`;
+      slot.appendChild(num);
+      const img = slot.querySelector('img');
+      if (img) img.addEventListener('click', () => bxLightboxOpen(img.src));
+    });
+  });
+}
+
 function fjToggle(idx) {
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 7; i++) {
     const d = document.getElementById('fj-detail-' + i);
     if (!d) continue;
     if (i === idx) d.classList.toggle('open');
@@ -7319,6 +8142,7 @@ window._SB = supabase.createClient(
 
 // _SB 정의 후 Supabase 데이터 로드
 loadStageInfo();
+bxTermsLoad();
 
 const MEMO_TAB_KEYS  = ['overview', 'as', 'funnel', 'cost'];
 const MEMO_TAB_NAMES = ['Overview', 'AS 조치 현황', 'AS 신청 페이지', '컨택센터 용역료'];
@@ -7423,5 +8247,6 @@ memoTextarea.addEventListener('keydown', e => {
 _loadAllMemos();
 </script>
 
+<div id="bx-lightbox" onclick="bxLightboxClose()"><img id="bx-lightbox-img" src="" alt=""></div>
 </body>
 </html>
