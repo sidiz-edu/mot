@@ -8072,26 +8072,29 @@ function initArsFlow() {
   const anchor = document.getElementById('ars-phone-anchor');
   if (!canvas || !svg || !anchor) return;
 
-  // 폰 mockup을 가로 중앙 고정
   const phoneW = anchor.offsetWidth;
   anchor.style.left = ((canvas.clientWidth - phoneW) / 2) + 'px';
 
-  const nodes = Array.from(canvas.querySelectorAll('.ars-drag-box'));
-  const nodeW = 120;
-  const nodeY = anchor.offsetTop + anchor.offsetHeight + 80;
+  const nodes  = Array.from(canvas.querySelectorAll('.ars-drag-box'));
+  const saved  = JSON.parse(localStorage.getItem('ars-flow-pos') || '{}');
+  const nodeW  = 120;
+  const nodeY  = anchor.offsetTop + anchor.offsetHeight + 80;
   const totalW = canvas.clientWidth;
-  const step = (totalW - 40) / nodes.length;
+  const step   = (totalW - 40) / nodes.length;
 
   nodes.forEach((node, i) => {
-    node.style.width  = nodeW + 'px';
-    node.style.left   = (20 + step * i + (step - nodeW) / 2) + 'px';
-    node.style.top    = nodeY + 'px';
+    node.style.width = nodeW + 'px';
+    if (saved[node.id]) {
+      node.style.left = saved[node.id].left + 'px';
+      node.style.top  = saved[node.id].top  + 'px';
+    } else {
+      node.style.left = (20 + step * i + (step - nodeW) / 2) + 'px';
+      node.style.top  = nodeY + 'px';
+    }
   });
 
   drawArsLines(svg, canvas, anchor, nodes);
-
   nodes.forEach(node => arsEnableDrag(node, () => drawArsLines(svg, canvas, anchor, nodes)));
-
   window.addEventListener('resize', () => drawArsLines(svg, canvas, anchor, nodes));
 }
 
@@ -8152,6 +8155,14 @@ function drawArsLines(svg, canvas, anchor, nodes) {
 function arsEnableDrag(el, onUpdate) {
   let ox = 0, oy = 0;
 
+  const savePos = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('ars-flow-pos') || '{}');
+      saved[el.id] = { left: el.offsetLeft, top: el.offsetTop };
+      localStorage.setItem('ars-flow-pos', JSON.stringify(saved));
+    } catch (e) {}
+  };
+
   const startDrag = (cx, cy) => {
     ox = cx - el.offsetLeft;
     oy = cy - el.offsetTop;
@@ -8162,7 +8173,7 @@ function arsEnableDrag(el, onUpdate) {
     el.style.top  = (cy - oy) + 'px';
     onUpdate();
   };
-  const endDrag = () => el.classList.remove('is-dragging');
+  const endDrag = () => { el.classList.remove('is-dragging'); savePos(); };
 
   // Mouse
   el.addEventListener('mousedown', e => {
