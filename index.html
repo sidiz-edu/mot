@@ -1572,7 +1572,7 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-phone-bar { display:flex; }
 .ars-phone-bar-chat { flex:1; background:#b0b0b0; text-align:center; padding:9px 6px; font-size:11px; color:#222; }
 .ars-phone-bar-end  { flex:1; background:#777; text-align:center; padding:9px 6px; font-size:11px; color:#fff; }
-#ars-canvas { position:relative; min-height:600px; background:var(--surface-2); border-radius:0 0 12px 12px; overflow:visible; }
+#ars-canvas { position:relative; min-height:1000px; background:var(--surface-2); border-radius:0 0 12px 12px; overflow:visible; }
 #ars-phone-anchor { position:absolute; top:24px; }
 #ars-lines { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
 .ars-drag-box { position:absolute; cursor:grab; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); user-select:none; box-shadow:0 2px 6px rgba(0,0,0,0.07); min-width:100px; }
@@ -1586,7 +1586,10 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-img-btn { flex-shrink:0; background:none; border:none; cursor:pointer; font-size:14px; padding:6px 6px 0; opacity:0.5; line-height:1; }
 .ars-img-btn:hover { opacity:1; }
 .ars-node-img { position:relative; }
-.ars-node-img img { width:100%; display:block; border-radius:0; max-height:200px; object-fit:contain; background:var(--surface-2); }
+.ars-node-img img { width:100%; display:block; border-radius:0; max-height:260px; object-fit:contain; background:var(--surface-2); cursor:zoom-in; }
+#ars-lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9900; cursor:zoom-out; align-items:center; justify-content:center; }
+#ars-lightbox.open { display:flex; }
+#ars-lightbox img { max-width:92vw; max-height:92vh; object-fit:contain; border-radius:8px; box-shadow:0 8px 40px rgba(0,0,0,0.5); }
 .ars-img-del { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.45); color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; }
 .ars-img-del:hover { background:rgba(0,0,0,0.75); }
 .ars-drag-box.drop-over { border-color:var(--accent); box-shadow:0 0 0 3px rgba(45,91,227,0.18); }
@@ -8080,6 +8083,15 @@ document.getElementById('search-input').addEventListener('input', function() {
   document.body.appendChild(fileInput);
   let targetId = null;
 
+  // 라이트박스
+  const lb = document.createElement('div');
+  lb.id = 'ars-lightbox';
+  lb.innerHTML = '<img src="" alt="확대 이미지">';
+  document.body.appendChild(lb);
+  lb.addEventListener('click', () => { lb.classList.remove('open'); lb.querySelector('img').src = ''; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { lb.classList.remove('open'); lb.querySelector('img').src = ''; } });
+  window.openLightbox = url => { lb.querySelector('img').src = url; lb.classList.add('open'); };
+
   function compress(file, cb) {
     const reader = new FileReader();
     reader.onload = e => {
@@ -8102,8 +8114,17 @@ document.getElementById('search-input').addEventListener('input', function() {
     if (!node) return;
     const area = node.querySelector('.ars-node-img');
     if (!area) return;
-    if (dataUrl) { area.querySelector('img').src = dataUrl; area.style.display = 'block'; }
-    else         { area.style.display = 'none'; area.querySelector('img').src = ''; }
+    if (dataUrl) {
+      const imgEl = area.querySelector('img');
+      imgEl.src = dataUrl;
+      area.style.display = 'block';
+      imgEl.onclick = e => { e.stopPropagation(); openLightbox(dataUrl); };
+    } else {
+      const imgEl = area.querySelector('img');
+      imgEl.onclick = null;
+      imgEl.src = '';
+      area.style.display = 'none';
+    }
   }
 
   function saveImg(nodeId, dataUrl) {
@@ -8189,7 +8210,7 @@ function initArsFlow() {
   const phoneNodes = allNodes.filter(n => n.id !== 'ars-n6');
   const n6         = document.getElementById('ars-n6');
   const saved      = JSON.parse(localStorage.getItem('ars-flow-pos') || '{}');
-  const nodeW      = 120;
+  const nodeW      = 160;
   const nodeY      = anchor.offsetTop + anchor.offsetHeight + 80;
   const totalW     = canvas.clientWidth;
   const step       = (totalW - 40) / phoneNodes.length;
@@ -8218,7 +8239,7 @@ function initArsFlow() {
         ? (parseFloat(n3.style.left) + parseFloat(n4.style.left) + nodeW) / 2 - nodeW / 2
         : totalW / 2 - nodeW / 2;
       n6.style.left = midLeft + 'px';
-      n6.style.top  = (nodeY + 160) + 'px';
+      n6.style.top  = (nodeY + 220) + 'px';
     }
   }
 
