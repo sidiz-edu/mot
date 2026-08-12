@@ -1589,6 +1589,7 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-node-img img { width:100%; display:block; border-radius:0; max-height:200px; object-fit:contain; background:var(--surface-2); }
 .ars-img-del { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.45); color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; }
 .ars-img-del:hover { background:rgba(0,0,0,0.75); }
+.ars-drag-box.drop-over { border-color:var(--accent); box-shadow:0 0 0 3px rgba(45,91,227,0.18); }
 .ars-sub-area { margin-top:10px; display:flex; flex-direction:column; gap:6px; align-items:center; width:100%; }
 .ars-sub-box { border:1px dashed var(--border); border-radius:7px; padding:6px 8px; font-size:10px; color:var(--ink-4); text-align:center; width:88%; }
 /* 채널 카드 배경 — 운영 개요 */
@@ -8148,6 +8149,17 @@ document.getElementById('search-input').addEventListener('input', function() {
       const del = area.querySelector('.ars-img-del');
       del.addEventListener('mousedown', e => e.stopPropagation());
       del.addEventListener('click',     e => { e.stopPropagation(); showImg(node.id, null); saveImg(node.id, null); });
+
+      // 파일 드래그 앤 드롭
+      node.addEventListener('dragover', e => {
+        if (e.dataTransfer.types.includes('Files')) { e.preventDefault(); node.classList.add('drop-over'); }
+      });
+      node.addEventListener('dragleave', () => node.classList.remove('drop-over'));
+      node.addEventListener('drop', e => {
+        e.preventDefault(); node.classList.remove('drop-over');
+        const f = e.dataTransfer.files[0];
+        if (f && f.type.startsWith('image/')) compress(f, url => { showImg(node.id, url); saveImg(node.id, url); });
+      });
     });
 
     // 저장된 이미지 복원
