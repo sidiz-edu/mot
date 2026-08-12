@@ -1563,8 +1563,7 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 #sec-cost .unit-price-tbl tr.is-as-row td { background: rgba(255,128,0,0.06); }
 #sec-cost .unit-price-tbl tr.is-recv-row td { background: rgba(124,58,237,0.05); }
 /* ARS 연결도 */
-.ars-flow-wrap { display:flex; flex-direction:column; align-items:center; padding:32px 16px; overflow-x:auto; }
-.ars-phone { width:256px; border-radius:18px; overflow:hidden; border:1.5px solid var(--border); background:#efefef; box-shadow:0 3px 14px rgba(0,0,0,0.10); flex-shrink:0; }
+.ars-phone { width:244px; border-radius:18px; overflow:hidden; border:1.5px solid var(--border); background:#efefef; box-shadow:0 3px 14px rgba(0,0,0,0.10); }
 .ars-phone-head { background:#fff; text-align:center; font-weight:700; font-size:15px; padding:13px; border-bottom:1px solid #e0e0e0; letter-spacing:1px; }
 .ars-phone-prompt { padding:10px 12px 8px; font-size:12px; font-weight:600; color:#111; line-height:1.5; }
 .ars-phone-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; padding:0 10px; }
@@ -1573,13 +1572,15 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-phone-bar { display:flex; }
 .ars-phone-bar-chat { flex:1; background:#b0b0b0; text-align:center; padding:9px 6px; font-size:11px; color:#222; }
 .ars-phone-bar-end  { flex:1; background:#777; text-align:center; padding:9px 6px; font-size:11px; color:#fff; }
-.ars-stem { width:2px; height:28px; background:var(--border); }
-.ars-branches-row { display:flex; gap:0; position:relative; width:100%; max-width:920px; }
-.ars-branches-row::before { content:''; position:absolute; top:0; left:calc(100%/12); right:calc(100%/12); height:2px; background:var(--border); }
-.ars-branch { display:flex; flex-direction:column; align-items:center; flex:1; }
-.ars-branch-stem { width:2px; height:26px; background:var(--border); }
-.ars-branch-box { border:1.5px solid var(--border); border-radius:9px; padding:8px 6px; text-align:center; font-size:11px; font-weight:600; color:var(--ink-2); min-width:80px; max-width:130px; width:90%; line-height:1.5; background:var(--surface); }
-.ars-branch-box.ars-ai { border-color:var(--accent); color:var(--accent); }
+#ars-canvas { position:relative; min-height:600px; background:var(--surface-2); border-radius:0 0 12px 12px; overflow:hidden; }
+#ars-phone-anchor { position:absolute; top:24px; }
+#ars-lines { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+.ars-drag-box { position:absolute; cursor:grab; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); user-select:none; box-shadow:0 2px 6px rgba(0,0,0,0.07); min-width:100px; }
+.ars-drag-box.ars-ai { border-color:var(--accent); }
+.ars-drag-box.is-dragging { cursor:grabbing; box-shadow:0 6px 20px rgba(0,0,0,0.16); z-index:20; }
+.ars-drag-label { font-size:12px; font-weight:600; color:var(--ink-2); padding:10px 14px; line-height:1.5; text-align:center; }
+.ars-drag-box.ars-ai .ars-drag-label { color:var(--accent); }
+.ars-drag-sub { font-size:10px; color:var(--ink-4); padding:5px 10px 8px; border-top:1px dashed var(--border); text-align:center; }
 .ars-sub-area { margin-top:10px; display:flex; flex-direction:column; gap:6px; align-items:center; width:100%; }
 .ars-sub-box { border:1px dashed var(--border); border-radius:7px; padding:6px 8px; font-size:10px; color:var(--ink-4); text-align:center; width:88%; }
 /* 채널 카드 배경 — 운영 개요 */
@@ -3586,78 +3587,58 @@ table.t               { font-size: 14px; }
       <div id="cost-4" style="display:none">
         <div class="card mt-16">
           <div class="card-head">
-            <div><div class="card-title">1577-5674 화면 연결도</div><div class="card-sub">SIDIZ 컨택센터 챗봇 · 버튼별 화면 흐름 — 작업 중</div></div>
+            <div><div class="card-title">1577-5674 화면 연결도</div><div class="card-sub">버튼별 화면 흐름 · 노드를 드래그하여 자유롭게 배치</div></div>
           </div>
-          <div class="ars-flow-wrap">
+          <div id="ars-canvas">
+            <!-- SVG connector lines (JS가 그림) -->
+            <svg id="ars-lines"></svg>
 
-            <!-- 메인 화면 mockup -->
-            <div class="ars-phone">
-              <div class="ars-phone-head">SIDIZ</div>
-              <div class="ars-phone-prompt">원하는 서비스를<br>선택해주세요.</div>
-              <div class="ars-phone-grid">
-                <div class="ars-phone-btn">📋 주문 조회/<br>변경/취소</div>
-                <div class="ars-phone-btn">📊 AS 조회/<br>변경/취소</div>
-                <div class="ars-phone-btn">📦 제품 문의</div>
-                <div class="ars-phone-btn">🔧 AS 신청</div>
-                <div class="ars-phone-btn">💬 기타 문의</div>
-                <div class="ars-phone-btn">🤖 대화형 AI<br>챗봇 상담</div>
-              </div>
-              <div class="ars-phone-note">3G, LTE, 5G환경에서 데이터 요금이 발생합니다.</div>
-              <div class="ars-phone-bar">
-                <div class="ars-phone-bar-chat">💬 체팅 상담</div>
-                <div class="ars-phone-bar-end">📞 통화종료</div>
-              </div>
-            </div>
-
-            <!-- 수직 연결선 -->
-            <div class="ars-stem"></div>
-
-            <!-- 6개 분기 -->
-            <div class="ars-branches-row">
-              <div class="ars-branch">
-                <div class="ars-branch-stem"></div>
-                <div class="ars-branch-box">주문 조회/<br>변경/취소</div>
-                <div class="ars-sub-area">
-                  <div class="ars-sub-box">추가 예정</div>
+            <!-- 메인화면 anchor (드래그 불가, 위치 고정) -->
+            <div id="ars-phone-anchor">
+              <div class="ars-phone">
+                <div class="ars-phone-head">SIDIZ</div>
+                <div class="ars-phone-prompt">원하는 서비스를<br>선택해주세요.</div>
+                <div class="ars-phone-grid">
+                  <div class="ars-phone-btn">📋 주문 조회/<br>변경/취소</div>
+                  <div class="ars-phone-btn">📊 AS 조회/<br>변경/취소</div>
+                  <div class="ars-phone-btn">📦 제품 문의</div>
+                  <div class="ars-phone-btn">🔧 AS 신청</div>
+                  <div class="ars-phone-btn">💬 기타 문의</div>
+                  <div class="ars-phone-btn">🤖 대화형 AI<br>챗봇 상담</div>
                 </div>
-              </div>
-              <div class="ars-branch">
-                <div class="ars-branch-stem"></div>
-                <div class="ars-branch-box">AS 조회/<br>변경/취소</div>
-                <div class="ars-sub-area">
-                  <div class="ars-sub-box">추가 예정</div>
-                </div>
-              </div>
-              <div class="ars-branch">
-                <div class="ars-branch-stem"></div>
-                <div class="ars-branch-box">제품 문의</div>
-                <div class="ars-sub-area">
-                  <div class="ars-sub-box">추가 예정</div>
-                </div>
-              </div>
-              <div class="ars-branch">
-                <div class="ars-branch-stem"></div>
-                <div class="ars-branch-box">AS 신청</div>
-                <div class="ars-sub-area">
-                  <div class="ars-sub-box">추가 예정</div>
-                </div>
-              </div>
-              <div class="ars-branch">
-                <div class="ars-branch-stem"></div>
-                <div class="ars-branch-box">기타 문의</div>
-                <div class="ars-sub-area">
-                  <div class="ars-sub-box">추가 예정</div>
-                </div>
-              </div>
-              <div class="ars-branch">
-                <div class="ars-branch-stem"></div>
-                <div class="ars-branch-box ars-ai">대화형 AI<br>챗봇 상담</div>
-                <div class="ars-sub-area">
-                  <div class="ars-sub-box">추가 예정</div>
+                <div class="ars-phone-note">3G, LTE, 5G환경에서 데이터 요금이 발생합니다.</div>
+                <div class="ars-phone-bar">
+                  <div class="ars-phone-bar-chat">💬 체팅 상담</div>
+                  <div class="ars-phone-bar-end">📞 통화종료</div>
                 </div>
               </div>
             </div>
 
+            <!-- 6개 드래그 노드 -->
+            <div class="ars-drag-box" id="ars-n0">
+              <div class="ars-drag-label">주문 조회/<br>변경/취소</div>
+              <div class="ars-drag-sub">추가 예정</div>
+            </div>
+            <div class="ars-drag-box" id="ars-n1">
+              <div class="ars-drag-label">AS 조회/<br>변경/취소</div>
+              <div class="ars-drag-sub">추가 예정</div>
+            </div>
+            <div class="ars-drag-box" id="ars-n2">
+              <div class="ars-drag-label">제품 문의</div>
+              <div class="ars-drag-sub">추가 예정</div>
+            </div>
+            <div class="ars-drag-box" id="ars-n3">
+              <div class="ars-drag-label">AS 신청</div>
+              <div class="ars-drag-sub">추가 예정</div>
+            </div>
+            <div class="ars-drag-box" id="ars-n4">
+              <div class="ars-drag-label">기타 문의</div>
+              <div class="ars-drag-sub">추가 예정</div>
+            </div>
+            <div class="ars-drag-box ars-ai" id="ars-n5">
+              <div class="ars-drag-label">대화형 AI<br>챗봇 상담</div>
+              <div class="ars-drag-sub">추가 예정</div>
+            </div>
           </div>
         </div>
       </div>
@@ -6903,6 +6884,7 @@ document.querySelectorAll('.seg-btn[data-cost]').forEach(btn => {
     if (active) requestAnimationFrame(() => reflowChartsIn(active));
     if (idx === 1 && !window.__sankeyRendered) { renderSankey(); window.__sankeyRendered = true; }
     if (idx === 2 && !window.__matrixRendered) { renderMatrix(); window.__matrixRendered = true; }
+    if (idx === 4 && !window.__arsFlowInit) { requestAnimationFrame(initArsFlow); window.__arsFlowInit = true; }
   });
 });
 
@@ -8082,6 +8064,99 @@ document.getElementById('search-input').addEventListener('input', function() {
     </div>`
   ).join('');
 });
+
+// ── ARS 연결도 드래그 ──────────────────────────────────────
+function initArsFlow() {
+  const canvas = document.getElementById('ars-canvas');
+  const svg    = document.getElementById('ars-lines');
+  const anchor = document.getElementById('ars-phone-anchor');
+  if (!canvas || !svg || !anchor) return;
+
+  // 폰 mockup을 가로 중앙 고정
+  const phoneW = anchor.offsetWidth;
+  anchor.style.left = ((canvas.clientWidth - phoneW) / 2) + 'px';
+
+  const nodes = Array.from(canvas.querySelectorAll('.ars-drag-box'));
+  const nodeW = 120;
+  const nodeY = anchor.offsetTop + anchor.offsetHeight + 80;
+  const totalW = canvas.clientWidth;
+  const step = (totalW - 40) / nodes.length;
+
+  nodes.forEach((node, i) => {
+    node.style.width  = nodeW + 'px';
+    node.style.left   = (20 + step * i + (step - nodeW) / 2) + 'px';
+    node.style.top    = nodeY + 'px';
+  });
+
+  drawArsLines(svg, canvas, anchor, nodes);
+
+  nodes.forEach(node => arsEnableDrag(node, () => drawArsLines(svg, canvas, anchor, nodes)));
+
+  window.addEventListener('resize', () => drawArsLines(svg, canvas, anchor, nodes));
+}
+
+function drawArsLines(svg, canvas, anchor, nodes) {
+  svg.innerHTML = '';
+  const cr = canvas.getBoundingClientRect();
+  const ar = anchor.getBoundingClientRect();
+  const fx = ar.left + ar.width  / 2 - cr.left;
+  const fy = ar.bottom - cr.top;
+
+  const NS = 'http://www.w3.org/2000/svg';
+  const stroke = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#d0d0d0';
+
+  nodes.forEach(node => {
+    const nr = node.getBoundingClientRect();
+    const tx = nr.left + nr.width  / 2 - cr.left;
+    const ty = nr.top  - cr.top;
+    const my = fy + (ty - fy) * 0.55;
+
+    const path = document.createElementNS(NS, 'path');
+    path.setAttribute('d', `M ${fx} ${fy} C ${fx} ${my}, ${tx} ${my}, ${tx} ${ty}`);
+    path.setAttribute('stroke', stroke);
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('fill', 'none');
+    svg.appendChild(path);
+  });
+}
+
+function arsEnableDrag(el, onUpdate) {
+  let ox = 0, oy = 0;
+
+  const startDrag = (cx, cy) => {
+    ox = cx - el.offsetLeft;
+    oy = cy - el.offsetTop;
+    el.classList.add('is-dragging');
+  };
+  const moveDrag = (cx, cy) => {
+    el.style.left = (cx - ox) + 'px';
+    el.style.top  = (cy - oy) + 'px';
+    onUpdate();
+  };
+  const endDrag = () => el.classList.remove('is-dragging');
+
+  // Mouse
+  el.addEventListener('mousedown', e => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+    const move = e => moveDrag(e.clientX, e.clientY);
+    const up   = () => { endDrag(); document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); };
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', up);
+  });
+
+  // Touch
+  el.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    startDrag(t.clientX, t.clientY);
+  }, { passive: true });
+  el.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const t = e.touches[0];
+    moveDrag(t.clientX, t.clientY);
+  }, { passive: false });
+  el.addEventListener('touchend', endDrag);
+}
 </script>
 
 <!-- =====================================================
