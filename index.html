@@ -8118,7 +8118,12 @@ document.getElementById('search-input').addEventListener('input', function() {
       const imgEl = area.querySelector('img');
       imgEl.src = dataUrl;
       area.style.display = 'block';
-      imgEl.onclick = e => { e.stopPropagation(); openLightbox(dataUrl); };
+      imgEl.onclick = e => {
+        e.stopPropagation();
+        const box = e.currentTarget.closest('.ars-drag-box');
+        if (box && box._dragMoved) return;
+        openLightbox(dataUrl);
+      };
     } else {
       const imgEl = area.querySelector('img');
       imgEl.onclick = null;
@@ -8346,14 +8351,20 @@ function arsEnableDrag(el, onUpdate) {
   const startDrag = (cx, cy) => {
     ox = cx - el.offsetLeft;
     oy = cy - el.offsetTop;
+    el._dragMoved = false;
     el.classList.add('is-dragging');
   };
   const moveDrag = (cx, cy) => {
+    el._dragMoved = true;
     el.style.left = (cx - ox) + 'px';
     el.style.top  = (cy - oy) + 'px';
     onUpdate();
   };
-  const endDrag = () => { el.classList.remove('is-dragging'); savePos(); };
+  const endDrag = () => {
+    el.classList.remove('is-dragging');
+    savePos();
+    setTimeout(() => { el._dragMoved = false; }, 100);
+  };
 
   // Mouse
   el.addEventListener('mousedown', e => {
