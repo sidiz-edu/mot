@@ -1575,6 +1575,9 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 #ars-canvas { position:relative; min-height:1000px; background:var(--surface-2); border-radius:0 0 12px 12px; overflow:visible; }
 #ars-phone-anchor { position:absolute; top:24px; cursor:grab; }
 #ars-phone-anchor.is-dragging { cursor:grabbing; }
+.ars-origin-dot { position:absolute; width:12px; height:12px; border-radius:50%; background:var(--accent); border:2px solid #fff; box-shadow:0 0 0 1.5px var(--accent); cursor:crosshair; z-index:15; transform:translate(-50%,-50%); opacity:0.85; transition:transform .15s, opacity .15s; }
+.ars-origin-dot:hover { transform:translate(-50%,-50%) scale(1.4); opacity:1; }
+.ars-origin-dot.is-dragging { transform:translate(-50%,-50%) scale(1.5); opacity:1; }
 #ars-lines { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
 .ars-drag-box { position:absolute; cursor:grab; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); user-select:none; box-shadow:0 2px 6px rgba(0,0,0,0.07); min-width:100px; }
 .ars-drag-box.ars-ai { border-color:var(--accent); }
@@ -8261,8 +8264,61 @@ function initArsFlow() {
   drawArsLines(svg, canvas, anchor, phoneNodes);
   allNodes.forEach(node => arsEnableDrag(node, redraw));
   arsEnableDrag(anchor, redraw);
+  initArsOriginDots(anchor, Array.from(anchor.querySelectorAll('.ars-phone-btn')), redraw);
   window.addEventListener('resize', () => drawArsLines(svg, canvas, anchor, phoneNodes));
   arsInitImages();
+}
+
+function initArsOriginDots(anchor, btns, redraw) {
+  const savedDots = JSON.parse(localStorage.getItem('ars-origin-dots') || '{}');
+  const ar = anchor.getBoundingClientRect();
+
+  btns.forEach((btn, i) => {
+    const id = `ars-dot-${i}`;
+    let dot = document.getElementById(id);
+    if (!dot) {
+      dot = document.createElement('div');
+      dot.id = id;
+      dot.className = 'ars-origin-dot';
+      anchor.appendChild(dot);
+    }
+
+    if (savedDots[id]) {
+      dot.style.left = savedDots[id].left + 'px';
+      dot.style.top  = savedDots[id].top  + 'px';
+    } else {
+      const br = btn.getBoundingClientRect();
+      dot.style.left = (br.left + br.width  / 2 - ar.left) + 'px';
+      dot.style.top  = (br.bottom - ar.top) + 'px';
+    }
+
+    let ox = 0, oy = 0;
+    dot.addEventListener('mousedown', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      ox = e.clientX - dot.offsetLeft;
+      oy = e.clientY - dot.offsetTop;
+      dot.classList.add('is-dragging');
+      const move = e => {
+        dot.style.left = (e.clientX - ox) + 'px';
+        dot.style.top  = (e.clientY - oy) + 'px';
+        redraw();
+      };
+      const up = () => {
+        dot.classList.remove('is-dragging');
+        try {
+          const d = JSON.parse(localStorage.getItem('ars-origin-dots') || '{}');
+          d[id] = { left: dot.offsetLeft, top: dot.offsetTop };
+          localStorage.setItem('ars-origin-dots', JSON.stringify(d));
+        } catch(e) {}
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', up);
+      };
+      document.addEventListener('mousemove', move);
+      document.addEventListener('mouseup', up);
+    });
+  });
+  redraw();
 }
 
 function drawArsLines(svg, canvas, anchor, nodes) {
@@ -8288,14 +8344,21 @@ function drawArsLines(svg, canvas, anchor, nodes) {
   svg.appendChild(defs);
 
   nodes.forEach((node, i) => {
-    const btn = btns[i];
-    if (!btn) return;
+    const dotEl = document.getElementById(`ars-dot-${i}`);
+    let fx, fy;
+    if (dotEl) {
+      const dr = dotEl.getBoundingClientRect();
+      fx = dr.left + dr.width  / 2 - cr.left;
+      fy = dr.top  + dr.height / 2 - cr.top;
+    } else {
+      const btn = btns[i];
+      if (!btn) return;
+      const br = btn.getBoundingClientRect();
+      fx = br.left + br.width / 2 - cr.left;
+      fy = br.bottom - cr.top;
+    }
 
-    const br = btn.getBoundingClientRect();
     const nr = node.getBoundingClientRect();
-
-    const fx = br.left + br.width  / 2 - cr.left;
-    const fy = br.bottom - cr.top;
     const tx = nr.left + nr.width  / 2 - cr.left;
     const ty = nr.top   - cr.top;
     const my = fy + (ty - fy) * 0.5;
@@ -8307,13 +8370,6 @@ function drawArsLines(svg, canvas, anchor, nodes) {
     path.setAttribute('fill', 'none');
     path.setAttribute('marker-end', 'url(#ars-arr)');
     svg.appendChild(path);
-
-    const dot = document.createElementNS(NS, 'circle');
-    dot.setAttribute('cx', fx);
-    dot.setAttribute('cy', fy);
-    dot.setAttribute('r', '4');
-    dot.setAttribute('fill', '#aaa');
-    svg.appendChild(dot);
   });
 
   // 추가 연결: AS 신청(n3), 기타 문의(n4) → 상담원 연결(n6)
