@@ -8097,26 +8097,55 @@ function initArsFlow() {
 
 function drawArsLines(svg, canvas, anchor, nodes) {
   svg.innerHTML = '';
-  const cr = canvas.getBoundingClientRect();
-  const ar = anchor.getBoundingClientRect();
-  const fx = ar.left + ar.width  / 2 - cr.left;
-  const fy = ar.bottom - cr.top;
-
   const NS = 'http://www.w3.org/2000/svg';
-  const stroke = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#d0d0d0';
+  const cr  = canvas.getBoundingClientRect();
+  const btns = Array.from(anchor.querySelectorAll('.ars-phone-btn'));
 
-  nodes.forEach(node => {
+  // 화살표 마커 정의
+  const defs   = document.createElementNS(NS, 'defs');
+  const marker = document.createElementNS(NS, 'marker');
+  marker.setAttribute('id', 'ars-arr');
+  marker.setAttribute('markerWidth', '7');
+  marker.setAttribute('markerHeight', '7');
+  marker.setAttribute('refX', '6');
+  marker.setAttribute('refY', '3.5');
+  marker.setAttribute('orient', 'auto');
+  const arrPath = document.createElementNS(NS, 'path');
+  arrPath.setAttribute('d', 'M0,0 L0,7 L7,3.5 z');
+  arrPath.setAttribute('fill', '#aaa');
+  marker.appendChild(arrPath);
+  defs.appendChild(marker);
+  svg.appendChild(defs);
+
+  nodes.forEach((node, i) => {
+    const btn = btns[i];
+    if (!btn) return;
+
+    const br = btn.getBoundingClientRect();
     const nr = node.getBoundingClientRect();
-    const tx = nr.left + nr.width  / 2 - cr.left;
-    const ty = nr.top  - cr.top;
-    const my = fy + (ty - fy) * 0.55;
 
+    const fx = br.left + br.width  / 2 - cr.left;
+    const fy = br.bottom - cr.top;
+    const tx = nr.left + nr.width  / 2 - cr.left;
+    const ty = nr.top   - cr.top;
+    const my = fy + (ty - fy) * 0.5;
+
+    // 연결선
     const path = document.createElementNS(NS, 'path');
     path.setAttribute('d', `M ${fx} ${fy} C ${fx} ${my}, ${tx} ${my}, ${tx} ${ty}`);
-    path.setAttribute('stroke', stroke);
-    path.setAttribute('stroke-width', '2');
+    path.setAttribute('stroke', '#aaa');
+    path.setAttribute('stroke-width', '1.8');
     path.setAttribute('fill', 'none');
+    path.setAttribute('marker-end', 'url(#ars-arr)');
     svg.appendChild(path);
+
+    // 출발점 원(어느 버튼에서 파생됐는지 명시)
+    const dot = document.createElementNS(NS, 'circle');
+    dot.setAttribute('cx', fx);
+    dot.setAttribute('cy', fy);
+    dot.setAttribute('r', '4');
+    dot.setAttribute('fill', '#aaa');
+    svg.appendChild(dot);
   });
 }
 
