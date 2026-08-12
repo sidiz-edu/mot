@@ -3642,6 +3642,11 @@ table.t               { font-size: 14px; }
             <div class="ars-drag-box ars-ai" id="ars-n5">
               <div class="ars-drag-label">대화형 AI<br>챗봇 상담</div>
             </div>
+
+            <!-- 공유 서브 노드 -->
+            <div class="ars-drag-box" id="ars-n6" style="border-style:dashed">
+              <div class="ars-drag-label">📞 상담원 연결</div>
+            </div>
           </div>
         </div>
       </div>
@@ -8174,14 +8179,16 @@ function initArsFlow() {
   const phoneW = anchor.offsetWidth;
   anchor.style.left = ((canvas.clientWidth - phoneW) / 2) + 'px';
 
-  const nodes  = Array.from(canvas.querySelectorAll('.ars-drag-box'));
-  const saved  = JSON.parse(localStorage.getItem('ars-flow-pos') || '{}');
-  const nodeW  = 120;
-  const nodeY  = anchor.offsetTop + anchor.offsetHeight + 80;
-  const totalW = canvas.clientWidth;
-  const step   = (totalW - 40) / nodes.length;
+  const allNodes   = Array.from(canvas.querySelectorAll('.ars-drag-box'));
+  const phoneNodes = allNodes.filter(n => n.id !== 'ars-n6');
+  const n6         = document.getElementById('ars-n6');
+  const saved      = JSON.parse(localStorage.getItem('ars-flow-pos') || '{}');
+  const nodeW      = 120;
+  const nodeY      = anchor.offsetTop + anchor.offsetHeight + 80;
+  const totalW     = canvas.clientWidth;
+  const step       = (totalW - 40) / phoneNodes.length;
 
-  nodes.forEach((node, i) => {
+  phoneNodes.forEach((node, i) => {
     node.style.width = nodeW + 'px';
     if (saved[node.id]) {
       node.style.left = saved[node.id].left + 'px';
@@ -8192,9 +8199,27 @@ function initArsFlow() {
     }
   });
 
-  drawArsLines(svg, canvas, anchor, nodes);
-  nodes.forEach(node => arsEnableDrag(node, () => drawArsLines(svg, canvas, anchor, nodes)));
-  window.addEventListener('resize', () => drawArsLines(svg, canvas, anchor, nodes));
+  // 상담원 연결 노드: AS 신청(n3)·기타 문의(n4) 중간 아래 초기 배치
+  if (n6) {
+    n6.style.width = nodeW + 'px';
+    if (saved['ars-n6']) {
+      n6.style.left = saved['ars-n6'].left + 'px';
+      n6.style.top  = saved['ars-n6'].top  + 'px';
+    } else {
+      const n3 = document.getElementById('ars-n3');
+      const n4 = document.getElementById('ars-n4');
+      const midLeft = n3 && n4
+        ? (parseFloat(n3.style.left) + parseFloat(n4.style.left) + nodeW) / 2 - nodeW / 2
+        : totalW / 2 - nodeW / 2;
+      n6.style.left = midLeft + 'px';
+      n6.style.top  = (nodeY + 160) + 'px';
+    }
+  }
+
+  const redraw = () => drawArsLines(svg, canvas, anchor, phoneNodes);
+  drawArsLines(svg, canvas, anchor, phoneNodes);
+  allNodes.forEach(node => arsEnableDrag(node, redraw));
+  window.addEventListener('resize', () => drawArsLines(svg, canvas, anchor, phoneNodes));
   arsInitImages();
 }
 
@@ -8233,7 +8258,6 @@ function drawArsLines(svg, canvas, anchor, nodes) {
     const ty = nr.top   - cr.top;
     const my = fy + (ty - fy) * 0.5;
 
-    // 연결선
     const path = document.createElementNS(NS, 'path');
     path.setAttribute('d', `M ${fx} ${fy} C ${fx} ${my}, ${tx} ${my}, ${tx} ${ty}`);
     path.setAttribute('stroke', '#aaa');
@@ -8242,7 +8266,6 @@ function drawArsLines(svg, canvas, anchor, nodes) {
     path.setAttribute('marker-end', 'url(#ars-arr)');
     svg.appendChild(path);
 
-    // 출발점 원(어느 버튼에서 파생됐는지 명시)
     const dot = document.createElementNS(NS, 'circle');
     dot.setAttribute('cx', fx);
     dot.setAttribute('cy', fy);
@@ -8250,6 +8273,36 @@ function drawArsLines(svg, canvas, anchor, nodes) {
     dot.setAttribute('fill', '#aaa');
     svg.appendChild(dot);
   });
+
+  // 추가 연결: AS 신청(n3), 기타 문의(n4) → 상담원 연결(n6)
+  const n6 = document.getElementById('ars-n6');
+  if (n6) {
+    const t6r = n6.getBoundingClientRect();
+    const tx6 = t6r.left + t6r.width  / 2 - cr.left;
+    const ty6 = t6r.top  - cr.top;
+    ['ars-n3','ars-n4'].forEach(fromId => {
+      const fromEl = document.getElementById(fromId);
+      if (!fromEl) return;
+      const fr  = fromEl.getBoundingClientRect();
+      const fx6 = fr.left + fr.width  / 2 - cr.left;
+      const fy6 = fr.bottom - cr.top;
+      const my6 = fy6 + (ty6 - fy6) * 0.5;
+
+      const p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', `M ${fx6} ${fy6} C ${fx6} ${my6}, ${tx6} ${my6}, ${tx6} ${ty6}`);
+      p.setAttribute('stroke', '#aaa');
+      p.setAttribute('stroke-width', '1.8');
+      p.setAttribute('stroke-dasharray', '5,3');
+      p.setAttribute('fill', 'none');
+      p.setAttribute('marker-end', 'url(#ars-arr)');
+      svg.appendChild(p);
+
+      const d = document.createElementNS(NS, 'circle');
+      d.setAttribute('cx', fx6); d.setAttribute('cy', fy6);
+      d.setAttribute('r', '4'); d.setAttribute('fill', '#aaa');
+      svg.appendChild(d);
+    });
+  }
 }
 
 function arsEnableDrag(el, onUpdate) {
