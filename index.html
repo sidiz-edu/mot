@@ -1581,6 +1581,14 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-drag-label { font-size:12px; font-weight:600; color:var(--ink-2); padding:10px 14px; line-height:1.5; text-align:center; }
 .ars-drag-box.ars-ai .ars-drag-label { color:var(--accent); }
 .ars-drag-sub { font-size:10px; color:var(--ink-4); padding:5px 10px 8px; border-top:1px dashed var(--border); text-align:center; }
+.ars-node-head { display:flex; align-items:flex-start; justify-content:space-between; gap:4px; }
+.ars-node-head .ars-drag-label { flex:1; }
+.ars-img-btn { flex-shrink:0; background:none; border:none; cursor:pointer; font-size:14px; padding:6px 6px 0; opacity:0.5; line-height:1; }
+.ars-img-btn:hover { opacity:1; }
+.ars-node-img { position:relative; }
+.ars-node-img img { width:100%; display:block; border-radius:0; max-height:200px; object-fit:contain; background:var(--surface-2); }
+.ars-img-del { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.45); color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; }
+.ars-img-del:hover { background:rgba(0,0,0,0.75); }
 .ars-sub-area { margin-top:10px; display:flex; flex-direction:column; gap:6px; align-items:center; width:100%; }
 .ars-sub-box { border:1px dashed var(--border); border-radius:7px; padding:6px 8px; font-size:10px; color:var(--ink-4); text-align:center; width:88%; }
 /* 채널 카드 배경 — 운영 개요 */
@@ -8065,6 +8073,91 @@ document.getElementById('search-input').addEventListener('input', function() {
   ).join('');
 });
 
+// ── ARS 이미지 첨부 ───────────────────────────────────────
+;(function() {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file'; fileInput.accept = 'image/*'; fileInput.style.display = 'none';
+  document.body.appendChild(fileInput);
+  let targetId = null;
+
+  function compress(file, cb) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 700;
+        const s = Math.min(1, MAX / Math.max(img.width, img.height));
+        const c = document.createElement('canvas');
+        c.width = img.width * s; c.height = img.height * s;
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        cb(c.toDataURL('image/jpeg', 0.82));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function showImg(nodeId, dataUrl) {
+    const node = document.getElementById(nodeId);
+    if (!node) return;
+    const area = node.querySelector('.ars-node-img');
+    if (!area) return;
+    if (dataUrl) { area.querySelector('img').src = dataUrl; area.style.display = 'block'; }
+    else         { area.style.display = 'none'; area.querySelector('img').src = ''; }
+  }
+
+  function saveImg(nodeId, dataUrl) {
+    try {
+      const d = JSON.parse(localStorage.getItem('ars-flow-imgs') || '{}');
+      if (dataUrl) d[nodeId] = dataUrl; else delete d[nodeId];
+      localStorage.setItem('ars-flow-imgs', JSON.stringify(d));
+    } catch(e) { alert('저장 용량이 초과됐습니다. 더 작은 이미지를 사용해주세요.'); }
+  }
+
+  fileInput.addEventListener('change', () => {
+    const f = fileInput.files[0];
+    if (!f || !targetId) return;
+    compress(f, url => { showImg(targetId, url); saveImg(targetId, url); });
+    fileInput.value = '';
+  });
+
+  window.arsInitImages = function() {
+    document.querySelectorAll('#ars-canvas .ars-drag-box').forEach(node => {
+      if (node.querySelector('.ars-img-btn')) return; // 이미 초기화됨
+
+      // 헤더 래퍼 + 카메라 버튼 주입
+      const label = node.querySelector('.ars-drag-label');
+      const head  = document.createElement('div');
+      head.className = 'ars-node-head';
+      node.insertBefore(head, label);
+      head.appendChild(label);
+      const btn = document.createElement('button');
+      btn.className = 'ars-img-btn'; btn.title = '이미지 첨부'; btn.textContent = '📷';
+      head.appendChild(btn);
+
+      // 이미지 영역 주입
+      const area = document.createElement('div');
+      area.className = 'ars-node-img'; area.style.display = 'none';
+      area.innerHTML = '<img src="" alt=""><button class="ars-img-del" title="삭제">✕</button>';
+      const sub = node.querySelector('.ars-drag-sub');
+      node.insertBefore(area, sub);
+
+      // 이벤트
+      btn.addEventListener('mousedown', e => e.stopPropagation());
+      btn.addEventListener('click',     e => { e.stopPropagation(); targetId = node.id; fileInput.click(); });
+      const del = area.querySelector('.ars-img-del');
+      del.addEventListener('mousedown', e => e.stopPropagation());
+      del.addEventListener('click',     e => { e.stopPropagation(); showImg(node.id, null); saveImg(node.id, null); });
+    });
+
+    // 저장된 이미지 복원
+    try {
+      const d = JSON.parse(localStorage.getItem('ars-flow-imgs') || '{}');
+      Object.keys(d).forEach(id => showImg(id, d[id]));
+    } catch(e) {}
+  };
+})();
+
 // ── ARS 연결도 드래그 ──────────────────────────────────────
 function initArsFlow() {
   const canvas = document.getElementById('ars-canvas');
@@ -8096,6 +8189,7 @@ function initArsFlow() {
   drawArsLines(svg, canvas, anchor, nodes);
   nodes.forEach(node => arsEnableDrag(node, () => drawArsLines(svg, canvas, anchor, nodes)));
   window.addEventListener('resize', () => drawArsLines(svg, canvas, anchor, nodes));
+  arsInitImages();
 }
 
 function drawArsLines(svg, canvas, anchor, nodes) {
