@@ -1578,7 +1578,7 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-drag-box { position:absolute; cursor:grab; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); user-select:none; box-shadow:0 2px 6px rgba(0,0,0,0.07); min-width:100px; }
 .ars-drag-box.ars-ai { border-color:var(--accent); }
 .ars-drag-box.is-dragging { cursor:grabbing; box-shadow:0 6px 20px rgba(0,0,0,0.16); z-index:20; }
-.ars-drag-label { font-size:12px; font-weight:600; color:var(--ink-2); padding:10px 14px; line-height:1.5; text-align:center; }
+.ars-drag-label { font-size:12px; font-weight:600; color:var(--ink-2); padding:10px 14px; line-height:1.5; text-align:center; white-space:nowrap; }
 .ars-drag-box.ars-ai .ars-drag-label { color:var(--accent); }
 .ars-drag-sub { font-size:10px; color:var(--ink-4); padding:5px 10px 8px; border-top:1px dashed var(--border); text-align:center; }
 .ars-node-head { display:flex; align-items:flex-start; justify-content:space-between; gap:4px; }
@@ -3628,10 +3628,10 @@ table.t               { font-size: 14px; }
 
             <!-- 6개 드래그 노드 -->
             <div class="ars-drag-box" id="ars-n0">
-              <div class="ars-drag-label" style="white-space:nowrap">주문 조회 / 변경 / 취소</div>
+              <div class="ars-drag-label">주문 조회 / 변경 / 취소</div>
             </div>
             <div class="ars-drag-box" id="ars-n1">
-              <div class="ars-drag-label">AS 조회/<br>변경/취소</div>
+              <div class="ars-drag-label">AS 조회 / 변경 / 취소</div>
             </div>
             <div class="ars-drag-box" id="ars-n2">
               <div class="ars-drag-label">제품 문의</div>
@@ -3643,7 +3643,7 @@ table.t               { font-size: 14px; }
               <div class="ars-drag-label">기타 문의</div>
             </div>
             <div class="ars-drag-box ars-ai" id="ars-n5">
-              <div class="ars-drag-label">대화형 AI<br>챗봇 상담</div>
+              <div class="ars-drag-label">대화형 AI 챗봇 상담</div>
             </div>
 
             <!-- 공유 서브 노드 -->
@@ -8221,7 +8221,6 @@ function initArsFlow() {
   const step       = (totalW - 40) / phoneNodes.length;
 
   phoneNodes.forEach((node, i) => {
-    node.style.width = nodeW + 'px';
     if (saved[node.id]) {
       node.style.left = saved[node.id].left + 'px';
       node.style.top  = saved[node.id].top  + 'px';
@@ -8233,16 +8232,16 @@ function initArsFlow() {
 
   // 상담원 연결 노드: AS 신청(n3)·기타 문의(n4) 중간 아래 초기 배치
   if (n6) {
-    n6.style.width = nodeW + 'px';
     if (saved['ars-n6']) {
       n6.style.left = saved['ars-n6'].left + 'px';
       n6.style.top  = saved['ars-n6'].top  + 'px';
     } else {
       const n3 = document.getElementById('ars-n3');
       const n4 = document.getElementById('ars-n4');
+      const n6w = n6.offsetWidth || nodeW;
       const midLeft = n3 && n4
-        ? (parseFloat(n3.style.left) + parseFloat(n4.style.left) + nodeW) / 2 - nodeW / 2
-        : totalW / 2 - nodeW / 2;
+        ? (parseFloat(n3.style.left) + parseFloat(n4.style.left) + (n3.offsetWidth || nodeW)) / 2 - n6w / 2
+        : totalW / 2 - n6w / 2;
       n6.style.left = midLeft + 'px';
       n6.style.top  = (nodeY + 220) + 'px';
     }
