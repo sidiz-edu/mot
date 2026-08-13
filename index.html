@@ -1578,6 +1578,13 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-origin-dot { position:absolute; width:12px; height:12px; border-radius:50%; background:var(--accent); border:2px solid #fff; box-shadow:0 0 0 1.5px var(--accent); cursor:crosshair; z-index:15; transform:translate(-50%,-50%); opacity:0.85; transition:transform .15s, opacity .15s; }
 .ars-origin-dot:hover { transform:translate(-50%,-50%) scale(1.4); opacity:1; }
 .ars-origin-dot.is-dragging { transform:translate(-50%,-50%) scale(1.5); opacity:1; }
+.ars-phone-cam-btn { position:absolute; top:50%; right:8px; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:13px; opacity:0.45; padding:2px; line-height:1; }
+.ars-phone-cam-btn:hover { opacity:1; }
+#ars-phone-img-wrap { display:none; position:relative; border-radius:16px; overflow:hidden; }
+#ars-phone-img-wrap img { width:100%; display:block; max-height:480px; object-fit:contain; background:#f0f0f0; cursor:zoom-in; }
+.ars-phone-img-del { position:absolute; top:6px; right:6px; background:rgba(0,0,0,0.45); color:#fff; border:none; border-radius:50%; width:22px; height:22px; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; }
+.ars-phone-img-del:hover { background:rgba(0,0,0,0.75); }
+#ars-phone-anchor.drop-active { outline:2px dashed var(--accent); outline-offset:4px; }
 #ars-lines { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
 .ars-drag-box { position:absolute; cursor:grab; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); user-select:none; box-shadow:0 2px 6px rgba(0,0,0,0.07); min-width:100px; }
 .ars-drag-box.ars-ai { border-color:var(--accent); }
@@ -8096,6 +8103,7 @@ document.getElementById('search-input').addEventListener('input', function() {
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { lb.classList.remove('open'); lb.querySelector('img').src = ''; } });
   window.openLightbox = url => { lb.querySelector('img').src = url; lb.classList.add('open'); };
 
+  window.arsCompress = compress;
   function compress(file, cb) {
     const reader = new FileReader();
     reader.onload = e => {
@@ -8265,6 +8273,7 @@ function initArsFlow() {
   allNodes.forEach(node => arsEnableDrag(node, redraw));
   arsEnableDrag(anchor, redraw);
   initArsOriginDots(anchor, Array.from(anchor.querySelectorAll('.ars-phone-btn')), redraw);
+  arsInitPhoneImage(anchor, redraw);
   window.addEventListener('resize', () => drawArsLines(svg, canvas, anchor, phoneNodes));
   arsInitImages();
 }
@@ -8319,6 +8328,84 @@ function initArsOriginDots(anchor, btns, redraw) {
     });
   });
   redraw();
+}
+
+function arsInitPhoneImage(anchor, redraw) {
+  const phone = anchor.querySelector('.ars-phone');
+  if (!phone) return;
+
+  // 📷 버튼
+  const head = phone.querySelector('.ars-phone-head');
+  head.style.position = 'relative';
+  const camBtn = document.createElement('button');
+  camBtn.className = 'ars-phone-cam-btn';
+  camBtn.title = '화면 이미지로 교체';
+  camBtn.textContent = '📷';
+  head.appendChild(camBtn);
+
+  // 이미지 래퍼 (폰 HTML 앞에 삽입)
+  const wrap = document.createElement('div');
+  wrap.id = 'ars-phone-img-wrap';
+  const imgEl = document.createElement('img');
+  imgEl.alt = '보이는 ARS 메인화면';
+  const delBtn = document.createElement('button');
+  delBtn.className = 'ars-phone-img-del';
+  delBtn.title = '이미지 삭제';
+  delBtn.textContent = '✕';
+  wrap.appendChild(imgEl);
+  wrap.appendChild(delBtn);
+  anchor.insertBefore(wrap, phone);
+
+  function show(dataUrl) {
+    if (dataUrl) {
+      imgEl.src = dataUrl;
+      wrap.style.display = 'block';
+      phone.style.display = 'none';
+    } else {
+      wrap.style.display = 'none';
+      phone.style.display = '';
+      imgEl.src = '';
+    }
+    redraw();
+  }
+
+  function save(dataUrl) {
+    try {
+      if (dataUrl) localStorage.setItem('ars-phone-img', dataUrl);
+      else localStorage.removeItem('ars-phone-img');
+    } catch(e) {}
+  }
+
+  // 저장된 이미지 복원
+  try { const s = localStorage.getItem('ars-phone-img'); if (s) show(s); } catch(e) {}
+
+  // 클릭 업로드
+  camBtn.addEventListener('mousedown', e => e.stopPropagation());
+  camBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const fi = document.createElement('input');
+    fi.type = 'file'; fi.accept = 'image/*';
+    fi.onchange = () => { const f = fi.files[0]; if (f) arsCompress(f, url => { show(url); save(url); }); };
+    fi.click();
+  });
+
+  // 삭제
+  delBtn.addEventListener('mousedown', e => e.stopPropagation());
+  delBtn.addEventListener('click', e => { e.stopPropagation(); show(null); save(null); });
+
+  // 이미지 클릭 → 라이트박스
+  imgEl.addEventListener('click', () => { if (imgEl.src) openLightbox(imgEl.src); });
+
+  // 드래그 앤 드롭
+  anchor.addEventListener('dragover', e => {
+    if (e.dataTransfer.types.includes('Files')) { e.preventDefault(); anchor.classList.add('drop-active'); }
+  });
+  anchor.addEventListener('dragleave', () => anchor.classList.remove('drop-active'));
+  anchor.addEventListener('drop', e => {
+    e.preventDefault(); anchor.classList.remove('drop-active');
+    const f = e.dataTransfer.files[0];
+    if (f && f.type.startsWith('image/')) arsCompress(f, url => { show(url); save(url); });
+  });
 }
 
 function drawArsLines(svg, canvas, anchor, nodes) {
