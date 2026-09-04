@@ -5979,11 +5979,11 @@ function renderContactDetail() {
   // 헤더
   head.innerHTML = `
     <tr>
-      <th rowspan="2" style="vertical-align:middle;text-align:center">단계</th>
-      <th rowspan="2" style="vertical-align:middle;text-align:center;width:28px">번호</th>
-      <th rowspan="2" style="min-width:160px;vertical-align:middle;text-align:center">항목</th>
-      <th rowspan="2" style="min-width:200px;vertical-align:middle;text-align:left">상세 내용</th>
-      <th rowspan="2" style="vertical-align:middle">건당 비용</th>
+      <th rowspan="2" style="position:sticky;left:0;z-index:3;background:var(--surface);width:48px;vertical-align:middle;text-align:center">단계</th>
+      <th rowspan="2" style="position:sticky;left:48px;z-index:3;background:var(--surface);width:32px;vertical-align:middle;text-align:center">번호</th>
+      <th rowspan="2" style="position:sticky;left:80px;z-index:3;background:var(--surface);width:160px;vertical-align:middle;text-align:center">항목</th>
+      <th rowspan="2" style="position:sticky;left:240px;z-index:3;background:var(--surface);width:200px;vertical-align:middle;text-align:left">상세 내용</th>
+      <th rowspan="2" style="position:sticky;left:440px;z-index:3;background:var(--surface);width:88px;vertical-align:middle">건당 비용</th>
       ${M.map(m=>`<th colspan="2" style="text-align:center">${m}</th>`).join('')}
       <th colspan="2" style="text-align:center;border-left:2px solid rgba(59,100,255,0.55)">26년 하반기 목표</th>
     </tr>
@@ -6005,7 +6005,7 @@ function renderContactDetail() {
   d.rows.forEach((row, ri) => {
     const num = ROW_NUM[ri] || '';
     if (!num) return;
-    const numTd = `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">${num}</td>`;
+    const numTd = `<td style="position:sticky;left:48px;z-index:2;background:var(--surface);text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">${num}</td>`;
 
     const ROW_BG = { 0:'rgba(144,238,144,0.22)', 2:'rgba(212,255,0,0.22)', 4:'rgba(125,155,106,0.20)', 6:'rgba(0,62,255,0.22)' };
 
@@ -6022,16 +6022,16 @@ function renderContactDetail() {
 
     const STAGE_CELL = 'text-align:center;vertical-align:middle;font-weight:700;font-size:12px;background:rgba(0,0,0,0.06)';
     const stageTd = ri === 0
-      ? `<td rowspan="4" style="${STAGE_CELL}">상담</td>`
+      ? `<td rowspan="4" style="position:sticky;left:0;z-index:2;${STAGE_CELL}">상담</td>`
       : '';
 
     const nameTd = row.isSub
-      ? `<td style="padding-left:16px;color:var(--ink-3);text-align:center;font-weight:600">${row.name}</td>`
-      : `<td style="font-weight:600;text-align:center">${row.name}</td>`;
-    const descTd = `<td style="text-align:left;color:var(--ink-2)">${row.desc}</td>`;
+      ? `<td style="position:sticky;left:80px;z-index:2;background:var(--surface);padding-left:16px;color:var(--ink-3);text-align:center;font-weight:600">${row.name}</td>`
+      : `<td style="position:sticky;left:80px;z-index:2;background:var(--surface);font-weight:600;text-align:center">${row.name}</td>`;
+    const descTd = `<td style="position:sticky;left:240px;z-index:2;background:var(--surface);text-align:left;color:var(--ink-2)">${row.desc}</td>`;
     const unitTd = row.unit
-      ? `<td class="num" style="font-weight:700">₩${row.unit.toLocaleString()}</td>`
-      : `<td></td>`;
+      ? `<td class="num" style="position:sticky;left:440px;z-index:2;background:var(--surface);font-weight:700">₩${row.unit.toLocaleString()}</td>`
+      : `<td style="position:sticky;left:440px;z-index:2;background:var(--surface)"></td>`;
     const cellsTd = row.counts.map((c,i)=>
       `<td class="num">${W(c)}</td><td class="num" style="color:var(--ink-2)">${WW(row.amounts[i])}</td>`
     ).join('') + tCellRow(ri);
@@ -6049,9 +6049,9 @@ function renderContactDetail() {
       const trSum = document.createElement('tr');
       trSum.style.cssText = 'background:var(--surface-3);font-weight:700;border-top:1px solid var(--border-strong)';
       trSum.innerHTML =
-        `<td style="text-align:center;color:var(--ink-3);font-weight:700;font-size:11px">4</td>` +
-        `<td colspan="2" style="font-weight:700">AS 상담 건 합계 <span style="font-weight:400;color:var(--ink-3);font-size:10px">(1+2+3)</span></td>` +
-        `<td></td>` +
+        `<td style="position:sticky;left:48px;z-index:2;background:var(--surface-3);text-align:center;color:var(--ink-3);font-weight:700;font-size:11px">4</td>` +
+        `<td colspan="2" style="position:sticky;left:80px;z-index:2;background:var(--surface-3);font-weight:700">AS 상담 건 합계 <span style="font-weight:400;color:var(--ink-3);font-size:10px">(1+2+3)</span></td>` +
+        `<td style="position:sticky;left:440px;z-index:2;background:var(--surface-3)"></td>` +
         sumC.map((c,i)=>
           `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--ink-2)"><b>${WW(sumA[i])}</b></td>`
         ).join('') + tCellAgg([0,2,4]);
@@ -6062,11 +6062,11 @@ function renderContactDetail() {
       const trRecv = document.createElement('tr');
       trRecv.style.cssText = 'border-top:1px dashed var(--border);background:rgba(72,180,122,0.20)';
       trRecv.innerHTML =
-        `<td rowspan="3" style="text-align:center;vertical-align:middle;font-weight:700;font-size:12px;background:rgba(0,0,0,0.06)">접수</td>` +
-        `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">5</td>` +
-        `<td style="font-weight:600;text-align:center">${recvRow.name}</td>` +
-        `<td style="text-align:left;color:var(--ink-2)">${recvRow.desc}</td>` +
-        `<td class="num" style="font-weight:700">₩${recvRow.unit.toLocaleString()}</td>` +
+        `<td rowspan="3" style="position:sticky;left:0;z-index:2;text-align:center;vertical-align:middle;font-weight:700;font-size:12px;background:rgba(0,0,0,0.06)">접수</td>` +
+        `<td style="position:sticky;left:48px;z-index:2;background:var(--surface);text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">5</td>` +
+        `<td style="position:sticky;left:80px;z-index:2;background:var(--surface);font-weight:600;text-align:center">${recvRow.name}</td>` +
+        `<td style="position:sticky;left:240px;z-index:2;background:var(--surface);text-align:left;color:var(--ink-2)">${recvRow.desc}</td>` +
+        `<td class="num" style="position:sticky;left:440px;z-index:2;background:var(--surface);font-weight:700">₩${recvRow.unit.toLocaleString()}</td>` +
         recvRow.counts.map((c,i)=>
           `<td class="num">${W(c)}</td><td class="num" style="color:var(--ink-2)">${WW(recvRow.amounts[i])}</td>`
         ).join('') + tCellRow(5);
@@ -6083,9 +6083,9 @@ function renderContactDetail() {
   const trRecvSum = document.createElement('tr');
   trRecvSum.style.cssText = 'background:var(--surface-3);font-weight:700;border-top:1px solid var(--border-strong)';
   trRecvSum.innerHTML =
-    `<td style="text-align:center;color:var(--ink-3);font-weight:700;font-size:11px">7</td>` +
-    `<td colspan="2" style="font-weight:700">AS 접수 건 합계 <span style="font-weight:400;color:var(--ink-3);font-size:10px">(5+6)</span></td>` +
-    `<td></td>` +
+    `<td style="position:sticky;left:48px;z-index:2;background:var(--surface-3);text-align:center;color:var(--ink-3);font-weight:700;font-size:11px">7</td>` +
+    `<td colspan="2" style="position:sticky;left:80px;z-index:2;background:var(--surface-3);font-weight:700">AS 접수 건 합계 <span style="font-weight:400;color:var(--ink-3);font-size:10px">(5+6)</span></td>` +
+    `<td style="position:sticky;left:440px;z-index:2;background:var(--surface-3)"></td>` +
     recvC.map((c, i) =>
       `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--ink-2)"><b>${WW(recvA[i])}</b></td>`
     ).join('') + tCellAgg([5,6]);
@@ -6100,11 +6100,11 @@ function renderContactDetail() {
   const trTot = document.createElement('tr');
   trTot.style.cssText = 'background:rgba(0,0,0,0.06);font-weight:700;border-top:2px solid var(--border-strong)';
   trTot.innerHTML =
-    `<td style="text-align:center;vertical-align:middle;font-weight:700;font-size:12px;background:rgba(0,0,0,0.10)">종합</td>` +
-    `<td style="text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">8</td>` +
-    `<td style="font-weight:600;text-align:center">총합계</td>` +
-    `<td style="text-align:left;color:var(--ink-2)">AS 상담 + AS 접수 총 합계 (4+7)</td>` +
-    `<td></td>` +
+    `<td style="position:sticky;left:0;z-index:2;text-align:center;vertical-align:middle;font-weight:700;font-size:12px;background:rgba(0,0,0,0.10)">종합</td>` +
+    `<td style="position:sticky;left:48px;z-index:2;background:rgba(0,0,0,0.06);text-align:center;color:var(--ink-4);font-weight:700;font-size:11px">8</td>` +
+    `<td style="position:sticky;left:80px;z-index:2;background:rgba(0,0,0,0.06);font-weight:600;text-align:center">총합계</td>` +
+    `<td style="position:sticky;left:240px;z-index:2;background:rgba(0,0,0,0.06);text-align:left;color:var(--ink-2)">AS 상담 + AS 접수 총 합계 (4+7)</td>` +
+    `<td style="position:sticky;left:440px;z-index:2;background:rgba(0,0,0,0.06)"></td>` +
     totC.map((c, i) =>
       `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--ink-2)"><b>${WW(totA[i])}</b></td>`
     ).join('') + tCellAgg([0,2,4,5,6]);
