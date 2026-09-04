@@ -3757,7 +3757,8 @@ const DATA = {
     "2026-04",
     "2026-05",
     "2026-06",
-    "2026-07"
+    "2026-07",
+    "2026-08"
   ],
   "natCount": [
     1482,
@@ -3774,7 +3775,8 @@ const DATA = {
     1464,
     1326,
     1423,
-    1560
+    1560,
+    1510
   ],
   "natClose": [
     76.2,
@@ -3791,7 +3793,8 @@ const DATA = {
     79.4,
     79.8,
     81.3,
-    82.2
+    82.2,
+    82.8
   ],
   "natN": [
     23.8,
@@ -3808,7 +3811,8 @@ const DATA = {
     20.6,
     20.2,
     18.7,
-    17.8
+    17.8,
+    17.2
   ],
   "natDays": [
     8.52,
@@ -3825,7 +3829,8 @@ const DATA = {
     5.95,
     6.59,
     6.24,
-    6.47
+    6.47,
+    6.34
   ],
   "nat2nd": [
     18.4,
@@ -3842,7 +3847,8 @@ const DATA = {
     16.4,
     17.2,
     16.0,
-    15.1
+    15.1,
+    14.6
   ],
   "nat3rd": [
     3.9,
@@ -3859,7 +3865,8 @@ const DATA = {
     3.6,
     2.6,
     1.8,
-    1.8
+    1.8,
+    2.0
   ],
   "seCount": [
     982,
@@ -4658,7 +4665,7 @@ const DATA = {
         1326,
         1423,
         1560,
-        null,
+        1510,
         null,
         null,
         null,
@@ -4688,7 +4695,7 @@ const DATA = {
         79.8,
         81.3,
         82.2,
-        null,
+        82.8,
         null,
         null,
         null,
@@ -4718,7 +4725,7 @@ const DATA = {
         20.2,
         18.7,
         17.8,
-        null,
+        17.2,
         null,
         null,
         null,
@@ -4748,7 +4755,7 @@ const DATA = {
         6.59,
         6.24,
         6.47,
-        null,
+        6.34,
         null,
         null,
         null,
@@ -4923,10 +4930,10 @@ const CHANNELS = [
 ];
 
 const KPIS = [
-  {label: "전국 조치 건수",       value: 1560,  unit: "건",  trend: 9.6,    dir: "up",   comp: "전월 대비",                   series: DATA.natCount,  cls: "is-pos"},
-  {label: "전국 1차 종결률",      value: 82.2,  unit: "%",   trend: 0.9,    dir: "up",   comp: "전월 대비",                   series: DATA.natClose,  cls: "is-pos"},
-  {label: "전국 N차율",           value: 17.8,  unit: "%",   trend: -0.9,   dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.natN,      cls: "is-pos"},
-  {label: "전국 평균 조치기간",   value: 6.47,  unit: "일",  trend: 3.7,    dir: "down", comp: "전월 대비 (낮을수록 좋음)", series: DATA.natDays,  cls: "is-pos"},
+  {label: "전국 조치 건수",       value: 1510,  unit: "건",  trend: -3.2,   dir: "down", comp: "전월 대비",                   series: DATA.natCount,  cls: ""},
+  {label: "전국 1차 종결률",      value: 82.8,  unit: "%",   trend: 0.6,    dir: "up",   comp: "전월 대비",                   series: DATA.natClose,  cls: "is-pos"},
+  {label: "전국 N차율",           value: 17.2,  unit: "%",   trend: -0.6,   dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.natN,      cls: "is-pos"},
+  {label: "전국 평균 조치기간",   value: 6.34,  unit: "일",  trend: -2.0,   dir: "down", comp: "전월 대비 (낮을수록 좋음)", series: DATA.natDays,  cls: "is-pos"},
   {label: "서울경인 조치 건수",   value: 737,  unit: "건",  trend: 16.2,   dir: "down", comp: "전월 대비",                   series: DATA.seCount,   cls: ""},
   {label: "서울경인 1차 종결률",  value: 79.8, unit: "%",   trend: -1.9,  dir: "up",   comp: "전월 대비",                   series: DATA.seClose,   cls: "is-pos"},
   {label: "서울경인 N차율",       value: 20.2, unit: "%",   trend: 1.9,   dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.seN,       cls: "is-pos"},
