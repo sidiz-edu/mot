@@ -2758,7 +2758,52 @@ table.t               { font-size: 14px; }
         </div>
       </div>
 
+      <!-- 월별 데이터 입력 프롬프트 -->
+      <details class="prompt-box" style="margin:0 0 20px;border:1px solid rgba(47,140,90,0.3);border-radius:10px;background:rgba(47,140,90,0.04);">
+        <summary style="cursor:pointer;padding:10px 16px;font-size:13px;font-weight:600;color:#1A5E3A;display:flex;align-items:center;gap:8px;list-style:none;user-select:none;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          월별 데이터 업데이트 프롬프트 (Claude에 복붙)
+        </summary>
+        <div style="padding:0 16px 14px;position:relative;">
+          <button onclick="(function(b){var t=b.closest('details').querySelector('pre');navigator.clipboard.writeText(t.textContent);b.textContent='✓ 복사됨';setTimeout(()=>b.textContent='복사',1500)})(this)" style="position:absolute;right:20px;top:6px;font-size:11px;padding:3px 10px;border:1px solid rgba(47,140,90,0.4);border-radius:5px;background:rgba(47,140,90,0.08);color:#1A5E3A;cursor:pointer;">복사</button>
+          <pre style="margin:8px 0 0;padding:12px 14px;background:var(--surface-2,#f5f5f5);border-radius:7px;font-size:11.5px;line-height:1.7;white-space:pre-wrap;word-break:break-all;color:var(--text);">@파일경로/AS 데이터_26년 X월.xls
 
+아래 기준으로 현황_AS 월별 결과를 뽑아줘.
+
+■ 파일 구조
+- header=0 (1행이 헤더)
+- 접수번호: col '접수번호', 순번: col '순번'
+- 접수일자: col '접수일자', 최종조치일: col '최종조치일'
+- 서비스팀: col '서비스팀', 조치요구내역: col '조치요구내역'
+
+■ 납기 계산
+NETWORKDAYS.INTL(접수일자+1, 최종조치일, "0000001") + 한국 공휴일 제외
+(일요일 + 공휴일만 제외, 토요일은 근무일로 계산)
+
+■ 접수여부 분류
+- 제외: 서비스팀에 [바로스(정상), !바로스(정상), 비용정산, 비용정산팀, 소파11김영현, !고객취소, 매출발행용(대전), 수출AS, 자재신청] 포함
+       OR 조치요구내역에 '고객취소' 포함
+- 택배: 서비스팀에 '택배' 포함
+- 진행: 그 외
+
+■ A~M 산출 기준 (조치월 = TEXT(최종조치일, "YYYY-MM"))
+
+A. 조치월
+B. 진행건수        = 접수여부='진행'인 유니크 접수번호 수
+C. 1차 종결 건수   = B - N차건수
+D. 1차 종결건 비율 = C/B
+E. 2차 종결 건수   = 순번>=2인 유니크 접수번호 수 - 순번>=3인 유니크 접수번호 수
+F. 2차 종결건 비율 = E/B
+G. 3차 종결 건수   = 순번>=3인 유니크 접수번호 수 - 순번>=4인 유니크 접수번호 수
+H. 3차 종결건 비율 = G/B
+I. 4차 이상 건수   = 순번>=4인 유니크 접수번호 수
+J. 4차 이상 비율   = I/B
+K. N차 건수        = E+G+I
+L. N차율           = K/B
+M. 평균 조치기간   = 접수여부 구분 없이 전체 행 중 납기>0인 행의 납기 평균
+                    (진행/택배/제외 모두 포함, 납기=0 제외)</pre>
+        </div>
+      </details>
 
       <!-- charts: view 0 (전국) -->
       <div id="view-0">
