@@ -2805,6 +2805,40 @@ M. 평균 조치기간   = 접수여부 구분 없이 전체 행 중 납기>0인
         </div>
       </details>
 
+      <details class="prompt-box" style="margin:0 0 20px;border:1px solid rgba(47,140,90,0.3);border-radius:10px;background:rgba(47,140,90,0.04);">
+        <summary style="cursor:pointer;padding:10px 16px;font-size:13px;font-weight:600;color:#1A5E3A;display:flex;align-items:center;gap:8px;list-style:none;user-select:none;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          서울경인 데이터 업데이트 프롬프트 (Claude에 복붙)
+        </summary>
+        <div style="padding:0 16px 14px;position:relative;">
+          <button onclick="(function(b){var t=b.closest('details').querySelector('pre');navigator.clipboard.writeText(t.textContent);b.textContent='✓ 복사됨';setTimeout(()=>b.textContent='복사',1500)})(this)" style="position:absolute;right:20px;top:6px;font-size:11px;padding:3px 10px;border:1px solid rgba(47,140,90,0.4);border-radius:5px;background:rgba(47,140,90,0.08);color:#1A5E3A;cursor:pointer;">복사</button>
+          <pre style="margin:8px 0 0;padding:12px 14px;background:var(--surface-2,#f5f5f5);border-radius:7px;font-size:11.5px;line-height:1.7;white-space:pre-wrap;word-break:break-all;color:var(--text);">@H:\내 드라이브\5. MOT (AS)\데이터 관리 _ AS 전담팀 (AS 엔지니어 팀)\엔지니어팀 건수정리(25년 5월~ 26년 X월).xls
+
+이 파일의 최신 월(26년 X월) 시트를 분석해서 아래 지표를 뽑아줘.
+
+■ 파일 구조
+- 월별 시트 구조 (시트명: '26년 X월' 형식)
+- 컬럼: 접수번호, 순번, 접수점검일, 최종조치일, 서비스팀
+- 전체 행 = 출고완료 (접수여부 구분 없이 모두 포함)
+
+■ 납기 계산
+NETWORKDAYS.INTL(접수점검일+1, 최종조치일, "0000001") + 한국 공휴일 제외
+(일요일 + 공휴일만 제외, 토요일은 근무일로 계산)
+
+■ 산출 기준
+
+B. 진행건수       = 고유 접수번호 수
+K. N차 건수       = 순번>=2인 고유 접수번호 수
+L. N차율          = K/B
+C. 1차 종결건수   = B - K
+D. 1차 종결율     = C/B
+M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제외)
+엔지니어 비율     = 서비스팀에 (S) 패턴이 포함된 고유 접수번호 / B
+시공팀 비율       = 서비스팀에 (S) 패턴이 없는 고유 접수번호 / B
+                   (한 건이 두 팀에 모두 해당될 수 있어 합계가 100% 초과 가능)</pre>
+        </div>
+      </details>
+
       <!-- charts: view 0 (전국) -->
       <div id="view-0">
         <div class="grid-2">
