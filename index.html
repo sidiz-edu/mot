@@ -2745,7 +2745,7 @@ table.t               { font-size: 14px; }
     <section class="page section" id="sec-as" data-screen-label="01 AS 조치 현황">
       <div class="page-head">
         <div class="page-h-left">
-          <div class="page-eyebrow">Operations · Jun 2026</div>
+          <div class="page-eyebrow">Operations · Aug 2026</div>
           <h1 class="page-title">시디즈 AS 조치 현황</h1>
           <div class="page-sub">전국 / 서울경인 조치 건수, 1차 종결률, N차율, 평균 조치기간 — 월별 추이 및 년도별 동월 비교</div>
         </div>
@@ -3017,7 +3017,8 @@ M. 평균 조치기간   = 접수여부 구분 없이 전체 행 중 납기>0인
                 <tr><td>2026-04</td><td>736</td><td>155</td><td>21.1%</td><td>581</td><td>78.9%</td><td>5.89일</td><td>82.3%</td><td>20.7%</td></tr>
                 <tr><td>2026-05</td><td>634</td><td>116</td><td>18.3%</td><td>518</td><td>81.7%</td><td>6.22일</td><td>81.9%</td><td>20.3%</td></tr>
                 <tr><td>2026-06</td><td>737</td><td>149</td><td>20.2%</td><td>588</td><td>79.8%</td><td>6.25일</td><td>86.6%</td><td>16.3%</td></tr>
-                <tr><td>2026-07</td><td>589</td><td>125</td><td>21.2%</td><td>464</td><td>78.8%</td><td>7.00일</td><td>—</td><td>—</td></tr>
+                <tr><td>2026-07</td><td>810</td><td>160</td><td>19.8%</td><td>650</td><td>80.2%</td><td>6.63일</td><td>84.0%</td><td>17.4%</td></tr>
+                <tr><td>2026-08</td><td>781</td><td>138</td><td>17.7%</td><td>643</td><td>82.3%</td><td>6.46일</td><td>83.0%</td><td>18.7%</td></tr>
               </tbody>
             </table>
           </div>
@@ -3929,7 +3930,8 @@ const DATA = {
     736,
     634,
     737,
-    589
+    810,
+    781
   ],
   "seClose": [
     75.6,
@@ -3946,7 +3948,8 @@ const DATA = {
     78.9,
     81.7,
     79.8,
-    78.8
+    80.2,
+    82.3
   ],
   "seN": [
     24.4,
@@ -3963,7 +3966,8 @@ const DATA = {
     21.1,
     18.3,
     20.2,
-    21.2
+    19.8,
+    17.7
   ],
   "seDays": [
     9.06,
@@ -3980,7 +3984,8 @@ const DATA = {
     5.89,
     6.22,
     6.25,
-    7.00
+    6.63,
+    6.46
   ],
   "seEng": [
     70.5,
@@ -3997,7 +4002,8 @@ const DATA = {
     82.3,
     81.9,
     86.6,
-    null
+    84.0,
+    83.0
   ],
   "seSig": [
     33.9,
@@ -4014,7 +4020,8 @@ const DATA = {
     20.7,
     20.3,
     16.3,
-    null
+    17.4,
+    18.7
   ],
   "contactMonths": ["25.1월","25.2월","25.3월","25.4월","25.5월","25.6월","25.7월","25.8월","25.9월","25.10월","25.11월","25.12월","26.1월","26.2월","26.3월","26.4월","26.5월","26.6월","26.7월","26.8월"],
   "workingDays": [18,20,20,22,20,19,23,20,22,18,20,22,21,17,21,20,20,22,23,20],
@@ -4980,10 +4987,10 @@ const KPIS = [
   {label: "전국 1차 종결률",      value: 82.8,  unit: "%",   trend: 0.6,    dir: "up",   comp: "전월 대비",                   series: DATA.natClose,  cls: "is-pos"},
   {label: "전국 N차율",           value: 17.2,  unit: "%",   trend: -0.6,   dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.natN,      cls: "is-pos"},
   {label: "전국 평균 조치기간",   value: 6.34,  unit: "일",  trend: -2.0,   dir: "down", comp: "전월 대비 (낮을수록 좋음)", series: DATA.natDays,  cls: "is-pos"},
-  {label: "서울경인 조치 건수",   value: 737,  unit: "건",  trend: 16.2,   dir: "down", comp: "전월 대비",                   series: DATA.seCount,   cls: ""},
-  {label: "서울경인 1차 종결률",  value: 79.8, unit: "%",   trend: -1.9,  dir: "up",   comp: "전월 대비",                   series: DATA.seClose,   cls: "is-pos"},
-  {label: "서울경인 N차율",       value: 20.2, unit: "%",   trend: 1.9,   dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.seN,       cls: "is-pos"},
-  {label: "서울경인 평균 조치",   value: 6.25, unit: "일",  trend: 0.03,  dir: "down", comp: "전월 대비 (낮을수록 좋음)", series: DATA.seDays, cls: ""},
+  {label: "서울경인 조치 건수",   value: 781,  unit: "건",  trend: -3.6,   dir: "down", comp: "전월 대비",                   series: DATA.seCount,   cls: ""},
+  {label: "서울경인 1차 종결률",  value: 82.3, unit: "%",   trend: 2.1,   dir: "up",   comp: "전월 대비",                   series: DATA.seClose,   cls: "is-pos"},
+  {label: "서울경인 N차율",       value: 17.7, unit: "%",   trend: -2.1,  dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.seN,       cls: "is-pos"},
+  {label: "서울경인 평균 조치",   value: 6.46, unit: "일",  trend: -0.17, dir: "down", comp: "전월 대비 (낮을수록 좋음)", series: DATA.seDays, cls: ""},
 ];
 </script>
 
