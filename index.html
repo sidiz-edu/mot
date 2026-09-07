@@ -2754,6 +2754,7 @@ table.t               { font-size: 14px; }
           <button class="seg-btn" data-cmp="1">서울경인</button>
           <button class="seg-btn" data-cmp="2">전국 vs 서울경인</button>
           <button class="seg-btn" data-cmp="3">년도별 동월 비교</button>
+          <button class="seg-btn" data-cmp="5">기타지역</button>
           <button class="seg-btn" data-cmp="4">원본 데이터</button>
         </div>
       </div>
@@ -2986,6 +2987,38 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
           <div class="card">
             <div class="card-head"><div><div class="card-title">평균 조치기간 · 년도별</div><div class="card-sub">년도별 동월 비교</div></div></div>
             <div class="chart-box"><canvas id="c_yoy_days"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- charts: view 5 (기타지역) -->
+      <div id="view-5" style="display:none">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><div><div class="card-title">월별 조치 건수</div><div class="card-sub">기타지역 (전국 − 서울경인) · 조치일 기준</div></div><span class="tag">최근 16개월</span></div>
+            <div class="chart-box"><canvas id="c_ot_count"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div><div class="card-title">1차 종결률</div><div class="card-sub">기타지역</div></div><span class="tag up">목표 ↑</span></div>
+            <div class="chart-box"><canvas id="c_ot_close"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div><div class="card-title">N차율 (재방문율)</div><div class="card-sub">기타지역</div></div><span class="tag down">목표 ↓</span></div>
+            <div class="chart-box"><canvas id="c_ot_n"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div><div class="card-title">평균 조치기간</div><div class="card-sub">기타지역 · 영업일 · 추정값</div></div><span class="tag down">목표 ↓</span></div>
+            <div class="chart-box"><canvas id="c_ot_days"></canvas></div>
+          </div>
+        </div>
+        <div class="note" style="margin-top:16px">
+          <div class="note-ic">i</div>
+          <div class="note-body">
+            <div class="note-title">기타지역 산출 방식</div>
+            <dl>
+              <dt>진행건수 · N차율 · 1차종결율</dt><dd>전국 − 서울경인 역산 (정확값)</dd>
+              <dt>평균 조치기간</dt><dd>가중평균 추정값 — <code>(전국평균×전국건수 − 서울경인평균×서울경인건수) / 기타건수</code> — 실제 행수 기준이 아닌 건수 기반 근사치</dd>
+            </dl>
           </div>
         </div>
       </div>
@@ -4057,6 +4090,10 @@ const DATA = {
     17.4,
     18.7
   ],
+  "otCount": [500,500,578,560,560,450,488,774,766,404,852,728,692,686,750,729],
+  "otN":     [22.6,20.2,19.6,24.1,22.1,19.8,25.0,25.3,24.7,22.0,22.2,20.2,19.1,19.1,22.4,16.7],
+  "otClose": [77.4,79.8,80.4,75.9,77.9,80.2,75.0,74.7,75.3,78.0,77.8,79.8,80.9,80.9,77.6,83.3],
+  "otDays":  [8.76,7.59,8.44,8.15,7.55,8.58,7.3,5.8,6.22,6.28,5.91,5.99,6.55,6.64,6.75,6.21],
   "contactMonths": ["25.1월","25.2월","25.3월","25.4월","25.5월","25.6월","25.7월","25.8월","25.9월","25.10월","25.11월","25.12월","26.1월","26.2월","26.3월","26.4월","26.5월","26.6월","26.7월","26.8월"],
   "workingDays": [18,20,20,22,20,19,23,20,22,18,20,22,21,17,21,20,20,22,23,20],
   "contact": [
@@ -5759,6 +5796,12 @@ function renderSec1() {
     ], DATA.natMonths, true);
   }
 
+  // 기타지역 (전국 − 서울경인)
+  makeBar  ('c_ot_count', '#6B8E6B',   DATA.otCount, DATA.natMonths, false, '조치 건수');
+  makeLine ('c_ot_close', '#2E5E2E',   DATA.otClose, DATA.natMonths, true,  '1차 종결률');
+  makeLine ('c_ot_n',     '#8FBC8F',   DATA.otN,     DATA.natMonths, true,  'N차율');
+  makeLine ('c_ot_days',  '#4A7A4A',   DATA.otDays,  DATA.natMonths, false, '평균 조치 (일) — 추정값');
+
   // 전국 vs 서울경인
   makeMultiLine('c_cmp_count', [
     {label: '전국',     color: '#073D20', data: DATA.natCount, fill: false},
@@ -6995,7 +7038,7 @@ document.querySelectorAll('.seg-btn[data-cmp]').forEach(btn => {
   btn.addEventListener('click', () => {
     const idx = +btn.dataset.cmp;
     document.querySelectorAll('.seg-btn[data-cmp]').forEach(b => b.classList.toggle('active', b===btn));
-    ['view-0','view-1','view-2','view-3','view-4'].forEach((id, i) => {
+    ['view-0','view-1','view-2','view-3','view-4','view-5'].forEach((id, i) => {
       const el = document.getElementById(id);
       if (el) el.style.display = i===idx ? 'block' : 'none';
     });
