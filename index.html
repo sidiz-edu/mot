@@ -7279,6 +7279,7 @@ function saveTasksNow(stage, sectionEl, fieldName) {
 }
 
 function openTaskEditor(stage, fieldName, sectionEl, btnEl) {
+  if (!sectionEl) { console.error('openTaskEditor: sectionEl is null for', stage, fieldName); return; }
   fieldName = fieldName || 'doing';
   const list = sectionEl.querySelector('.mot-task-list');
   const isEditing = sectionEl.classList.contains('task-editing-mode');
@@ -7496,7 +7497,7 @@ function renderStageCard(el, row) {
       <div class="mot-task-sec-hd routine">
         <span class="mot-task-sec-badge">Routine</span>
         <span class="mot-task-sec-name">정기 운영</span>
-        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', 'doing', document.getElementById('task-section-${stage}'), this)" title="편집">${PENCIL}</button>
+        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', 'doing', this.closest('.mot-stage-section'), this)" title="편집">${PENCIL}</button>
       </div>
       ${taskListHtml(doing)}
     </div>
@@ -7504,7 +7505,7 @@ function renderStageCard(el, row) {
       <div class="mot-task-sec-hd active">
         <span class="mot-task-sec-badge">Active</span>
         <span class="mot-task-sec-name">프로젝트 진행</span>
-        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', 'project', document.getElementById('project-section-${stage}'), this)" title="편집">${PENCIL}</button>
+        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', 'project', this.closest('.mot-stage-section'), this)" title="편집">${PENCIL}</button>
       </div>
       ${taskListHtml(project)}
     </div>
@@ -7512,7 +7513,7 @@ function renderStageCard(el, row) {
       <div class="mot-task-sec-hd planned">
         <span class="mot-task-sec-badge">Planned</span>
         <span class="mot-task-sec-name">프로젝트 예정</span>
-        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', 'todo', document.getElementById('todo-section-${stage}'), this)" title="편집">${PENCIL}</button>
+        <button class="mot-task-edit-btn" onclick="openTaskEditor('${stage}', 'todo', this.closest('.mot-stage-section'), this)" title="편집">${PENCIL}</button>
       </div>
       ${taskListHtml(todo)}
     </div>
