@@ -1594,8 +1594,8 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-drag-sub { font-size:10px; color:var(--ink-4); padding:5px 10px 8px; border-top:1px dashed var(--border); text-align:center; }
 .ars-node-head { display:flex; align-items:flex-start; justify-content:space-between; gap:4px; }
 .ars-node-head .ars-drag-label { flex:1; }
-.ars-img-btn { flex-shrink:0; background:none; border:none; cursor:pointer; font-size:14px; padding:6px 6px 0; opacity:0.5; line-height:1; }
-.ars-img-btn:hover { opacity:1; }
+.ars-img-btn { flex-shrink:0; background:var(--surface-2); border:1px solid var(--border); border-radius:5px; cursor:pointer; font-size:12px; padding:3px 6px; line-height:1; color:var(--ink-3); white-space:nowrap; }
+.ars-img-btn:hover { background:var(--surface-3); color:var(--ink); }
 .ars-node-img { position:relative; }
 .ars-node-img img { width:100%; display:block; border-radius:0; max-height:260px; object-fit:contain; background:var(--surface-2); cursor:zoom-in; }
 #ars-lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9900; cursor:zoom-out; align-items:center; justify-content:center; }
@@ -8408,7 +8408,7 @@ document.getElementById('search-input').addEventListener('input', function() {
       node.insertBefore(head, label);
       head.appendChild(label);
       const btn = document.createElement('button');
-      btn.className = 'ars-img-btn'; btn.title = '이미지 첨부'; btn.textContent = '📷';
+      btn.className = 'ars-img-btn'; btn.title = '이미지 첨부'; btn.textContent = '📷 사진';
       head.appendChild(btn);
 
       // 이미지 영역 주입
