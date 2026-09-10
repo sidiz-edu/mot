@@ -8406,26 +8406,31 @@ document.getElementById('search-input').addEventListener('input', function() {
 
   window.arsInitImages = function() {
     document.querySelectorAll('#ars-canvas .ars-drag-box').forEach(node => {
-      if (node.querySelector('.ars-img-btn')) return; // 이미 초기화됨
+      if (node.dataset.arsReady) return; // 이미 초기화됨
+      node.dataset.arsReady = '1';
 
-      // 헤더 래퍼 + 카메라 버튼 주입
-      const label = node.querySelector('.ars-drag-label');
-      const head  = document.createElement('div');
-      head.className = 'ars-node-head';
-      node.insertBefore(head, label);
-      head.appendChild(label);
-      const btn = document.createElement('button');
-      btn.className = 'ars-img-btn'; btn.title = '이미지 첨부'; btn.textContent = '📷 사진';
-      head.appendChild(btn);
+      // 버튼/영역이 HTML에 없으면 동적 생성
+      if (!node.querySelector('.ars-img-btn')) {
+        const label = node.querySelector('.ars-drag-label');
+        const head  = document.createElement('div');
+        head.className = 'ars-node-head';
+        node.insertBefore(head, label);
+        head.appendChild(label);
+        const btn = document.createElement('button');
+        btn.className = 'ars-img-btn'; btn.title = '이미지 첨부'; btn.textContent = '📷 사진';
+        head.appendChild(btn);
+      }
+      if (!node.querySelector('.ars-node-img')) {
+        const area = document.createElement('div');
+        area.className = 'ars-node-img'; area.style.display = 'none';
+        area.innerHTML = '<img src="" alt=""><button class="ars-img-del" title="삭제">✕</button>';
+        const sub = node.querySelector('.ars-drag-sub');
+        node.insertBefore(area, sub);
+      }
 
-      // 이미지 영역 주입
-      const area = document.createElement('div');
-      area.className = 'ars-node-img'; area.style.display = 'none';
-      area.innerHTML = '<img src="" alt=""><button class="ars-img-del" title="삭제">✕</button>';
-      const sub = node.querySelector('.ars-drag-sub');
-      node.insertBefore(area, sub);
-
-      // 이벤트
+      // 이벤트 바인딩
+      const btn = node.querySelector('.ars-img-btn');
+      const area = node.querySelector('.ars-node-img');
       btn.addEventListener('mousedown', e => e.stopPropagation());
       btn.addEventListener('click',     e => { e.stopPropagation(); targetId = node.id; fileInput.click(); });
       const del = area.querySelector('.ars-img-del');
