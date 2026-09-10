@@ -8372,12 +8372,22 @@ document.getElementById('search-input').addEventListener('input', function() {
     }
   }
 
-  function saveImg(nodeId, dataUrl) {
-    try {
-      const d = JSON.parse(localStorage.getItem('ars-flow-imgs') || '{}');
-      if (dataUrl) d[nodeId] = dataUrl; else delete d[nodeId];
-      localStorage.setItem('ars-flow-imgs', JSON.stringify(d));
-    } catch(e) { alert('저장 용량이 초과됐습니다. 더 작은 이미지를 사용해주세요.'); }
+  async function saveImg(nodeId, dataUrl) {
+    if (!window._SB) return;
+    if (dataUrl) {
+      // dataUrl → Blob → Supabase Storage 업로드
+      const res  = await fetch(dataUrl);
+      const blob = await res.blob();
+      const path = `ars/${nodeId}.jpg`;
+      await window._SB.storage.from('mot-screenshots').upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
+      const { data: pub } = window._SB.storage.from('mot-screenshots').getPublicUrl(path);
+      // 캐시 버스팅용 타임스탬프 추가
+      const imgUrl = pub.publicUrl + '?t=' + Date.now();
+      await window._SB.from('ars_node_imgs').upsert({ node_id: nodeId, img_url: imgUrl, updated_at: new Date().toISOString() }, { onConflict: 'node_id' });
+    } else {
+      await window._SB.storage.from('mot-screenshots').remove([`ars/${nodeId}.jpg`]);
+      await window._SB.from('ars_node_imgs').delete().eq('node_id', nodeId);
+    }
   }
 
   fileInput.addEventListener('change', () => {
@@ -8427,11 +8437,12 @@ document.getElementById('search-input').addEventListener('input', function() {
       });
     });
 
-    // 저장된 이미지 복원
-    try {
-      const d = JSON.parse(localStorage.getItem('ars-flow-imgs') || '{}');
-      Object.keys(d).forEach(id => showImg(id, d[id]));
-    } catch(e) {}
+    // Supabase에서 저장된 이미지 복원
+    if (window._SB) {
+      window._SB.from('ars_node_imgs').select('node_id, img_url').then(({ data }) => {
+        if (data) data.forEach(row => showImg(row.node_id, row.img_url));
+      });
+    }
   };
 })();
 
