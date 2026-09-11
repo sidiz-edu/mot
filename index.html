@@ -8264,21 +8264,6 @@ document.getElementById('btn-settings').addEventListener('click', () => {
   document.getElementById('settings-data-date').textContent = '최신 데이터: ' + latest;
   openOverlay('overlay-settings');
 });
-document.getElementById('btn-fullscreen').addEventListener('click', () => {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen();
-  } else {
-    document.exitFullscreen();
-  }
-});
-document.addEventListener('fullscreenchange', () => {
-  const isFs = !!document.fullscreenElement;
-  document.getElementById('ic-fullscreen-enter').style.display = isFs ? 'none' : '';
-  document.getElementById('ic-fullscreen-exit').style.display  = isFs ? '' : 'none';
-  document.getElementById('btn-fullscreen').querySelector('.ic + .ic, .ic').nextSibling;
-  const btn = document.getElementById('btn-fullscreen');
-  btn.childNodes.forEach(n => { if (n.nodeType === 3) n.textContent = isFs ? '나가기' : '전체보기'; });
-});
 document.getElementById('btn-notif').addEventListener('click', () => openOverlay('overlay-notif'));
 document.getElementById('btn-search').addEventListener('click', () => {
   openOverlay('overlay-search');
