@@ -8791,7 +8791,7 @@ function arsEnableDrag(el, onUpdate) {
   const endDrag = () => {
     el.classList.remove('is-dragging');
     savePos();
-    setTimeout(() => { el._dragMoved = false; }, 100);
+    // _dragMoved는 startDrag에서만 false로 리셋 — 타이머 없이 drag 직후 click 차단
   };
 
   // Mouse
