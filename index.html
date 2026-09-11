@@ -3749,34 +3749,34 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
 
             <!-- 6개 드래그 노드 -->
             <div class="ars-drag-box" id="ars-n0">
-              <div class="ars-node-head"><div class="ars-drag-label">주문 조회 / 변경 / 취소</div><button class="ars-img-btn" title="이미지 첨부">📷 사진</button></div>
-              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제">✕</button></div>
+              <div class="ars-node-head"><div class="ars-drag-label">주문 조회 / 변경 / 취소</div><button class="ars-img-btn" title="이미지 첨부" onclick="event.stopPropagation();arsUploadImg(this.closest('.ars-drag-box').id)">📷 사진</button></div>
+              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제" onclick="event.stopPropagation();arsDeleteImg(this.closest('.ars-drag-box').id)">✕</button></div>
             </div>
             <div class="ars-drag-box" id="ars-n1">
-              <div class="ars-node-head"><div class="ars-drag-label">AS 조회 / 변경 / 취소</div><button class="ars-img-btn" title="이미지 첨부">📷 사진</button></div>
-              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제">✕</button></div>
+              <div class="ars-node-head"><div class="ars-drag-label">AS 조회 / 변경 / 취소</div><button class="ars-img-btn" title="이미지 첨부" onclick="event.stopPropagation();arsUploadImg(this.closest('.ars-drag-box').id)">📷 사진</button></div>
+              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제" onclick="event.stopPropagation();arsDeleteImg(this.closest('.ars-drag-box').id)">✕</button></div>
             </div>
             <div class="ars-drag-box" id="ars-n2">
-              <div class="ars-node-head"><div class="ars-drag-label">제품 문의</div><button class="ars-img-btn" title="이미지 첨부">📷 사진</button></div>
-              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제">✕</button></div>
+              <div class="ars-node-head"><div class="ars-drag-label">제품 문의</div><button class="ars-img-btn" title="이미지 첨부" onclick="event.stopPropagation();arsUploadImg(this.closest('.ars-drag-box').id)">📷 사진</button></div>
+              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제" onclick="event.stopPropagation();arsDeleteImg(this.closest('.ars-drag-box').id)">✕</button></div>
             </div>
             <div class="ars-drag-box" id="ars-n3">
-              <div class="ars-node-head"><div class="ars-drag-label">AS 신청</div><button class="ars-img-btn" title="이미지 첨부">📷 사진</button></div>
-              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제">✕</button></div>
+              <div class="ars-node-head"><div class="ars-drag-label">AS 신청</div><button class="ars-img-btn" title="이미지 첨부" onclick="event.stopPropagation();arsUploadImg(this.closest('.ars-drag-box').id)">📷 사진</button></div>
+              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제" onclick="event.stopPropagation();arsDeleteImg(this.closest('.ars-drag-box').id)">✕</button></div>
             </div>
             <div class="ars-drag-box" id="ars-n4">
-              <div class="ars-node-head"><div class="ars-drag-label">기타 문의</div><button class="ars-img-btn" title="이미지 첨부">📷 사진</button></div>
-              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제">✕</button></div>
+              <div class="ars-node-head"><div class="ars-drag-label">기타 문의</div><button class="ars-img-btn" title="이미지 첨부" onclick="event.stopPropagation();arsUploadImg(this.closest('.ars-drag-box').id)">📷 사진</button></div>
+              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제" onclick="event.stopPropagation();arsDeleteImg(this.closest('.ars-drag-box').id)">✕</button></div>
             </div>
             <div class="ars-drag-box ars-ai" id="ars-n5">
-              <div class="ars-node-head"><div class="ars-drag-label">대화형 AI 챗봇 상담</div><button class="ars-img-btn" title="이미지 첨부">📷 사진</button></div>
-              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제">✕</button></div>
+              <div class="ars-node-head"><div class="ars-drag-label">대화형 AI 챗봇 상담</div><button class="ars-img-btn" title="이미지 첨부" onclick="event.stopPropagation();arsUploadImg(this.closest('.ars-drag-box').id)">📷 사진</button></div>
+              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제" onclick="event.stopPropagation();arsDeleteImg(this.closest('.ars-drag-box').id)">✕</button></div>
             </div>
 
             <!-- 공유 서브 노드 -->
             <div class="ars-drag-box" id="ars-n6" style="border-style:dashed">
-              <div class="ars-node-head"><div class="ars-drag-label">📞 상담원 연결</div><button class="ars-img-btn" title="이미지 첨부">📷 사진</button></div>
-              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제">✕</button></div>
+              <div class="ars-node-head"><div class="ars-drag-label">📞 상담원 연결</div><button class="ars-img-btn" title="이미지 첨부" onclick="event.stopPropagation();arsUploadImg(this.closest('.ars-drag-box').id)">📷 사진</button></div>
+              <div class="ars-node-img" style="display:none"><img src="" alt=""><button class="ars-img-del" title="삭제" onclick="event.stopPropagation();arsDeleteImg(this.closest('.ars-drag-box').id)">✕</button></div>
             </div>
           </div>
         </div>
@@ -8323,6 +8323,22 @@ document.getElementById('search-input').addEventListener('input', function() {
 });
 
 // ── ARS 이미지 첨부 ───────────────────────────────────────
+// 글로벌 함수: HTML onclick에서 직접 호출
+window.arsUploadImg = function(nodeId) {
+  const fi = document.createElement('input');
+  fi.type = 'file'; fi.accept = 'image/*';
+  fi.onchange = () => {
+    const f = fi.files[0];
+    if (!f) return;
+    window._arsCompress(f, url => { window._arsShowImg(nodeId, url); window._arsSaveImg(nodeId, url); });
+  };
+  fi.click();
+};
+window.arsDeleteImg = function(nodeId) {
+  window._arsShowImg(nodeId, null);
+  window._arsSaveImg(nodeId, null);
+};
+
 ;(function() {
   const fileInput = document.createElement('input');
   fileInput.type = 'file'; fileInput.accept = 'image/*'; fileInput.style.display = 'none';
@@ -8396,6 +8412,11 @@ document.getElementById('search-input').addEventListener('input', function() {
       await window._SB.from('ars_node_imgs').delete().eq('node_id', nodeId);
     }
   }
+
+  // 글로벌 노출 (window.arsUploadImg / arsDeleteImg에서 사용)
+  window._arsCompress = compress;
+  window._arsShowImg  = showImg;
+  window._arsSaveImg  = saveImg;
 
   fileInput.addEventListener('change', () => {
     const f = fileInput.files[0];
