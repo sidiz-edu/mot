@@ -1573,8 +1573,7 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-phone-bar-chat { flex:1; background:#b0b0b0; text-align:center; padding:9px 6px; font-size:11px; color:#222; }
 .ars-phone-bar-end  { flex:1; background:#777; text-align:center; padding:9px 6px; font-size:11px; color:#fff; }
 #ars-canvas { position:relative; min-height:1000px; background:var(--surface-2); border-radius:0 0 12px 12px; overflow:visible; }
-#ars-phone-anchor { position:absolute; top:24px; cursor:grab; overflow:hidden; display:flex; flex-direction:column; min-width:100px; }
-#ars-phone-anchor.is-dragging { cursor:grabbing; }
+#ars-phone-anchor { top:24px; }
 .ars-origin-dot { position:absolute; width:12px; height:12px; border-radius:50%; background:var(--accent); border:2px solid #fff; box-shadow:0 0 0 1.5px var(--accent); cursor:crosshair; z-index:15; transform:translate(-50%,-50%); opacity:0.85; transition:transform .15s, opacity .15s; }
 .ars-origin-dot:hover { transform:translate(-50%,-50%) scale(1.4); opacity:1; }
 .ars-origin-dot.is-dragging { transform:translate(-50%,-50%) scale(1.5); opacity:1; }
@@ -3739,8 +3738,8 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
             </div>
 
             <!-- 메인화면 anchor (드래그 불가, 위치 고정) -->
-            <div id="ars-phone-anchor">
-              <div style="font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--accent);padding:4px 10px 2px;text-transform:uppercase;">STEP 1 · 보이는 ARS</div>
+            <div id="ars-phone-anchor" class="ars-drag-box" style="border-color:var(--accent);border-width:2px;">
+              <div style="font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--accent);padding:6px 10px 2px;text-transform:uppercase;">STEP 1 · 보이는 ARS</div>
               <div class="ars-phone">
                 <div class="ars-phone-head">SIDIZ</div>
                 <div class="ars-phone-prompt">원하는 서비스를<br>선택해주세요.</div>
@@ -8498,7 +8497,7 @@ function initArsFlow() {
     anchor.style.top  = anchor.offsetTop + 'px';
   }
 
-  const allNodes   = Array.from(canvas.querySelectorAll('.ars-drag-box'));
+  const allNodes   = Array.from(canvas.querySelectorAll('.ars-drag-box')).filter(n => n.id !== 'ars-phone-anchor');
   const phoneNodes = allNodes.filter(n => n.id !== 'ars-n6');
   const n6         = document.getElementById('ars-n6');
   const nodeW      = 160;
