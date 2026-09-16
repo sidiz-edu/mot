@@ -8494,6 +8494,8 @@ function initArsFlow() {
   if (saved['ars-phone-anchor']) {
     anchor.style.left = saved['ars-phone-anchor'].left + 'px';
     anchor.style.top  = saved['ars-phone-anchor'].top  + 'px';
+    if (saved['ars-phone-anchor'].w) anchor.style.width  = saved['ars-phone-anchor'].w + 'px';
+    if (saved['ars-phone-anchor'].h) anchor.style.height = saved['ars-phone-anchor'].h + 'px';
   } else {
     anchor.style.left = ((canvas.clientWidth - phoneW) / 2) + 'px';
     anchor.style.top  = anchor.offsetTop + 'px';
@@ -8538,6 +8540,15 @@ function initArsFlow() {
       n6.style.left = midLeft + 'px';
       n6.style.top  = (nodeY + 220) + 'px';
     }
+  }
+
+  // ars-n-sms 위치/크기 복원
+  const nSms = document.getElementById('ars-n-sms');
+  if (nSms && saved['ars-n-sms']) {
+    nSms.style.left = saved['ars-n-sms'].left + 'px';
+    nSms.style.top  = saved['ars-n-sms'].top  + 'px';
+    if (saved['ars-n-sms'].w) nSms.style.width  = saved['ars-n-sms'].w + 'px';
+    if (saved['ars-n-sms'].h) nSms.style.height = saved['ars-n-sms'].h + 'px';
   }
 
   const redraw = () => drawArsLines(svg, canvas, anchor, phoneNodes);
