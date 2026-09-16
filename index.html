@@ -1563,7 +1563,7 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 #sec-cost .unit-price-tbl tr.is-as-row td { background: rgba(255,128,0,0.06); }
 #sec-cost .unit-price-tbl tr.is-recv-row td { background: rgba(124,58,237,0.05); }
 /* ARS 연결도 */
-.ars-phone { width:244px; border-radius:18px; overflow:hidden; border:1.5px solid var(--border); background:#efefef; box-shadow:0 3px 14px rgba(0,0,0,0.10); }
+.ars-phone { width:360px; border-radius:18px; overflow:hidden; border:1.5px solid var(--border); background:#efefef; box-shadow:0 3px 14px rgba(0,0,0,0.10); }
 .ars-phone-head { background:#fff; text-align:center; font-weight:700; font-size:15px; padding:13px; border-bottom:1px solid #e0e0e0; letter-spacing:1px; }
 .ars-phone-prompt { padding:10px 12px 8px; font-size:12px; font-weight:600; color:#111; line-height:1.5; }
 .ars-phone-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; padding:0 10px; }
@@ -8347,7 +8347,15 @@ window.arsUploadImg = function(nodeId) {
         const node = document.getElementById(nodeId);
         if (node) {
           const area = node.querySelector('.ars-node-img');
-          if (area) { area.querySelector('img').src = dataUrl; area.style.display = 'block'; }
+          if (area) {
+            const imgEl = area.querySelector('img');
+            imgEl.src = dataUrl;
+            area.style.display = 'block';
+            if (!imgEl._lbBound) {
+              imgEl._lbBound = true;
+              imgEl.addEventListener('click', e => { e.stopPropagation(); window.openLightbox && window.openLightbox(imgEl.src); });
+            }
+          }
         }
         // Supabase 저장
         if (window._SB) {
@@ -8410,6 +8418,11 @@ window.arsDeleteImg = function(nodeId) {
       const imgEl = area.querySelector('img');
       imgEl.src = dataUrl;
       area.style.display = 'block';
+      // 클릭 시 라이트박스 (한 번만 바인딩)
+      if (!imgEl._lbBound) {
+        imgEl._lbBound = true;
+        imgEl.addEventListener('click', e => { e.stopPropagation(); window.openLightbox && window.openLightbox(imgEl.src); });
+      }
     } else {
       const imgEl = area.querySelector('img');
       imgEl.src = '';
