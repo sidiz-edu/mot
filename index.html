@@ -8375,15 +8375,8 @@ window.arsDeleteImg = function(nodeId) {
       const imgEl = area.querySelector('img');
       imgEl.src = dataUrl;
       area.style.display = 'block';
-      imgEl.onclick = e => {
-        e.stopPropagation();
-        const box = e.currentTarget.closest('.ars-drag-box');
-        if (box && box._dragMoved) return;
-        openLightbox(dataUrl);
-      };
     } else {
       const imgEl = area.querySelector('img');
-      imgEl.onclick = null;
       imgEl.src = '';
       area.style.display = 'none';
     }
@@ -8643,15 +8636,25 @@ function arsInitPhoneImage(anchor, redraw) {
     redraw();
   }
 
-  function save(dataUrl) {
-    try {
-      if (dataUrl) localStorage.setItem('ars-phone-img', dataUrl);
-      else localStorage.removeItem('ars-phone-img');
-    } catch(e) {}
+  const PHONE_ID = 'ars-phone-anchor';
+
+  async function save(dataUrl) {
+    if (!window._SB) return;
+    if (dataUrl) {
+      await window._SB.from('ars_node_imgs').upsert(
+        { node_id: PHONE_ID, img_url: dataUrl, updated_at: new Date().toISOString() },
+        { onConflict: 'node_id' }
+      );
+    } else {
+      await window._SB.from('ars_node_imgs').delete().eq('node_id', PHONE_ID);
+    }
   }
 
-  // 저장된 이미지 복원
-  try { const s = localStorage.getItem('ars-phone-img'); if (s) show(s); } catch(e) {}
+  // 저장된 이미지 복원 (Supabase)
+  if (window._SB) {
+    window._SB.from('ars_node_imgs').select('img_url').eq('node_id', PHONE_ID).single()
+      .then(({ data }) => { if (data) show(data.img_url); });
+  }
 
   // 클릭 업로드
   camBtn.addEventListener('mousedown', e => e.stopPropagation());
@@ -8666,9 +8669,6 @@ function arsInitPhoneImage(anchor, redraw) {
   // 삭제
   delBtn.addEventListener('mousedown', e => e.stopPropagation());
   delBtn.addEventListener('click', e => { e.stopPropagation(); show(null); save(null); });
-
-  // 이미지 클릭 → 라이트박스
-  imgEl.addEventListener('click', () => { if (imgEl.src) openLightbox(imgEl.src); });
 
   // 드래그 앤 드롭
   anchor.addEventListener('dragover', e => {
