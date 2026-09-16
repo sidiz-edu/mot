@@ -9120,6 +9120,38 @@ window._SB = supabase.createClient(
 loadStageInfo();
 bxTermsLoad();
 
+// ARS 이미지 복원 — initArsFlow 타이밍과 무관하게 직접 복원
+(function restoreArsImgs() {
+  window._SB.from('ars_node_imgs').select('node_id, img_url').then(({ data, error }) => {
+    if (!data) return;
+    data.forEach(row => {
+      if (!row.img_url || row.img_url.length < 200) return; // 비어있는 항목 스킵
+      const nodeId = row.node_id;
+      // 일반 노드
+      const node = document.getElementById(nodeId);
+      if (!node) return;
+      const area = node.querySelector('.ars-node-img');
+      if (area) {
+        const imgEl = area.querySelector('img');
+        imgEl.src = row.img_url;
+        area.style.display = 'block';
+        if (!imgEl._lbBound) {
+          imgEl._lbBound = true;
+          imgEl.addEventListener('click', e => { e.stopPropagation(); window.openLightbox && window.openLightbox(imgEl.src); });
+        }
+      }
+      // 폰 앵커 이미지 (wrap 영역)
+      if (nodeId === 'ars-phone-anchor') {
+        const wrap = node.querySelector('.ars-phone-img-wrap');
+        if (wrap) {
+          const imgEl = wrap.querySelector('img');
+          if (imgEl) { imgEl.src = row.img_url; wrap.style.display = 'block'; }
+        }
+      }
+    });
+  });
+})();
+
 const MEMO_TAB_KEYS  = ['overview', 'as', 'funnel', 'cost'];
 const MEMO_TAB_NAMES = ['Overview', 'AS 조치 현황', 'AS 신청 페이지', '컨택센터 용역료'];
 
