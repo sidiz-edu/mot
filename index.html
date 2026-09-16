@@ -8740,6 +8740,12 @@ function drawArsLines(svg, canvas, anchor, nodes) {
     path.setAttribute('fill', 'none');
     path.setAttribute('marker-end', 'url(#ars-arr)');
     svg.appendChild(path);
+
+    // 출발점 원형 노드
+    const c1 = document.createElementNS(NS, 'circle');
+    c1.setAttribute('cx', fx); c1.setAttribute('cy', fy);
+    c1.setAttribute('r', '5'); c1.setAttribute('fill', '#aaa');
+    svg.appendChild(c1);
   });
 
   // 추가 연결: AS 신청(n3), 기타 문의(n4) → 상담원 연결(n6)
