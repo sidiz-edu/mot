@@ -1572,7 +1572,7 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-phone-bar { display:flex; }
 .ars-phone-bar-chat { flex:1; background:#b0b0b0; text-align:center; padding:9px 6px; font-size:11px; color:#222; }
 .ars-phone-bar-end  { flex:1; background:#777; text-align:center; padding:9px 6px; font-size:11px; color:#fff; }
-#ars-canvas { position:relative; min-height:1000px; background:var(--surface-2); border-radius:0 0 12px 12px; overflow:visible; }
+#ars-canvas { position:relative; min-height:2400px; min-width:1600px; background:var(--surface-2); border-radius:0 0 12px 12px; overflow:visible; }
 #ars-phone-anchor { position:absolute; top:24px; cursor:grab; }
 #ars-phone-anchor.is-dragging { cursor:grabbing; }
 .ars-origin-dot { position:absolute; width:12px; height:12px; border-radius:50%; background:var(--accent); border:2px solid #fff; box-shadow:0 0 0 1.5px var(--accent); cursor:crosshair; z-index:15; transform:translate(-50%,-50%); opacity:0.85; transition:transform .15s, opacity .15s; }
@@ -3726,6 +3726,7 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
           <div class="card-head">
             <div><div class="card-title">1577-5674 보이는 ARS 화면 연결도</div><div class="card-sub">버튼별 화면 흐름 · 노드를 드래그하여 자유롭게 배치</div></div>
           </div>
+          <div style="overflow:auto; border-radius:0 0 12px 12px;">
           <div id="ars-canvas">
             <!-- SVG connector lines (JS가 그림) -->
             <svg id="ars-lines"></svg>
@@ -3792,6 +3793,7 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
               <div class="ars-node-img" style="display:none"><img src="" alt="" draggable="false"><button class="ars-img-del" title="삭제" onclick="event.stopPropagation();arsDeleteImg(this.closest('.ars-drag-box').id)">✕</button></div>
             </div>
           </div>
+          </div><!-- /ars-canvas scroll wrapper -->
         </div>
       </div>
 
