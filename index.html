@@ -8357,7 +8357,9 @@ window.arsUploadImg = function(nodeId) {
             }
           }
         }
-        // Supabase 저장
+        // localStorage에 즉시 저장 (새로고침 대비)
+        try { localStorage.setItem('ars-img-' + nodeId, dataUrl); } catch(e) {}
+        // Supabase 백업 저장
         if (window._SB) {
           window._SB.from('ars_node_imgs').upsert(
             { node_id: nodeId, img_url: dataUrl, updated_at: new Date().toISOString() },
@@ -9120,33 +9122,38 @@ window._SB = supabase.createClient(
 loadStageInfo();
 bxTermsLoad();
 
-// ARS 이미지 복원 — initArsFlow 타이밍과 무관하게 직접 복원
+// ARS 이미지 복원 — localStorage 우선, Supabase 보완
 (function restoreArsImgs() {
-  window._SB.from('ars_node_imgs').select('node_id, img_url').then(({ data, error }) => {
+  function applyImg(nodeId, dataUrl) {
+    if (!dataUrl || dataUrl.length < 200) return;
+    const node = document.getElementById(nodeId);
+    if (!node) return;
+    const area = node.querySelector('.ars-node-img');
+    if (area) {
+      const imgEl = area.querySelector('img');
+      imgEl.src = dataUrl;
+      area.style.display = 'block';
+      if (!imgEl._lbBound) {
+        imgEl._lbBound = true;
+        imgEl.addEventListener('click', e => { e.stopPropagation(); const card = imgEl.closest('.ars-drag-box, #ars-phone-anchor'); if (card && card._dragMoved) return; window.openLightbox && window.openLightbox(imgEl.src); });
+      }
+    }
+  }
+
+  // 1) localStorage 즉시 복원
+  ['ars-n-sms','ars-n0','ars-n1','ars-n2','ars-n3','ars-n4','ars-n5','ars-n6'].forEach(id => {
+    try { applyImg(id, localStorage.getItem('ars-img-' + id)); } catch(e) {}
+  });
+
+  // 2) Supabase로 최신 데이터 동기화
+  window._SB.from('ars_node_imgs').select('node_id, img_url').then(({ data }) => {
     if (!data) return;
     data.forEach(row => {
-      if (!row.img_url || row.img_url.length < 200) return; // 비어있는 항목 스킵
-      const nodeId = row.node_id;
-      // 일반 노드
-      const node = document.getElementById(nodeId);
-      if (!node) return;
-      const area = node.querySelector('.ars-node-img');
-      if (area) {
-        const imgEl = area.querySelector('img');
-        imgEl.src = row.img_url;
-        area.style.display = 'block';
-        if (!imgEl._lbBound) {
-          imgEl._lbBound = true;
-          imgEl.addEventListener('click', e => { e.stopPropagation(); const card = imgEl.closest('.ars-drag-box, #ars-phone-anchor'); if (card && card._dragMoved) return; window.openLightbox && window.openLightbox(imgEl.src); });
-        }
-      }
-      // 폰 앵커 이미지 (wrap 영역)
-      if (nodeId === 'ars-phone-anchor') {
-        const wrap = node.querySelector('.ars-phone-img-wrap');
-        if (wrap) {
-          const imgEl = wrap.querySelector('img');
-          if (imgEl) { imgEl.src = row.img_url; wrap.style.display = 'block'; }
-        }
+      if (row.node_id === 'ars-phone-anchor') return;
+      applyImg(row.node_id, row.img_url);
+      // localStorage도 최신으로 갱신
+      if (row.img_url && row.img_url.length > 200) {
+        try { localStorage.setItem('ars-img-' + row.node_id, row.img_url); } catch(e) {}
       }
     });
   });
