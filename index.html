@@ -8330,7 +8330,34 @@ window.arsUploadImg = function(nodeId) {
     const f = fi.files[0];
     document.body.removeChild(fi);
     if (!f) return;
-    window._arsCompress(f, url => { window._arsShowImg(nodeId, url); window._arsSaveImg(nodeId, url); });
+    // 이미지 압축 후 카드에 표시 + Supabase 저장
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 700;
+        const s = Math.min(1, MAX / Math.max(img.width, img.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width * s; canvas.height = img.height * s;
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+        // 카드에 표시
+        const node = document.getElementById(nodeId);
+        if (node) {
+          const area = node.querySelector('.ars-node-img');
+          if (area) { area.querySelector('img').src = dataUrl; area.style.display = 'block'; }
+        }
+        // Supabase 저장
+        if (window._SB) {
+          window._SB.from('ars_node_imgs').upsert(
+            { node_id: nodeId, img_url: dataUrl, updated_at: new Date().toISOString() },
+            { onConflict: 'node_id' }
+          );
+        }
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(f);
   };
   fi.click();
 };
