@@ -1573,7 +1573,7 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-phone-bar-chat { flex:1; background:#b0b0b0; text-align:center; padding:9px 6px; font-size:11px; color:#222; }
 .ars-phone-bar-end  { flex:1; background:#777; text-align:center; padding:9px 6px; font-size:11px; color:#fff; }
 #ars-canvas { position:relative; min-height:1000px; background:var(--surface-2); border-radius:0 0 12px 12px; overflow:visible; }
-#ars-phone-anchor { position:absolute; top:24px; cursor:grab; }
+#ars-phone-anchor { position:absolute; top:24px; cursor:grab; overflow:hidden; display:flex; flex-direction:column; min-width:100px; }
 #ars-phone-anchor.is-dragging { cursor:grabbing; }
 .ars-origin-dot { position:absolute; width:12px; height:12px; border-radius:50%; background:var(--accent); border:2px solid #fff; box-shadow:0 0 0 1.5px var(--accent); cursor:crosshair; z-index:15; transform:translate(-50%,-50%); opacity:0.85; transition:transform .15s, opacity .15s; }
 .ars-origin-dot:hover { transform:translate(-50%,-50%) scale(1.4); opacity:1; }
@@ -8795,7 +8795,7 @@ function arsEnableDrag(el, onUpdate) {
   };
 
   // 커스텀 리사이즈 핸들 추가 (.ars-drag-box만)
-  if (el.classList.contains('ars-drag-box')) {
+  if (el.classList.contains('ars-drag-box') || el.id === 'ars-phone-anchor') {
     const handle = document.createElement('div');
     handle.className = 'ars-resize-handle';
     el.appendChild(handle);
