@@ -8499,7 +8499,7 @@ function initArsFlow() {
   }
 
   const allNodes   = Array.from(canvas.querySelectorAll('.ars-drag-box')).filter(n => n.id !== 'ars-phone-anchor');
-  const phoneNodes = allNodes.filter(n => n.id !== 'ars-n6');
+  const phoneNodes = allNodes.filter(n => n.id !== 'ars-n6' && n.id !== 'ars-n-sms');
   const n6         = document.getElementById('ars-n6');
   const nodeW      = 160;
   const nodeY      = anchor.offsetTop + anchor.offsetHeight + 80;
