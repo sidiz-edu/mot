@@ -1584,6 +1584,8 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 #ars-phone-img-wrap img { width:100%; display:block; max-height:480px; object-fit:contain; background:#f0f0f0; cursor:zoom-in; }
 .ars-phone-img-del { position:absolute; top:6px; right:6px; background:rgba(0,0,0,0.45); color:#fff; border:none; border-radius:50%; width:22px; height:22px; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; }
 .ars-phone-img-del:hover { background:rgba(0,0,0,0.75); }
+.ars-phone-cam-btn { position:absolute; top:6px; left:6px; background:rgba(0,0,0,0.45); color:#fff; border:none; border-radius:12px; padding:3px 7px; font-size:13px; cursor:pointer; line-height:1; z-index:5; }
+.ars-phone-cam-btn:hover { background:rgba(0,0,0,0.7); }
 #ars-phone-anchor.drop-active { outline:2px dashed var(--accent); outline-offset:4px; }
 #ars-lines { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
 .ars-drag-box { position:absolute; cursor:grab; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); user-select:none; box-shadow:0 2px 6px rgba(0,0,0,0.07); min-width:100px; overflow:hidden; display:flex; flex-direction:column; }
@@ -8610,6 +8612,7 @@ function arsInitPhoneImage(anchor, redraw) {
   camBtn.className = 'ars-phone-cam-btn';
   camBtn.title = '화면 이미지로 교체';
   camBtn.textContent = '📷';
+  camBtn.style.display = 'none'; // 초기엔 숨김, 이미지 있을 때만 표시
   head.appendChild(camBtn);
 
   // 이미지 래퍼 (폰 HTML 앞에 삽입)
@@ -8623,6 +8626,7 @@ function arsInitPhoneImage(anchor, redraw) {
   delBtn.textContent = '✕';
   wrap.appendChild(imgEl);
   wrap.appendChild(delBtn);
+  wrap.appendChild(camBtn);  // 📷 버튼을 이미지 위에 항상 표시
   anchor.insertBefore(wrap, phone);
 
   function show(dataUrl) {
@@ -8630,10 +8634,12 @@ function arsInitPhoneImage(anchor, redraw) {
       imgEl.src = dataUrl;
       wrap.style.display = 'block';
       phone.style.display = 'none';
+      camBtn.style.display = '';
     } else {
       wrap.style.display = 'none';
       phone.style.display = '';
       imgEl.src = '';
+      camBtn.style.display = 'none'; // 이미지 없을 때는 폰 헤드의 버튼 사용
     }
     redraw();
   }
