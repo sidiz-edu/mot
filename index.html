@@ -8353,7 +8353,7 @@ window.arsUploadImg = function(nodeId) {
             area.style.display = 'block';
             if (!imgEl._lbBound) {
               imgEl._lbBound = true;
-              imgEl.addEventListener('click', e => { e.stopPropagation(); window.openLightbox && window.openLightbox(imgEl.src); });
+              imgEl.addEventListener('click', e => { e.stopPropagation(); const card = imgEl.closest('.ars-drag-box, #ars-phone-anchor'); if (card && card._dragMoved) return; window.openLightbox && window.openLightbox(imgEl.src); });
             }
           }
         }
@@ -8421,7 +8421,7 @@ window.arsDeleteImg = function(nodeId) {
       // 클릭 시 라이트박스 (한 번만 바인딩)
       if (!imgEl._lbBound) {
         imgEl._lbBound = true;
-        imgEl.addEventListener('click', e => { e.stopPropagation(); window.openLightbox && window.openLightbox(imgEl.src); });
+        imgEl.addEventListener('click', e => { e.stopPropagation(); const card = imgEl.closest('.ars-drag-box, #ars-phone-anchor'); if (card && card._dragMoved) return; window.openLightbox && window.openLightbox(imgEl.src); });
       }
     } else {
       const imgEl = area.querySelector('img');
@@ -9137,7 +9137,7 @@ bxTermsLoad();
         area.style.display = 'block';
         if (!imgEl._lbBound) {
           imgEl._lbBound = true;
-          imgEl.addEventListener('click', e => { e.stopPropagation(); window.openLightbox && window.openLightbox(imgEl.src); });
+          imgEl.addEventListener('click', e => { e.stopPropagation(); const card = imgEl.closest('.ars-drag-box, #ars-phone-anchor'); if (card && card._dragMoved) return; window.openLightbox && window.openLightbox(imgEl.src); });
         }
       }
       // 폰 앵커 이미지 (wrap 영역)
