@@ -8411,6 +8411,7 @@ window.arsDeleteImg = function(nodeId) {
 
   window.arsInitImages = function() {
     document.querySelectorAll('#ars-canvas .ars-drag-box').forEach(node => {
+      if (node.id === 'ars-phone-anchor') return; // 별도 처리
       if (node.dataset.arsReady) return; // 이미 초기화됨
       node.dataset.arsReady = '1';
 
@@ -8467,7 +8468,7 @@ window.arsDeleteImg = function(nodeId) {
     // Supabase에서 저장된 이미지 복원
     if (window._SB) {
       window._SB.from('ars_node_imgs').select('node_id, img_url').then(({ data }) => {
-        if (data) data.forEach(row => showImg(row.node_id, row.img_url));
+        if (data) data.forEach(row => { if (row.node_id !== 'ars-phone-anchor') showImg(row.node_id, row.img_url); });
       });
     }
   };
