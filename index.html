@@ -1586,7 +1586,7 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-phone-img-del:hover { background:rgba(0,0,0,0.75); }
 #ars-phone-anchor.drop-active { outline:2px dashed var(--accent); outline-offset:4px; }
 #ars-lines { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
-.ars-drag-box { position:absolute; cursor:grab; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); user-select:none; box-shadow:0 2px 6px rgba(0,0,0,0.07); min-width:100px; resize:both; overflow:hidden; }
+.ars-drag-box { position:absolute; cursor:grab; border:1.5px solid var(--border); border-radius:10px; background:var(--surface); user-select:none; box-shadow:0 2px 6px rgba(0,0,0,0.07); min-width:100px; resize:both; overflow:hidden; display:flex; flex-direction:column; }
 .ars-drag-box.ars-ai { border-color:var(--accent); }
 .ars-drag-box.is-dragging { cursor:grabbing; box-shadow:0 6px 20px rgba(0,0,0,0.16); z-index:20; }
 .ars-drag-label { font-size:12px; font-weight:600; color:var(--ink-2); padding:10px 14px; line-height:1.5; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -1597,7 +1597,8 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-img-btn { flex-shrink:0; background:var(--surface-2); border:1px solid var(--border); border-radius:5px; cursor:pointer; font-size:12px; padding:3px 6px; line-height:1; color:var(--ink-3); white-space:nowrap; }
 .ars-img-btn:hover { background:var(--surface-3); color:var(--ink); }
 .ars-node-img { position:relative; }
-.ars-node-img img { width:100%; display:block; border-radius:0; max-height:260px; object-fit:contain; background:var(--surface-2); cursor:zoom-in; -webkit-user-drag:none; user-select:none; }
+.ars-node-img { flex:1; min-height:0; }
+.ars-node-img img { width:100%; height:100%; display:block; border-radius:0; object-fit:contain; background:var(--surface-2); cursor:zoom-in; -webkit-user-drag:none; user-select:none; }
 #ars-lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9900; cursor:zoom-out; align-items:center; justify-content:center; }
 #ars-lightbox.open { display:flex; }
 #ars-lightbox img { max-width:92vw; max-height:92vh; object-fit:contain; border-radius:8px; box-shadow:0 8px 40px rgba(0,0,0,0.5); }
