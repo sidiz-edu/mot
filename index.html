@@ -8389,22 +8389,13 @@ window.arsDeleteImg = function(nodeId) {
   }
 
   async function saveImg(nodeId, dataUrl) {
-    if (!window._SB) { console.warn('[ARS] _SB 없음, 저장 건너뜀'); return; }
+    if (!window._SB) return;
     if (dataUrl) {
-      try {
-        const res  = await fetch(dataUrl);
-        const blob = await res.blob();
-        const path = `ars/${nodeId}.jpg`;
-        const { error: upErr } = await window._SB.storage.from('mot-screenshots').upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
-        if (upErr) { console.error('[ARS] Storage 업로드 실패:', upErr); return; }
-        const { data: pub } = window._SB.storage.from('mot-screenshots').getPublicUrl(path);
-        const imgUrl = pub.publicUrl + '?t=' + Date.now();
-        const { error: dbErr } = await window._SB.from('ars_node_imgs').upsert({ node_id: nodeId, img_url: imgUrl, updated_at: new Date().toISOString() }, { onConflict: 'node_id' });
-        if (dbErr) console.error('[ARS] DB upsert 실패:', dbErr);
-        else console.log('[ARS] 저장 완료:', nodeId, imgUrl);
-      } catch(e) { console.error('[ARS] saveImg 예외:', e); }
+      await window._SB.from('ars_node_imgs').upsert(
+        { node_id: nodeId, img_url: dataUrl, updated_at: new Date().toISOString() },
+        { onConflict: 'node_id' }
+      );
     } else {
-      await window._SB.storage.from('mot-screenshots').remove([`ars/${nodeId}.jpg`]);
       await window._SB.from('ars_node_imgs').delete().eq('node_id', nodeId);
     }
   }
