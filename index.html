@@ -1563,7 +1563,7 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 #sec-cost .unit-price-tbl tr.is-as-row td { background: rgba(255,128,0,0.06); }
 #sec-cost .unit-price-tbl tr.is-recv-row td { background: rgba(124,58,237,0.05); }
 /* ARS 연결도 */
-.ars-phone { width:360px; border-radius:18px; overflow:hidden; border:1.5px solid var(--border); background:#efefef; box-shadow:0 3px 14px rgba(0,0,0,0.10); }
+.ars-phone { width:100%; border-radius:18px; overflow:hidden; border:1.5px solid var(--border); background:#efefef; box-shadow:0 3px 14px rgba(0,0,0,0.10); }
 .ars-phone-head { background:#fff; text-align:center; font-weight:700; font-size:15px; padding:13px; border-bottom:1px solid #e0e0e0; letter-spacing:1px; }
 .ars-phone-prompt { padding:10px 12px 8px; font-size:12px; font-weight:600; color:#111; line-height:1.5; }
 .ars-phone-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; padding:0 10px; }
@@ -1572,7 +1572,25 @@ html[data-theme="dark"] #sec-as .note-title { color: #6BC990; }
 .ars-phone-bar { display:flex; }
 .ars-phone-bar-chat { flex:1; background:#b0b0b0; text-align:center; padding:9px 6px; font-size:11px; color:#222; }
 .ars-phone-bar-end  { flex:1; background:#777; text-align:center; padding:9px 6px; font-size:11px; color:#fff; }
-#ars-canvas { position:relative; min-height:2400px; min-width:1600px; background:var(--surface-2); border-radius:0 0 12px 12px; overflow:visible; }
+#ars-canvas-outer { overflow:hidden; border-radius:0 0 12px 12px; height:calc(100vh - 200px); min-height:600px; position:relative; background:var(--surface-2); }
+#ars-canvas { position:relative; min-height:2400px; min-width:1600px; background:var(--surface-2); overflow:visible; transform-origin:0 0; will-change:transform; }
+.ars-toolbar { display:flex; align-items:center; gap:4px; padding:5px 10px; background:var(--surface); border-bottom:1px solid var(--border); user-select:none; flex-wrap:wrap; }
+.ars-tb-btn { background:var(--surface-2); border:1px solid var(--border); border-radius:6px; padding:3px 10px; cursor:pointer; font-size:13px; line-height:1.5; color:var(--ink); transition:background .12s; }
+.ars-tb-btn:hover:not(:disabled) { background:var(--accent); color:#fff; border-color:var(--accent); }
+.ars-tb-btn:disabled { opacity:0.35; cursor:default; }
+.ars-tb-sep { width:1px; height:18px; background:var(--border); margin:0 3px; flex-shrink:0; }
+.ars-scale-lbl { font-size:12px; color:var(--ink-4); min-width:40px; text-align:center; }
+.ars-port { position:absolute; width:10px; height:10px; border-radius:50%; background:#6366f1; border:1.5px solid #fff; box-shadow:0 0 0 1px #6366f1; opacity:0; transition:opacity .15s; cursor:crosshair; z-index:20; transform:translate(-50%,-50%); pointer-events:auto; }
+.ars-drag-box:hover .ars-port { opacity:0.7; }
+.ars-port:hover { opacity:1 !important; transform:translate(-50%,-50%) scale(1.4); }
+.ars-port-top    { top:0;    left:50%; }
+.ars-port-right  { top:50%;  left:100%; }
+.ars-port-bottom { top:100%; left:50%; }
+.ars-port-left   { top:50%;  left:0; }
+.ars-connect-target { outline:2px dashed #6366f1 !important; outline-offset:2px; }
+.ars-connecting-cursor { cursor:crosshair !important; }
+.ars-custom-conn { cursor:pointer; }
+.ars-custom-conn:hover { stroke:#4f46e5 !important; stroke-width:2.5 !important; }
 #ars-phone-anchor { position:absolute; top:24px; cursor:grab; }
 #ars-phone-anchor.is-dragging { cursor:grabbing; }
 .ars-origin-dot { position:absolute; width:12px; height:12px; border-radius:50%; background:var(--accent); border:2px solid #fff; box-shadow:0 0 0 1.5px var(--accent); cursor:crosshair; z-index:15; transform:translate(-50%,-50%); opacity:0.85; transition:transform .15s, opacity .15s; }
@@ -3726,7 +3744,17 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
           <div class="card-head">
             <div><div class="card-title">1577-5674 보이는 ARS 화면 연결도</div><div class="card-sub">버튼별 화면 흐름 · 노드를 드래그하여 자유롭게 배치</div></div>
           </div>
-          <div style="overflow:auto; border-radius:0 0 12px 12px;">
+          <div class="ars-toolbar">
+            <button class="ars-tb-btn" id="ars-undo" title="되돌리기 (Ctrl+Z)" disabled>↩ 되돌리기</button>
+            <div class="ars-tb-sep"></div>
+            <button class="ars-tb-btn" id="ars-zoom-out" title="축소 (휠 아래)">－</button>
+            <span class="ars-scale-lbl" id="ars-scale-lbl">100%</span>
+            <button class="ars-tb-btn" id="ars-zoom-in" title="확대 (휠 위)">＋</button>
+            <div class="ars-tb-sep"></div>
+            <button class="ars-tb-btn" id="ars-zoom-fit" title="모든 노드 화면에 맞추기">⊡ 맞추기</button>
+            <button class="ars-tb-btn" id="ars-zoom-reset" title="100% 초기화">↺ 초기화</button>
+          </div>
+          <div id="ars-canvas-outer">
           <div id="ars-canvas">
             <!-- SVG connector lines (JS가 그림) -->
             <svg id="ars-lines"></svg>
@@ -3792,8 +3820,8 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
               <div class="ars-node-head"><div class="ars-drag-label">📞 상담원 연결</div><button class="ars-img-btn" title="이미지 첨부" onmousedown="event.stopPropagation()" onclick="event.stopPropagation();arsUploadImg(this.closest('.ars-drag-box').id)">📷</button></div>
               <div class="ars-node-img" style="display:none"><img src="" alt="" draggable="false"><button class="ars-img-del" title="삭제" onclick="event.stopPropagation();arsDeleteImg(this.closest('.ars-drag-box').id)">✕</button></div>
             </div>
-          </div>
-          </div><!-- /ars-canvas scroll wrapper -->
+          </div><!-- /ars-canvas -->
+          </div><!-- /ars-canvas-outer -->
         </div>
       </div>
 
@@ -4112,8 +4140,8 @@ const DATA = {
   "otN":     [22.6,20.2,19.6,24.1,22.1,19.8,25.0,25.3,24.7,22.0,22.2,20.2,19.1,19.1,22.4,16.7],
   "otClose": [77.4,79.8,80.4,75.9,77.9,80.2,75.0,74.7,75.3,78.0,77.8,79.8,80.9,80.9,77.6,83.3],
   "otDays":  [8.76,7.59,8.44,8.15,7.55,8.58,7.3,5.8,6.22,6.28,5.91,5.99,6.55,6.64,6.75,6.21],
-  "contactMonths": ["25.1월","25.2월","25.3월","25.4월","25.5월","25.6월","25.7월","25.8월","25.9월","25.10월","25.11월","25.12월","26.1월","26.2월","26.3월","26.4월","26.5월","26.6월","26.7월","26.8월"],
-  "workingDays": [18,20,20,22,20,19,23,20,22,18,20,22,21,17,21,20,20,22,23,20],
+  "contactMonths": ["25.1월","25.2월","25.3월","25.4월","25.5월","25.6월","25.7월","25.8월","25.9월","25.10월","25.11월","25.12월","26.1월","26.2월","26.3월","26.4월","26.5월","26.6월","26.7월","26.8월","26.9월"],
+  "workingDays": [18,20,20,22,20,19,23,20,22,18,20,22,21,17,21,20,20,22,23,20,20],
   "contact": [
     {
         "name": "상담 (게시판)",
@@ -4137,7 +4165,8 @@ const DATA = {
             3023,
             3679,
             3439,
-            3767
+            3767,
+            3925
         ],
         "amounts": [
             22445000,
@@ -4159,7 +4188,8 @@ const DATA = {
             9069000,
             11037000,
             10317000,
-            11301000
+            11301000,
+            11775000
         ]
     },
     {
@@ -4184,7 +4214,8 @@ const DATA = {
             1929,
             2216,
             2278,
-            2374
+            2374,
+            2215
         ],
         "amounts": [
             23530500,
@@ -4206,7 +4237,8 @@ const DATA = {
             26041500,
             29916000,
             30753000,
-            32049000
+            32049000,
+            29902500
         ]
     },
     {
@@ -4231,7 +4263,8 @@ const DATA = {
             946,
             1080,
             1034,
-            1094
+            1094,
+            1038
         ],
         "amounts": [
             13161500,
@@ -4253,7 +4286,8 @@ const DATA = {
             5203000,
             5940000,
             5687000,
-            6017000
+            6017000,
+            5709000
         ]
     },
     {
@@ -4278,7 +4312,8 @@ const DATA = {
             2137,
             2272,
             2421,
-            2451
+            2451,
+            2239
         ],
         "amounts": [
             12281100,
@@ -4300,30 +4335,31 @@ const DATA = {
             14317900,
             15222400,
             16220700,
-            16421700
+            16421700,
+            15001300
         ]
     }
 ],
   "contactDetail": {
-    "months": ["26.1월","26.2월","26.3월","26.4월","26.5월","26.6월","26.7월","26.8월"],
+    "months": ["26.1월","26.2월","26.3월","26.4월","26.5월","26.6월","26.7월","26.8월","26.9월"],
     "rows": [
       { "name":"유선 - 전화통화 (CTI)",    "type":"인바운드",        "desc":"고객 인입 시 컨택센터가 응대하는 콜 건 수",                          "unit":13500, "isAS":true,  "isSub":false,
-        "counts":[2292,1847,2358,1833,1929,2216,2278,2374], "amounts":[30942000,24934500,31833000,24745500,26041500,29916000,30753000,32049000] },
+        "counts":[2292,1847,2358,1833,1929,2216,2278,2374,2215], "amounts":[30942000,24934500,31833000,24745500,26041500,29916000,30753000,32049000,29902500] },
       { "name":"상담 (모바일)_ON",        "type":"채팅",            "desc":"채팅 상담 건 수 (구매 상담)",                                        "unit":5500,  "isAS":false, "isSub":false,
-        "counts":[734,663,755,550,548,646,631,656],     "amounts":[4037000,3646500,4152500,3025000,3014000,3553000,3470500,3608000] },
+        "counts":[734,663,755,550,548,646,631,656,612],     "amounts":[4037000,3646500,4152500,3025000,3014000,3553000,3470500,3608000,3366000] },
       { "name":"모바일 - AI챗봇 (해피톡)", "type":"채팅",            "desc":"채팅 상담 건 수 (서비스 상담)",                                      "unit":5500,  "isAS":true,  "isSub":false,
-        "counts":[472,429,553,416,398,434,403,438],     "amounts":[2596000,2359500,3041500,2288000,2189000,2387000,2216500,2409000] },
+        "counts":[472,429,553,416,398,434,403,438,426],     "amounts":[2596000,2359500,3041500,2288000,2189000,2387000,2216500,2409000,2343000] },
       { "name":"상담 (게시판)_ON",        "type":"게시글",          "desc":"외부몰 구매 게시글 답변 처리 건 수",                                  "unit":5500,  "isAS":false, "isSub":false,
-        "counts":[2877,3007,4222,2666,2769,3366,3166,3428],"amounts":[15823500,16538500,23221000,14663000,15229500,18513000,17413000,18854000] },
+        "counts":[2877,3007,4222,2666,2769,3366,3166,3428,3584],"amounts":[15823500,16538500,23221000,14663000,15229500,18513000,17413000,18854000,19712000] },
       { "name":"외부쇼핑몰 (게시판)",       "type":"게시글",          "desc":"외부몰 AS 게시글 답변 처리 건 수",                                    "unit":5500,  "isAS":true,  "isSub":false,
-        "counts":[330,315,395,245,233,283,251,282],     "amounts":[1815000,1732500,2172500,1347500,1281500,1556500,1380500,1551000] },
+        "counts":[330,315,395,245,233,283,251,282,307],     "amounts":[1815000,1732500,2172500,1347500,1281500,1556500,1380500,1551000,1688500] },
       { "name":"AS접수 (자사몰 제외)",      "type":"무 / 유",         "desc":"AS 조치를 위한 접수 건 수 (자사몰 게시판 건수 제외)",                 "unit":6700,  "isAS":true,  "isSub":false,
-        "counts":[2567,2186,2327,1295,1353,1407,1456,1436],"amounts":[17198900,14646200,15590900,8676500,9065100,9426900,9755200,9621200] },
+        "counts":[2567,2186,2327,1295,1353,1407,1456,1436,1371],"amounts":[17198900,14646200,15590900,8676500,9065100,9426900,9755200,9621200,9185700] },
       { "name":"AS접수 (자사몰)",          "type":"홈페이지 게시글", "desc":"접수 (AS) 중 자사몰 게시판으로 접수된 건 (별도 집계)",               "unit":6700,  "isAS":true,  "isSub":true,
-        "counts":[null,null,369,831,784,865,965,1015],   "amounts":[null,null,2472300,5567700,5252800,5795500,6465500,6800500] }
+        "counts":[null,null,369,831,784,865,965,1015,868],   "amounts":[null,null,2472300,5567700,5252800,5795500,6465500,6800500,5815600] }
     ],
-    "asTotals":   { "counts":[3094,2591,3675,3325,3344,3798,3897,4109],   "amounts":[35353000,29026500,39519300,33948700,34764800,39655000,40815500,42809500] },
-    "grandTotals":{ "counts":[5661,4777,5633,3789,3913,4340,4388,4530],   "amounts":[52551900,43672700,52637900,37057500,38577100,43286400,44105200,45630200] }
+    "asTotals":   { "counts":[3094,2591,3675,3325,3344,3798,3897,4109,3816],   "amounts":[35353000,29026500,39519300,33948700,34764800,39655000,40815500,42809500,39749600] },
+    "grandTotals":{ "counts":[5661,4777,5633,3789,3913,4340,4388,4530,4319],   "amounts":[52551900,43672700,52637900,37057500,38577100,43286400,44105200,45630200,43119700] }
   },
   "csMonths": ["25.1월","25.2월","25.3월","25.4월","25.5월","25.6월","25.7월","25.8월","25.9월","25.10월","25.11월","25.12월","26.1월","26.2월","26.3월","26.4월","26.5월","26.6월","26.7월","26.8월"],
   "csTotals": [99123500, 137973800, 125952800, 99388200, 84581100, 87479900, 107566700, 107956400, 107500300, 89680900, 88568100, 94133900, 89938800, 79067100, 98908400, 73883300, 74214600, 85080300, 86172400, 87880400],
@@ -8337,12 +8373,12 @@ window.arsUploadImg = function(nodeId) {
     reader.onload = ev => {
       const img = new Image();
       img.onload = () => {
-        const MAX = 700;
+        const MAX = 400;
         const s = Math.min(1, MAX / Math.max(img.width, img.height));
         const canvas = document.createElement('canvas');
         canvas.width = img.width * s; canvas.height = img.height * s;
         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.72);
         // 카드에 표시
         const node = document.getElementById(nodeId);
         if (node) {
@@ -8353,7 +8389,7 @@ window.arsUploadImg = function(nodeId) {
             area.style.display = 'block';
             if (!imgEl._lbBound) {
               imgEl._lbBound = true;
-              imgEl.addEventListener('click', e => { e.stopPropagation(); const card = imgEl.closest('.ars-drag-box, #ars-phone-anchor'); if (card && card._dragMoved) return; window.openLightbox && window.openLightbox(imgEl.src); });
+              imgEl.addEventListener('click', e => { e.stopPropagation(); if (imgEl.src && imgEl.src.length > 100) window.openLightbox && window.openLightbox(imgEl.src); });
             }
           }
         }
@@ -8399,12 +8435,12 @@ window.arsDeleteImg = function(nodeId) {
     reader.onload = e => {
       const img = new Image();
       img.onload = () => {
-        const MAX = 700;
+        const MAX = 400;
         const s = Math.min(1, MAX / Math.max(img.width, img.height));
         const c = document.createElement('canvas');
         c.width = img.width * s; c.height = img.height * s;
         c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-        cb(c.toDataURL('image/jpeg', 0.82));
+        cb(c.toDataURL('image/jpeg', 0.72));
       };
       img.src = e.target.result;
     };
@@ -8423,7 +8459,7 @@ window.arsDeleteImg = function(nodeId) {
       // 클릭 시 라이트박스 (한 번만 바인딩)
       if (!imgEl._lbBound) {
         imgEl._lbBound = true;
-        imgEl.addEventListener('click', e => { e.stopPropagation(); const card = imgEl.closest('.ars-drag-box, #ars-phone-anchor'); if (card && card._dragMoved) return; window.openLightbox && window.openLightbox(imgEl.src); });
+        imgEl.addEventListener('click', e => { e.stopPropagation(); if (imgEl.src && imgEl.src.length > 100) window.openLightbox && window.openLightbox(imgEl.src); });
       }
     } else {
       const imgEl = area.querySelector('img');
@@ -8433,6 +8469,12 @@ window.arsDeleteImg = function(nodeId) {
   }
 
   async function saveImg(nodeId, dataUrl) {
+    // localStorage 백업 (즉시, Supabase 실패해도 유지)
+    try {
+      if (dataUrl) localStorage.setItem('ars-img-' + nodeId, dataUrl);
+      else localStorage.removeItem('ars-img-' + nodeId);
+    } catch(e) {}
+
     if (!window._SB) return;
     if (dataUrl) {
       await window._SB.from('ars_node_imgs').upsert(
@@ -8600,14 +8642,134 @@ function initArsFlow() {
     if (saved['ars-n-sms'].h) nSms.style.height = saved['ars-n-sms'].h + 'px';
   }
 
-  const redraw = () => drawArsLines(svg, canvas, anchor, phoneNodes);
-  drawArsLines(svg, canvas, anchor, phoneNodes);
+  const redraw = () => {}; // 자동 선 비활성화
+  window._arsRedraw = redraw;
+  svg.innerHTML = ''; // 초기 빈 SVG
+  localStorage.removeItem('ars-origin-dots'); // 기존 dot 데이터 제거
+  document.querySelectorAll('.ars-origin-dot').forEach(d => d.remove()); // 기존 dot 엘리먼트 제거
   allNodes.forEach(node => arsEnableDrag(node, redraw));
   arsEnableDrag(anchor, redraw);
-  initArsOriginDots(anchor, Array.from(anchor.querySelectorAll('.ars-phone-btn')), redraw);
   arsInitPhoneImage(anchor, redraw);
-  window.addEventListener('resize', () => drawArsLines(svg, canvas, anchor, phoneNodes));
   arsInitImages();
+  initArsConnectionMode(canvas, svg, redraw);
+
+  // ── Zoom + Undo system ──────────────────────────────────────────
+  const outer = document.getElementById('ars-canvas-outer');
+  let scale = 1, panX = 0, panY = 0;
+  const undoStack = [];
+  window._arsZoom = { scale: 1 };
+
+  function applyZoom() {
+    canvas.style.transform = `translate(${panX}px,${panY}px) scale(${scale})`;
+    const lbl = document.getElementById('ars-scale-lbl');
+    if (lbl) lbl.textContent = Math.round(scale * 100) + '%';
+    window._arsZoom.scale = scale;
+    const undoBtn = document.getElementById('ars-undo');
+    if (undoBtn) undoBtn.disabled = undoStack.length === 0;
+  }
+
+  function zoomAt(clientX, clientY, factor) {
+    const rect = outer.getBoundingClientRect();
+    const mx = clientX - rect.left;
+    const my = clientY - rect.top;
+    const newScale = Math.min(3, Math.max(0.2, scale * factor));
+    panX = mx - (mx - panX) * newScale / scale;
+    panY = my - (my - panY) * newScale / scale;
+    scale = newScale;
+    applyZoom();
+    redraw();
+  }
+
+  outer.addEventListener('wheel', e => {
+    e.preventDefault();
+    zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.1 : 1 / 1.1);
+  }, { passive: false });
+
+  // Space + drag to pan
+  let spaceDown = false, panning = false, panStartX = 0, panStartY = 0, panStartPanX = 0, panStartPanY = 0;
+  document.addEventListener('keydown', e => { if (e.code === 'Space' && !e.target.matches('input,textarea')) { e.preventDefault(); spaceDown = true; outer.style.cursor = 'grab'; } });
+  document.addEventListener('keyup',   e => { if (e.code === 'Space') { spaceDown = false; panning = false; outer.style.cursor = ''; } });
+  outer.addEventListener('mousedown', e => {
+    if (spaceDown) {
+      e.preventDefault(); panning = true;
+      panStartX = e.clientX; panStartY = e.clientY;
+      panStartPanX = panX; panStartPanY = panY;
+      outer.style.cursor = 'grabbing';
+    }
+  });
+  document.addEventListener('mousemove', e => {
+    if (panning) {
+      panX = panStartPanX + (e.clientX - panStartX);
+      panY = panStartPanY + (e.clientY - panStartY);
+      applyZoom(); redraw();
+    }
+  });
+  document.addEventListener('mouseup', () => { if (panning) { panning = false; outer.style.cursor = spaceDown ? 'grab' : ''; } });
+
+  let lastDist = 0;
+  outer.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  }, { passive: true });
+  outer.addEventListener('touchmove', e => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      if (lastDist > 0) zoomAt((e.touches[0].clientX + e.touches[1].clientX) / 2, (e.touches[0].clientY + e.touches[1].clientY) / 2, dist / lastDist);
+      lastDist = dist;
+    }
+  }, { passive: false });
+  outer.addEventListener('touchend', () => { lastDist = 0; }, { passive: true });
+
+  const zoomInBtn    = document.getElementById('ars-zoom-in');
+  const zoomOutBtn   = document.getElementById('ars-zoom-out');
+  const zoomFitBtn   = document.getElementById('ars-zoom-fit');
+  const zoomResetBtn = document.getElementById('ars-zoom-reset');
+  const undoBtn      = document.getElementById('ars-undo');
+
+  if (zoomInBtn)  zoomInBtn.onclick  = () => { const r = outer.getBoundingClientRect(); zoomAt(r.left + r.width/2, r.top + r.height/2, 1.2); };
+  if (zoomOutBtn) zoomOutBtn.onclick = () => { const r = outer.getBoundingClientRect(); zoomAt(r.left + r.width/2, r.top + r.height/2, 1/1.2); };
+  if (zoomResetBtn) zoomResetBtn.onclick = () => { scale = 1; panX = 0; panY = 0; applyZoom(); redraw(); };
+
+  if (zoomFitBtn) zoomFitBtn.onclick = () => {
+    const allDragNodes = Array.from(canvas.querySelectorAll('.ars-drag-box'));
+    if (!allDragNodes.length) return;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    allDragNodes.forEach(n => {
+      const l = parseInt(n.style.left) || 0, t = parseInt(n.style.top) || 0;
+      const w = n.offsetWidth || 200,       h = n.offsetHeight || 100;
+      minX = Math.min(minX, l); minY = Math.min(minY, t);
+      maxX = Math.max(maxX, l + w); maxY = Math.max(maxY, t + h);
+    });
+    const pad = 40;
+    scale = Math.min(3, Math.max(0.2, Math.min((outer.clientWidth - pad*2) / (maxX - minX), (outer.clientHeight - pad*2) / (maxY - minY))));
+    panX = pad - minX * scale;
+    panY = pad - minY * scale;
+    applyZoom(); redraw();
+  };
+
+  window._arsSaveUndo = function() {
+    const ns = Array.from(canvas.querySelectorAll('.ars-drag-box')).map(n => ({ id: n.id, left: n.style.left, top: n.style.top, width: n.style.width, height: n.style.height }));
+    const ds = Array.from(canvas.querySelectorAll('.ars-origin-dot')).map(d => ({ id: d.id, left: d.style.left, top: d.style.top }));
+    undoStack.push({ nodes: ns, dots: ds });
+    if (undoStack.length > 50) undoStack.shift();
+    if (undoBtn) undoBtn.disabled = false;
+  };
+
+  function doUndo() {
+    if (!undoStack.length) return;
+    const prev = undoStack.pop();
+    prev.nodes.forEach(s => { const el = document.getElementById(s.id); if (el) { el.style.left = s.left; el.style.top = s.top; el.style.width = s.width; el.style.height = s.height; } });
+    (prev.dots || []).forEach(s => { const el = document.getElementById(s.id); if (el) { el.style.left = s.left; el.style.top = s.top; } });
+    if (undoBtn) undoBtn.disabled = undoStack.length === 0;
+    redraw();
+  }
+
+  if (undoBtn) undoBtn.onclick = doUndo;
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); doUndo(); }
+  });
+
+  applyZoom();
 }
 
 function initArsOriginDots(anchor, btns, redraw) {
@@ -8640,12 +8802,16 @@ function initArsOriginDots(anchor, btns, redraw) {
     dot.addEventListener('mousedown', e => {
       e.preventDefault();
       e.stopPropagation();
-      ox = e.clientX - dot.offsetLeft;
-      oy = e.clientY - dot.offsetTop;
+      const s = (window._arsZoom && window._arsZoom.scale) || 1;
+      const cr = canvas.getBoundingClientRect();
+      ox = (e.clientX - cr.left) / s - dot.offsetLeft;
+      oy = (e.clientY - cr.top)  / s - dot.offsetTop;
       dot.classList.add('is-dragging');
       const move = e => {
-        dot.style.left = (e.clientX - ox) + 'px';
-        dot.style.top  = (e.clientY - oy) + 'px';
+        const s2 = (window._arsZoom && window._arsZoom.scale) || 1;
+        const cr2 = canvas.getBoundingClientRect();
+        dot.style.left = ((e.clientX - cr2.left) / s2 - ox) + 'px';
+        dot.style.top  = ((e.clientY - cr2.top)  / s2 - oy) + 'px';
         redraw();
       };
       const up = () => {
@@ -8754,10 +8920,166 @@ function arsInitPhoneImage(anchor, redraw) {
   });
 }
 
+function initArsConnectionMode(canvas, svg, baseRedraw) {
+  const PORTS = ['top', 'right', 'bottom', 'left'];
+  const NS = 'http://www.w3.org/2000/svg';
+  const conns = JSON.parse(localStorage.getItem('ars-connections') || '[]');
+
+  // SVG를 canvas 마지막으로 이동해서 드래그 박스보다 위에 렌더링
+  canvas.appendChild(svg);
+  svg.style.pointerEvents = 'none';
+
+  // arrow marker 정의 (drawArsLines 없이도 작동)
+  const NS2 = 'http://www.w3.org/2000/svg';
+  if (!svg.querySelector('#ars-arr')) {
+    const defs = document.createElementNS(NS2, 'defs');
+    const mk = document.createElementNS(NS2, 'marker');
+    mk.setAttribute('id', 'ars-arr'); mk.setAttribute('markerWidth', '7'); mk.setAttribute('markerHeight', '7');
+    mk.setAttribute('refX', '6'); mk.setAttribute('refY', '3.5'); mk.setAttribute('orient', 'auto');
+    const ap = document.createElementNS(NS2, 'path');
+    ap.setAttribute('d', 'M0,0 L0,7 L7,3.5 z'); ap.setAttribute('fill', '#6366f1');
+    mk.appendChild(ap); defs.appendChild(mk); svg.appendChild(defs);
+  }
+
+  function portPos(el, side) {
+    const l = el.offsetLeft, t = el.offsetTop, w = el.offsetWidth, h = el.offsetHeight;
+    if (side === 'top')    return { x: l + w/2, y: t };
+    if (side === 'right')  return { x: l + w,   y: t + h/2 };
+    if (side === 'bottom') return { x: l + w/2, y: t + h };
+                           return { x: l,       y: t + h/2 };
+  }
+
+  function pathD(fp, fromSide, tp, toSide) {
+    const cx1 = fromSide === 'left' ? fp.x - 60 : fromSide === 'right' ? fp.x + 60 : fp.x;
+    const cy1 = fromSide === 'top'  ? fp.y - 60 : fromSide === 'bottom' ? fp.y + 60 : fp.y;
+    const cx2 = toSide   === 'left' ? tp.x - 60 : toSide   === 'right' ? tp.x + 60 : tp.x;
+    const cy2 = toSide   === 'top'  ? tp.y - 60 : toSide   === 'bottom' ? tp.y + 60 : tp.y;
+    return `M ${fp.x} ${fp.y} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${tp.x} ${tp.y}`;
+  }
+
+  function bestPort(fromPos, toEl) {
+    let best = 'top', bd = Infinity;
+    PORTS.forEach(s => { const p = portPos(toEl, s); const d = Math.hypot(p.x - fromPos.x, p.y - fromPos.y); if (d < bd) { bd = d; best = s; } });
+    return best;
+  }
+
+  function saveConns() { localStorage.setItem('ars-connections', JSON.stringify(conns)); }
+
+  function drawConns() {
+    svg.querySelectorAll('.ars-custom-conn, .ars-custom-hit').forEach(el => el.remove());
+    conns.forEach(c => {
+      const fe = document.getElementById(c.from), te = document.getElementById(c.to);
+      if (!fe || !te) return;
+      const fp = portPos(fe, c.fromSide), tp = portPos(te, c.toSide);
+      const d = pathD(fp, c.fromSide, tp, c.toSide);
+
+      // 보이는 선
+      const path = document.createElementNS(NS, 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('stroke', '#6366f1');
+      path.setAttribute('stroke-width', '1.8');
+      path.setAttribute('fill', 'none');
+      path.setAttribute('marker-end', 'url(#ars-arr)');
+      path.setAttribute('pointer-events', 'none');
+      path.classList.add('ars-custom-conn');
+      svg.appendChild(path);
+
+      // 넓은 투명 히트 영역 (클릭용)
+      const hit = document.createElementNS(NS, 'path');
+      hit.setAttribute('d', d);
+      hit.setAttribute('stroke', 'transparent');
+      hit.setAttribute('stroke-width', '14');
+      hit.setAttribute('fill', 'none');
+      hit.setAttribute('pointer-events', 'stroke');
+      hit.classList.add('ars-custom-hit');
+      hit.style.cursor = 'pointer';
+      hit.title = '클릭하여 삭제';
+      hit.addEventListener('click', () => {
+        const idx = conns.indexOf(c);
+        if (idx >= 0) { conns.splice(idx, 1); saveConns(); drawConns(); }
+      });
+      hit.addEventListener('mouseenter', () => { path.setAttribute('stroke', '#4f46e5'); path.setAttribute('stroke-width', '2.5'); });
+      hit.addEventListener('mouseleave', () => { path.setAttribute('stroke', '#6366f1'); path.setAttribute('stroke-width', '1.8'); });
+      svg.appendChild(hit);
+    });
+  }
+
+  // 포트 핸들 추가
+  Array.from(canvas.querySelectorAll('.ars-drag-box')).forEach(node => {
+    if (node.querySelector('.ars-port')) return;
+    PORTS.forEach(side => {
+      const p = document.createElement('div');
+      p.className = `ars-port ars-port-${side}`;
+      node.appendChild(p);
+      p.addEventListener('mousedown', e => { e.preventDefault(); e.stopPropagation(); startConn(node, side, e); });
+    });
+  });
+
+  let connecting = false, fromNode = null, fromSide = null, tempPath = null;
+
+  function startConn(node, side, e) {
+    connecting = true; fromNode = node; fromSide = side;
+    tempPath = document.createElementNS(NS, 'path');
+    tempPath.setAttribute('stroke', '#6366f1');
+    tempPath.setAttribute('stroke-width', '2');
+    tempPath.setAttribute('stroke-dasharray', '6,3');
+    tempPath.setAttribute('fill', 'none');
+    tempPath.setAttribute('pointer-events', 'none');
+    svg.appendChild(tempPath);
+    document.body.classList.add('ars-connecting-cursor');
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }
+
+  function onMove(e) {
+    if (!connecting || !tempPath) return;
+    const cr = canvas.getBoundingClientRect();
+    const s = (window._arsZoom && window._arsZoom.scale) || 1;
+    const fp = portPos(fromNode, fromSide);
+    const tx = (e.clientX - cr.left) / s, ty = (e.clientY - cr.top) / s;
+    const d = pathD(fp, fromSide, { x: tx, y: ty }, fromSide === 'top' ? 'bottom' : fromSide === 'bottom' ? 'top' : fromSide === 'left' ? 'right' : 'left');
+    tempPath.setAttribute('d', d);
+    canvas.querySelectorAll('.ars-connect-target').forEach(n => n.classList.remove('ars-connect-target'));
+    const target = Array.from(canvas.querySelectorAll('.ars-drag-box')).find(n => {
+      if (n === fromNode) return false;
+      const r = n.getBoundingClientRect();
+      return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    });
+    if (target) target.classList.add('ars-connect-target');
+  }
+
+  function onUp(e) {
+    if (!connecting) return;
+    connecting = false;
+    if (tempPath) { tempPath.remove(); tempPath = null; }
+    document.body.classList.remove('ars-connecting-cursor');
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    canvas.querySelectorAll('.ars-connect-target').forEach(n => n.classList.remove('ars-connect-target'));
+    const target = Array.from(canvas.querySelectorAll('.ars-drag-box')).find(n => {
+      if (n === fromNode) return false;
+      const r = n.getBoundingClientRect();
+      return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    });
+    if (target) {
+      const fp = portPos(fromNode, fromSide);
+      conns.push({ id: Date.now(), from: fromNode.id, fromSide, to: target.id, toSide: bestPort(fp, target) });
+      saveConns();
+    }
+    drawConns();
+  }
+
+  const origRedraw = window._arsRedraw;
+  window._arsRedraw = () => { if (origRedraw) origRedraw(); canvas.appendChild(svg); drawConns(); };
+  drawConns();
+}
+
 function drawArsLines(svg, canvas, anchor, nodes) {
   svg.innerHTML = '';
   const NS = 'http://www.w3.org/2000/svg';
   const cr  = canvas.getBoundingClientRect();
+  const s   = (window._arsZoom && window._arsZoom.scale) || 1;
+  const toC = (screenX, screenY) => [(screenX - cr.left) / s, (screenY - cr.top) / s];
   const btns = Array.from(anchor.querySelectorAll('.ars-phone-btn'));
 
   // 화살표 마커 정의
@@ -8781,19 +9103,16 @@ function drawArsLines(svg, canvas, anchor, nodes) {
     let fx, fy;
     if (dotEl) {
       const dr = dotEl.getBoundingClientRect();
-      fx = dr.left + dr.width  / 2 - cr.left;
-      fy = dr.top  + dr.height / 2 - cr.top;
+      [fx, fy] = toC(dr.left + dr.width / 2, dr.top + dr.height / 2);
     } else {
       const btn = btns[i];
       if (!btn) return;
       const br = btn.getBoundingClientRect();
-      fx = br.left + br.width / 2 - cr.left;
-      fy = br.bottom - cr.top;
+      [fx, fy] = toC(br.left + br.width / 2, br.bottom);
     }
 
     const nr = node.getBoundingClientRect();
-    const tx = nr.left + nr.width  / 2 - cr.left;
-    const ty = nr.top   - cr.top;
+    const [tx, ty] = toC(nr.left + nr.width / 2, nr.top);
     const my = fy + (ty - fy) * 0.5;
 
     const path = document.createElementNS(NS, 'path');
@@ -8815,14 +9134,12 @@ function drawArsLines(svg, canvas, anchor, nodes) {
   const n6 = document.getElementById('ars-n6');
   if (n6) {
     const t6r = n6.getBoundingClientRect();
-    const tx6 = t6r.left + t6r.width  / 2 - cr.left;
-    const ty6 = t6r.top  - cr.top;
+    const [tx6, ty6] = toC(t6r.left + t6r.width / 2, t6r.top);
     ['ars-n3','ars-n4'].forEach(fromId => {
       const fromEl = document.getElementById(fromId);
       if (!fromEl) return;
       const fr  = fromEl.getBoundingClientRect();
-      const fx6 = fr.left + fr.width  / 2 - cr.left;
-      const fy6 = fr.bottom - cr.top;
+      const [fx6, fy6] = toC(fr.left + fr.width / 2, fr.bottom);
       const my6 = fy6 + (ty6 - fy6) * 0.5;
 
       const p = document.createElementNS(NS, 'path');
@@ -8844,6 +9161,8 @@ function drawArsLines(svg, canvas, anchor, nodes) {
 
 function arsEnableDrag(el, onUpdate) {
   let ox = 0, oy = 0;
+  const getS  = () => (window._arsZoom && window._arsZoom.scale) || 1;
+  const getCR = () => document.getElementById('ars-canvas').getBoundingClientRect();
 
   const savePos = () => {
     try {
@@ -8854,15 +9173,18 @@ function arsEnableDrag(el, onUpdate) {
   };
 
   const startDrag = (cx, cy) => {
-    ox = cx - el.offsetLeft;
-    oy = cy - el.offsetTop;
+    if (window._arsSaveUndo) window._arsSaveUndo();
+    const cr = getCR(), s = getS();
+    ox = (cx - cr.left) / s - el.offsetLeft;
+    oy = (cy - cr.top)  / s - el.offsetTop;
     el._dragMoved = false;
     el.classList.add('is-dragging');
   };
   const moveDrag = (cx, cy) => {
     el._dragMoved = true;
-    el.style.left = (cx - ox) + 'px';
-    el.style.top  = (cy - oy) + 'px';
+    const cr = getCR(), s = getS();
+    el.style.left = ((cx - cr.left) / s - ox) + 'px';
+    el.style.top  = ((cy - cr.top)  / s - oy) + 'px';
     onUpdate();
   };
   const endDrag = () => {
@@ -8870,7 +9192,6 @@ function arsEnableDrag(el, onUpdate) {
     savePos();
   };
 
-  // 커스텀 리사이즈 핸들 추가 (.ars-drag-box만)
   if (el.classList.contains('ars-drag-box') || el.id === 'ars-phone-anchor') {
     const handle = document.createElement('div');
     handle.className = 'ars-resize-handle';
@@ -8878,13 +9199,12 @@ function arsEnableDrag(el, onUpdate) {
     handle.addEventListener('mousedown', e => {
       e.stopPropagation();
       e.preventDefault();
-      const startW = el.offsetWidth;
-      const startH = el.offsetHeight;
-      const startX = e.clientX;
-      const startY = e.clientY;
+      if (window._arsSaveUndo) window._arsSaveUndo();
+      const s = getS();
+      const startW = el.offsetWidth, startH = el.offsetHeight, startX = e.clientX, startY = e.clientY;
       const move = e => {
-        el.style.width  = Math.max(100, startW + e.clientX - startX) + 'px';
-        el.style.height = Math.max(40,  startH + e.clientY - startY) + 'px';
+        el.style.width  = Math.max(100, startW + (e.clientX - startX) / s) + 'px';
+        el.style.height = Math.max(40,  startH + (e.clientY - startY) / s) + 'px';
         onUpdate();
       };
       const up = () => { savePos(); document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); };
@@ -8895,9 +9215,9 @@ function arsEnableDrag(el, onUpdate) {
 
   // Mouse
   el.addEventListener('mousedown', e => {
-    e.preventDefault();
+    if (e.target.closest('.ars-node-img, .ars-img-btn, .ars-img-del, .ars-port, .ars-resize-handle, .ars-img-del, button')) return;
     startDrag(e.clientX, e.clientY);
-    const move = e => moveDrag(e.clientX, e.clientY);
+    const move = e => { e.preventDefault(); moveDrag(e.clientX, e.clientY); };
     const up   = () => { endDrag(); document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); };
     document.addEventListener('mousemove', move);
     document.addEventListener('mouseup', up);
@@ -9135,7 +9455,7 @@ bxTermsLoad();
       area.style.display = 'block';
       if (!imgEl._lbBound) {
         imgEl._lbBound = true;
-        imgEl.addEventListener('click', e => { e.stopPropagation(); const card = imgEl.closest('.ars-drag-box, #ars-phone-anchor'); if (card && card._dragMoved) return; window.openLightbox && window.openLightbox(imgEl.src); });
+        imgEl.addEventListener('click', e => { e.stopPropagation(); if (imgEl.src && imgEl.src.length > 100) window.openLightbox && window.openLightbox(imgEl.src); });
       }
     }
   }
