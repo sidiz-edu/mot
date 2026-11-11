@@ -408,7 +408,7 @@ button { font-family: inherit; cursor: pointer; }
 .chart-box.h-180 { height: 180px; }
 .chart-box.h-160 { height: 160px; }
 .chart-box.h-280 { height: 280px; }
-.asd-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 8px; }
+.asd-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 8px; }
 .asd-stat { padding: 8px 10px; border-radius: 8px; background: var(--surface-2); }
 .asd-k { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink-3); }
 .asd-k i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
@@ -3478,7 +3478,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
           <div class="card-head">
             <div>
               <div class="card-title">AS 신청페이지 일별 전환율</div>
-              <div class="card-sub">메인 조회 대비 · 10/28 페이지 개선 전후 비교</div>
+              <div class="card-sub">클릭률·완료율은 메인 조회 대비, 이지리페어는 버튼 클릭 대비 · 10/28 개선 전후 비교</div>
             </div>
             <span class="tag up">목표 ↑</span>
           </div>
@@ -3496,7 +3496,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
             <dt>유입 데이터</dt><dd>웹 행동 로그 · 주별 단계별 사용자 수 (메인조회 → AS신청클릭 → 제품선택 → 증상입력 → 고객정보 → 신청완료)</dd>
             <dt>유입률</dt><dd>(다음 단계 수 ÷ 전 단계 수) × 100</dd>
             <dt>제품등록 수</dt><dd>정품등록 완료 건수 <span class="mute">(주별 기준)</span></dd>
-            <dt>일별 전환율</dt><dd>'AS 신청페이지 개선' 시트(일별) · 버튼 클릭률 = 버튼 클릭 ÷ 메인 조회, 신청 완료율 = 신청 완료 ÷ 메인 조회 · 개선 전후 값은 기간 합계 기준 (개선 전 10/1~10/27, 개선 후 10/28~)</dd>
+            <dt>일별 전환율</dt><dd>'AS 신청페이지 개선' 시트(일별) · 버튼 클릭률 = 버튼 클릭 ÷ 메인 조회, 신청 완료율 = 신청 완료 ÷ 메인 조회, 이지리페어 클릭률 = 정품등록 리스트 내 이지리페어 클릭 ÷ 버튼 클릭 (Looker Studio 일별) · 개선 전후 값은 기간 합계 기준 (개선 전 10/1~10/27, 개선 후 10/28~)</dd>
           </dl>
         </div>
       </div>
@@ -4747,11 +4747,12 @@ const DATA = {
     }
 ],
   "asDaily": {
-    "source": "AS 신청페이지 개선 시트 (일별 · 메인 조회/버튼 클릭/신청 완료)",
+    "source": "AS 신청페이지 개선 시트 (일별 · 메인 조회/버튼 클릭/신청 완료) + Looker Studio AS KPI Overview (이지리페어 클릭율 일별 → 건수 환산)",
     "dates": ["10/1", "10/2", "10/3", "10/4", "10/5", "10/6", "10/7", "10/8", "10/9", "10/10", "10/11", "10/12", "10/13", "10/14", "10/15", "10/16", "10/17", "10/18", "10/19", "10/20", "10/21", "10/22", "10/23", "10/24", "10/25", "10/26", "10/27", "10/28", "10/29", "10/30", "10/31", "11/1", "11/2", "11/3", "11/4", "11/5", "11/6", "11/7", "11/8", "11/9"],
     "view": [255, 246, 167, 154, 190, 284, 191, 243, 141, 140, 154, 344, 314, 243, 195, 209, 157, 148, 276, 205, 223, 216, 210, 129, 146, 244, 235, 214, 152, 181, 133, 153, 230, 236, 220, 208, 233, 126, 112, 206],
     "click": [61, 72, 41, 36, 39, 79, 47, 64, 47, 47, 36, 82, 98, 55, 44, 71, 38, 31, 64, 43, 57, 59, 59, 41, 33, 75, 51, 62, 66, 62, 41, 59, 97, 91, 63, 97, 90, 46, 28, 67],
     "done": [27, 30, 19, 16, 22, 29, 21, 21, 14, 24, 20, 31, 28, 26, 21, 35, 20, 20, 34, 26, 24, 21, 25, 21, 21, 33, 26, 30, 21, 25, 18, 22, 20, 33, 21, 33, 32, 24, 13, 28],
+    "easy": [3, 12, 3, 2, 6, 15, 5, 3, 5, 17, 6, 12, 6, 5, 5, 3, 6, 5, 5, 2, 1, 6, 2, 6, 6, 5, 3, 4, 3, 2, 6, 8, 7, 10, 5, 3, 3, 11, 6, 2],
     "events": [{"date": "10/28", "label": "CTA 상단 추가 · 절차 6→4단계"}, {"date": "11/3", "label": "정품등록 1577 번호 삭제"}]
   },
   "funnel": {
@@ -6206,13 +6207,13 @@ function renderSec1() {
 function renderAsDaily() {
   const A = DATA.asDaily;
   if (!A) return;
-  const pct = (num) => num.map((v, i) => A.view[i] ? Math.round(v / A.view[i] * 1000) / 10 : null);
-  const clickR = pct(A.click), doneR = pct(A.done);
+  const pct = (num, den = A.view) => num.map((v, i) => den[i] ? Math.round(v / den[i] * 1000) / 10 : null);
+  const clickR = pct(A.click), doneR = pct(A.done), easyR = A.easy ? pct(A.easy, A.click) : null;
   const cut = A.dates.indexOf(A.events[0].date);
   const sum = (arr, s, e) => arr.slice(s, e).reduce((x, y) => x + y, 0);
-  const rate = (num, s, e) => sum(num, s, e) / sum(A.view, s, e) * 100;
-  const stat = (label, color, num) => {
-    const before = rate(num, 0, cut), after = rate(num, cut, A.dates.length), d = after - before;
+  const rate = (num, s, e, den = A.view) => sum(num, s, e) / sum(den, s, e) * 100;
+  const stat = (label, color, num, den = A.view) => {
+    const before = rate(num, 0, cut, den), after = rate(num, cut, A.dates.length, den), d = after - before;
     return `<div class="asd-stat">
       <div class="asd-k"><i style="background:${color}"></i>${label}</div>
       <div class="asd-v" style="color:${color}">${after.toFixed(1)}%</div>
@@ -6220,7 +6221,8 @@ function renderAsDaily() {
     </div>`;
   };
   const box = document.getElementById('asd-stats');
-  if (box) box.innerHTML = stat('버튼 클릭률', COLORS.accent, A.click) + stat('신청 완료율', COLORS.pos, A.done);
+  if (box) box.innerHTML = stat('버튼 클릭률', COLORS.accent, A.click) + stat('신청 완료율', COLORS.pos, A.done)
+    + (A.easy ? stat('이지리페어 클릭률', COLORS.warn, A.easy, A.click) : '');
 
   const el = document.getElementById('c_as_daily');
   if (!el) return;
@@ -6255,7 +6257,8 @@ function renderAsDaily() {
   scales.x.ticks.maxRotation = 0; scales.x.ticks.autoSkip = true; scales.x.ticks.maxTicksLimit = 8;
   CHARTS['c_as_daily'] = new Chart(ctx, {
     type: 'line',
-    data: { labels: A.dates, datasets: [ds('버튼 클릭률', clickR, COLORS.accent, A.click), ds('신청 완료율', doneR, COLORS.pos, A.done)] },
+    data: { labels: A.dates, datasets: [ds('버튼 클릭률', clickR, COLORS.accent, A.click), ds('신청 완료율', doneR, COLORS.pos, A.done)]
+      .concat(A.easy ? [ds('이지리페어 클릭률', easyR, COLORS.warn, A.easy)] : []) },
     options: {
       responsive: true, maintainAspectRatio: false,
       interaction: { intersect: false, mode: 'index' },
