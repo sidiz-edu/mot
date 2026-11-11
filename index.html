@@ -415,6 +415,19 @@ button { font-family: inherit; cursor: pointer; }
 .asd-v { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; margin-top: 2px; }
 .asd-d { font-size: 11px; color: var(--ink-3); }
 .asd-d b { font-weight: 700; }
+.t27-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.t27-kpi { padding: 12px 14px; border-radius: 10px; background: var(--surface-2); }
+.t27-kpi .k { font-size: 12px; color: var(--ink-3); }
+.t27-kpi .v { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin-top: 2px; }
+.t27-kpi .d { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.t27-kpi .d b { color: var(--pos); font-weight: 700; }
+.t27-h { font-size: 12.5px; font-weight: 600; color: var(--ink-2); margin: 6px 0 6px; }
+.t27-h span { font-weight: 400; color: var(--ink-3); margin-left: 6px; }
+.t27-legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 11.5px; color: var(--ink-3); margin-bottom: 4px; }
+.t27-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.t27-note { margin-top: 10px; font-size: 11.5px; line-height: 1.6; color: var(--ink-3); }
+.t27-note b { color: var(--ink-2); }
+@media (max-width: 760px) { .t27-kpis { grid-template-columns: 1fr; } }
 /* YoY 미니 차트 */
 .chart-inner { background: var(--surface-2); border: 1px solid var(--border-soft); border-radius: 8px; padding: 10px 12px; }
 .chart-inner-title { font-size: 11.5px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
@@ -3450,17 +3463,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
         </div>
       </div>
 
-      <div class="grid-3 mt-16">
-        <div class="card">
-          <div class="card-head">
-            <div>
-              <div class="card-title">1 → 2 유입률</div>
-              <div class="card-sub">메인 조회 → AS 신청 버튼 클릭</div>
-            </div>
-            <span class="tag down">목표 ↓</span>
-          </div>
-          <div class="chart-box"><canvas id="c_conv12"></canvas></div>
-        </div>
+      <div class="grid-2 mt-16">
         <div class="card">
           <div class="card-head">
             <div>
@@ -3579,6 +3582,34 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
               <thead id="cs_detail_head"></thead>
               <tbody id="cs_detail_body"></tbody>
             </table>
+          </div>
+        </div>
+        <!-- 27년 목표 -->
+        <div class="card mt-16">
+          <div class="card-head">
+            <div>
+              <div class="card-title">27년 AS 관련 용역료 목표</div>
+              <div class="card-sub">월평균 · AS 상담(유선·모바일·게시판) + AS 접수 · AS-IS는 26년 1~10월 실적</div>
+            </div>
+            <span class="tag down">목표 ↓</span>
+          </div>
+          <div class="t27-kpis" id="t27-kpis"></div>
+          <div class="grid-2 mt-8">
+            <div>
+              <div class="t27-h">월평균 용역료 구성 <span>단위: 만원</span></div>
+              <div class="t27-legend" id="t27-legend"></div>
+              <div class="chart-box h-220"><canvas id="c_t27_stack"></canvas></div>
+            </div>
+            <div>
+              <div class="t27-h">26년 월별 AS 관련 용역료와 목표선 <span>단위: 만원</span></div>
+              <div class="t27-legend" id="t27-legend2"></div>
+              <div class="chart-box h-220"><canvas id="c_t27_trend"></canvas></div>
+            </div>
+          </div>
+          <div class="t27-note">
+            <b>목표</b> 보이는 ARS·유선번호 노출 축소로 유선 AS 상담 45% 감축 (2,134 → 1,174건) ·
+            <b>의지치</b> 자사몰 접수 비중 80%, 단순 문의 월 600건 수준 (유선 AS 상담 765건) ·
+            건당 단가: 유선 13,500원 / 모바일 5,500원 / 게시판 3,000원 / 접수 6,700원
           </div>
         </div>
         <!-- 월별 분석 노트 -->
@@ -6260,12 +6291,104 @@ function renderSec2() {
     {label:'⑤ → ⑥ 고객정보→신청완료',    color: '#38BDF8', data: stepPct(F.done,  F.info),  fill: false},
   ], F.periods, true);
 
-  makeLine('c_conv12', COLORS.accent, F.conv12, F.periods, true, '유입률', { min: 10, max: 50 });
   renderAsDaily();
   makeBar ('c_product_reg', COLORS.accent, F.productReg, F.periods, false, '등록 수');
   fjInitMetrics();
   bxInitSlotNums();
   bxTermsInit();
+}
+
+// ---- 27년 AS 관련 용역료 목표 ----
+const TARGET27 = {
+  labels: ['AS-IS (26년 1~10월)', '목표', '의지치'],
+  totals: [4770, 3520, 2560],
+  series: [
+    { name: '유선 AS 상담',         color: '#90EE90', amt: [2881, 1585, 1033], cnt: [2134, 1174, 765] },
+    { name: '모바일·게시판 AS 상담', color: '#7D9B6A', amt: [327, 375, 115],    cnt: [727, 815, 255] },
+    { name: 'AS 접수',              color: '#003EFF', amt: [1561, 1560, 1407], cnt: [2329, 2329, 2100] },
+  ],
+};
+function renderTarget27() {
+  const T = TARGET27, base = T.totals[0];
+  const fmt = v => Math.round(v).toLocaleString();
+  const kpis = document.getElementById('t27-kpis');
+  if (kpis) kpis.innerHTML = T.labels.map((lb, i) => {
+    const cut = base - T.totals[i];
+    const sub = i === 0 ? '월 4,770만원 · 연 약 5.7억원'
+      : `<b>월 -${fmt(cut)}만원 · -${Math.round(cut / base * 100)}%</b> · 연 약 ${(cut * 12 / 10000).toFixed(1)}억원 절감`;
+    return `<div class="t27-kpi"><div class="k">${lb}</div><div class="v"${i ? ' style="color:var(--accent)"' : ''}>약 ${fmt(T.totals[i])}만원</div><div class="d">${sub}</div></div>`;
+  }).join('');
+  const lg = document.getElementById('t27-legend');
+  if (lg) lg.innerHTML = T.series.map(s => `<span><i style="background:${s.color}"></i>${s.name}</span>`).join('');
+
+  // ① 구성 누적 가로막대
+  const el = document.getElementById('c_t27_stack');
+  if (el) {
+    const endLabels = {
+      id: 't27End',
+      afterDatasetsDraw(chart) {
+        const { ctx: c } = chart;
+        const last = chart.getDatasetMeta(T.series.length - 1);
+        c.save(); c.textBaseline = 'middle';
+        last.data.forEach((bar, i) => {
+          c.font = '700 12px Pretendard Variable, Pretendard, sans-serif'; c.fillStyle = COLORS.ink;
+          const txt = fmt(T.totals[i]);
+          c.fillText(txt, bar.x + 6, bar.y);
+          if (i) {
+            const w = c.measureText(txt).width;
+            c.font = '600 11px Pretendard Variable, Pretendard, sans-serif'; c.fillStyle = COLORS.pos;
+            c.fillText(`-${Math.round((base - T.totals[i]) / base * 100)}%`, bar.x + 12 + w, bar.y);
+          }
+        });
+        c.restore();
+      }
+    };
+    const scales = baseScales(false);
+    CHARTS['c_t27_stack'] = new Chart(el.getContext('2d'), {
+      type: 'bar',
+      data: { labels: T.labels, datasets: T.series.map(s => ({ label: s.name, data: s.amt, _cnt: s.cnt, backgroundColor: s.color, borderRadius: 3, barThickness: 26 })) },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        layout: { padding: { right: 70 } },
+        scales: {
+          x: Object.assign(scales.y, { stacked: true, min: 0, max: 5000, ticks: Object.assign(scales.y.ticks, { stepSize: 1000, callback: v => v.toLocaleString() }) }),
+          y: Object.assign(scales.x, { stacked: true }),
+        },
+        plugins: {
+          valueLabels: { enabled: false },
+          tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${fmt(c.raw)}만원 (${c.dataset._cnt[c.dataIndex].toLocaleString()}건)` } }
+        }
+      },
+      plugins: [endLabels]
+    });
+  }
+
+  // ② 26년 월별 실적 + 목표선
+  const el2 = document.getElementById('c_t27_trend');
+  const cd = DATA.contactDetail;
+  if (el2 && cd) {
+    const monthly = cd.months.map((m, i) => Math.round([0, 2, 4, 5, 6].reduce((s, r) => s + (cd.rows[r].amounts[i] || 0), 0) / 10000));
+    const lines = [
+      { label: '월별 실적', data: monthly, color: COLORS.ink2, dash: [], pr: 2.5 },
+      { label: 'AS-IS 평균 4,770', data: monthly.map(() => T.totals[0]), color: COLORS.ink3, dash: [2, 3], pr: 0 },
+      { label: '목표 3,520', data: monthly.map(() => T.totals[1]), color: COLORS.accent, dash: [6, 4], pr: 0 },
+      { label: '의지치 2,560', data: monthly.map(() => T.totals[2]), color: COLORS.pos, dash: [6, 4], pr: 0 },
+    ];
+    const lg2 = document.getElementById('t27-legend2');
+    if (lg2) lg2.innerHTML = lines.map(l => `<span><i style="background:${l.color}"></i>${l.label}</span>`).join('');
+    const scales2 = baseScales(false);
+    scales2.y.min = 2000; scales2.y.max = 6000; scales2.y.ticks.stepSize = 1000;
+    CHARTS['c_t27_trend'] = new Chart(el2.getContext('2d'), {
+      type: 'line',
+      data: { labels: cd.months, datasets: lines.map(l => ({ label: l.label, data: l.data, borderColor: l.color, borderDash: l.dash, borderWidth: 2, pointRadius: l.pr, pointBackgroundColor: l.color, fill: false, tension: 0.3 })) },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { intersect: false, mode: 'index' },
+        scales: scales2,
+        plugins: { valueLabels: { enabled: false }, tooltip: { callbacks: { label: c => ` ${c.dataset.label.split(' ')[0]}: ${fmt(c.parsed.y)}만원` } } }
+      }
+    });
+  }
 }
 
 // ---- Section 3 charts + table ----
@@ -6505,22 +6628,6 @@ function renderContactDetail() {
   const W  = v => v == null ? '—' : v.toLocaleString();
   const WW = v => v == null ? '—' : '₩' + v.toLocaleString();
 
-  // 26년 하반기 목표 데이터 (rows 인덱스 기준)
-  const TARGET_COUNTS = [765, null, 155, null, 100, 420, 1680];
-  const tAmt = ri => TARGET_COUNTS[ri] != null ? TARGET_COUNTS[ri] * d.rows[ri].unit : null;
-  const TBLUE = '2px solid rgba(59,100,255,0.55)';
-  const tCell = (c, a, bold=false) => {
-    const vC = c != null ? (bold ? `<b>${c.toLocaleString()}건</b>` : W(c)) : '—';
-    const vA = a != null ? (bold ? `<b>${WW(a)}</b>` : WW(a)) : '—';
-    return `<td class="num" style="border-left:${TBLUE}">${vC}</td><td class="num" style="color:var(--ink-2)">${vA}</td>`;
-  };
-  const tCellRow = ri => tCell(TARGET_COUNTS[ri], tAmt(ri));
-  const tCellAgg = indices => {
-    const c = indices.reduce((s,i)=>s+(TARGET_COUNTS[i]||0),0);
-    const a = indices.reduce((s,i)=>s+(tAmt(i)||0),0);
-    return tCell(c, a, true);
-  };
-
   // 행 번호 맵: rows 인덱스 → 표시 번호 (없으면 '')
   // rows: [0]유선_AS=1, [1]모바일_ON='', [2]모바일_AS=2,
   //       [3]게시판_ON='', [4]게시판_AS=3, [5]접수AS='', [6]자사몰=6
@@ -6535,11 +6642,9 @@ function renderContactDetail() {
       <th rowspan="2" style="position:sticky;left:240px;z-index:3;background:var(--surface);width:200px;vertical-align:middle;text-align:left">상세 내용</th>
       <th rowspan="2" style="position:sticky;left:440px;z-index:3;background:var(--surface);width:88px;vertical-align:middle">건당 비용</th>
       ${M.map(m=>`<th colspan="2" style="text-align:center">${m}</th>`).join('')}
-      <th colspan="2" style="text-align:center;border-left:2px solid rgba(59,100,255,0.55)">26년 하반기 목표</th>
     </tr>
     <tr>
       ${M.map(()=>'<th style="color:var(--ink-3);font-weight:600">건수</th><th style="color:var(--ink-3);font-weight:600">금액</th>').join('')}
-      <th style="color:var(--ink-3);font-weight:600;border-left:2px solid rgba(59,100,255,0.55)">건수</th><th style="color:var(--ink-3);font-weight:600">금액</th>
     </tr>`;
 
   body.innerHTML = '';
@@ -6584,7 +6689,7 @@ function renderContactDetail() {
       : `<td style="position:sticky;left:440px;z-index:2;background:var(--surface)"></td>`;
     const cellsTd = row.counts.map((c,i)=>
       `<td class="num">${W(c)}</td><td class="num" style="color:var(--ink-2)">${WW(row.amounts[i])}</td>`
-    ).join('') + tCellRow(ri);
+    ).join('');
 
     body.appendChild(mkRow(numTd, stageTd, nameTd, descTd, unitTd, cellsTd, style, cls));
 
@@ -6604,7 +6709,7 @@ function renderContactDetail() {
         `<td style="position:sticky;left:440px;z-index:2;background:var(--surface-3)"></td>` +
         sumC.map((c,i)=>
           `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--ink-2)"><b>${WW(sumA[i])}</b></td>`
-        ).join('') + tCellAgg([0,2,4]);
+        ).join('');
       body.appendChild(trSum);
 
       // 상담_AS 합계 직후 — 접수(AS) 행 삽입 (번호 없음, 구분용)
@@ -6619,7 +6724,7 @@ function renderContactDetail() {
         `<td class="num" style="position:sticky;left:440px;z-index:2;background:var(--surface);font-weight:700">₩${recvRow.unit.toLocaleString()}</td>` +
         recvRow.counts.map((c,i)=>
           `<td class="num">${W(c)}</td><td class="num" style="color:var(--ink-2)">${WW(recvRow.amounts[i])}</td>`
-        ).join('') + tCellRow(5);
+        ).join('');
       body.appendChild(trRecv);
     }
   });
@@ -6638,7 +6743,7 @@ function renderContactDetail() {
     `<td style="position:sticky;left:440px;z-index:2;background:var(--surface-3)"></td>` +
     recvC.map((c, i) =>
       `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--ink-2)"><b>${WW(recvA[i])}</b></td>`
-    ).join('') + tCellAgg([5,6]);
+    ).join('');
   body.appendChild(trRecvSum);
 
   // 8번 — 종합 총합계 (4+5+6)
@@ -6657,7 +6762,7 @@ function renderContactDetail() {
     `<td style="position:sticky;left:440px;z-index:2;background:rgba(0,0,0,0.06)"></td>` +
     totC.map((c, i) =>
       `<td class="num"><b>${c.toLocaleString()}건</b></td><td class="num" style="color:var(--ink-2)"><b>${WW(totA[i])}</b></td>`
-    ).join('') + tCellAgg([0,2,4,5,6]);
+    ).join('');
   body.appendChild(trTot);
 
 }
@@ -7106,205 +7211,6 @@ function renderSankey(mi) {
   host.innerHTML = svg;
 }
 
-// ---- Sankey-lite TARGET (26년 하반기 목표) ----
-function renderSankeyTarget() {
-  const host = document.getElementById('sankey-host');
-  if (!host) return;
-
-  const subEl = document.getElementById('sankey-card-sub');
-  if (subEl) subEl.textContent = '26년 하반기 목표 · 흐름 두께는 건수 비율';
-
-  // 목표: 자사몰 80%(1,680건) / 컨택센터 20%(420건) / 단순문의 600건
-  // 컨택센터 채널 비율은 현행 유지 (CTI 75% / 해피톡 15.2% / 게시판 9.8%)
-  const phoneVol  = 765;
-  const mobileVol = 155;
-  const boardVol  = 100;
-  const recvRest  = 420;
-  const recvJas   = 1680;
-
-  const totalCounsel = phoneVol + mobileVol + boardVol;
-  const phoneRecv  = Math.round(recvRest * phoneVol  / totalCounsel);
-  const mobileRecv = Math.round(recvRest * mobileVol / totalCounsel);
-  const boardRecv  = recvRest - phoneRecv - mobileRecv;
-  const phoneReply  = phoneVol  - phoneRecv;
-  const mobileReply = mobileVol - mobileRecv;
-  const boardReply  = boardVol  - boardRecv;
-
-  const W = 1320, H = 580, PAD = 24, COL_W = 160, NODE_W = 14;
-
-  const channels = [
-    { id: 'phone-as',  label: '유선 - 전화통화 (CTI)',    vol: phoneVol,  kind: 'counsel', costPer: '건당 13,500원' },
-    { id: 'mobile-as', label: '모바일 - AI챗봇 (해피톡)', vol: mobileVol, kind: 'counsel', costPer: '건당 5,500원' },
-    { id: 'board-as',  label: '외부쇼핑몰 (게시판)',        vol: boardVol,  kind: 'counsel', costPer: '건당 3,000원' },
-    { id: 'recv-jas',  label: 'AS접수 (자사몰)',            vol: recvJas,   kind: 'receive' },
-  ];
-  const systems = [
-    { id: 'cti',       label: '' },
-    { id: 'happy',     label: '' },
-    { id: 'board',     label: '' },
-    { id: 'recv-rest', label: '' },
-  ];
-  const outcomes = [
-    { id: 'reply',    label: '답변·통화 종결' },
-    { id: 'out-rest', label: 'AS접수 (자사몰 제외)', costPer: '건당 6,700원' },
-    { id: 'out-jas',  label: 'AS접수 (자사몰)',      costPer: '건당 6,700원' },
-  ];
-
-  const cs = [
-    { c: 'phone-as',  s: 'cti',       v: phoneReply  },
-    { c: 'phone-as',  s: 'recv-rest', v: phoneRecv   },
-    { c: 'mobile-as', s: 'happy',     v: mobileReply },
-    { c: 'mobile-as', s: 'recv-rest', v: mobileRecv  },
-    { c: 'board-as',  s: 'board',     v: boardReply  },
-    { c: 'board-as',  s: 'recv-rest', v: boardRecv   },
-  ];
-  const so = [
-    { s: 'cti',       o: 'reply',    v: phoneReply  },
-    { s: 'happy',     o: 'reply',    v: mobileReply },
-    { s: 'board',     o: 'reply',    v: boardReply  },
-    { s: 'recv-rest', o: 'out-rest', v: recvRest    },
-  ];
-  const co = [{ c: 'recv-jas', o: 'out-jas', v: recvJas }];
-
-  const sum = arr => arr.reduce((a,b)=>a+(typeof b==='number'?b:b.v),0);
-  const colTotal = (links, key) => {
-    const m={};
-    links.forEach(l=>{m[l[key]]=(m[l[key]]||0)+l.v;});
-    return m;
-  };
-
-  const totalCh  = sum(channels.map(c=>c.vol));
-  const sysTotals    = colTotal(cs,'s');
-  const sysOutTotals = colTotal(so,'s');
-  const outTotals    = colTotal(so,'o');
-  co.forEach(l=>{outTotals[l.o]=(outTotals[l.o]||0)+l.v;});
-  const totalOut = sum(Object.values(outTotals));
-  const baseTotal = Math.max(totalCh, totalOut);
-  const gapPx = 8;
-  const usableH = H - PAD*2 - gapPx * (Math.max(channels.length, systems.length, outcomes.length)-1);
-  const scale = usableH / baseTotal;
-
-  function positionNodes(nodes, getVol, gap=gapPx) {
-    let y=PAD;
-    return nodes.map(n=>{
-      const h=Math.max(getVol(n)*scale,6);
-      const node={...n,h,y,mid:y+h/2};
-      y+=h+gap; return node;
-    });
-  }
-  const chCol  = positionNodes(channels, n=>n.vol);
-  const sysCol = positionNodes(systems,  n=>Math.max(sysTotals[n.id]||0,sysOutTotals[n.id]||0), 0);
-  const outCol = positionNodes(outcomes, n=>outTotals[n.id]||0);
-
-  const colX = { ch: PAD+190, sys: PAD+190+COL_W+200, out: PAD+190+(COL_W+200)*2 };
-
-  function linkPath(x1,y1,x2,y2){const cx=(x1+x2)/2;return `M${x1},${y1} C${cx},${y1} ${cx},${y2} ${x2},${y2}`;}
-
-  function buildOutgoing(nodes,links,key){const out={};nodes.forEach(n=>out[n.id]=[]);links.forEach(l=>{const nd=nodes.find(n=>n.id===l[key]);if(!nd)return;out[l[key]].push(l);});return out;}
-  function buildIncoming(nodes,links,key){const inc={};nodes.forEach(n=>inc[n.id]=[]);links.forEach(l=>{const nd=nodes.find(n=>n.id===l[key]);if(!nd)return;inc[l[key]].push(l);});return inc;}
-
-  const csOut=buildOutgoing(chCol,cs,'c'), csIn=buildIncoming(sysCol,cs,'s');
-  const soOut=buildOutgoing(sysCol,so,'s'), soIn=buildIncoming(outCol,so,'o');
-  const coOut=buildOutgoing(chCol,co,'c'), coIn=buildIncoming(outCol,co,'o');
-
-  function layoutLinks(nodes,linkMap,side){
-    nodes.forEach(n=>{let y=n.y;(linkMap[n.id]||[]).forEach(l=>{const h=Math.max(l.v*scale,1);if(side==='src'){l._srcY=y+h/2;l._srcH=h;}else{l._tgtY=y+h/2;l._tgtH=h;}y+=h;});});
-  }
-  layoutLinks(chCol,csOut,'src'); layoutLinks(sysCol,csIn,'tgt');
-  layoutLinks(sysCol,soOut,'src'); layoutLinks(outCol,soIn,'tgt');
-  chCol.forEach(n=>{const csH=(csOut[n.id]||[]).reduce((a,l)=>a+Math.max(l.v*scale,1),0);let y=n.y+csH;(coOut[n.id]||[]).forEach(l=>{const h=Math.max(l.v*scale,1);l._srcY=y+h/2;l._srcH=h;y+=h;});});
-  outCol.forEach(n=>{const soH=(soIn[n.id]||[]).reduce((a,l)=>a+Math.max(l.v*scale,1),0);let y=n.y+soH;(coIn[n.id]||[]).forEach(l=>{const h=Math.max(l.v*scale,1);l._tgtY=y+h/2;l._tgtH=h;y+=h;});});
-
-  const ACCENT=cssVar('--accent'), INK=cssVar('--ink'), INK3=cssVar('--ink-3');
-  const GREEN='#48B47A', LIME='#90EE90', FLUOR='#D4FF00', SAGE='#7D9B6A';
-  const sysToOutcome={}; so.forEach(l=>{sysToOutcome[l.s]=l.o;});
-
-  let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img">`;
-
-  const gx1=colX.ch+NODE_W, gx2=colX.out;
-  svg+=`<defs>
-    <linearGradient id="tgt-grad-phone-recv" gradientUnits="userSpaceOnUse" x1="${gx1}" y1="0" x2="${gx2}" y2="0">
-      <stop offset="0%" stop-color="${LIME}"  stop-opacity="0.55"/><stop offset="100%" stop-color="${GREEN}" stop-opacity="0.45"/>
-    </linearGradient>
-    <linearGradient id="tgt-grad-mobile-recv" gradientUnits="userSpaceOnUse" x1="${gx1}" y1="0" x2="${gx2}" y2="0">
-      <stop offset="0%" stop-color="${FLUOR}" stop-opacity="0.55"/><stop offset="100%" stop-color="${GREEN}" stop-opacity="0.45"/>
-    </linearGradient>
-    <linearGradient id="tgt-grad-board-recv" gradientUnits="userSpaceOnUse" x1="${gx1}" y1="0" x2="${gx2}" y2="0">
-      <stop offset="0%" stop-color="${SAGE}"  stop-opacity="0.55"/><stop offset="100%" stop-color="${GREEN}" stop-opacity="0.45"/>
-    </linearGradient>
-  </defs>`;
-  const RECV_GRAD={'phone-as':'tgt-grad-phone-recv','mobile-as':'tgt-grad-mobile-recv','board-as':'tgt-grad-board-recv'};
-
-  svg+=`<text class="sankey-col-title" x="${colX.ch+NODE_W/2}" y="${PAD-8}" text-anchor="middle">인입 채널</text>`;
-  svg+=`<text class="sankey-col-title" x="${colX.out+NODE_W/2}" y="${PAD-8}" text-anchor="middle">최종 결과</text>`;
-
-  // AS 상담 그룹 브래킷 (좌측)
-  const _gsTop=chCol.find(n=>n.id==='phone-as'), _gsBot=chCol.find(n=>n.id==='board-as');
-  if(_gsTop&&_gsBot){
-    const gy1=_gsTop.y,gy2=_gsBot.y+_gsBot.h,gmid=(gy1+gy2)/2,bx=18;
-    svg+=`<line x1="${bx+10}" y1="${gy1}" x2="${bx+10}" y2="${gy2}" stroke="${INK3}" stroke-width="1.5"/>`;
-    svg+=`<line x1="${bx+10}" y1="${gy1}" x2="${bx+18}" y2="${gy1}" stroke="${INK3}" stroke-width="1.5"/>`;
-    svg+=`<line x1="${bx+10}" y1="${gy2}" x2="${bx+18}" y2="${gy2}" stroke="${INK3}" stroke-width="1.5"/>`;
-    svg+=`<text class="sankey-group-label" x="${bx}" y="${gmid}" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90,${bx},${gmid})">AS 상담</text>`;
-  }
-
-  // channel → system 링크
-  cs.forEach(l=>{
-    const c=chCol.find(n=>n.id===l.c),s=sysCol.find(n=>n.id===l.s);
-    if(!c||!s)return;
-    const isRecv=sysToOutcome[l.s]==='out-rest';
-    const stroke=isRecv?`url(#${RECV_GRAD[l.c]})`:INK;
-    svg+=`<path data-mid="cs-${l.c}-${l.s}" d="${linkPath(colX.ch+NODE_W,l._srcY,colX.sys,l._tgtY)}" fill="none" stroke="${stroke}" stroke-opacity="${isRecv?1:0.35}" stroke-width="${l._srcH}"/>`;
-  });
-  // system → outcome 링크
-  so.forEach(l=>{
-    const s=sysCol.find(n=>n.id===l.s),o=outCol.find(n=>n.id===l.o);
-    if(!s||!o)return;
-    svg+=`<path data-mid="so-${l.s}-${l.o}" d="${linkPath(colX.sys,l._srcY,colX.out,l._tgtY)}" fill="none" stroke="${l.o==='out-rest'?GREEN:INK}" stroke-opacity="0.35" stroke-width="${l._srcH}"/>`;
-  });
-  // 자사몰 직접 연결 (파란색)
-  co.forEach(l=>{
-    const c=chCol.find(n=>n.id===l.c),o=outCol.find(n=>n.id===l.o);
-    if(!c||!o)return;
-    svg+=`<path data-mid="co-${l.c}-${l.o}" d="${linkPath(colX.ch+NODE_W,l._srcY,colX.out,l._tgtY)}" fill="none" stroke="${ACCENT}" stroke-opacity="0.35" stroke-width="${l._srcH}"/>`;
-  });
-
-  // 노드 그리기
-  function drawNodes(nodes,x,anchor='start',colKey=''){
-    nodes.forEach(n=>{
-      const color=n.id==='out-rest'?GREEN:(n.id==='out-jas'?ACCENT:((n.kind==='order'||n.kind==='receive')?ACCENT:INK));
-      if(n.label!==''){
-        svg+=`<rect data-mid="node-${colKey}-${n.id}" x="${x}" y="${n.y}" width="${NODE_W}" height="${n.h}" fill="${color}" rx="2"/>`;
-        const lx=anchor==='end'?x-10:x+NODE_W+10;
-        svg+=`<text class="sankey-node-label" x="${lx}" y="${n.mid-2}" text-anchor="${anchor}" dominant-baseline="middle">${n.label}</text>`;
-        const vol=(n.vol!=null)?n.vol:(sysTotals[n.id]||outTotals[n.id]||0);
-        if(n.costPer){
-          svg+=`<text x="${lx}" y="${n.mid+14}" text-anchor="${anchor}" dominant-baseline="middle" font-family="'Pretendard Variable',Pretendard,system-ui,sans-serif" font-variant-numeric="tabular-nums"><tspan font-size="12.5" fill="var(--ink-2)">${vol.toLocaleString()}건</tspan><tspan font-size="10" fill="var(--accent)" font-weight="500"> (${n.costPer})</tspan></text>`;
-        }else{
-          svg+=`<text class="sankey-node-sub" x="${lx}" y="${n.mid+14}" text-anchor="${anchor}" dominant-baseline="middle">${vol.toLocaleString()}건</text>`;
-        }
-      }
-    });
-  }
-  drawNodes(chCol, colX.ch,  'end',   'ch');
-  drawNodes(sysCol,colX.sys, 'end',   'sys');
-  drawNodes(outCol,colX.out, 'start', 'out');
-
-  // AS 접수 등록 묶음 브래킷 (우측)
-  const _arTop=outCol.find(n=>n.id==='out-rest'),_arBot=outCol.find(n=>n.id==='out-jas');
-  if(_arTop&&_arBot){
-    const ay1=_arTop.y,ay2=_arBot.y+_arBot.h,amid=(ay1+ay2)/2,bx=colX.out+NODE_W+148;
-    svg+=`<line x1="${bx}" y1="${ay1}" x2="${bx+8}" y2="${ay1}" stroke="${INK3}" stroke-width="1.5"/>`;
-    svg+=`<line x1="${bx+8}" y1="${ay1}" x2="${bx+8}" y2="${ay2}" stroke="${INK3}" stroke-width="1.5"/>`;
-    svg+=`<line x1="${bx}" y1="${ay2}" x2="${bx+8}" y2="${ay2}" stroke="${INK3}" stroke-width="1.5"/>`;
-    svg+=`<text class="sankey-group-label" x="${bx+16}" y="${amid-6}" text-anchor="start" dominant-baseline="middle">AS 접수 등록</text>`;
-    svg+=`<text class="sankey-node-sub" x="${bx+16}" y="${amid+10}" text-anchor="start" dominant-baseline="middle">${(recvRest+recvJas).toLocaleString()}건</text>`;
-  }
-
-  svg+='</svg>';
-  host.innerHTML=svg;
-}
-
 // ---- System matrix (Tab 3) ----
 function renderMatrix() {
   const root = document.getElementById('mtx-table');
@@ -7357,6 +7263,7 @@ renderSec3();
 renderTeams();
 renderChannels();
 renderContactDetail();
+renderTarget27();
 // 월 선택 버튼 생성
 (function() {
   const sel = document.getElementById('sankey-month-sel');
@@ -7370,23 +7277,10 @@ renderContactDetail();
     btn.addEventListener('click', () => {
       sel.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      window.__sankeyTarget = false;
       morphToNewSankey(() => renderSankey(i));
     });
     sel.appendChild(btn);
   });
-  // 26년 하반기 목표 탭
-  const targetBtn = document.createElement('button');
-  targetBtn.className = 'seg-btn';
-  targetBtn.textContent = '26년 하반기 목표';
-  targetBtn.style.cssText = 'color:var(--accent);border-color:var(--accent-soft)';
-  targetBtn.addEventListener('click', () => {
-    sel.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
-    targetBtn.classList.add('active');
-    window.__sankeyTarget = true;
-    morphToNewSankey(() => renderSankeyTarget());
-  });
-  sel.appendChild(targetBtn);
 })();
 renderSankey(); window.__sankeyRendered = true;
 bindChannelClicks();
@@ -7516,7 +7410,8 @@ function rebuildAll() {
   renderSec3();
   renderTeams();
   renderChannels();
-  if (window.__sankeyRendered) { if (window.__sankeyTarget) renderSankeyTarget(); else renderSankey(); }
+  if (window.__sankeyRendered) renderSankey();
+  renderTarget27();
   if (window.__matrixRendered) renderMatrix();
 
   document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s === initialActive));
@@ -8614,7 +8509,6 @@ const SEARCH_INDEX = [
   {label:'년도별 동월 비교',   sub:'AS 조치 현황', tab:1},
   {label:'AS 신청 페이지',sub:'퍼널 분석', tab:2},
   {label:'단계별 유입 추이',   sub:'퍼널 분석', tab:2},
-  {label:'1→2 유입률',        sub:'퍼널 분석', tab:2},
   {label:'신청페이지 클릭률·완료율', sub:'퍼널 분석', tab:2},
   {label:'제품 등록 수',       sub:'퍼널 분석', tab:2},
   {label:'컨택센터 용역료',    sub:'비용 분석', tab:3},
