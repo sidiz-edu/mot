@@ -3601,7 +3601,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
               <div class="chart-box h-220"><canvas id="c_t27_stack"></canvas></div>
             </div>
             <div>
-              <div class="t27-h">26년 월별 AS 관련 용역료와 목표선 <span>단위: 만원</span></div>
+              <div class="t27-h">26년 월별 실적 → 27년 목표 <span>단위: 만원 · 27년은 월평균</span></div>
               <div class="t27-legend" id="t27-legend2"></div>
               <div class="chart-box h-220"><canvas id="c_t27_trend"></canvas></div>
             </div>
@@ -6366,30 +6366,66 @@ function renderTarget27() {
     });
   }
 
-  // ② 26년 월별 실적 + 목표선
+  // ② 26년 월별 실적 → 27년 목표·의지치
   const el2 = document.getElementById('c_t27_trend');
   const cd = DATA.contactDetail;
   if (el2 && cd) {
     const monthly = cd.months.map((m, i) => Math.round([0, 2, 4, 5, 6].reduce((s, r) => s + (cd.rows[r].amounts[i] || 0), 0) / 10000));
+    const n = monthly.length, labels = cd.months.concat(['27년']);
+    const last = monthly[n - 1];
+    const path = v => Array(n - 1).fill(null).concat([last, v]);
     const lines = [
-      { label: '월별 실적', data: monthly, color: COLORS.ink2, dash: [], pr: 2.5 },
-      { label: 'AS-IS 평균 4,770', data: monthly.map(() => T.totals[0]), color: COLORS.ink3, dash: [2, 3], pr: 0 },
-      { label: '목표 3,520', data: monthly.map(() => T.totals[1]), color: COLORS.accent, dash: [6, 4], pr: 0 },
-      { label: '의지치 2,560', data: monthly.map(() => T.totals[2]), color: COLORS.pos, dash: [6, 4], pr: 0 },
+      { label: '26년 월별 실적', data: monthly.concat([null]), color: COLORS.ink2, dash: [], pr: 2.5 },
+      { label: 'AS-IS 평균 4,770', data: monthly.map(() => T.totals[0]).concat([null]), color: COLORS.ink3, dash: [2, 3], pr: 0 },
+      { label: '27년 목표 3,520', data: path(T.totals[1]), color: COLORS.accent, dash: [6, 4], path: true, v: T.totals[1] },
+      { label: '27년 의지치 2,560', data: path(T.totals[2]), color: COLORS.pos, dash: [6, 4], path: true, v: T.totals[2] },
     ];
     const lg2 = document.getElementById('t27-legend2');
     if (lg2) lg2.innerHTML = lines.map(l => `<span><i style="background:${l.color}"></i>${l.label}</span>`).join('');
+    const endLbl = {
+      id: 't27TrendLbl',
+      afterDatasetsDraw(chart) {
+        const c = chart.ctx; c.save();
+        c.textAlign = 'right'; c.textBaseline = 'middle';
+        lines.forEach((l, di) => {
+          if (!l.path) return;
+          const p = chart.getDatasetMeta(di).data[n];
+          if (!p) return;
+          c.font = '700 11.5px Pretendard Variable, Pretendard, sans-serif'; c.fillStyle = l.color;
+          c.fillText(`${fmt(l.v)} (-${Math.round((base - l.v) / base * 100)}%)`, p.x - 9, p.y - 10);
+        });
+        const lp = chart.getDatasetMeta(0).data[n - 1];
+        if (lp) { c.font = '600 11px Pretendard Variable, Pretendard, sans-serif'; c.fillStyle = COLORS.ink2; c.textAlign = 'center'; c.fillText(fmt(last), lp.x, lp.y - 12); }
+        c.restore();
+      }
+    };
     const scales2 = baseScales(false);
     scales2.y.min = 2000; scales2.y.max = 6000; scales2.y.ticks.stepSize = 1000;
     CHARTS['c_t27_trend'] = new Chart(el2.getContext('2d'), {
       type: 'line',
-      data: { labels: cd.months, datasets: lines.map(l => ({ label: l.label, data: l.data, borderColor: l.color, borderDash: l.dash, borderWidth: 2, pointRadius: l.pr, pointBackgroundColor: l.color, fill: false, tension: 0.3 })) },
+      data: { labels, datasets: lines.map(l => ({
+        label: l.label, data: l.data, _path: !!l.path,
+        borderColor: l.color, borderDash: l.dash, borderWidth: 2, fill: false, tension: l.path ? 0 : 0.3,
+        pointRadius: l.path ? (ctx => ctx.dataIndex === n ? 5 : 0) : l.pr,
+        pointBackgroundColor: l.color, pointBorderColor: COLORS.surface, pointBorderWidth: 1.5,
+      })) },
       options: {
         responsive: true, maintainAspectRatio: false,
+        layout: { padding: { top: 8, right: 6 } },
         interaction: { intersect: false, mode: 'index' },
         scales: scales2,
-        plugins: { valueLabels: { enabled: false }, tooltip: { callbacks: { label: c => ` ${c.dataset.label.split(' ')[0]}: ${fmt(c.parsed.y)}만원` } } }
-      }
+        plugins: {
+          valueLabels: { enabled: false },
+          tooltip: {
+            filter: it => !(it.dataset._path && it.dataIndex === n - 1),
+            callbacks: {
+              title: items => items[0].dataIndex === n ? '27년 (월평균)' : items[0].label,
+              label: c => ` ${c.dataset.label.replace(/\s[\d,]+$/, '')}: ${fmt(c.parsed.y)}만원`
+            }
+          }
+        }
+      },
+      plugins: [endLbl]
     });
   }
 }
