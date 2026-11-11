@@ -2363,7 +2363,7 @@ table.t               { font-size: 14px; }
         <button class="sb-item" data-tab="3">
           <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
           <span>AS 조치 현황</span>
-          <span class="sb-count">05월</span>
+          <span class="sb-count">10월</span>
         </button>
       </div>
     </div>
@@ -2763,7 +2763,7 @@ table.t               { font-size: 14px; }
     <section class="page section" id="sec-as" data-screen-label="01 AS 조치 현황">
       <div class="page-head">
         <div class="page-h-left">
-          <div class="page-eyebrow">Operations · Aug 2026</div>
+          <div class="page-eyebrow">Operations · Oct 2026</div>
           <h1 class="page-title">시디즈 AS 조치 현황</h1>
           <div class="page-sub">전국 / 서울경인 조치 건수, 1차 종결률, N차율, 평균 조치기간 — 월별 추이 및 년도별 동월 비교</div>
         </div>
@@ -3071,6 +3071,8 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
                 <tr><td>2026-06</td><td>1,423</td><td>266</td><td>18.7%</td><td>1,157</td><td>81.3%</td><td>6.24일</td></tr>
                 <tr><td>2026-07</td><td>1,560</td><td>278</td><td>17.8%</td><td>1,282</td><td>82.2%</td><td>6.47일</td></tr>
                 <tr><td>2026-08</td><td>1,510</td><td>260</td><td>17.2%</td><td>1,250</td><td>82.8%</td><td>6.34일</td></tr>
+                <tr><td>2026-09</td><td>1,432</td><td>262</td><td>18.3%</td><td>1,170</td><td>81.7%</td><td>6.40일</td></tr>
+                <tr><td>2026-10</td><td>1,529</td><td>292</td><td>19.1%</td><td>1,237</td><td>80.9%</td><td>6.22일</td></tr>
               </tbody>
             </table>
           </div>
@@ -3983,7 +3985,9 @@ const DATA = {
     "2026-05",
     "2026-06",
     "2026-07",
-    "2026-08"
+    "2026-08",
+    "2026-09",
+    "2026-10"
   ],
   "natCount": [
     1482,
@@ -4001,7 +4005,9 @@ const DATA = {
     1326,
     1423,
     1560,
-    1510
+    1510,
+    1432,
+    1529
   ],
   "natClose": [
     76.2,
@@ -4019,7 +4025,9 @@ const DATA = {
     79.8,
     81.3,
     82.2,
-    82.8
+    82.8,
+    81.7,
+    80.9
   ],
   "natN": [
     23.8,
@@ -4037,7 +4045,9 @@ const DATA = {
     20.2,
     18.7,
     17.8,
-    17.2
+    17.2,
+    18.3,
+    19.1
   ],
   "natDays": [
     8.52,
@@ -4055,7 +4065,9 @@ const DATA = {
     6.59,
     6.24,
     6.47,
-    6.34
+    6.34,
+    6.4,
+    6.22
   ],
   "nat2nd": [
     18.4,
@@ -4073,7 +4085,9 @@ const DATA = {
     17.2,
     16.0,
     15.1,
-    14.6
+    14.6,
+    15.7,
+    15.9
   ],
   "nat3rd": [
     3.9,
@@ -4091,7 +4105,9 @@ const DATA = {
     2.6,
     1.8,
     1.8,
-    2.0
+    2.0,
+    1.9,
+    2.9
   ],
   "seCount": [
     982,
@@ -5089,8 +5105,8 @@ const DATA = {
         1423,
         1560,
         1510,
-        null,
-        null,
+        1432,
+        1529,
         null,
         null
       ]
@@ -5119,8 +5135,8 @@ const DATA = {
         81.3,
         82.2,
         82.8,
-        null,
-        null,
+        81.7,
+        80.9,
         null,
         null
       ]
@@ -5149,8 +5165,8 @@ const DATA = {
         18.7,
         17.8,
         17.2,
-        null,
-        null,
+        18.3,
+        19.1,
         null,
         null
       ]
@@ -5179,8 +5195,8 @@ const DATA = {
         6.24,
         6.47,
         6.34,
-        null,
-        null,
+        6.4,
+        6.22,
         null,
         null
       ]
@@ -5353,10 +5369,10 @@ const CHANNELS = [
 ];
 
 const KPIS = [
-  {label: "전국 조치 건수",       value: 1510,  unit: "건",  trend: -3.2,   dir: "down", comp: "전월 대비",                   series: DATA.natCount,  cls: ""},
-  {label: "전국 1차 종결률",      value: 82.8,  unit: "%",   trend: 0.6,    dir: "up",   comp: "전월 대비",                   series: DATA.natClose,  cls: "is-pos"},
-  {label: "전국 N차율",           value: 17.2,  unit: "%",   trend: -0.6,   dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.natN,      cls: "is-pos"},
-  {label: "전국 평균 조치기간",   value: 6.34,  unit: "일",  trend: -2.0,   dir: "down", comp: "전월 대비 (낮을수록 좋음)", series: DATA.natDays,  cls: "is-pos"},
+  {label: "전국 조치 건수",       value: 1529,  unit: "건",  trend: 6.8,    dir: "up",   comp: "전월 대비",                   series: DATA.natCount,  cls: ""},
+  {label: "전국 1차 종결률",      value: 80.9,  unit: "%",   trend: -0.8,   dir: "down", comp: "전월 대비",                   series: DATA.natClose,  cls: "is-neg"},
+  {label: "전국 N차율",           value: 19.1,  unit: "%",   trend: 0.8,    dir: "down", comp: "전월 대비 (낮을수록 좋음)",  series: DATA.natN,      cls: "is-neg"},
+  {label: "전국 평균 조치기간",   value: 6.22,  unit: "일",  trend: -2.8,   dir: "up",   comp: "전월 대비 (낮을수록 좋음)", series: DATA.natDays,  cls: "is-pos"},
   {label: "서울경인 조치 건수",   value: 781,  unit: "건",  trend: -3.6,   dir: "down", comp: "전월 대비",                   series: DATA.seCount,   cls: ""},
   {label: "서울경인 1차 종결률",  value: 82.3, unit: "%",   trend: 2.1,   dir: "up",   comp: "전월 대비",                   series: DATA.seClose,   cls: "is-pos"},
   {label: "서울경인 N차율",       value: 17.7, unit: "%",   trend: -2.1,  dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.seN,       cls: "is-pos"},
