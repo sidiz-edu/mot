@@ -2750,7 +2750,7 @@ table.t               { font-size: 14px; }
             <div class="note-title">데이터 출처</div>
             <dl>
               <dt>전국 AS 데이터</dt><dd>ERP Korea - AS진행상태 확인 ▶ 회사 : 시디즈, 브랜드 : 시디즈, 최종조치일 : 월초~월말 ▶ 조회 ▶ 오른쪽 마우스 - 자료변환(Export File)</dd>
-              <dt>서울경인 AS 데이터</dt><dd>라스트마일사업팀 김진우님 요청본</dd>
+              <dt>서울경인 AS 데이터</dt><dd>전국 ERP 파일에서 서비스센터 양지·안성, 센터조치 건 추출 (26.3·4월, 26.9월~) <span class="mute">· 그 외 달은 라스트마일사업팀 김진우님 요청본</span></dd>
               <dt>AS 신청 페이지</dt><dd>웹 행동 로그 · 주별 단계별 집계</dd>
               <dt>컨택센터 비용</dt><dd>브랜드 용역료 청구 현황 <span class="mute">(월별 자료)</span></dd>
             </dl>
@@ -2831,30 +2831,36 @@ M. 평균 조치기간   = 접수여부 구분 없이 전체 행 중 납기>0인
         </summary>
         <div style="padding:0 16px 14px;position:relative;">
           <button onclick="(function(b){var t=b.closest('details').querySelector('pre');navigator.clipboard.writeText(t.textContent);b.textContent='✓ 복사됨';setTimeout(()=>b.textContent='복사',1500)})(this)" style="position:absolute;right:20px;top:6px;font-size:11px;padding:3px 10px;border:1px solid rgba(47,140,90,0.4);border-radius:5px;background:rgba(47,140,90,0.08);color:#1A5E3A;cursor:pointer;">복사</button>
-          <pre style="margin:8px 0 0;padding:12px 14px;background:var(--surface-2,#f5f5f5);border-radius:7px;font-size:11.5px;line-height:1.7;white-space:pre-wrap;word-break:break-all;color:var(--text);">@H:\내 드라이브\5. MOT (AS)\데이터 관리 _ AS 전담팀 (AS 엔지니어 팀)\엔지니어팀 건수정리(25년 5월~ 26년 X월).xls
+          <pre style="margin:8px 0 0;padding:12px 14px;background:var(--surface-2,#f5f5f5);border-radius:7px;font-size:11.5px;line-height:1.7;white-space:pre-wrap;word-break:break-all;color:var(--text);">@파일경로/AS 데이터_26년 X월.xls  (전국과 같은 ERP 파일)
 
-이 파일의 최신 월(26년 X월) 시트를 분석해서 아래 지표를 뽑아줘.
+이 파일에서 서울경인 건만 골라 현황_AS_서울경인 월별 결과를 뽑아줘.
 
-■ 파일 구조
-- 월별 시트 구조 (시트명: '26년 X월' 형식)
-- 컬럼: 접수번호, 순번, 접수점검일, 최종조치일, 서비스팀
-- 전체 행 = 출고완료 (접수여부 구분 없이 모두 포함)
+■ 서울경인 추출
+- 서비스센터: 양지센터, 안성센터
+- 조치구분: 센터조치
+- 서비스팀: 인력팀만 (CS○○○, IH○○, AJ·AZ·AD○○ 등)
+  제외: 택배, 바로스(정상), !바로스(정상), 수출AS, 비용정산, 자재신청, !!CS_로 시작하는 팀
+- 조치월 = TEXT(최종조치일, "YYYY-MM") → 전월 접수분 포함 (전국과 같은 기준)
 
 ■ 납기 계산
-NETWORKDAYS.INTL(접수점검일+1, 최종조치일, "0000001") + 한국 공휴일 제외
+NETWORKDAYS.INTL(접수일자+1, 최종조치일, "0000001") + 한국 공휴일 제외
 (일요일 + 공휴일만 제외, 토요일은 근무일로 계산)
 
-■ 산출 기준
-
+■ 산출 기준 (A~M 항목은 전국과 동일)
 B. 진행건수       = 고유 접수번호 수
-K. N차 건수       = 순번>=2인 고유 접수번호 수
-L. N차율          = K/B
-C. 1차 종결건수   = B - K
-D. 1차 종결율     = C/B
-M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제외)
-엔지니어 비율     = 서비스팀에 (S) 패턴이 포함된 고유 접수번호 / B
-시공팀 비율       = 서비스팀에 (S) 패턴이 없는 고유 접수번호 / B
-                   (한 건이 두 팀에 모두 해당될 수 있어 합계가 100% 초과 가능)</pre>
+E. 2차 종결 건수  = 순번>=2 고유 접수번호 수 - 순번>=3 고유 접수번호 수
+G. 3차 종결 건수  = 순번>=3 고유 접수번호 수 - 순번>=4 고유 접수번호 수
+I. 4차 이상 건수  = 순번>=4 고유 접수번호 수
+K. N차 건수       = E+G+I,  L. N차율 = K/B
+C. 1차 종결건수   = B - K,  D. 1차 종결율 = C/B
+M. 평균 조치기간  = 추출한 행 중 납기>0인 행의 납기 평균
+엔지니어 비율     = 서비스팀에 (S)가 포함된 고유 접수번호 / B
+시공팀 비율       = 서비스팀에 (S)가 없는 고유 접수번호 / B
+                   (한 건이 두 팀에 모두 해당될 수 있어 합계가 100% 초과 가능)
+
+■ 기타지역 (전국 − 서울경인)
+진행건수 · N차 · 1차 종결 = 전국 − 서울경인
+평균 조치기간 = 양지·안성 외 센터에서 위와 같은 조건(센터조치·인력팀) 행의 납기>0 평균</pre>
         </div>
       </details>
 
@@ -2953,6 +2959,16 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
           </div>
           <div class="chart-box h-220"><canvas id="c_se_team"></canvas></div>
         </div>
+        <div class="note" style="margin-top:16px">
+          <div class="note-ic">i</div>
+          <div class="note-body">
+            <div class="note-title">집계 기준</div>
+            <dl>
+              <dt>조치월 기준 <span class="mute">(전국과 동일)</span></dt><dd>25.5~11월 · 26.2~4월 · 26.9월~</dd>
+              <dt>같은 달 접수+조치 기준</dt><dd>25.12~26.1월 · 26.5~8월 — 전월 접수분이 빠져 약 25~30% 적게 잡힘 (ERP 원본으로 재계산 예정)</dd>
+            </dl>
+          </div>
+        </div>
       </div>
 
       <!-- charts: view 2 (전국 vs 서울경인) -->
@@ -3035,7 +3051,8 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
             <div class="note-title">기타지역 산출 방식</div>
             <dl>
               <dt>진행건수 · N차율 · 1차종결율</dt><dd>전국 − 서울경인 역산 (정확값)</dd>
-              <dt>평균 조치기간</dt><dd>가중평균 추정값 — <code>(전국평균×전국건수 − 서울경인평균×서울경인건수) / 기타건수</code> — 실제 행수 기준이 아닌 건수 기반 근사치</dd>
+              <dt>평균 조치기간</dt><dd>26.3·4·9·10월: ERP 원본에서 직접 계산 (양지·안성 외 센터의 센터조치·인력팀 행) / 그 외 달: 가중평균 추정값 — <code>(전국평균×전국건수 − 서울경인평균×서울경인건수) / 기타건수</code> — 전국 평균에 택배 건이 섞여 실제보다 낮게 나옴</dd>
+              <dt>주의</dt><dd>25.12~26.1월 · 26.5~8월은 서울경인이 같은 달 기준이라 기타지역 건수가 실제보다 많게 계산됨 (재계산 예정)</dd>
             </dl>
           </div>
         </div>
@@ -3079,7 +3096,7 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
         </div>
         <div class="card mt-16">
           <div class="card-head">
-            <div><div class="card-title">A/S 현황 — 서울경인</div><div class="card-sub">조치월 기준 · 서울경인 진행 건수</div></div>
+            <div><div class="card-title">A/S 현황 — 서울경인</div><div class="card-sub">조치월 기준 · 서울경인 진행 건수 · 25.12~26.1월, 26.5~8월은 같은 달 접수+조치 기준 (재계산 예정)</div></div>
           </div>
           <div class="tbl-wrap">
             <table class="t">
@@ -3100,12 +3117,14 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
                 <tr><td>2025-12</td><td>680</td><td>150</td><td>22.1%</td><td>530</td><td>77.9%</td><td>6.10일</td><td>80.4%</td><td>23.2%</td></tr>
                 <tr><td>2026-01</td><td>869</td><td>212</td><td>24.4%</td><td>657</td><td>75.6%</td><td>5.65일</td><td>73.4%</td><td>31.5%</td></tr>
                 <tr><td>2026-02</td><td>813</td><td>178</td><td>21.9%</td><td>635</td><td>78.1%</td><td>6.01일</td><td>80.1%</td><td>22.4%</td></tr>
-                <tr><td>2026-03</td><td>841</td><td>194</td><td>23.1%</td><td>647</td><td>76.9%</td><td>5.81일</td><td>82.5%</td><td>19.6%</td></tr>
-                <tr><td>2026-04</td><td>736</td><td>155</td><td>21.1%</td><td>581</td><td>78.9%</td><td>5.89일</td><td>82.3%</td><td>20.7%</td></tr>
+                <tr><td>2026-03</td><td>1,108</td><td>251</td><td>22.7%</td><td>857</td><td>77.3%</td><td>6.24일</td><td>80.8%</td><td>22.0%</td></tr>
+                <tr><td>2026-04</td><td>975</td><td>197</td><td>20.2%</td><td>778</td><td>79.8%</td><td>6.26일</td><td>82.5%</td><td>20.6%</td></tr>
                 <tr><td>2026-05</td><td>634</td><td>116</td><td>18.3%</td><td>518</td><td>81.7%</td><td>6.22일</td><td>81.9%</td><td>20.3%</td></tr>
                 <tr><td>2026-06</td><td>737</td><td>149</td><td>20.2%</td><td>588</td><td>79.8%</td><td>6.25일</td><td>86.6%</td><td>16.3%</td></tr>
                 <tr><td>2026-07</td><td>810</td><td>160</td><td>19.8%</td><td>650</td><td>80.2%</td><td>6.63일</td><td>84.0%</td><td>17.4%</td></tr>
                 <tr><td>2026-08</td><td>781</td><td>138</td><td>17.7%</td><td>643</td><td>82.3%</td><td>6.46일</td><td>83.0%</td><td>18.7%</td></tr>
+                <tr><td>2026-09</td><td>947</td><td>186</td><td>19.6%</td><td>761</td><td>80.4%</td><td>6.97일</td><td>79.7%</td><td>23.4%</td></tr>
+                <tr><td>2026-10</td><td>1,017</td><td>211</td><td>20.7%</td><td>806</td><td>79.3%</td><td>6.69일</td><td>82.3%</td><td>20.7%</td></tr>
               </tbody>
             </table>
           </div>
@@ -3119,7 +3138,7 @@ M. 평균 조치기간  = 납기>0인 전체 행의 납기 평균 (납기=0 제�
           <div class="note-title">데이터 출처 및 산출 방식</div>
           <dl>
             <dt>전국 AS</dt><dd>ERP Korea - AS진행상태 확인 ▶ 회사 : 시디즈, 브랜드 : 시디즈, 최종조치일 : 월초~월말 ▶ 조회 ▶ 오른쪽 마우스 - 자료변환(Export File)</dd>
-            <dt>서울경인 AS</dt><dd>라스트마일사업팀 김진우님 요청본</dd>
+            <dt>서울경인 AS</dt><dd>전국 ERP 파일에서 서비스센터 양지·안성, 센터조치·인력팀 건 추출 (26.3·4월, 26.9월~) <span class="mute">· 그 외 달은 라스트마일사업팀 김진우님 요청본</span></dd>
             <dt>진행건수 정의</dt><dd>접수번호가 같으나 따로 표시되는 건은 하나의 진행건수로 통합 <span class="mute">(N차 방문 건)</span></dd>
             <dt>분석 지표</dt><dd>진행건수 · N차 비율 · 1차 종결 비율 · 평균 조치기간</dd>
           </dl>
@@ -4120,12 +4139,14 @@ const DATA = {
     680,
     869,
     813,
-    841,
-    736,
+    1108,
+    975,
     634,
     737,
     810,
-    781
+    781,
+    947,
+    1017
   ],
   "seClose": [
     75.6,
@@ -4138,12 +4159,14 @@ const DATA = {
     77.9,
     75.6,
     78.1,
-    76.9,
-    78.9,
+    77.3,
+    79.8,
     81.7,
     79.8,
     80.2,
-    82.3
+    82.3,
+    80.4,
+    79.3
   ],
   "seN": [
     24.4,
@@ -4156,12 +4179,14 @@ const DATA = {
     22.1,
     24.4,
     21.9,
-    23.1,
-    21.1,
+    22.7,
+    20.2,
     18.3,
     20.2,
     19.8,
-    17.7
+    17.7,
+    19.6,
+    20.7
   ],
   "seDays": [
     9.06,
@@ -4174,12 +4199,14 @@ const DATA = {
     6.1,
     5.65,
     6.01,
-    5.81,
-    5.89,
+    6.24,
+    6.26,
     6.22,
     6.25,
     6.63,
-    6.46
+    6.46,
+    6.97,
+    6.69
   ],
   "seEng": [
     70.5,
@@ -4192,12 +4219,14 @@ const DATA = {
     80.4,
     73.4,
     80.1,
+    80.8,
     82.5,
-    82.3,
     81.9,
     86.6,
     84.0,
-    83.0
+    83.0,
+    79.7,
+    82.3
   ],
   "seSig": [
     33.9,
@@ -4210,17 +4239,19 @@ const DATA = {
     23.2,
     31.5,
     22.4,
-    19.6,
-    20.7,
+    22.0,
+    20.6,
     20.3,
     16.3,
     17.4,
-    18.7
+    18.7,
+    23.4,
+    20.7
   ],
-  "otCount": [500,500,578,560,560,450,488,774,766,404,852,728,692,686,750,729],
-  "otN":     [22.6,20.2,19.6,24.1,22.1,19.8,25.0,25.3,24.7,22.0,22.2,20.2,19.1,19.1,22.4,16.7],
-  "otClose": [77.4,79.8,80.4,75.9,77.9,80.2,75.0,74.7,75.3,78.0,77.8,79.8,80.9,80.9,77.6,83.3],
-  "otDays":  [8.76,7.59,8.44,8.15,7.55,8.58,7.3,5.8,6.22,6.28,5.91,5.99,6.55,6.64,6.75,6.21],
+  "otCount": [500,500,578,560,560,450,488,774,766,404,585,489,692,686,750,729,485,512],
+  "otN":     [22.6,20.2,19.6,24.1,22.1,19.8,25.0,25.3,24.7,22.0,22.7,21.3,19.1,19.1,22.4,16.7,15.7,15.8],
+  "otClose": [77.4,79.8,80.4,75.9,77.9,80.2,75.0,74.7,75.3,78.0,77.3,78.7,80.9,80.9,77.6,83.3,84.3,84.2],
+  "otDays":  [8.76,7.59,8.44,8.15,7.55,8.58,7.3,5.8,6.22,6.28,6.34,6.4,6.55,6.64,6.75,6.21,7.19,6.78],
   "contactMonths": ["25.1월","25.2월","25.3월","25.4월","25.5월","25.6월","25.7월","25.8월","25.9월","25.10월","25.11월","25.12월","26.1월","26.2월","26.3월","26.4월","26.5월","26.6월","26.7월","26.8월","26.9월","26.10월"],
   "workingDays": [18,20,20,22,20,19,23,20,22,18,20,22,21,17,21,20,20,22,23,20,20,20],
   "contact": [
@@ -5373,10 +5404,10 @@ const KPIS = [
   {label: "전국 1차 종결률",      value: 80.9,  unit: "%",   trend: -0.8,   dir: "down", comp: "전월 대비",                   series: DATA.natClose,  cls: "is-neg"},
   {label: "전국 N차율",           value: 19.1,  unit: "%",   trend: 0.8,    dir: "down", comp: "전월 대비 (낮을수록 좋음)",  series: DATA.natN,      cls: "is-neg"},
   {label: "전국 평균 조치기간",   value: 6.22,  unit: "일",  trend: -2.8,   dir: "up",   comp: "전월 대비 (낮을수록 좋음)", series: DATA.natDays,  cls: "is-pos"},
-  {label: "서울경인 조치 건수",   value: 781,  unit: "건",  trend: -3.6,   dir: "down", comp: "전월 대비",                   series: DATA.seCount,   cls: ""},
-  {label: "서울경인 1차 종결률",  value: 82.3, unit: "%",   trend: 2.1,   dir: "up",   comp: "전월 대비",                   series: DATA.seClose,   cls: "is-pos"},
-  {label: "서울경인 N차율",       value: 17.7, unit: "%",   trend: -2.1,  dir: "up",   comp: "전월 대비 (낮을수록 좋음)",  series: DATA.seN,       cls: "is-pos"},
-  {label: "서울경인 평균 조치",   value: 6.46, unit: "일",  trend: -0.17, dir: "down", comp: "전월 대비 (낮을수록 좋음)", series: DATA.seDays, cls: ""},
+  {label: "서울경인 조치 건수",   value: 1017, unit: "건",  trend: 7.4,   dir: "up",   comp: "전월 대비",                   series: DATA.seCount,   cls: ""},
+  {label: "서울경인 1차 종결률",  value: 79.3, unit: "%",   trend: -1.1,  dir: "down", comp: "전월 대비",                   series: DATA.seClose,   cls: "is-neg"},
+  {label: "서울경인 N차율",       value: 20.7, unit: "%",   trend: 1.1,   dir: "down", comp: "전월 대비 (낮을수록 좋음)",  series: DATA.seN,       cls: "is-neg"},
+  {label: "서울경인 평균 조치",   value: 6.69, unit: "일",  trend: -0.28, dir: "up",   comp: "전월 대비 (낮을수록 좋음)", series: DATA.seDays, cls: "is-pos"},
 ];
 </script>
 
