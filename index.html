@@ -3477,7 +3477,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
           <div class="card-head">
             <div>
               <div class="card-title">AS 신청페이지 일별 전환율</div>
-              <div class="card-sub">3/16 개설 이후 일별 · 클릭률·완료율은 메인 조회 대비, 이지리페어는 버튼 클릭 대비 · 개선 전(10/1~10/27) vs 개선 후(10/28~)</div>
+              <div class="card-sub">3/16 개설 이후 일별(옅은 선)·7일 이동평균(굵은 선) · 클릭률·완료율은 메인 조회 대비, 이지리페어는 버튼 클릭 대비 · 개선 전(10/1~10/27) vs 개선 후(10/28~)</div>
             </div>
             <span class="tag up">목표 ↑</span>
           </div>
@@ -6220,19 +6220,32 @@ function renderAsDaily() {
       c.restore();
     }
   };
-  const ds = (label, data, color, num) => ({
-    label, data, _num: num,
-    borderColor: color, backgroundColor: 'transparent', fill: false,
-    tension: 0.3, borderWidth: dense ? 1.5 : 2, pointRadius: dense ? 0 : 1.5, pointHoverRadius: 4,
+  // 7일 이동평균(앞뒤 3일 합계 비율) — 요일 편차를 없앤 추세선
+  const roll = (num, den, w = 3) => num.map((_, i) => {
+    const s = Math.max(0, i - w), e = Math.min(num.length, i + w + 1), dn = sum(den, s, e);
+    return dn ? Math.round(sum(num, s, e) / dn * 1000) / 10 : null;
+  });
+  const ds = (label, data, color, num, trend) => ({
+    label, data, _num: num, _trend: trend,
+    borderColor: dense ? hexToRgba(color, 0.3) : color, backgroundColor: 'transparent', fill: false,
+    tension: 0.3, borderWidth: dense ? 1 : 2, pointRadius: dense ? 0 : 1.5, pointHoverRadius: 3,
     pointBackgroundColor: color, pointBorderColor: COLORS.surface, pointBorderWidth: 1,
   });
+  const tr = (label, data, color) => ({
+    label: label + ' 7일 평균', data, _isTrend: true,
+    borderColor: color, backgroundColor: 'transparent', fill: false,
+    tension: 0.35, borderWidth: 3, pointRadius: 0, pointHoverRadius: 0,
+  });
+  const series = [['버튼 클릭률', clickR, COLORS.accent, A.click, A.view], ['신청 완료율', doneR, COLORS.pos, A.done, A.view]]
+    .concat(A.easy ? [['이지리페어 클릭률', easyR, COLORS.warn, A.easy, A.click]] : []);
+  const datasets = series.map(([lb, d, c, n, den]) => ds(lb, d, c, n, roll(n, den)))
+    .concat(series.map(([lb, , c, n, den]) => tr(lb, roll(n, den), c)));
   const scales = baseScales(true);
   scales.y.min = 0; scales.y.max = 50; scales.y.ticks.stepSize = 10;
   scales.x.ticks.maxRotation = 0; scales.x.ticks.autoSkip = true; scales.x.ticks.maxTicksLimit = dense ? 10 : 8;
   CHARTS['c_as_daily'] = new Chart(ctx, {
     type: 'line',
-    data: { labels: A.dates, datasets: [ds('버튼 클릭률', clickR, COLORS.accent, A.click), ds('신청 완료율', doneR, COLORS.pos, A.done)]
-      .concat(A.easy ? [ds('이지리페어 클릭률', easyR, COLORS.warn, A.easy)] : []) },
+    data: { labels: A.dates, datasets },
     options: {
       responsive: true, maintainAspectRatio: false,
       interaction: { intersect: false, mode: 'index' },
@@ -6241,12 +6254,13 @@ function renderAsDaily() {
       plugins: {
         valueLabels: { enabled: false },
         tooltip: {
+          filter: it => !it.dataset._isTrend,
           callbacks: {
             title: items => {
               const i = items[0].dataIndex, e = evs.find(v => v.i === i);
               return `${A.dates[i]} · 메인 조회 ${A.view[i].toLocaleString()}회` + (e ? `\n▶ ${e.label}` : '');
             },
-            label: c => ` ${c.dataset.label}: ${c.parsed.y == null ? '-' : c.parsed.y.toFixed(1) + '%'} (${c.dataset._num[c.dataIndex]}건)`
+            label: c => ` ${c.dataset.label}: ${c.parsed.y == null ? '-' : c.parsed.y.toFixed(1) + '%'} (${c.dataset._num[c.dataIndex]}건)` + (c.dataset._trend ? ` · 7일 평균 ${c.dataset._trend[c.dataIndex]}%` : '')
           }
         }
       }
