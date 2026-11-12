@@ -2843,6 +2843,13 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
 - 진행건수 · N차 건수 · 1차 종결 건수 = 전국 - 서울경인
 - 평균 조치기간 = 양지·안성 외 센터에서 서울경인과 같은 조건(센터조치·인력팀) 행의 납기>0 평균
 
+■ 4) 고객 해결기간 (대시보드 DATA.resolve)
+- 대상: 전국 '진행' 건을 접수번호로 묶음 (해결월 = 그 접수번호의 마지막 최종조치일 월)
+- 해결기간 = 첫 접수(순번 01)의 접수일자+1 ~ 마지막 최종조치일 영업일 (위 납기와 같은 규칙, 0 이하 제외)
+  · 순번 01 행이 없으면 접수번호의 날짜(P+YYYYMMDD)를 첫 접수일로 사용
+- all = 전체 평균, one = 순번 01만 있는 건 평균, multi = 순번 2 이상 있는 건 평균, n = 건수, nMulti = N차 건수
+- 이전 달 파일도 함께 있어야 N차 첫 접수일을 찾을 수 있음
+
 ■ 검증
 - 서울경인 진행건수는 보통 전국의 65~69% — 크게 벗어나면 필터부터 다시 확인
 - 대시보드에서 전국 = 서울경인 + 기타지역인지 확인</pre>
@@ -2912,6 +2919,22 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
             </div>
             <div class="chart-box"><canvas id="c_nat_3rd"></canvas></div>
           </div>
+        </div>
+        <div class="card mt-16">
+          <div class="card-head">
+            <div>
+              <div class="card-title">고객 해결기간 (첫 접수 → 최종 해결)</div>
+              <div class="card-sub">전국 · 접수번호 단위 · 영업일 · 해결월 기준 — N차 방문까지 포함해 고객이 실제로 기다린 기간</div>
+            </div>
+            <div class="lg-row" style="margin:0">
+              <span class="lg-chip"><i style="background:#073D20"></i>전체</span>
+              <span class="lg-chip"><i style="background:#48B47A"></i>1차에 끝난 건</span>
+              <span class="lg-chip"><i style="background:#FF8000"></i>N차까지 간 건</span>
+              <span class="lg-chip"><i style="background:#B5AFA3"></i>참고: 현재 평균 조치기간</span>
+            </div>
+          </div>
+          <div class="chart-box h-280"><canvas id="c_nat_resolve"></canvas></div>
+          <div style="font-size:11.5px;color:var(--ink-3);margin-top:8px;line-height:1.6">현재 '평균 조치기간'은 방문 차수마다 재접수일부터 따로 세고 택배·제외 건도 포함 → 고객 해결기간은 첫 접수부터 마지막 조치까지 한 번에 셈(진행 건만). 해결된 건이 다음 달 재접수되면 다음 달로 옮겨 다시 셈 · 25.5월은 첫 접수가 4월 이전인 건이 있어 참고용.</div>
         </div>
       </div>
 
@@ -3973,6 +3996,14 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
      ===================================================== -->
 <script>
 const DATA = {
+  "resolve": {
+    "note": "고객 해결기간 = 접수번호별 첫 접수일 다음날 ~ 마지막 조치일 영업일(일·공휴일 제외) · 해결월 기준 · 전국 진행 건",
+    "all": [12.38, 9.86, 9.89, 10.49, 10.24, 10.2, 10.06, 8.88, 7.91, 7.98, 7.99, 8.02, 8.71, 7.97, 8.64, 8.44, 8.62, 8.2],
+    "one": [9.06, 7.92, 7.97, 8.59, 7.82, 8.27, 7.65, 6.81, 6.04, 6.15, 6.27, 6.47, 7.08, 6.56, 7.21, 7.13, 7.1, 6.74],
+    "multi": [22.63, 17.79, 17.61, 18.33, 18.36, 17.83, 16.76, 15.62, 13.81, 14.12, 13.76, 13.67, 15.13, 14.23, 15.2, 14.67, 15.23, 14.35],
+    "n": [1368, 1337, 1607, 1667, 1702, 1307, 1357, 1352, 1540, 1109, 1606, 1370, 1257, 1344, 1473, 1428, 1351, 1527],
+    "nMulti": [334, 262, 321, 325, 391, 264, 360, 318, 370, 254, 370, 295, 254, 247, 263, 247, 252, 292]
+  },
   "natMonths": [
     "2025-05",
     "2025-06",
@@ -6118,6 +6149,12 @@ function renderSec1() {
   makeLine ('c_nat_days',  '#1A7A45',   DATA.natDays,  DATA.natMonths, false, '평균 조치 (일)');
   makeLine ('c_nat_2nd',   '#1565C0',   DATA.nat2nd,   DATA.natMonths, true,  '2차 종결률',   { min: 0, max: 50 });
   makeLine ('c_nat_3rd',   '#C62828',   DATA.nat3rd,   DATA.natMonths, true,  '3차 종결률',   { min: 0, max: 10 });
+  if (DATA.resolve) makeMultiLine('c_nat_resolve', [
+    { label: '전체',               color: '#073D20', data: DATA.resolve.all },
+    { label: '1차에 끝난 건',      color: '#48B47A', data: DATA.resolve.one },
+    { label: 'N차까지 간 건',      color: '#FF8000', data: DATA.resolve.multi, _counts: DATA.resolve.nMulti },
+    { label: '현재 평균 조치기간', color: '#B5AFA3', data: DATA.natDays, dash: [5, 4] },
+  ], DATA.natMonths, false);
 
   // 서울경인
   makeBar  ('c_se_count', '#00B65F',    DATA.seCount, DATA.natMonths, false, '조치 건수');
