@@ -415,6 +415,20 @@ button { font-family: inherit; cursor: pointer; }
 .asd-v { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; margin-top: 2px; }
 .asd-d { font-size: 11px; color: var(--ink-3); }
 .asd-d b { font-weight: 700; }
+/* AS 신청 사유 */
+:root { --asr-1:#2a78d6; --asr-2:#eb6834; --asr-3:#1baf7a; --asr-4:#eda100; --asr-5:#e87ba4; --asr-6:#008300; }
+html[data-theme="dark"] { --asr-1:#3987e5; --asr-2:#d95926; --asr-3:#199e70; --asr-4:#c98500; --asr-5:#d55181; --asr-6:#008300; }
+.asr-seg .seg-btn { padding: 5px 12px; font-size: 12px; }
+.asr-months { display: flex; flex-wrap: wrap; gap: 4px; }
+.asr-months .seg-btn { border: 1px solid var(--border); border-radius: 7px; padding: 4px 10px; font-size: 12px; background: var(--surface); }
+.asr-months .seg-btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.asr-tbl td small { display: block; font-size: 10.5px; color: var(--ink-3); font-weight: 400; margin-top: 1px; }
+.asr-tbl thead th, .asr-tbl tbody td { padding: 8px 10px; white-space: nowrap; }
+.asr-tbl tbody td.asr-hd { white-space: normal; min-width: 120px; }
+.asr-prod td.asr-rank { width: 36px; color: var(--ink-3); font-weight: 600; }
+.asr-prod .asr-bar { display: inline-block; height: 6px; border-radius: 3px; background: var(--accent); opacity: 0.55; vertical-align: middle; margin-left: 8px; }
+.asr-prod td .asr-sub { color: var(--ink-3); font-size: 11.5px; margin-left: 4px; }
+.asr-foot { font-size: 11.5px; color: var(--ink-3); margin-top: 8px; line-height: 1.6; }
 /* YoY 미니 차트 */
 .chart-inner { background: var(--surface-2); border: 1px solid var(--border-soft); border-radius: 8px; padding: 10px 12px; }
 .chart-inner-title { font-size: 11.5px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
@@ -3509,6 +3523,46 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
         </div>
       </div>
 
+      <!-- AS 신청 사유 -->
+      <div class="card mt-16">
+        <div class="card-head">
+          <div>
+            <div class="card-title">AS 신청 사유 — 주별 구성비</div>
+            <div class="card-sub">AS 신청 완료 건 기준 · 월~일 주별 100% 막대 · 상위 6개 항목 + 그 외 · 점선 = 10/28 신청 절차 개선(6→4단계)</div>
+          </div>
+          <div class="seg asr-seg" id="asr-dim" role="tablist" aria-label="신청 사유 기준">
+            <button class="seg-btn active" data-dim="part">부위</button>
+            <button class="seg-btn" data-dim="issue">증상</button>
+          </div>
+        </div>
+        <div class="lg-row" id="asr-legend"></div>
+        <div class="chart-box h-280"><canvas id="c_as_reason"></canvas></div>
+        <div class="asr-foot" id="asr-week-foot"></div>
+      </div>
+
+      <div class="card mt-16">
+        <div class="card-head">
+          <div>
+            <div class="card-title">월별 신청 사유 구성</div>
+            <div class="card-sub" id="asr-tbl-sub">위 그래프와 같은 기준(부위/증상) · 칸 = 그 달 비중, 작은 글씨 = 건수 · 색이 진할수록 비중 높음</div>
+          </div>
+        </div>
+        <div class="tbl-wrap"><table class="t asr-tbl" id="asr-tbl"></table></div>
+        <div class="asr-foot">3월은 페이지 개설일(3/16)부터, 11월은 11/10까지 · 월별 값은 주를 더하지 않고 그 달 기간으로 따로 조회</div>
+      </div>
+
+      <div class="card mt-16">
+        <div class="card-head">
+          <div>
+            <div class="card-title">AS 신청 제품 TOP 10</div>
+            <div class="card-sub">제품명을 모델 단위로 묶음 (예: T50_HLDA·T50 HF → T50 / ALL NEW·NEW T500 → T500) · 주요 부위·증상 = 그 모델 안에서 가장 많은 항목</div>
+          </div>
+          <div class="asr-months" id="asr-month"></div>
+        </div>
+        <div class="tbl-wrap"><table class="t asr-prod" id="asr-prod"></table></div>
+        <div class="asr-foot" id="asr-prod-foot"></div>
+      </div>
+
       <!-- 데이터 출처 -->
       <div class="note">
         <div class="note-ic">i</div>
@@ -3518,6 +3572,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
             <dt>유입 데이터</dt><dd>웹 행동 로그 · 주별 단계별 사용자 수 (메인조회 → AS신청클릭 → 제품선택 → 증상입력 → 고객정보 → 신청완료)</dd>
             <dt>유입률</dt><dd>(다음 단계 수 ÷ 전 단계 수) × 100</dd>
             <dt>제품등록 수</dt><dd>정품등록 완료 건수 <span class="mute">(주별 기준)</span></dd>
+            <dt>신청 사유</dt><dd>Looker Studio 'AS 신청 완료 현황' 표(제품명·부위·증상)의 모든 행을 기간별로 합산 · 주별(월~일)과 월별을 각각 따로 조회 · 두 합계 모두 전체 신청 완료 6,169건(3/16~11/10)과 일치(항목별 값은 조회 기간에 따라 몇 건 차이 날 수 있음) · '표면 물량' 오타 항목은 '표면 불량'에 합침 · 제품은 모델 단위로 묶음</dd>
             <dt>일별 전환율</dt><dd>Looker Studio 일별 표(3/16~) · 버튼 클릭률 = 버튼 클릭 ÷ 메인 조회, 신청 완료율 = 신청 완료 ÷ 메인 조회, 이지리페어 클릭률 = 정품등록 리스트 내 이지리페어 클릭 ÷ 버튼 클릭 (Looker Studio 일별) · 개선 전후 값은 기간 합계 기준 (개선 전 10/1~10/27, 개선 후 10/28~)</dd>
           </dl>
         </div>
@@ -4748,6 +4803,15 @@ const DATA = {
         ]
     }
 ],
+  "asReason": {
+    "source": "Looker Studio WARRANTY & AS & FAQ — AS 신청 완료 현황 표(제품명·부위·증상) 전체 행 합산 · 주별(월~일)·월별 따로 조회",
+    "event": {"week":"10/26","label":"10/28 개선"},
+    "parts": ["좌판","등판·틸팅","베이스·중심봉·레버","헤드레스트","팔걸이·암패드","기타","바퀴·글라이드","마감재 교체·관리","럼버서포트","부품 구매·누락"],
+    "issues": ["파손","분리·교체","흔들림·한 쪽으로 기울어짐","작동 불량","소음","레버 높낮이 조절 불량","기타","표면 불량(오염·찍힘 등)","흔들림·양쪽 높이 다름","조립 불량","메쉬 교체","부품 구매","가죽 교체","고정 불량","작동·고정 불량","부품 누락","(DIY)조립 요청","커버 구매","오염 관리·세척","오배송","포장 불량"],
+    "weeks": {"start":["3/16","3/23","3/30","4/6","4/13","4/20","4/27","5/4","5/11","5/18","5/25","6/1","6/8","6/15","6/22","6/29","7/6","7/13","7/20","7/27","8/3","8/10","8/17","8/24","8/31","9/7","9/14","9/21","9/28","10/5","10/12","10/19","10/26","11/2","11/9"],"end":["3/22","3/29","4/5","4/12","4/19","4/26","5/3","5/10","5/17","5/24","5/31","6/7","6/14","6/21","6/28","7/5","7/12","7/19","7/26","8/2","8/9","8/16","8/23","8/30","9/6","9/13","9/20","9/27","10/4","10/11","10/18","10/25","11/1","11/8","11/10"],"total":[98,136,196,188,188,108,119,114,120,112,137,200,170,196,204,195,212,209,223,201,241,224,246,238,227,186,184,170,199,151,181,172,175,176,73],"lastDays":2,"part":[[15,27,15,14,19,4,0,2,1,1],[37,27,19,22,15,6,3,2,1,4],[50,31,33,29,27,16,2,3,2,3],[39,29,37,23,29,20,5,2,2,2],[45,38,22,24,24,20,3,4,5,3],[26,27,18,16,14,5,0,2,0,0],[27,26,13,13,23,10,3,2,1,1],[26,32,11,15,14,10,1,2,2,1],[17,26,16,15,21,12,6,3,3,1],[18,29,20,15,16,8,2,1,1,2],[36,34,22,14,13,10,4,1,3,0],[46,37,32,27,22,21,4,9,1,1],[46,27,27,17,26,14,4,6,3,0],[42,41,33,26,15,21,6,5,4,3],[45,39,28,28,37,17,2,1,5,2],[40,39,29,42,19,11,7,4,2,2],[47,43,35,29,30,11,5,7,2,3],[56,37,28,34,26,17,2,4,3,2],[52,49,31,27,22,22,6,5,4,5],[53,31,23,35,26,11,7,6,4,5],[63,42,41,29,29,20,3,6,3,5],[51,39,50,23,24,20,5,9,1,2],[59,42,46,30,37,19,5,1,5,2],[55,43,39,38,30,16,5,6,5,1],[44,41,45,23,22,22,12,6,7,5],[48,36,36,14,21,11,7,4,5,4],[47,34,25,29,29,13,3,2,0,2],[37,38,19,29,20,14,5,2,3,3],[55,49,20,21,19,20,6,3,4,2],[36,23,23,20,24,8,4,6,4,3],[40,30,33,21,26,17,8,2,4,0],[46,26,24,23,25,16,3,4,5,0],[41,44,27,10,21,15,6,5,4,2],[45,27,31,17,28,16,4,1,2,5],[22,19,18,3,3,8,0,0,0,0]],"issue":[[27,14,13,8,7,7,4,6,6,2,0,1,2,1,0,0,0,0,0,0,0],[39,12,16,12,11,13,6,11,2,7,2,2,0,0,1,2,0,0,0,0,0],[49,25,26,17,14,17,16,19,2,4,1,1,2,0,1,2,0,0,0,0,0],[43,22,28,16,17,15,19,13,4,4,0,2,2,0,2,0,0,0,0,1,0],[41,24,28,10,18,11,17,14,2,10,2,2,2,0,3,1,2,0,0,0,1],[22,14,19,12,17,7,3,8,1,1,2,0,0,0,0,0,2,0,0,0,0],[34,9,21,10,15,6,9,6,4,0,2,0,0,0,1,1,1,0,0,0,0],[24,26,15,9,7,3,9,10,3,2,2,1,0,1,1,0,1,0,0,0,0],[38,11,12,12,12,13,12,1,2,0,1,1,2,0,3,0,0,0,0,0,0],[25,16,11,13,20,10,7,2,3,1,0,2,0,0,0,0,0,1,0,1,0],[36,18,20,14,17,10,10,7,1,0,0,0,0,2,1,0,0,1,0,0,0],[48,23,27,20,19,15,20,13,3,0,4,1,4,1,0,0,1,1,0,0,0],[36,25,23,17,21,12,14,10,4,0,5,0,1,2,0,0,0,0,0,0,0],[32,31,29,19,15,16,18,20,2,0,1,3,4,2,1,0,3,0,0,0,0],[51,31,23,21,16,19,16,17,2,3,0,2,1,1,0,0,1,0,0,0,0],[42,27,28,29,10,18,11,18,3,3,2,0,2,0,0,2,0,0,0,0,0],[59,28,21,24,12,22,11,17,5,1,3,2,3,2,0,1,0,1,0,0,0],[49,30,27,23,15,13,14,22,0,5,3,1,0,1,1,1,3,1,0,0,0],[56,27,34,14,16,14,21,20,2,4,2,3,0,4,0,2,1,1,2,0,0],[54,20,27,23,16,12,11,20,2,2,2,3,4,2,1,2,0,0,0,0,0],[52,38,28,24,20,21,18,21,2,1,2,2,2,3,0,3,2,2,0,0,0],[47,32,33,19,15,27,19,16,2,2,5,0,3,0,0,2,1,0,1,0,0],[62,28,29,19,16,34,19,24,6,1,0,1,1,2,3,1,0,0,0,0,0],[70,38,28,26,17,19,15,13,0,2,1,0,2,2,0,1,1,2,1,0,0],[56,33,25,22,20,16,21,11,4,1,5,4,1,3,3,1,1,0,0,0,0],[51,27,28,11,15,16,11,13,2,0,1,2,3,1,3,2,0,0,0,0,0],[57,20,23,21,18,11,13,12,2,3,1,0,0,0,0,2,0,0,1,0,0],[48,26,19,18,11,10,13,15,1,2,2,2,0,0,1,1,1,0,0,0,0],[57,21,26,15,22,9,18,17,2,1,0,1,3,2,2,1,1,0,0,1,0],[33,22,20,15,11,12,8,15,3,0,5,3,0,2,1,0,0,0,1,0,0],[50,20,15,11,19,22,17,17,5,0,0,0,1,2,1,0,0,1,0,0,0],[32,27,25,15,12,14,15,16,1,5,3,0,1,2,3,0,0,0,0,0,1],[34,32,25,8,24,13,14,11,4,0,0,2,4,0,2,0,1,1,0,0,0],[40,32,29,11,15,14,16,8,3,0,0,5,1,0,2,0,0,0,0,0,0],[20,10,14,0,7,9,7,5,0,0,0,0,0,0,0,0,1,0,0,0,0]]},
+    "months": {"keys":["M03","M04","M05","M06","M07","M08","M09","M10","M11"],"labels":["3월*","4월","5월","6월","7월","8월","9월","10월","11월*"],"total":[315,687,514,846,925,1030,832,749,271],"part":[[73,67,47,53,39,17,3,6,4,6],[155,129,108,86,104,63,13,10,11,8],[104,127,73,62,72,41,14,9,8,4],[198,159,130,115,109,75,18,22,13,7],[218,177,137,146,110,63,25,19,15,15],[244,188,182,132,128,83,21,24,16,12],[201,167,132,98,98,67,26,14,14,15],[186,135,111,87,99,61,26,21,18,5],[70,52,54,19,36,27,4,1,3,5]],"issue":[[80,36,44,28,26,23,17,28,7,11,2,3,4,2,1,3,0,0,0,0,0],[165,81,101,55,69,53,56,43,13,17,6,5,4,0,9,3,5,0,0,1,1],[130,71,67,51,62,37,39,21,10,4,5,4,2,3,4,0,1,2,0,1,0],[182,127,110,89,78,65,70,67,13,4,11,5,10,6,1,2,5,1,0,0,0],[235,119,120,100,57,76,59,86,10,14,9,9,5,9,2,6,4,3,2,0,0],[249,147,132,95,76,105,80,78,10,7,10,5,9,9,3,7,3,4,1,0,0],[232,113,106,74,69,55,63,63,9,5,8,8,5,5,5,7,3,0,1,1,0],[169,107,95,57,70,64,59,65,14,6,9,5,9,7,8,0,1,2,1,0,1],[64,46,48,10,28,23,26,13,4,0,0,5,1,0,2,0,1,0,0,0,0]]},
+    "products": {"M03":{"total":315,"other":17,"top":[["T50",44,"헤드레스트",13,"흔들림·한 쪽으로 기울어짐",13],["T500",40,"헤드레스트",10,"작동 불량",9],["T50 AIR",31,"좌판",10,"파손",9],["T80",29,"등판·틸팅",11,"파손",11],["T20",25,"헤드레스트",10,"조립 불량",10],["GC PRO",20,"좌판",14,"파손",7],["GX",19,"팔걸이·암패드",6,"파손",6],["T40",13,"헤드레스트",7,"표면 불량(오염·찍힘 등)",5],["TAB",12,"등판·틸팅",7,"파손",6],["IBLE",12,"좌판",7,"분리·교체",4]]},"M04":{"total":687,"other":39,"top":[["T50",116,"좌판",31,"작동 불량",26],["T50 AIR",80,"헤드레스트",18,"파손",19],["T80",78,"팔걸이·암패드",33,"파손",26],["T500",77,"베이스·중심봉·레버",18,"파손",17],["T20",39,"헤드레스트",15,"조립 불량",15],["GC PRO",33,"좌판",18,"파손",10],["TAB",26,"등판·틸팅",11,"파손",16],["IBLE",23,"팔걸이·암패드",6,"파손",9],["GX",23,"등판·틸팅",8,"소음",7],["T60",21,"등판·틸팅",6,"흔들림·한 쪽으로 기울어짐",6]]},"M05":{"total":514,"other":30,"top":[["T50",87,"헤드레스트",20,"흔들림·한 쪽으로 기울어짐",22],["T80",60,"팔걸이·암패드",24,"파손",24],["T500",55,"등판·틸팅",15,"파손",15],["T50 AIR",54,"헤드레스트",13,"작동 불량",14],["GC PRO",30,"좌판",23,"파손",16],["TAB",25,"팔걸이·암패드",10,"파손",14],["GX",23,"등판·틸팅",7,"소음",8],["T60",21,"좌판",6,"소음",8],["IBLE",18,"등판·틸팅",8,"파손",7],["T20",18,"등판·틸팅",9,"소음",4]]},"M06":{"total":846,"other":35,"top":[["T50",149,"좌판",45,"작동 불량",38],["T80",101,"팔걸이·암패드",54,"파손",43],["T500",96,"베이스·중심봉·레버",25,"파손",19],["T50 AIR",89,"좌판",27,"파손",27],["GC PRO",51,"좌판",28,"파손",14],["GX",45,"헤드레스트",15,"작동 불량",13],["IBLE",32,"등판·틸팅",11,"파손",11],["LINIE",28,"좌판",17,"분리·교체",9],["TAB",26,"등판·틸팅",11,"파손",12],["MUUVE",25,"베이스·중심봉·레버",16,"레버 높낮이 조절 불량",16]]},"M07":{"total":925,"other":62,"top":[["T50",155,"좌판",51,"흔들림·한 쪽으로 기울어짐",42],["T50 AIR",104,"좌판",28,"파손",33],["T500",94,"등판·틸팅",28,"파손",23],["T80",84,"팔걸이·암패드",41,"파손",35],["GX",65,"헤드레스트",27,"작동 불량",21],["GC PRO",44,"좌판",29,"파손",21],["T20",43,"등판·틸팅",17,"파손",8],["TAB",37,"베이스·중심봉·레버",10,"파손",11],["T40",32,"헤드레스트",15,"분리·교체",15],["IBLE",31,"베이스·중심봉·레버",8,"파손",12]]},"M08":{"total":1030,"other":65,"top":[["T50",188,"좌판",66,"흔들림·한 쪽으로 기울어짐",61],["T50 AIR",127,"좌판",40,"파손",30],["T500",124,"등판·틸팅",32,"파손",33],["T80",102,"팔걸이·암패드",51,"파손",40],["GX",62,"헤드레스트",21,"작동 불량",14],["GC PRO",54,"좌판",33,"파손",26],["TAB",40,"등판·틸팅",12,"파손",18],["T20",37,"등판·틸팅",13,"파손",10],["IBLE",33,"좌판",14,"분리·교체",12],["T40",27,"헤드레스트",12,"파손",9]]},"M09":{"total":832,"other":43,"top":[["T50",158,"좌판",49,"흔들림·한 쪽으로 기울어짐",34],["T500",94,"등판·틸팅",25,"파손",31],["T50 AIR",86,"좌판",30,"파손",21],["T80",73,"팔걸이·암패드",36,"파손",36],["GC PRO",44,"좌판",27,"파손",22],["GX",39,"헤드레스트",12,"작동 불량",10],["T20",38,"등판·틸팅",13,"파손",9],["IBLE",36,"등판·틸팅",13,"분리·교체",11],["T60",32,"좌판",10,"소음",13],["T90",30,"베이스·중심봉·레버",9,"소음",7]]},"M10":{"total":749,"other":39,"top":[["T50",147,"좌판",55,"흔들림·한 쪽으로 기울어짐",40],["T500",79,"등판·틸팅",19,"분리·교체",15],["T50 AIR",73,"좌판",20,"파손",14],["T80",72,"팔걸이·암패드",38,"파손",39],["GC PRO",47,"좌판",26,"파손",15],["GX",40,"등판·틸팅",9,"소음",8],["T20",32,"등판·틸팅",14,"레버 높낮이 조절 불량",7],["IBLE",29,"등판·틸팅",10,"분리·교체",12],["T90",27,"등판·틸팅",8,"소음",9],["T60",27,"등판·틸팅",8,"소음",7]]},"M11":{"total":271,"other":10,"top":[["T50",44,"좌판",18,"흔들림·한 쪽으로 기울어짐",21],["T80",36,"팔걸이·암패드",14,"파손",13],["T500",22,"등판·틸팅",8,"분리·교체",7],["T50 AIR",22,"베이스·중심봉·레버",5,"분리·교체",6],["GC PRO",20,"좌판",16,"파손",8],["T60",13,"좌판",3,"소음",3],["TAB",12,"팔걸이·암패드",4,"파손",5],["GX",12,"팔걸이·암패드",4,"파손",5],["IBLE",11,"등판·틸팅",3,"분리·교체",4],["T20",11,"등판·틸팅",5,"소음",3]]},"all":{"total":6169,"other":340,"top":[["T50",1088,"좌판",344,"흔들림·한 쪽으로 기울어짐",296],["T500",681,"등판·틸팅",168,"파손",165],["T50 AIR",666,"좌판",181,"파손",164],["T80",635,"팔걸이·암패드",301,"파손",267],["GC PRO",343,"좌판",214,"파손",139],["GX",328,"헤드레스트",95,"작동 불량",71],["T20",267,"등판·틸팅",98,"파손",54],["TAB",232,"등판·틸팅",69,"파손",103],["IBLE",225,"등판·틸팅",67,"파손",64],["T60",181,"좌판",46,"소음",55]]}}
+  },
   "asDaily": {
     "source": "Looker Studio WARRANTY & AS & FAQ — 일별 표(메인 조회/버튼 클릭/신청 완료) + AS KPI Overview 이지리페어 클릭율(일별 → 건수 환산)",
     "compareFrom": "10/1",
@@ -6306,6 +6370,135 @@ function renderAsDaily() {
   });
 }
 
+// ---- AS 신청 사유 (부위·증상 주별/월별 · 제품 TOP 10) ----
+function renderAsReason() {
+  const R = DATA.asReason;
+  if (!R) return;
+  const dim = window.__asrDim || 'part';
+  document.querySelectorAll('#asr-dim .seg-btn').forEach(b => b.classList.toggle('active', b.dataset.dim === dim));
+  const cats = dim === 'part' ? R.parts : R.issues;
+  const W = R.weeks, M = R.months, wm = W[dim], mm = M[dim];
+  const pal = [1, 2, 3, 4, 5, 6].map(i => cssVar('--asr-' + i));
+  const pct = (n, d) => d ? Math.round(n / d * 1000) / 10 : null;
+  const TOP = 6;
+
+  // 범례
+  const lg = document.getElementById('asr-legend');
+  if (lg) lg.innerHTML = cats.slice(0, TOP).map((c, k) => `<span class="lg-chip"><i style="background:${pal[k]}"></i>${c}</span>`).join('')
+    + (cats.length > TOP ? `<span class="lg-chip"><i style="background:${cssVar('--ink-4')}"></i>그 외 ${cats.length - TOP}개 항목</span>` : '');
+  const last = W.start.length - 1;
+  const foot = document.getElementById('asr-week-foot');
+  if (foot) foot.textContent = `비중 = 그 주 신청 완료 대비 · 주별 신청 완료 ${Math.min(...W.total.slice(0, last))}~${Math.max(...W.total)}건`
+    + (W.lastDays < 7 ? ` · 마지막 주(${W.start[last]}~${W.end[last]})는 ${W.lastDays}일치(${W.total[last]}건)라 흔들림이 큼` : '');
+
+  // 주별 그래프
+  const el = document.getElementById('c_as_reason');
+  if (el) {
+    if (CHARTS.c_as_reason) { try { CHARTS.c_as_reason.destroy(); } catch (e) {} }
+    const evi = W.start.indexOf(R.event.week);
+    const marker = {
+      id: 'asrMarker',
+      afterDatasetsDraw(chart) {
+        if (evi < 1) return;
+        const { ctx: c, chartArea: a, scales: { x } } = chart;
+        const px = (x.getPixelForValue(evi - 1) + x.getPixelForValue(evi)) / 2;
+        c.save();
+        c.strokeStyle = COLORS.ink; c.setLineDash([4, 3]); c.lineWidth = 1.5;
+        c.beginPath(); c.moveTo(px, a.top - 14); c.lineTo(px, a.bottom); c.stroke(); c.setLineDash([]);
+        c.fillStyle = COLORS.ink2; c.font = '600 10.5px Pretendard Variable, Pretendard, sans-serif';
+        c.textAlign = 'left'; c.textBaseline = 'bottom';
+        c.fillText(R.event.label, px + 4, a.top - 3);
+        c.restore();
+      }
+    };
+    const rest = wm.map(r => r.slice(TOP).reduce((s, v) => s + v, 0));
+    const series = cats.slice(0, TOP).map((c, k) => ({ label: c, num: wm.map(r => r[k]), color: pal[k] }))
+      .concat(cats.length > TOP ? [{ label: `그 외 ${cats.length - TOP}개`, num: rest, color: cssVar('--ink-4') }] : []);
+    const datasets = series.map(s => ({
+      label: s.label, _num: s.num,
+      data: s.num.map((n, i) => W.total[i] ? n / W.total[i] * 100 : null),
+      backgroundColor: s.color, hoverBackgroundColor: s.color,
+      borderColor: COLORS.surface, borderWidth: { top: 2 }, borderSkipped: false,
+      stack: 'w', barPercentage: 0.88, categoryPercentage: 0.92,
+    }));
+    const scales = baseScales(true);
+    scales.x.stacked = true; scales.y.stacked = true;
+    scales.y.min = 0; scales.y.max = 100; scales.y.ticks.stepSize = 25;
+    scales.x.ticks.maxRotation = 0; scales.x.ticks.autoSkip = true; scales.x.ticks.maxTicksLimit = 12;
+    CHARTS.c_as_reason = new Chart(el.getContext('2d'), {
+      type: 'bar',
+      data: { labels: W.start, datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { intersect: false, mode: 'index' },
+        layout: { padding: { top: 18 } },
+        scales,
+        plugins: {
+          valueLabels: { enabled: false },
+          tooltip: {
+            callbacks: {
+              title: items => { const i = items[0].dataIndex; return `${W.start[i]}~${W.end[i]} · 신청 완료 ${W.total[i].toLocaleString()}건`; },
+              label: c => ` ${c.dataset.label}: ${c.parsed.y == null ? '-' : c.parsed.y.toFixed(1) + '%'} (${c.dataset._num[c.dataIndex]}건)`
+            }
+          }
+        }
+      },
+      plugins: [marker]
+    });
+  }
+
+  // 월별 구성 표 (상위 10개 + 그 외)
+  const tb = document.getElementById('asr-tbl');
+  if (tb) {
+    const SHOW = 10;
+    const allTot = M.total.reduce((a, b) => a + b, 0);
+    const colTot = cats.map((_, j) => mm.reduce((s, r) => s + r[j], 0));
+    const rows = cats.slice(0, SHOW).map((c, j) => ({ c, v: mm.map(r => r[j]), all: colTot[j] }));
+    if (cats.length > SHOW) {
+      const rest = cats.slice(SHOW);
+      rows.push({ c: `그 외 ${rest.length}개`, title: rest.join(', '), v: mm.map(r => r.slice(SHOW).reduce((a, b) => a + b, 0)), all: colTot.slice(SHOW).reduce((a, b) => a + b, 0) });
+    }
+    const maxShare = Math.max(...rows.flatMap(r => r.v.map((n, i) => n / M.total[i])));
+    const cell = (n, d) => {
+      const s = d ? n / d : 0;
+      return `<td style="background:${hexToRgba(COLORS.accent, (s / maxShare * 0.28).toFixed(3))}">${(s * 100).toFixed(1)}%<small>${n.toLocaleString()}건</small></td>`;
+    };
+    tb.innerHTML = `<thead><tr><th style="text-align:left">${dim === 'part' ? '부위' : '증상'}</th>${M.labels.map(l => `<th>${l}</th>`).join('')}<th>전체</th></tr></thead><tbody>`
+      + rows.map(r => `<tr><td class="asr-hd"${r.title ? ` title="${r.title}"` : ''}>${r.c}</td>${r.v.map((n, i) => cell(n, M.total[i])).join('')}${cell(r.all, allTot)}</tr>`).join('')
+      + `<tr><td class="asr-hd">신청 완료</td>${M.total.map(n => `<td>${n.toLocaleString()}건</td>`).join('')}<td>${allTot.toLocaleString()}건</td></tr></tbody>`;
+  }
+  const sub = document.getElementById('asr-tbl-sub');
+  if (sub) sub.textContent = `${dim === 'part' ? '부위' : '증상'} 기준(위 버튼과 연동) · 칸 = 그 달 비중, 작은 글씨 = 건수 · 색이 진할수록 비중 높음`;
+  renderAsProducts();
+}
+
+function renderAsProducts() {
+  const R = DATA.asReason;
+  if (!R) return;
+  const key = window.__asrMonth || 'all';
+  const keys = ['all'].concat(R.months.keys), labels = ['전체'].concat(R.months.labels);
+  const mb = document.getElementById('asr-month');
+  if (mb) mb.innerHTML = keys.map((k, i) => `<button class="seg-btn${k === key ? ' active' : ''}" data-m="${k}">${labels[i]}</button>`).join('');
+  const P = R.products[key], tb = document.getElementById('asr-prod');
+  if (!P || !tb) return;
+  const max = Math.max(...P.top.map(r => r[1]));
+  const pc = (n, d) => (n / d * 100).toFixed(1) + '%';
+  tb.innerHTML = '<thead><tr><th style="text-align:left">#</th><th style="text-align:left">모델</th><th>신청 완료</th><th style="text-align:left">비중</th><th style="text-align:left">주요 부위</th><th style="text-align:left">주요 증상</th></tr></thead><tbody>'
+    + P.top.map((r, i) => `<tr><td class="asr-rank">${i + 1}</td><td style="text-align:left">${r[0]}</td><td>${r[1].toLocaleString()}건</td>`
+      + `<td style="text-align:left">${pc(r[1], P.total)}<span class="asr-bar" style="width:${Math.round(r[1] / max * 80)}px"></span></td>`
+      + `<td style="text-align:left">${r[2]}<span class="asr-sub">${pc(r[3], r[1])}</span></td><td style="text-align:left">${r[4]}<span class="asr-sub">${pc(r[5], r[1])}</span></td></tr>`).join('')
+    + `<tr><td></td><td style="text-align:left">TOP 10 합계</td><td>${P.top.reduce((s, r) => s + r[1], 0).toLocaleString()}건</td><td style="text-align:left">${pc(P.top.reduce((s, r) => s + r[1], 0), P.total)}</td><td></td><td></td></tr></tbody>`;
+  const foot = document.getElementById('asr-prod-foot');
+  if (foot) foot.textContent = `${labels[keys.indexOf(key)]} 신청 완료 ${P.total.toLocaleString()}건 기준 · 모델로 묶지 못한 소량·특판 제품 ${P.other.toLocaleString()}건(${pc(P.other, P.total)})은 순위에서 제외`;
+}
+
+document.addEventListener('click', e => {
+  const d = e.target.closest('#asr-dim .seg-btn');
+  if (d) { window.__asrDim = d.dataset.dim; renderAsReason(); return; }
+  const m = e.target.closest('#asr-month .seg-btn');
+  if (m) { window.__asrMonth = m.dataset.m; renderAsProducts(); }
+});
+
 // ---- Section 2 charts ----
 function renderSec2() {
   const F = DATA.funnel;
@@ -6320,6 +6513,7 @@ function renderSec2() {
   ], F.periods, true);
 
   renderAsDaily();
+  renderAsReason();
   makeBar ('c_product_reg', COLORS.accent, F.productReg, F.periods, false, '등록 수');
   fjInitMetrics();
   bxInitSlotNums();
