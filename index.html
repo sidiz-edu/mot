@@ -3437,7 +3437,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
         <div class="card-head">
           <div>
             <div class="card-title">단계별 이탈 — 어디서 빠지나<span class="src src-looker" title="Looker Studio AS Funnel 스코어카드 · 주별(월~일)은 AS 현황 시트 3번 탭, 월별·10/28 전후는 기간별 조회">Looker</span></div>
-            <div class="card-sub">AS 신청 버튼 클릭 이후 화면별로 남은 수와 빠진 수 · 이탈 = 앞 단계 수 − 다음 단계 수 · 아래 표의 기간을 누르면 위 막대가 바뀜</div>
+            <div class="card-sub">AS 메인 페이지 조회부터 화면별로 남은 수와 빠진 수 · 이탈 = 앞 단계 수 − 다음 단계 수 · 아래 표의 기간을 누르면 위 막대가 바뀜</div>
           </div>
           <div class="seg asr-seg" id="fd-gran" role="tablist" aria-label="기간 단위">
             <button class="seg-btn active" data-g="week">주별</button>
@@ -3447,7 +3447,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
         </div>
         <div class="fd-pick" id="fd-pick"></div>
         <div class="fd-top" id="fd-top"></div>
-        <div class="fd-head"><div>단계</div><div id="fd-h-bar">남은 수 (버튼 클릭 = 100%) · 빗금 = 그 화면에서 이탈</div><div id="fd-h-rate">이탈률 (전주 대비)</div><div class="fd-h-spark" id="fd-h-spark">주별 추이 · 점선 = 10/28 개선 주</div></div>
+        <div class="fd-head"><div>단계</div><div id="fd-h-bar">남은 수 (메인 조회 = 100%) · 빗금 = 그 화면에서 이탈</div><div id="fd-h-rate">클릭률·이탈률 (전주 대비)</div><div class="fd-h-spark" id="fd-h-spark">주별 추이 · 점선 = 10/28 개선 주</div></div>
         <div id="fd-funnel"></div>
         <div class="fd-tbl-h"><span id="fd-tbl-title">기간별 이탈률</span><button class="fd-more" id="fd-more" type="button"></button></div>
         <div class="tbl-wrap"><table class="t fd-tbl" id="fd-tbl"></table></div>
@@ -6804,6 +6804,7 @@ document.addEventListener('click', e => {
 // ---- AS 신청 단계별 이탈 (주별·월별·10/28 전후) ----
 const FD_KEYS = ['main', 'click', 'pick', 'sym', 'info', 'done'];
 const FD_STEPS = [
+  { k: 'main',  name: 'AS 메인 페이지 조회', sub: 'AS 신청 페이지 방문',   color: '#003EFF' },
   { k: 'click', name: 'AS 신청 버튼 클릭', sub: '메인 조회 대비 클릭률', color: '#0033CC' },
   { k: 'pick',  name: '제품 선택',         sub: '로그인 포함',            color: '#1A4FD8' },
   { k: 'sym',   name: '증상 입력',         sub: '부위·증상·사진',         color: '#3D72D7' },
@@ -6811,6 +6812,11 @@ const FD_STEPS = [
   { k: 'done',  name: '신청 완료',         sub: '완료 이벤트가 덜 잡힌 기간', color: '#8FB4F0' },
 ];
 const FD_TAG = { b: '<span class="fd-tag b">개선 전</span>', a: '<span class="fd-tag a">개선 후</span>', m: '<span class="fd-tag m">10/28 전후 섞임</span>' };
+function fdDays(range) {
+  const m = String(range).match(/(\d{1,2})\/(\d{1,2})~(\d{1,2})\/(\d{1,2})/);
+  if (!m) return 7;
+  return Math.round((new Date(2026, +m[3] - 1, +m[4]) - new Date(2026, +m[1] - 1, +m[2])) / 86400000) + 1;
+}
 function fdLists() {
   const F = DATA.funnel, M = DATA.funnelPeriods.months;
   const md = s => [...String(s).matchAll(/(\d{1,2})\.\s*(\d{1,2})/g)].map(m => [+m[1], +m[2]]);
@@ -6843,8 +6849,8 @@ function renderFunnelDrop() {
   }
   const fmt = v => Math.round(v).toLocaleString();
   const split = [cur].concat(g === 'cmp' ? [prev] : []).some(o => Math.abs(o.info - o.done) > Math.max(2, o.info * 0.02));
-  const steps = split ? FD_STEPS : FD_STEPS.slice(0, 3).concat([Object.assign({}, FD_STEPS[3], { name: '고객 정보 · 신청 완료', sub: '두 값이 같게 집계됨' })]);
-  const rateOf = (o, i) => i === 0 ? o.click / o.main * 100 : (o[steps[i - 1].k] - o[steps[i].k]) / o[steps[i - 1].k] * 100;
+  const steps = split ? FD_STEPS : FD_STEPS.slice(0, 4).concat([Object.assign({}, FD_STEPS[4], { name: '고객 정보 · 신청 완료', sub: '두 값이 같게 집계됨' })]);
+  const rateOf = (o, i) => i === 0 ? null : i === 1 ? o.click / o.main * 100 : (o[steps[i - 1].k] - o[steps[i].k]) / o[steps[i - 1].k] * 100;
   const unit = g === 'week' ? '전주' : g === 'month' ? '전월' : '개선 전';
 
   // 기간 선택
@@ -6862,8 +6868,8 @@ function renderFunnelDrop() {
     ? `<div class="fd-top-row">${line(prev, `${prev.label} ${prev.range}`)}</div><div class="fd-top-row">${line(cur, `개선 후 ${cur.range}`)}</div>`
     : `<div class="fd-top-row">${line(cur, cur.label + (cur.range ? ` · ${cur.range}` : ''))}${FD_TAG[cur.ph]}</div>`;
   const hd = (id, s) => { const el = document.getElementById(id); if (el) el.textContent = s; };
-  hd('fd-h-bar', g === 'cmp' ? '남은 수 (버튼 클릭 = 100%) · 위 = 개선 전, 아래 = 개선 후 · 빗금 = 그 화면에서 이탈' : '남은 수 (버튼 클릭 = 100%) · 빗금 = 그 화면에서 이탈');
-  hd('fd-h-rate', g === 'cmp' ? '이탈률 (개선 후 · 개선 전 대비)' : `이탈률 (${unit} 대비)`);
+  hd('fd-h-bar', g === 'cmp' ? '남은 수 (메인 조회 = 100%) · 위 = 개선 전, 아래 = 개선 후 · 빗금 = 그 화면에서 이탈' : '남은 수 (메인 조회 = 100%) · 빗금 = 그 화면에서 이탈');
+  hd('fd-h-rate', g === 'cmp' ? '클릭률·이탈률 (개선 후 · 개선 전 대비)' : `클릭률·이탈률 (${unit} 대비)`);
   hd('fd-h-spark', g === 'month' ? '월별 추이 · 점선 = 10월(10/28 개선)' : g === 'cmp' ? '주별 추이 · 음영 = 개선 후' : '주별 추이 · 점선 = 10/28 개선 주');
 
   // 단계 막대 + 추이
@@ -6871,15 +6877,15 @@ function renderFunnelDrop() {
   const evI = sList.findIndex(o => o.ph === 'm');
   const band = g === 'cmp' ? [evI + 1, sList.length - 1] : [idx, idx];
   const series = i => sList.map(o => { const den = i === 0 ? o.main : o[steps[i - 1].k]; return den ? rateOf(o, i) : null; });
-  const spark = (vals, color) => {
-    const W = 220, H = 40, max = 50, n = vals.length, step = W / Math.max(1, n - 1);
+  const spark = (vals, color, maxV, fmtV) => {
+    const W = 220, H = 40, max = maxV || 50, n = vals.length, step = W / Math.max(1, n - 1);
     const x = i => i * step, y = v => H - Math.min(Math.max(v, 0), max) / max * H;
     const pts = vals.map((v, i) => v == null ? null : [x(i), y(v)]);
     const d = pts.filter(Boolean).map((p, k) => (k ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
     const hp = pts[band[1]] || pts[pts.length - 1];
     const bx = Math.max(0, x(band[0]) - step / 2), bw = Math.min(W, x(band[1]) + step / 2) - bx;
     const dots = n <= 12 ? pts.map(p => p ? `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="1.8" fill="${color}"/>` : '').join('') : '';
-    const hits = pts.map((p, i) => p ? `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="5" fill="transparent"><title>${sList[i].label} ${vals[i].toFixed(1)}%</title></circle>` : '').join('');
+    const hits = pts.map((p, i) => p ? `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="5" fill="transparent"><title>${sList[i].label} ${fmtV ? fmtV(vals[i]) : vals[i].toFixed(1) + '%'}</title></circle>` : '').join('');
     return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="추이">`
       + `<rect x="${bx.toFixed(1)}" y="0" width="${bw.toFixed(1)}" height="${H}" rx="3" fill="${color}" opacity=".1"/>`
       + (evI >= 0 ? `<line x1="${x(evI).toFixed(1)}" x2="${x(evI).toFixed(1)}" y1="0" y2="${H}" stroke="currentColor" stroke-dasharray="3 3" opacity=".6"/>` : '')
@@ -6887,24 +6893,36 @@ function renderFunnelDrop() {
       + (hp ? `<circle cx="${hp[0].toFixed(1)}" cy="${hp[1].toFixed(1)}" r="3.4" fill="${color}" stroke="var(--surface)" stroke-width="1.5"/>` : '') + hits + '</svg>';
   };
   const track = (o, i, color, tag) => {
-    const w = o[steps[i].k] / o.click * 100, pw = i ? o[steps[i - 1].k] / o.click * 100 : 100;
+    const w = o[steps[i].k] / o.main * 100, pw = i ? o[steps[i - 1].k] / o.main * 100 : 100;
     const lost = i ? o[steps[i - 1].k] - o[steps[i].k] : 0, lossW = pw - w, out = lossW < 9;
     return `<div class="fd-bar${i ? '' : ' full'}" style="width:${Math.min(100, w)}%;background:${color}">${tag ? `<em>${tag}</em>` : ''}${fmt(o[steps[i].k])}</div>`
       + (i && lost > 0 ? `<div class="fd-loss" style="left:${w}%;width:${lossW}%"></div><div class="fd-loss-t" style="left:${out ? pw : w}%;padding-left:${out ? 6 : 8}px">−${fmt(lost)}</div>` : '');
   };
+  const days = o => o.days || (o.range ? fdDays(o.range) : 7);
+  const avg = o => o.main / days(o);
   const rates = steps.map((_, i) => rateOf(cur, i));
-  const maxI = steps.map((_, i) => i).slice(1).reduce((m, i) => rates[i] > rates[m] ? i : m, 1);
+  const maxI = steps.map((_, i) => i).slice(2).reduce((m, i) => rates[i] > rates[m] ? i : m, 2);
   box.innerHTML = steps.map((s, i) => {
-    const r = rates[i], pr = prev ? rateOf(prev, i) : null, dd = pr == null ? null : r - pr;
-    const good = i === 0 ? dd >= 0 : dd <= 0;
-    const delta = dd == null ? '<div class="fd-delta">비교할 앞 기간 없음</div>'
-      : `<div class="fd-delta"><b style="color:var(${good ? '--pos' : '--neg'})">${dd >= 0 ? '▲' : '▼'}${Math.abs(dd).toFixed(1)}%p</b> · ${unit} ${pr.toFixed(1)}%</div>`;
+    let rateH, sp;
+    if (i === 0) {
+      const ch = prev ? (avg(cur) / avg(prev) - 1) * 100 : null;
+      rateH = `<div class="fd-rate">일평균<b>${fmt(avg(cur))}</b></div>` + (ch == null ? '<div class="fd-delta">비교할 앞 기간 없음</div>'
+        : `<div class="fd-delta"><b style="color:var(--ink-2)">${ch >= 0 ? '▲' : '▼'}${Math.abs(ch).toFixed(1)}%</b> · ${unit} ${fmt(avg(prev))}</div>`);
+      const vs = sList.map(avg);
+      sp = spark(vs, s.color, Math.max(...vs) * 1.15, v => `일평균 ${fmt(v)}회`);
+    } else {
+      const r = rates[i], pr = prev ? rateOf(prev, i) : null, dd = pr == null ? null : r - pr;
+      const good = i === 1 ? dd >= 0 : dd <= 0;
+      rateH = `<div class="fd-rate">${i === 1 ? '클릭률' : '이탈'}<b>${r.toFixed(1)}%</b></div>` + (dd == null ? '<div class="fd-delta">비교할 앞 기간 없음</div>'
+        : `<div class="fd-delta"><b style="color:var(${good ? '--pos' : '--neg'})">${dd >= 0 ? '▲' : '▼'}${Math.abs(dd).toFixed(1)}%p</b> · ${unit} ${pr.toFixed(1)}%</div>`);
+      sp = spark(series(i), s.color);
+    }
     const tr = g === 'cmp' ? `<div class="fd-sub">${track(prev, i, '#9C968A', '전')}</div><div class="fd-sub">${track(cur, i, s.color, '후')}</div>` : track(cur, i, s.color, '');
-    return `<div class="fd-row${i && i === maxI ? ' is-max' : ''}">
+    return `<div class="fd-row${i > 1 && i === maxI ? ' is-max' : ''}">
       <div class="fd-lbl"><b>${s.name}</b><small>${s.sub}</small></div>
       <div class="fd-track${g === 'cmp' ? ' dual' : ''}">${tr}</div>
-      <div><div class="fd-rate">${i ? '이탈' : '클릭률'}<b>${r.toFixed(1)}%</b></div>${delta}</div>
-      <div class="fd-spark">${spark(series(i), s.color)}</div>
+      <div>${rateH}</div>
+      <div class="fd-spark">${sp}</div>
     </div>`;
   }).join('');
 
@@ -6949,7 +6967,7 @@ function renderFunnelDrop() {
   const per = (o, k) => o[k] / o.days, gr = (x, y) => (x / y - 1) * 100, sg = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(0) + '%';
   const cb = per(B4, 'click'), ca = per(AF, 'click'), pb = per(B4, 'pick'), pa = per(AF, 'pick');
   const story = gr(ca, cb) >= 10 && gr(pa, pb) < gr(ca, cb) / 2 ? ' → 늘어난 클릭 대부분이 <b>로그인·제품 선택</b>에서 빠짐' : '';
-  const S4 = FD_STEPS.slice(0, 4), dr = (o, i) => (o[S4[i - 1].k] - o[S4[i].k]) / o[S4[i - 1].k] * 100;
+  const S4 = FD_STEPS.slice(1, 5), dr = (o, i) => (o[S4[i - 1].k] - o[S4[i].k]) / o[S4[i - 1].k] * 100;
   const hi = [1, 2, 3].reduce((m, i) => dr(BA, i) > dr(BA, m) ? i : m, 1);
   const ins = document.getElementById('fd-insight');
   if (ins) ins.innerHTML = `
