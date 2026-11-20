@@ -6856,7 +6856,7 @@ function renderFunnelDrop() {
       : `<span class="fd-lab">개선 전 기준</span><button class="seg-btn${base === 'b4' ? ' active' : ''}" type="button" data-base="b4">직전 ${C.before4.range} · ${C.before4.days}일</button><button class="seg-btn${base === 'all' ? ' active' : ''}" type="button" data-base="all">개선 전 전체 ${C.beforeAll.range} · ${C.beforeAll.days}일</button><span class="fd-lab" style="margin-left:10px">개선 후 ${C.after.range} · ${C.after.days}일</span>`;
 
   // 요약 줄
-  const line = (o, lab) => `<span class="fd-period">${lab}</span>메인 조회 <b>${fmt(o.main)}</b><span class="fd-arr">→</span>버튼 클릭 <b>${fmt(o.click)}</b> <span class="fd-dim">(${(o.click / o.main * 100).toFixed(1)}%)</span><span class="fd-arr">→</span>신청 완료 <b>${fmt(o.done)}</b><span class="fd-sep"></span>클릭 대비 완료 <b>${(o.done / o.click * 100).toFixed(1)}%</b>`;
+  const line = (o, lab) => `<span class="fd-period">${lab}</span>메인 조회 <b>${fmt(o.main)}</b><span class="fd-arr">→</span>버튼 클릭 <b>${fmt(o.click)}</b> <span class="fd-dim">(${(o.click / o.main * 100).toFixed(1)}%)</span><span class="fd-arr">→</span>신청 완료 <b>${fmt(o.done)}</b><span class="fd-sep"></span>클릭 대비 완료 <b>${(o.done / o.click * 100).toFixed(1)}%</b><span class="fd-sep"></span>메인 조회 대비 완료 <b>${(o.done / o.main * 100).toFixed(1)}%</b>`;
   const top = document.getElementById('fd-top');
   if (top) top.innerHTML = g === 'cmp'
     ? `<div class="fd-top-row">${line(prev, `${prev.label} ${prev.range}`)}</div><div class="fd-top-row">${line(cur, `개선 후 ${cur.range}`)}</div>`
@@ -6921,6 +6921,7 @@ function renderFunnelDrop() {
     { h: '증상 입력 이탈', r: o => (o.pick - o.sym) / o.pick * 100 },
     { h: '고객 정보 이탈', r: o => (o.sym - o.info) / o.sym * 100 },
     { h: '클릭 대비 완료', r: o => o.done / o.click * 100, up: true },
+    { h: '메인 조회 대비 완료', r: o => o.done / o.main * 100, up: true },
   ];
   const rng = COLS.map(c => c.r ? [Math.min(...rowsAll.map(c.r)), Math.max(...rowsAll.map(c.r))] : null);
   const cellT = (c, j, o) => {
