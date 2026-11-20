@@ -467,6 +467,15 @@ html[data-theme="dark"] { --asr-1:#3987e5; --asr-2:#d95926; --asr-3:#199e70; --a
 html[data-theme="dark"] .src-looker { background: #2A2238; color: #CBB5EE; border-color: #4A3A66; }
 .src-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin-top: 10px; font-size: 12px; color: var(--ink-3); }
 .src-legend > span { display: inline-flex; align-items: center; }
+/* 신청 사유·제품 TOP — 출처 전환 (웹 신청 Looker / 실제 AS ERP) */
+.src-seg .seg-btn { padding: 5px 11px; font-size: 12px; display: inline-flex; align-items: center; gap: 5px; }
+.src-seg .seg-btn::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.75; }
+.src-seg .seg-btn.active[data-s="web"] { background: #5E3D8A; color: #fff; }
+.src-seg .seg-btn.active[data-s="erp"] { background: var(--accent); color: #fff; }
+html[data-theme="dark"] .src-seg .seg-btn.active[data-s="web"] { background: #7B5BB5; }
+.asr-head-r { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex: none; }
+.asr-head-r .asr-months { justify-content: flex-end; }
+.asr-tbl tr.asr-unk td { color: var(--ink-3); }
 /* YoY 미니 차트 */
 .chart-inner { background: var(--surface-2); border: 1px solid var(--border-soft); border-radius: 8px; padding: 10px 12px; }
 .chart-inner-title { font-size: 11.5px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
@@ -2818,7 +2827,7 @@ table.t               { font-size: 14px; }
             <dl>
               <dt>전국 AS 데이터</dt><dd><span class="src src-erp lead" title="ERP Korea · AS진행상태 확인">ERP</span>ERP Korea - AS진행상태 확인 ▶ 회사 : 시디즈, 브랜드 : 시디즈, 최종조치일 : 월초~월말 ▶ 조회 ▶ 오른쪽 마우스 - 자료변환(Export File)</dd>
               <dt>서울경인 AS 데이터</dt><dd><span class="src src-erp lead" title="ERP Korea · AS진행상태 확인">ERP</span>전국 ERP 파일에서 서비스센터 양지·안성, 센터조치 건 추출 (전 기간 · 26.11.11 재계산) <span class="mute">· 이전에는 라스트마일사업팀 김진우님 요청본 사용</span></dd>
-              <dt>AS 신청 페이지</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>Looker Studio 웹 행동 로그 · 주별·일별 단계 집계, 신청 사유·제품</dd>
+              <dt>AS 신청 페이지</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>Looker Studio 웹 행동 로그 · 주별·일별 단계 집계, 신청 사유·제품 · 실제 AS 비교는 <span class="src src-erp" title="ERP AS진행상태 확인 내보내기">ERP</span></dd>
               <dt>컨택센터 비용</dt><dd>브랜드 용역료 청구 현황 <span class="mute">(월별 자료)</span> · 자사몰 AS 접수 건수는 <span class="src src-erp" title="ERP 홈페이지 의뢰 건수 (사용자 직접 입력)">ERP</span> 홈페이지 의뢰 건수</dd>
             </dl>
           </div>
@@ -3213,7 +3222,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
           <div class="page-eyebrow">Funnel · Weekly</div>
           <h1 class="page-title">AS 신청 페이지</h1>
           <div class="page-sub">메인조회 → AS신청클릭 → 제품선택 → 증상입력 → 고객정보 → 신청완료 · 주별 전환 추이</div>
-          <div class="src-legend"><span>데이터 출처</span><span><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>웹 행동 로그 (Looker Studio) — 이 탭의 모든 수치</span><span><span class="src src-erp lead" title="ERP 홈페이지 의뢰 건수 (사용자 직접 입력)">ERP</span>AS 접수·조치 기록 — 자사몰 AS 접수 건수는 컨택센터 용역료 탭</span></div>
+          <div class="src-legend"><span>데이터 출처</span><span><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>웹 행동 로그 (Looker Studio) — 이 탭 기본 수치</span><span><span class="src src-erp lead" title="ERP 홈페이지 의뢰 건수 (사용자 직접 입력)">ERP</span>AS 접수·조치 기록 — 월별 신청 사유·제품 TOP 10의 '실제 AS · ERP' 보기, 자사몰 AS 접수 건수(컨택센터 탭)</span></div>
         </div>
         <div style="display:flex;gap:8px;flex-shrink:0">
           <a href="https://datastudio.google.com/u/0/reporting/c1c840c2-3f4c-4574-bc04-e0f171694e62/page/p_wjcqp4l5zd?s=vOvBNV2iETU" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--ink-2);font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap">
@@ -3602,21 +3611,22 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
       <div class="card mt-16">
         <div class="card-head">
           <div>
-            <div class="card-title">월별 신청 사유 구성<span class="src src-looker" title="Looker Studio 'AS 신청 완료 현황' 표 · 고객이 웹에서 고른 값">Looker</span></div>
+            <div class="card-title">월별 신청 사유 구성<span id="asr-tbl-srcb"><span class="src src-looker" title="Looker Studio 'AS 신청 완료 현황' 표 · 고객이 웹에서 고른 값">Looker</span></span></div>
             <div class="card-sub" id="asr-tbl-sub">위 그래프와 같은 기준(부위/증상) · 칸 = 그 달 비중, 작은 글씨 = 건수 · 색이 진할수록 비중 높음</div>
           </div>
+          <div class="seg src-seg" id="asr-src-a" role="tablist" aria-label="데이터 출처"><button class="seg-btn active" data-s="web">웹 신청 · Looker</button><button class="seg-btn" data-s="erp">실제 AS · ERP</button></div>
         </div>
         <div class="tbl-wrap"><table class="t asr-tbl" id="asr-tbl"></table></div>
-        <div class="asr-foot">3월은 페이지 개설일(3/16)부터, 11월은 11/19까지 · 월별 값은 주를 더하지 않고 그 달 기간으로 따로 조회</div>
+        <div class="asr-foot" id="asr-tbl-foot">3월은 페이지 개설일(3/16)부터, 11월은 11/19까지 · 월별 값은 주를 더하지 않고 그 달 기간으로 따로 조회</div>
       </div>
 
       <div class="card mt-16">
         <div class="card-head">
           <div>
-            <div class="card-title">AS 신청 제품 TOP 10<span class="src src-looker" title="Looker Studio 'AS 신청 완료 현황' 표 · 고객이 웹에서 고른 값">Looker</span></div>
-            <div class="card-sub">제품명을 모델 단위로 묶음 (예: T50_HLDA·T50 HF → T50 / ALL NEW·NEW T500 → T500) · 주요 부위·증상 = 그 모델 안에서 가장 많은 항목</div>
+            <div class="card-title">AS 신청 제품 TOP 10<span id="asr-prod-srcb"><span class="src src-looker" title="Looker Studio 'AS 신청 완료 현황' 표 · 고객이 웹에서 고른 값">Looker</span></span></div>
+            <div class="card-sub" id="asr-prod-sub">제품명을 모델 단위로 묶음 (예: T50_HLDA·T50 HF → T50 / ALL NEW·NEW T500 → T500) · 주요 부위·증상 = 그 모델 안에서 가장 많은 항목</div>
           </div>
-          <div class="asr-months" id="asr-month"></div>
+          <div class="asr-head-r"><div class="seg src-seg" id="asr-src-b" role="tablist" aria-label="데이터 출처"><button class="seg-btn active" data-s="web">웹 신청 · Looker</button><button class="seg-btn" data-s="erp">실제 AS · ERP</button></div><div class="asr-months" id="asr-month"></div></div>
         </div>
         <div class="tbl-wrap"><table class="t asr-prod" id="asr-prod"></table></div>
         <div class="asr-foot" id="asr-prod-foot"></div>
@@ -3632,6 +3642,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
             <dt>유입률</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>(다음 단계 수 ÷ 전 단계 수) × 100</dd>
             <dt>제품등록 수</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>Looker Studio '정품등록 완료' 건수 <span class="mute">(주별 기준)</span></dd>
             <dt>신청 사유</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>고객이 웹에서 고른 값 (ERP 실제 조치 내용 아님) · Looker Studio 'AS 신청 완료 현황' 표(제품명·부위·증상)의 모든 행을 기간별로 합산 · 주별(월~일)과 월별을 각각 따로 조회 · 두 합계 모두 전체 신청 완료 6,394건(3/16~11/19)과 일치(항목별 값은 조회 기간에 따라 몇 건 차이 날 수 있음) · '표면 물량' 오타 항목은 '표면 불량'에 합침 · 제품은 모델 단위로 묶음</dd>
+            <dt>실제 AS</dt><dd><span class="src src-erp lead" title="ERP AS진행상태 확인 내보내기 · 조치요구내역 키워드 자동 분류">ERP</span>ERP AS진행상태 확인 내보내기 (3월~10월, 최종조치일 기준) · 접수번호당 1건 · 반품·환불·고객취소·택배 발송·바로스·비용정산 건 제외 · 조치요구내역(자유 문장)에서 제품·부위·증상을 키워드로 자동 분류 · 미분류 부위 15%·증상 12% · 전화·게시판·웹 등 모든 채널 포함 (ERP에는 접수 경로 구분이 없음)</dd>
             <dt>단계별 이탈</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>주별 퍼널(월~일)에서 앞 단계 수 − 다음 단계 수 · 이탈률 = 이탈 ÷ 앞 단계 수 · 버튼 클릭 → 제품 선택 사이에는 로그인 화면 포함 · 고객 정보 입력과 신청 완료는 6월부터 같은 수로 집계 · 개선 전 = 9/28~10/25, 개선 후 = 11/2~ (10/26 주 제외)</dd>
             <dt>참고</dt><dd>같은 'AS 신청'이라도 <span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>웹에서 신청 완료한 수와 <span class="src src-erp lead" title="ERP 홈페이지 의뢰 건수 (사용자 직접 입력)">ERP</span>홈페이지 의뢰로 접수된 수(컨택센터 용역료 탭 '자사몰 AS 접수')는 집계 기준이 달라 숫자가 다를 수 있음</dd>
             <dt>일별 전환율</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>Looker Studio 일별 표(3/16~) · 버튼 클릭률 = 버튼 클릭 ÷ 메인 조회, 신청 완료율 = 신청 완료 ÷ 메인 조회, 이지리페어 클릭률 = 정품등록 리스트 내 이지리페어 클릭 ÷ 버튼 클릭 (Looker Studio 일별) · 개선 전후 값은 기간 합계 기준 (개선 전 10/1~10/27, 개선 후 10/28~)</dd>
@@ -4871,7 +4882,8 @@ const DATA = {
     "issues": ["파손","분리·교체","흔들림·한 쪽으로 기울어짐","작동 불량","소음","레버 높낮이 조절 불량","기타","표면 불량(오염·찍힘 등)","흔들림·양쪽 높이 다름","조립 불량","메쉬 교체","부품 구매","가죽 교체","고정 불량","작동·고정 불량","부품 누락","(DIY)조립 요청","커버 구매","오염 관리·세척","오배송","포장 불량"],
     "weeks": {"start":["3/16","3/23","3/30","4/6","4/13","4/20","4/27","5/4","5/11","5/18","5/25","6/1","6/8","6/15","6/22","6/29","7/6","7/13","7/20","7/27","8/3","8/10","8/17","8/24","8/31","9/7","9/14","9/21","9/28","10/5","10/12","10/19","10/26","11/2","11/9","11/16"],"end":["3/22","3/29","4/5","4/12","4/19","4/26","5/3","5/10","5/17","5/24","5/31","6/7","6/14","6/21","6/28","7/5","7/12","7/19","7/26","8/2","8/9","8/16","8/23","8/30","9/6","9/13","9/20","9/27","10/4","10/11","10/18","10/25","11/1","11/8","11/15","11/19"],"total":[98,136,196,188,188,108,119,114,120,112,137,200,170,196,204,195,212,209,223,201,241,224,246,238,227,186,184,170,199,151,181,172,175,176,185,113],"lastDays":4,"part":[[15,27,15,14,19,4,0,2,1,1],[37,27,19,22,15,6,3,2,1,4],[50,31,33,29,27,16,2,3,2,3],[39,29,37,23,29,20,5,2,2,2],[45,38,22,24,24,20,3,4,5,3],[26,27,18,16,14,5,0,2,0,0],[27,26,13,13,23,10,3,2,1,1],[26,32,11,15,14,10,1,2,2,1],[17,26,16,15,21,12,6,3,3,1],[18,29,20,15,16,8,2,1,1,2],[36,34,22,14,13,10,4,1,3,0],[46,37,32,27,22,21,4,9,1,1],[46,27,27,17,26,14,4,6,3,0],[42,41,33,26,15,21,6,5,4,3],[45,39,28,28,37,17,2,1,5,2],[40,39,29,42,19,11,7,4,2,2],[47,43,35,29,30,11,5,7,2,3],[56,37,28,34,26,17,2,4,3,2],[52,49,31,27,22,22,6,5,4,5],[53,31,23,35,26,11,7,6,4,5],[63,42,41,29,29,20,3,6,3,5],[51,39,50,23,24,20,5,9,1,2],[59,42,46,30,37,19,5,1,5,2],[55,43,39,38,30,16,5,6,5,1],[44,41,45,23,22,22,12,6,7,5],[48,36,36,14,21,11,7,4,5,4],[47,34,25,29,29,13,3,2,0,2],[37,38,19,29,20,14,5,2,3,3],[55,49,20,21,19,20,6,3,4,2],[36,23,23,20,24,8,4,6,4,3],[40,30,33,21,26,17,8,2,4,0],[46,26,24,23,25,16,3,4,5,0],[41,44,27,10,21,15,6,5,4,2],[45,27,31,17,28,16,4,1,2,5],[56,38,34,9,17,18,5,2,3,3],[34,11,18,16,15,14,0,2,3,0]],"issue":[[27,14,13,8,7,7,4,6,6,2,0,1,2,1,0,0,0,0,0,0,0],[39,12,16,12,11,13,6,11,2,7,2,2,0,0,1,2,0,0,0,0,0],[49,25,26,17,14,17,16,19,2,4,1,1,2,0,1,2,0,0,0,0,0],[43,22,28,16,17,15,19,13,4,4,0,2,2,0,2,0,0,0,0,1,0],[41,24,28,10,18,11,17,14,2,10,2,2,2,0,3,1,2,0,0,0,1],[22,14,19,12,17,7,3,8,1,1,2,0,0,0,0,0,2,0,0,0,0],[34,9,21,10,15,6,9,6,4,0,2,0,0,0,1,1,1,0,0,0,0],[24,26,15,9,7,3,9,10,3,2,2,1,0,1,1,0,1,0,0,0,0],[38,11,12,12,12,13,12,1,2,0,1,1,2,0,3,0,0,0,0,0,0],[25,16,11,13,20,10,7,2,3,1,0,2,0,0,0,0,0,1,0,1,0],[36,18,20,14,17,10,10,7,1,0,0,0,0,2,1,0,0,1,0,0,0],[48,23,27,20,19,15,20,13,3,0,4,1,4,1,0,0,1,1,0,0,0],[36,25,23,17,21,12,14,10,4,0,5,0,1,2,0,0,0,0,0,0,0],[32,31,29,19,15,16,18,20,2,0,1,3,4,2,1,0,3,0,0,0,0],[51,31,23,21,16,19,16,17,2,3,0,2,1,1,0,0,1,0,0,0,0],[42,27,28,29,10,18,11,18,3,3,2,0,2,0,0,2,0,0,0,0,0],[59,28,21,24,12,22,11,17,5,1,3,2,3,2,0,1,0,1,0,0,0],[49,30,27,23,15,13,14,22,0,5,3,1,0,1,1,1,3,1,0,0,0],[56,27,34,14,16,14,21,20,2,4,2,3,0,4,0,2,1,1,2,0,0],[54,20,27,23,16,12,11,20,2,2,2,3,4,2,1,2,0,0,0,0,0],[52,38,28,24,20,21,18,21,2,1,2,2,2,3,0,3,2,2,0,0,0],[47,32,33,19,15,27,19,16,2,2,5,0,3,0,0,2,1,0,1,0,0],[62,28,29,19,16,34,19,24,6,1,0,1,1,2,3,1,0,0,0,0,0],[70,38,28,26,17,19,15,13,0,2,1,0,2,2,0,1,1,2,1,0,0],[56,33,25,22,20,16,21,11,4,1,5,4,1,3,3,1,1,0,0,0,0],[51,27,28,11,15,16,11,13,2,0,1,2,3,1,3,2,0,0,0,0,0],[57,20,23,21,18,11,13,12,2,3,1,0,0,0,0,2,0,0,1,0,0],[48,26,19,18,11,10,13,15,1,2,2,2,0,0,1,1,1,0,0,0,0],[57,21,26,15,22,9,18,17,2,1,0,1,3,2,2,1,1,0,0,1,0],[33,22,20,15,11,12,8,15,3,0,5,3,0,2,1,0,0,0,1,0,0],[50,20,15,11,19,22,17,17,5,0,0,0,1,2,1,0,0,1,0,0,0],[32,27,25,15,12,14,15,16,1,5,3,0,1,2,3,0,0,0,0,0,1],[34,32,25,8,24,13,14,11,4,0,0,2,4,0,2,0,1,1,0,0,0],[40,32,29,11,15,14,16,8,3,0,0,5,1,0,2,0,0,0,0,0,0],[43,26,29,5,21,15,15,16,4,1,0,2,1,1,1,1,3,1,0,0,0],[20,14,19,12,12,9,14,8,1,0,1,0,1,0,2,0,0,0,0,0,0]]},
     "months": {"keys":["M03","M04","M05","M06","M07","M08","M09","M10","M11"],"labels":["3월*","4월","5월","6월","7월","8월","9월","10월","11월*"],"total":[315,687,514,846,925,1030,832,749,496],"part":[[73,67,47,53,39,17,3,6,4,6],[155,129,108,86,104,63,13,10,11,8],[104,127,73,62,72,41,14,9,8,4],[198,159,130,115,109,75,18,22,13,7],[218,177,137,146,110,63,25,19,15,15],[244,188,182,132,128,83,21,24,16,12],[201,167,132,98,98,67,26,14,14,15],[186,135,111,87,99,61,26,21,18,5],[140,80,85,44,65,52,9,5,8,8]],"issue":[[80,36,44,28,26,23,17,28,7,11,2,3,4,2,1,3,0,0,0,0,0],[165,81,101,55,69,53,56,43,13,17,6,5,4,0,9,3,5,0,0,1,1],[130,71,67,51,62,37,39,21,10,4,5,4,2,3,4,0,1,2,0,1,0],[182,127,110,89,78,65,70,67,13,4,11,5,10,6,1,2,5,1,0,0,0],[235,119,120,100,57,76,59,86,10,14,9,9,5,9,2,6,4,3,2,0,0],[249,147,132,95,76,105,80,78,10,7,10,5,9,9,3,7,3,4,1,0,0],[232,113,106,74,69,55,63,63,9,5,8,8,5,5,5,7,3,0,1,1,0],[169,107,95,57,70,64,59,65,14,6,9,5,9,7,8,0,1,2,1,0,1],[106,76,80,31,53,38,49,32,9,1,1,7,3,1,4,1,3,1,0,0,0]]},
-    "products": {"M03":{"total":315,"other":17,"top":[["T50",44,"헤드레스트",13,"흔들림·한 쪽으로 기울어짐",13],["T500",40,"헤드레스트",10,"작동 불량",9],["T50 AIR",31,"좌판",10,"파손",9],["T80",29,"등판·틸팅",11,"파손",11],["T20",25,"헤드레스트",10,"조립 불량",10],["GC PRO",20,"좌판",14,"파손",7],["GX",19,"팔걸이·암패드",6,"파손",6],["T40",13,"헤드레스트",7,"표면 불량(오염·찍힘 등)",5],["TAB",12,"등판·틸팅",7,"파손",6],["IBLE",12,"좌판",7,"분리·교체",4]]},"M04":{"total":687,"other":39,"top":[["T50",116,"좌판",31,"작동 불량",26],["T50 AIR",80,"헤드레스트",18,"파손",19],["T80",78,"팔걸이·암패드",33,"파손",26],["T500",77,"베이스·중심봉·레버",18,"파손",17],["T20",39,"헤드레스트",15,"조립 불량",15],["GC PRO",33,"좌판",18,"파손",10],["TAB",26,"등판·틸팅",11,"파손",16],["IBLE",23,"팔걸이·암패드",6,"파손",9],["GX",23,"등판·틸팅",8,"소음",7],["T60",21,"등판·틸팅",6,"흔들림·한 쪽으로 기울어짐",6]]},"M05":{"total":514,"other":30,"top":[["T50",87,"헤드레스트",20,"흔들림·한 쪽으로 기울어짐",22],["T80",60,"팔걸이·암패드",24,"파손",24],["T500",55,"등판·틸팅",15,"파손",15],["T50 AIR",54,"헤드레스트",13,"작동 불량",14],["GC PRO",30,"좌판",23,"파손",16],["TAB",25,"팔걸이·암패드",10,"파손",14],["GX",23,"등판·틸팅",7,"소음",8],["T60",21,"좌판",6,"소음",8],["IBLE",18,"등판·틸팅",8,"파손",7],["T20",18,"등판·틸팅",9,"소음",4]]},"M06":{"total":846,"other":35,"top":[["T50",149,"좌판",45,"작동 불량",38],["T80",101,"팔걸이·암패드",54,"파손",43],["T500",96,"베이스·중심봉·레버",25,"파손",19],["T50 AIR",89,"좌판",27,"파손",27],["GC PRO",51,"좌판",28,"파손",14],["GX",45,"헤드레스트",15,"작동 불량",13],["IBLE",32,"등판·틸팅",11,"파손",11],["LINIE",28,"좌판",17,"분리·교체",9],["TAB",26,"등판·틸팅",11,"파손",12],["MUUVE",25,"베이스·중심봉·레버",16,"레버 높낮이 조절 불량",16]]},"M07":{"total":925,"other":62,"top":[["T50",155,"좌판",51,"흔들림·한 쪽으로 기울어짐",42],["T50 AIR",104,"좌판",28,"파손",33],["T500",94,"등판·틸팅",28,"파손",23],["T80",84,"팔걸이·암패드",41,"파손",35],["GX",65,"헤드레스트",27,"작동 불량",21],["GC PRO",44,"좌판",29,"파손",21],["T20",43,"등판·틸팅",17,"파손",8],["TAB",37,"베이스·중심봉·레버",10,"파손",11],["T40",32,"헤드레스트",15,"분리·교체",15],["IBLE",31,"베이스·중심봉·레버",8,"파손",12]]},"M08":{"total":1030,"other":65,"top":[["T50",188,"좌판",66,"흔들림·한 쪽으로 기울어짐",61],["T50 AIR",127,"좌판",40,"파손",30],["T500",124,"등판·틸팅",32,"파손",33],["T80",102,"팔걸이·암패드",51,"파손",40],["GX",62,"헤드레스트",21,"작동 불량",14],["GC PRO",54,"좌판",33,"파손",26],["TAB",40,"등판·틸팅",12,"파손",18],["T20",37,"등판·틸팅",13,"파손",10],["IBLE",33,"좌판",14,"분리·교체",12],["T40",27,"헤드레스트",12,"파손",9]]},"M09":{"total":832,"other":43,"top":[["T50",158,"좌판",49,"흔들림·한 쪽으로 기울어짐",34],["T500",94,"등판·틸팅",25,"파손",31],["T50 AIR",86,"좌판",30,"파손",21],["T80",73,"팔걸이·암패드",36,"파손",36],["GC PRO",44,"좌판",27,"파손",22],["GX",39,"헤드레스트",12,"작동 불량",10],["T20",38,"등판·틸팅",13,"파손",9],["IBLE",36,"등판·틸팅",13,"분리·교체",11],["T60",32,"좌판",10,"소음",13],["T90",30,"베이스·중심봉·레버",9,"소음",7]]},"M10":{"total":749,"other":39,"top":[["T50",147,"좌판",55,"흔들림·한 쪽으로 기울어짐",40],["T500",79,"등판·틸팅",19,"분리·교체",15],["T50 AIR",73,"좌판",20,"파손",14],["T80",72,"팔걸이·암패드",38,"파손",39],["GC PRO",47,"좌판",26,"파손",15],["GX",40,"등판·틸팅",9,"소음",8],["T20",32,"등판·틸팅",14,"레버 높낮이 조절 불량",7],["IBLE",29,"등판·틸팅",10,"분리·교체",12],["T90",27,"등판·틸팅",8,"소음",9],["T60",27,"등판·틸팅",8,"소음",7]]},"M11":{"total":496,"other":19,"top":[["T50",97,"좌판",43,"흔들림·한 쪽으로 기울어짐",34],["T80",53,"팔걸이·암패드",24,"파손",22],["T500",46,"등판·틸팅",10,"분리·교체",11],["T50 AIR",44,"좌판",13,"파손",10],["GC PRO",34,"좌판",24,"파손",11],["TAB",24,"팔걸이·암패드",6,"파손",9],["T60",22,"등판·틸팅",5,"소음",7],["GX",21,"팔걸이·암패드",6,"흔들림·한 쪽으로 기울어짐",5],["T20",20,"기타",7,"기타",5],["IBLE",16,"기타",4,"기타",4]]},"all":{"total":6394,"other":348,"top":[["T50",1141,"좌판",371,"흔들림·한 쪽으로 기울어짐",306],["T500",708,"등판·틸팅",171,"파손",172],["T50 AIR",681,"좌판",190,"파손",167],["T80",634,"팔걸이·암패드",301,"파손",274],["GC PRO",355,"좌판",220,"파손",142],["GX",354,"헤드레스트",95,"작동 불량",72],["T20",278,"등판·틸팅",99,"파손",55],["TAB",245,"등판·틸팅",72,"파손",107],["IBLE",232,"등판·틸팅",70,"파손",64],["T60",192,"좌판",49,"소음",62]]}}
+    "products": {"M03":{"total":315,"other":17,"top":[["T50",44,"헤드레스트",13,"흔들림·한 쪽으로 기울어짐",13],["T500",40,"헤드레스트",10,"작동 불량",9],["T50 AIR",31,"좌판",10,"파손",9],["T80",29,"등판·틸팅",11,"파손",11],["T20",25,"헤드레스트",10,"조립 불량",10],["GC PRO",20,"좌판",14,"파손",7],["GX",19,"팔걸이·암패드",6,"파손",6],["T40",13,"헤드레스트",7,"표면 불량(오염·찍힘 등)",5],["TAB",12,"등판·틸팅",7,"파손",6],["IBLE",12,"좌판",7,"분리·교체",4]]},"M04":{"total":687,"other":39,"top":[["T50",116,"좌판",31,"작동 불량",26],["T50 AIR",80,"헤드레스트",18,"파손",19],["T80",78,"팔걸이·암패드",33,"파손",26],["T500",77,"베이스·중심봉·레버",18,"파손",17],["T20",39,"헤드레스트",15,"조립 불량",15],["GC PRO",33,"좌판",18,"파손",10],["TAB",26,"등판·틸팅",11,"파손",16],["IBLE",23,"팔걸이·암패드",6,"파손",9],["GX",23,"등판·틸팅",8,"소음",7],["T60",21,"등판·틸팅",6,"흔들림·한 쪽으로 기울어짐",6]]},"M05":{"total":514,"other":30,"top":[["T50",87,"헤드레스트",20,"흔들림·한 쪽으로 기울어짐",22],["T80",60,"팔걸이·암패드",24,"파손",24],["T500",55,"등판·틸팅",15,"파손",15],["T50 AIR",54,"헤드레스트",13,"작동 불량",14],["GC PRO",30,"좌판",23,"파손",16],["TAB",25,"팔걸이·암패드",10,"파손",14],["GX",23,"등판·틸팅",7,"소음",8],["T60",21,"좌판",6,"소음",8],["IBLE",18,"등판·틸팅",8,"파손",7],["T20",18,"등판·틸팅",9,"소음",4]]},"M06":{"total":846,"other":35,"top":[["T50",149,"좌판",45,"작동 불량",38],["T80",101,"팔걸이·암패드",54,"파손",43],["T500",96,"베이스·중심봉·레버",25,"파손",19],["T50 AIR",89,"좌판",27,"파손",27],["GC PRO",51,"좌판",28,"파손",14],["GX",45,"헤드레스트",15,"작동 불량",13],["IBLE",32,"등판·틸팅",11,"파손",11],["LINIE",28,"좌판",17,"분리·교체",9],["TAB",26,"등판·틸팅",11,"파손",12],["MUUVE",25,"베이스·중심봉·레버",16,"레버 높낮이 조절 불량",16]]},"M07":{"total":925,"other":62,"top":[["T50",155,"좌판",51,"흔들림·한 쪽으로 기울어짐",42],["T50 AIR",104,"좌판",28,"파손",33],["T500",94,"등판·틸팅",28,"파손",23],["T80",84,"팔걸이·암패드",41,"파손",35],["GX",65,"헤드레스트",27,"작동 불량",21],["GC PRO",44,"좌판",29,"파손",21],["T20",43,"등판·틸팅",17,"파손",8],["TAB",37,"베이스·중심봉·레버",10,"파손",11],["T40",32,"헤드레스트",15,"분리·교체",15],["IBLE",31,"베이스·중심봉·레버",8,"파손",12]]},"M08":{"total":1030,"other":65,"top":[["T50",188,"좌판",66,"흔들림·한 쪽으로 기울어짐",61],["T50 AIR",127,"좌판",40,"파손",30],["T500",124,"등판·틸팅",32,"파손",33],["T80",102,"팔걸이·암패드",51,"파손",40],["GX",62,"헤드레스트",21,"작동 불량",14],["GC PRO",54,"좌판",33,"파손",26],["TAB",40,"등판·틸팅",12,"파손",18],["T20",37,"등판·틸팅",13,"파손",10],["IBLE",33,"좌판",14,"분리·교체",12],["T40",27,"헤드레스트",12,"파손",9]]},"M09":{"total":832,"other":43,"top":[["T50",158,"좌판",49,"흔들림·한 쪽으로 기울어짐",34],["T500",94,"등판·틸팅",25,"파손",31],["T50 AIR",86,"좌판",30,"파손",21],["T80",73,"팔걸이·암패드",36,"파손",36],["GC PRO",44,"좌판",27,"파손",22],["GX",39,"헤드레스트",12,"작동 불량",10],["T20",38,"등판·틸팅",13,"파손",9],["IBLE",36,"등판·틸팅",13,"분리·교체",11],["T60",32,"좌판",10,"소음",13],["T90",30,"베이스·중심봉·레버",9,"소음",7]]},"M10":{"total":749,"other":39,"top":[["T50",147,"좌판",55,"흔들림·한 쪽으로 기울어짐",40],["T500",79,"등판·틸팅",19,"분리·교체",15],["T50 AIR",73,"좌판",20,"파손",14],["T80",72,"팔걸이·암패드",38,"파손",39],["GC PRO",47,"좌판",26,"파손",15],["GX",40,"등판·틸팅",9,"소음",8],["T20",32,"등판·틸팅",14,"레버 높낮이 조절 불량",7],["IBLE",29,"등판·틸팅",10,"분리·교체",12],["T90",27,"등판·틸팅",8,"소음",9],["T60",27,"등판·틸팅",8,"소음",7]]},"M11":{"total":496,"other":19,"top":[["T50",97,"좌판",43,"흔들림·한 쪽으로 기울어짐",34],["T80",53,"팔걸이·암패드",24,"파손",22],["T500",46,"등판·틸팅",10,"분리·교체",11],["T50 AIR",44,"좌판",13,"파손",10],["GC PRO",34,"좌판",24,"파손",11],["TAB",24,"팔걸이·암패드",6,"파손",9],["T60",22,"등판·틸팅",5,"소음",7],["GX",21,"팔걸이·암패드",6,"흔들림·한 쪽으로 기울어짐",5],["T20",20,"기타",7,"기타",5],["IBLE",16,"기타",4,"기타",4]]},"all":{"total":6394,"other":348,"top":[["T50",1141,"좌판",371,"흔들림·한 쪽으로 기울어짐",306],["T500",708,"등판·틸팅",171,"파손",172],["T50 AIR",681,"좌판",190,"파손",167],["T80",634,"팔걸이·암패드",301,"파손",274],["GC PRO",355,"좌판",220,"파손",142],["GX",354,"헤드레스트",95,"작동 불량",72],["T20",278,"등판·틸팅",99,"파손",55],["TAB",245,"등판·틸팅",72,"파손",107],["IBLE",232,"등판·틸팅",70,"파손",64],["T60",192,"좌판",49,"소음",62]]}},
+    "erp": {"source":"ERP AS진행상태 확인 내보내기 (최종조치일 기준 월별) · 2026년 3~10월","parts":["등판·틸팅","좌판","헤드레스트","베이스·중심봉·레버","팔걸이·암패드","마감재","바퀴·글라이드","럼버서포트","전장(충전·LED)","미분류"],"issues":["작동·고정 불량","파손","구매·교체 요청","소음","흔들림·기울어짐","높낮이 불량","표면·오염","분리·빠짐","조립·누락","전장(충전·LED)","미분류"],"months":{"keys":["M03","M04","M05","M06","M07","M08","M09","M10"],"labels":["3월","4월","5월","6월","7월","8월","9월","10월"],"total":[1668,1351,1212,1328,1455,1396,1322,1427],"part":[[380,334,165,174,198,46,34,22,6,309],[297,279,165,178,142,28,28,11,7,216],[247,242,186,147,135,24,20,20,7,184],[316,283,173,155,135,29,29,22,5,181],[339,322,213,158,169,30,25,17,7,175],[320,348,180,166,142,28,21,14,4,173],[282,306,173,182,135,22,31,14,4,173],[301,293,135,163,156,27,29,18,85,220]],"issue":[[226,226,178,165,212,96,96,71,133,8,257],[229,183,139,158,132,110,83,67,70,4,176],[246,191,135,142,104,97,65,38,41,3,150],[252,203,156,152,112,112,47,55,39,1,199],[302,229,172,159,126,108,93,78,32,3,153],[290,212,152,144,154,116,92,65,20,2,149],[243,206,140,138,144,130,91,66,26,4,134],[200,228,154,146,153,111,110,68,18,85,154]]},"products":{"M03":{"total":1668,"other":185,"top":[["T50",210,"등판·틸팅",37,"흔들림·기울어짐",44],["T20",163,"등판·틸팅",58,"조립·누락",81],["T80",139,"팔걸이·암패드",53,"파손",43],["T500",127,"등판·틸팅",36,"작동·고정 불량",25],["T50 AIR",109,"좌판",37,"작동·고정 불량",25],["RINGO",86,"베이스·중심봉·레버",31,"작동·고정 불량",15],["T60",81,"좌판",15,"소음",23],["IBLE",71,"등판·틸팅",19,"구매·교체 요청",15],["GC PRO",64,"좌판",40,"파손",23],["TAB",63,"등판·틸팅",24,"파손",18]]},"M04":{"total":1351,"other":158,"top":[["T50",192,"좌판",50,"작동·고정 불량",51],["T80",127,"팔걸이·암패드",45,"파손",34],["T50 AIR",108,"좌판",39,"작동·고정 불량",25],["T20",103,"헤드레스트",48,"조립·누락",43],["T500",93,"등판·틸팅",26,"작동·고정 불량",24],["TAB",60,"등판·틸팅",25,"작동·고정 불량",16],["IBLE",60,"등판·틸팅",13,"구매·교체 요청",12],["GC PRO",56,"좌판",34,"파손",26],["RINGO",55,"베이스·중심봉·레버",28,"작동·고정 불량",11],["T60",47,"등판·틸팅",11,"소음",14]]},"M05":{"total":1212,"other":127,"top":[["T50",192,"헤드레스트",41,"작동·고정 불량",58],["T80",104,"팔걸이·암패드",33,"파손",31],["T50 AIR",102,"좌판",28,"작동·고정 불량",27],["T500",98,"등판·틸팅",24,"작동·고정 불량",32],["T20",86,"헤드레스트",34,"조립·누락",19],["GC PRO",58,"좌판",28,"파손",27],["TAB",55,"팔걸이·암패드",18,"파손",17],["GX",50,"헤드레스트",15,"흔들림·기울어짐",11],["IBLE",44,"좌판",18,"표면·오염",11],["T60",39,"등판·틸팅",12,"소음",11]]},"M06":{"total":1328,"other":119,"top":[["T50",220,"헤드레스트",55,"작동·고정 불량",68],["T80",130,"팔걸이·암패드",54,"파손",37],["T50 AIR",129,"좌판",38,"작동·고정 불량",35],["T500",123,"등판·틸팅",41,"작동·고정 불량",38],["GC PRO",68,"좌판",45,"파손",28],["T20",56,"등판·틸팅",17,"조립·누락",9],["TAB",54,"등판·틸팅",18,"파손",14],["GX",54,"헤드레스트",18,"흔들림·기울어짐",13],["T60",52,"등판·틸팅",15,"소음",19],["T90",44,"등판·틸팅",12,"소음",19]]},"M07":{"total":1455,"other":122,"top":[["T50",263,"헤드레스트",69,"작동·고정 불량",80],["T50 AIR",161,"좌판",55,"작동·고정 불량",34],["T500",130,"등판·틸팅",40,"작동·고정 불량",45],["T80",121,"팔걸이·암패드",57,"파손",39],["GX",79,"헤드레스트",28,"작동·고정 불량",19],["GC PRO",75,"좌판",38,"파손",30],["T20",62,"등판·틸팅",26,"작동·고정 불량",12],["IBLE",57,"등판·틸팅",23,"표면·오염",13],["TAB",49,"등판·틸팅",14,"파손",18],["T90",47,"등판·틸팅",11,"소음",17]]},"M08":{"total":1396,"other":105,"top":[["T50",263,"좌판",67,"작동·고정 불량",69],["T50 AIR",158,"좌판",71,"작동·고정 불량",44],["T500",137,"등판·틸팅",39,"작동·고정 불량",38],["T80",126,"팔걸이·암패드",53,"파손",30],["GC PRO",78,"좌판",51,"파손",41],["T20",65,"등판·틸팅",28,"작동·고정 불량",20],["GX",64,"헤드레스트",20,"작동·고정 불량",14],["TAB",57,"등판·틸팅",18,"파손",15],["IBLE",55,"등판·틸팅",15,"파손",10],["T60",41,"등판·틸팅",11,"소음",10]]},"M09":{"total":1322,"other":98,"top":[["T50",266,"좌판",70,"작동·고정 불량",58],["T50 AIR",142,"좌판",49,"작동·고정 불량",38],["T500",116,"등판·틸팅",38,"작동·고정 불량",40],["T80",107,"팔걸이·암패드",45,"파손",36],["GC PRO",70,"좌판",39,"파손",34],["IBLE",62,"등판·틸팅",23,"파손",17],["GX",53,"헤드레스트",21,"흔들림·기울어짐",10],["TAB",50,"등판·틸팅",18,"파손",12],["T60",50,"등판·틸팅",9,"소음",12],["T90",48,"등판·틸팅",15,"소음",20]]},"M10":{"total":1427,"other":109,"top":[["T50",284,"좌판",72,"흔들림·기울어짐",53],["GC PRO",138,"전장(충전·LED)",85,"전장(충전·LED)",85],["T80",128,"팔걸이·암패드",52,"파손",45],["T50 AIR",118,"좌판",50,"구매·교체 요청",22],["T500",108,"등판·틸팅",41,"작동·고정 불량",23],["IBLE",66,"좌판",19,"표면·오염",21],["T60",64,"등판·틸팅",18,"소음",15],["RINGO",58,"베이스·중심봉·레버",9,"표면·오염",8],["TAB",48,"등판·틸팅",15,"파손",12],["GX",47,"헤드레스트",19,"소음",11]]},"all":{"total":11159,"other":1023,"top":[["T50",1890,"좌판",427,"작동·고정 불량",461],["T50 AIR",1027,"좌판",367,"작동·고정 불량",243],["T80",982,"팔걸이·암패드",392,"파손",295],["T500",932,"등판·틸팅",285,"작동·고정 불량",265],["T20",620,"등판·틸팅",206,"조립·누락",179],["GC PRO",607,"좌판",306,"파손",238],["IBLE",456,"등판·틸팅",136,"표면·오염",91],["GX",442,"헤드레스트",130,"작동·고정 불량",85],["TAB",436,"등판·틸팅",145,"파손",118],["T60",417,"등판·틸팅",96,"소음",120]]}},"stat":{"rows":18884,"excludedTeam":5143,"returns":205,"total":11159,"partUnk":1631,"issueUnk":1372,"famUnk":1023}}
   },
   "asDaily": {
     "source": "Looker Studio WARRANTY & AS & FAQ — 일별 표(메인 조회/버튼 클릭/신청 완료) + AS KPI Overview 이지리페어 클릭율(일별 → 건수 환산)",
@@ -6541,52 +6553,95 @@ function renderAsReason() {
     });
   }
 
-  // 월별 구성 표 (상위 10개 + 그 외)
+  renderAsrTable(dim);
+  renderAsProducts();
+}
+
+// 출처 전환: 웹 신청(Looker) / 실제 AS(ERP) — 월별 표와 제품 TOP 10이 같이 바뀜
+const ASR_SRC = {
+  web: { color: '#6A4BA8', badge: `<span class="src src-looker" title="Looker Studio 'AS 신청 완료 현황' 표 · 고객이 웹에서 고른 값">Looker</span>` },
+  erp: { color: null, badge: `<span class="src src-erp" title="ERP AS진행상태 확인 내보내기 · 조치요구내역 키워드 자동 분류">ERP</span>` },
+};
+function asrSrc() { return window.__asrSrc === 'erp' && DATA.asReason && DATA.asReason.erp ? 'erp' : 'web'; }
+function asrSrcUI(src) {
+  document.querySelectorAll('.src-seg .seg-btn').forEach(b => b.classList.toggle('active', b.dataset.s === src));
+  ['asr-tbl-srcb', 'asr-prod-srcb'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ASR_SRC[src].badge; });
+}
+function asrKeepWeb(el) { if (el && el.dataset.web == null) el.dataset.web = el.innerHTML; return el; }
+
+function renderAsrTable(dim) {
+  const R = DATA.asReason, src = asrSrc(), X = src === 'erp' ? R.erp : R;
+  asrSrcUI(src);
+  const cats = dim === 'part' ? X.parts : X.issues, M = X.months, mm = M[dim];
+  const tint = src === 'erp' ? COLORS.accent : ASR_SRC.web.color;
   const tb = document.getElementById('asr-tbl');
   if (tb) {
-    const SHOW = 10;
+    const SHOW = src === 'erp' ? cats.length : 10;
     const allTot = M.total.reduce((a, b) => a + b, 0);
     const colTot = cats.map((_, j) => mm.reduce((s, r) => s + r[j], 0));
-    const rows = cats.slice(0, SHOW).map((c, j) => ({ c, v: mm.map(r => r[j]), all: colTot[j] }));
+    const rows = cats.slice(0, SHOW).map((c, j) => ({ c, v: mm.map(r => r[j]), all: colTot[j], unk: c === '미분류' }));
     if (cats.length > SHOW) {
       const rest = cats.slice(SHOW);
       rows.push({ c: `그 외 ${rest.length}개`, title: rest.join(', '), v: mm.map(r => r.slice(SHOW).reduce((a, b) => a + b, 0)), all: colTot.slice(SHOW).reduce((a, b) => a + b, 0) });
     }
-    const maxShare = Math.max(...rows.flatMap(r => r.v.map((n, i) => n / M.total[i])));
-    const cell = (n, d) => {
+    const maxShare = Math.max(...rows.filter(r => !r.unk).flatMap(r => r.v.map((n, i) => n / M.total[i])));
+    const cell = (n, d, unk) => {
       const s = d ? n / d : 0;
-      return `<td style="background:${hexToRgba(COLORS.accent, (s / maxShare * 0.28).toFixed(3))}">${(s * 100).toFixed(1)}%<small>${n.toLocaleString()}건</small></td>`;
+      return `<td${unk ? '' : ` style="background:${hexToRgba(tint, (s / maxShare * 0.28).toFixed(3))}"`}>${(s * 100).toFixed(1)}%<small>${n.toLocaleString()}건</small></td>`;
     };
+    const totLabel = src === 'erp' ? 'ERP AS' : '신청 완료';
     tb.innerHTML = `<thead><tr><th style="text-align:left">${dim === 'part' ? '부위' : '증상'}</th>${M.labels.map(l => `<th>${l}</th>`).join('')}<th>전체</th></tr></thead><tbody>`
-      + rows.map(r => `<tr><td class="asr-hd"${r.title ? ` title="${r.title}"` : ''}>${r.c}</td>${r.v.map((n, i) => cell(n, M.total[i])).join('')}${cell(r.all, allTot)}</tr>`).join('')
-      + `<tr><td class="asr-hd">신청 완료</td>${M.total.map(n => `<td>${n.toLocaleString()}건</td>`).join('')}<td>${allTot.toLocaleString()}건</td></tr></tbody>`;
+      + rows.map(r => `<tr${r.unk ? ' class="asr-unk"' : ''}><td class="asr-hd"${r.title ? ` title="${r.title}"` : r.unk ? ' title="조치요구내역 문장에서 부위·증상 단어를 찾지 못한 건"' : ''}>${r.c}</td>${r.v.map((n, i) => cell(n, M.total[i], r.unk)).join('')}${cell(r.all, allTot, r.unk)}</tr>`).join('')
+      + `<tr><td class="asr-hd">${totLabel}</td>${M.total.map(n => `<td>${n.toLocaleString()}건</td>`).join('')}<td>${allTot.toLocaleString()}건</td></tr></tbody>`;
   }
+  const word = dim === 'part' ? '부위' : '증상';
   const sub = document.getElementById('asr-tbl-sub');
-  if (sub) sub.textContent = `${dim === 'part' ? '부위' : '증상'} 기준(위 버튼과 연동) · 칸 = 그 달 비중, 작은 글씨 = 건수 · 색이 진할수록 비중 높음`;
-  renderAsProducts();
+  if (sub) sub.textContent = src === 'erp'
+    ? `${word} 기준(위 버튼과 연동) · ERP 조치요구내역(자유 문장)을 키워드로 자동 분류 · 조치월 기준 · 전화·게시판·웹 등 모든 채널 · 칸 = 그 달 비중`
+    : `${word} 기준(위 버튼과 연동) · 칸 = 그 달 비중, 작은 글씨 = 건수 · 색이 진할수록 비중 높음`;
+  const foot = asrKeepWeb(document.getElementById('asr-tbl-foot'));
+  if (foot) {
+    const S = R.erp && R.erp.stat, next = R.erp ? (parseInt(R.erp.months.keys.slice(-1)[0].slice(1), 10) % 12) + 1 : 0;
+    foot.innerHTML = src === 'erp'
+      ? `${M.labels[0]}~${M.labels.slice(-1)[0]} ERP 내보내기 (최종조치일 기준) · ${next}월은 월말 추출 후 추가 · 접수번호당 1건 · 반품·환불·고객취소·택배 발송·바로스·비용정산 건 제외 · 미분류 = 문장에서 ${word} 단어를 찾지 못한 건 (${((dim === 'part' ? S.partUnk : S.issueUnk) / S.total * 100).toFixed(1)}%) · 웹 선택지와 분류 이름이 다름`
+      : foot.dataset.web;
+  }
 }
 
 function renderAsProducts() {
   const R = DATA.asReason;
   if (!R) return;
-  const key = window.__asrMonth || 'all';
-  const keys = ['all'].concat(R.months.keys), labels = ['전체'].concat(R.months.labels);
+  const src = asrSrc(), X = src === 'erp' ? R.erp : R;
+  asrSrcUI(src);
+  const keys = ['all'].concat(X.months.keys), labels = ['전체'].concat(X.months.labels);
+  const key = keys.includes(window.__asrMonth) ? window.__asrMonth : 'all';
   const mb = document.getElementById('asr-month');
   if (mb) mb.innerHTML = keys.map((k, i) => `<button class="seg-btn${k === key ? ' active' : ''}" data-m="${k}">${labels[i]}</button>`).join('');
-  const P = R.products[key], tb = document.getElementById('asr-prod');
+  const P = X.products[key], tb = document.getElementById('asr-prod');
   if (!P || !tb) return;
   const max = Math.max(...P.top.map(r => r[1]));
   const pc = (n, d) => (n / d * 100).toFixed(1) + '%';
-  tb.innerHTML = '<thead><tr><th style="text-align:left">#</th><th style="text-align:left">모델</th><th>신청 완료</th><th style="text-align:left">비중</th><th style="text-align:left">주요 부위</th><th style="text-align:left">주요 증상</th></tr></thead><tbody>'
+  const barC = src === 'erp' ? COLORS.accent : ASR_SRC.web.color;
+  const sumTop = P.top.reduce((s, r) => s + r[1], 0);
+  tb.innerHTML = `<thead><tr><th style="text-align:left">#</th><th style="text-align:left">모델</th><th>${src === 'erp' ? 'ERP AS' : '신청 완료'}</th><th style="text-align:left">비중</th><th style="text-align:left">주요 부위</th><th style="text-align:left">주요 증상</th></tr></thead><tbody>`
     + P.top.map((r, i) => `<tr><td class="asr-rank">${i + 1}</td><td style="text-align:left">${r[0]}</td><td>${r[1].toLocaleString()}건</td>`
-      + `<td style="text-align:left">${pc(r[1], P.total)}<span class="asr-bar" style="width:${Math.round(r[1] / max * 80)}px"></span></td>`
+      + `<td style="text-align:left">${pc(r[1], P.total)}<span class="asr-bar" style="width:${Math.round(r[1] / max * 80)}px;background:${barC}"></span></td>`
       + `<td style="text-align:left">${r[2]}<span class="asr-sub">${pc(r[3], r[1])}</span></td><td style="text-align:left">${r[4]}<span class="asr-sub">${pc(r[5], r[1])}</span></td></tr>`).join('')
-    + `<tr><td></td><td style="text-align:left">TOP 10 합계</td><td>${P.top.reduce((s, r) => s + r[1], 0).toLocaleString()}건</td><td style="text-align:left">${pc(P.top.reduce((s, r) => s + r[1], 0), P.total)}</td><td></td><td></td></tr></tbody>`;
+    + `<tr><td></td><td style="text-align:left">TOP 10 합계</td><td>${sumTop.toLocaleString()}건</td><td style="text-align:left">${pc(sumTop, P.total)}</td><td></td><td></td></tr></tbody>`;
+  const sub = asrKeepWeb(document.getElementById('asr-prod-sub'));
+  if (sub) sub.innerHTML = src === 'erp'
+    ? 'ERP 조치요구내역의 제품명·제품코드로 모델 묶음 (웹과 같은 묶음 기준) · 주요 부위·증상 = 그 모델 안에서 가장 많은 항목 (미분류 제외) · 조치월 기준'
+    : sub.dataset.web;
   const foot = document.getElementById('asr-prod-foot');
-  if (foot) foot.textContent = `${labels[keys.indexOf(key)]} 신청 완료 ${P.total.toLocaleString()}건 기준 · 모델로 묶지 못한 소량·특판 제품 ${P.other.toLocaleString()}건(${pc(P.other, P.total)})은 순위에서 제외`;
+  const lab = labels[keys.indexOf(key)];
+  if (foot) foot.textContent = src === 'erp'
+    ? `${lab} ERP AS ${P.total.toLocaleString()}건 기준 · 문장에서 제품을 찾지 못한 ${P.other.toLocaleString()}건(${pc(P.other, P.total)})은 순위에서 제외 · 11월은 월말 추출 후 추가`
+    : `${lab} 신청 완료 ${P.total.toLocaleString()}건 기준 · 모델로 묶지 못한 소량·특판 제품 ${P.other.toLocaleString()}건(${pc(P.other, P.total)})은 순위에서 제외`;
 }
 
 document.addEventListener('click', e => {
+  const s = e.target.closest('.src-seg .seg-btn');
+  if (s) { window.__asrSrc = s.dataset.s; renderAsrTable(window.__asrDim || 'part'); renderAsProducts(); return; }
   const d = e.target.closest('#asr-dim .seg-btn');
   if (d) { window.__asrDim = d.dataset.dim; renderAsReason(); return; }
   const m = e.target.closest('#asr-month .seg-btn');
