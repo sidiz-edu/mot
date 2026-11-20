@@ -429,6 +429,44 @@ html[data-theme="dark"] { --asr-1:#3987e5; --asr-2:#d95926; --asr-3:#199e70; --a
 .asr-prod .asr-bar { display: inline-block; height: 6px; border-radius: 3px; background: var(--accent); opacity: 0.55; vertical-align: middle; margin-left: 8px; }
 .asr-prod td .asr-sub { color: var(--ink-3); font-size: 11.5px; margin-left: 4px; }
 .asr-foot { font-size: 11.5px; color: var(--ink-3); margin-top: 8px; line-height: 1.6; }
+/* AS 신청 단계별 이탈 */
+.fd-top { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 10px 14px; background: var(--surface-2); border: 1px solid var(--border-soft); border-radius: 10px; margin-bottom: 12px; font-size: 12.5px; color: var(--ink-2); }
+.fd-top b { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+.fd-top .fd-period { font-weight: 700; color: var(--accent-ink); background: var(--accent-soft); padding: 3px 9px; border-radius: 6px; font-size: 12px; margin-right: 4px; }
+.fd-top .fd-arr { color: var(--ink-4); }
+.fd-top .fd-sep { width: 1px; height: 14px; background: var(--border); margin: 0 4px; }
+.fd-head, .fd-row { display: grid; grid-template-columns: 170px minmax(0, 1fr) 150px 220px; gap: 18px; align-items: center; }
+.fd-head { font-size: 11px; font-weight: 600; color: var(--ink-3); padding-bottom: 6px; border-bottom: 1px solid var(--border-soft); }
+.fd-row { padding: 11px 0; border-bottom: 1px solid var(--border-soft); }
+.fd-row:last-child { border-bottom: 0; }
+.fd-lbl b { display: block; font-size: 13px; font-weight: 700; color: var(--ink); }
+.fd-lbl small { display: block; font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+.fd-track { position: relative; height: 30px; border-radius: 6px; background: var(--surface-2); }
+.fd-bar { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px 0 0 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: #fff; font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.fd-bar.full { border-radius: 6px; }
+.fd-loss { position: absolute; top: 0; bottom: 0; border-radius: 0 6px 6px 0; background: repeating-linear-gradient(135deg, var(--neg-soft) 0 5px, rgba(192, 74, 59, 0.18) 5px 10px); box-shadow: inset 0 0 0 1px rgba(192, 74, 59, 0.35); }
+.fd-loss-t { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; color: var(--neg); font-size: 12px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.fd-rate { font-size: 11px; color: var(--ink-3); }
+.fd-rate b { font-size: 19px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-left: 3px; font-variant-numeric: tabular-nums; }
+.fd-row.is-max .fd-rate b { color: var(--neg); }
+.fd-delta { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+.fd-delta b { font-weight: 700; }
+.fd-spark svg { display: block; overflow: visible; color: var(--ink-3); }
+.fd-insight { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fd-ins { padding: 11px 14px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border-soft); font-size: 12.5px; color: var(--ink-2); line-height: 1.6; }
+.fd-ins b { color: var(--ink); font-weight: 700; }
+.fd-ins .k { display: block; font-size: 11px; font-weight: 700; color: var(--ink-3); margin-bottom: 2px; }
+@media (max-width: 900px) { .fd-head, .fd-row { grid-template-columns: 104px minmax(0, 1fr) 96px; gap: 10px; } .fd-spark, .fd-h-spark { display: none; } .fd-insight { grid-template-columns: 1fr; } }
+/* 데이터 출처 배지 — Looker(보라) / ERP(파랑) · 개요 '사용 시스템' 칩과 같은 색 */
+.src { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; line-height: 1; padding: 3px 7px 3px 6px; border-radius: 999px; border: 1px solid; vertical-align: 2px; margin-left: 6px; white-space: nowrap; letter-spacing: 0.01em; cursor: help; }
+.src::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex: none; }
+.src.lead { margin: 0 6px 0 0; vertical-align: 1px; }
+.lg-chip .src { margin-left: 0; }
+.src-looker { background: #F0EBF8; color: #5E3D8A; border-color: #D9C6F0; }
+.src-erp { background: var(--accent-soft); color: var(--accent-ink); border-color: rgba(45, 91, 227, 0.25); }
+html[data-theme="dark"] .src-looker { background: #2A2238; color: #CBB5EE; border-color: #4A3A66; }
+.src-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin-top: 10px; font-size: 12px; color: var(--ink-3); }
+.src-legend > span { display: inline-flex; align-items: center; }
 /* YoY 미니 차트 */
 .chart-inner { background: var(--surface-2); border: 1px solid var(--border-soft); border-radius: 8px; padding: 10px 12px; }
 .chart-inner-title { font-size: 11.5px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
@@ -2758,7 +2796,7 @@ table.t               { font-size: 14px; }
         </div>
         <div class="ov-grid">
           <button class="ov-card" data-go="1" style="--card-accent:#003EFF">
-            <div class="ov-card-head"><span class="ov-card-num" style="background:rgba(0,62,255,0.08);color:#003EFF">01</span><span class="ov-card-title">AS 신청 페이지</span></div>
+            <div class="ov-card-head"><span class="ov-card-num" style="background:rgba(0,62,255,0.08);color:#003EFF">01</span><span class="ov-card-title">AS 신청 페이지<span class="src src-looker" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span></span></div>
             <div class="ov-card-desc">메인 조회 → AS 신청 클릭 → 제품 선택 → 증상 입력 단계별 전환 추이와 이탈 구간을 추적합니다.</div>
             <div class="ov-card-foot"><span>주간 단위 · 단계별 전환</span><span class="ov-card-arrow" style="color:#003EFF">자세히 →</span></div>
           </button>
@@ -2778,10 +2816,10 @@ table.t               { font-size: 14px; }
           <div class="note-body">
             <div class="note-title">데이터 출처</div>
             <dl>
-              <dt>전국 AS 데이터</dt><dd>ERP Korea - AS진행상태 확인 ▶ 회사 : 시디즈, 브랜드 : 시디즈, 최종조치일 : 월초~월말 ▶ 조회 ▶ 오른쪽 마우스 - 자료변환(Export File)</dd>
-              <dt>서울경인 AS 데이터</dt><dd>전국 ERP 파일에서 서비스센터 양지·안성, 센터조치 건 추출 (전 기간 · 26.11.11 재계산) <span class="mute">· 이전에는 라스트마일사업팀 김진우님 요청본 사용</span></dd>
-              <dt>AS 신청 페이지</dt><dd>웹 행동 로그 · 주별 단계별 집계</dd>
-              <dt>컨택센터 비용</dt><dd>브랜드 용역료 청구 현황 <span class="mute">(월별 자료)</span></dd>
+              <dt>전국 AS 데이터</dt><dd><span class="src src-erp lead" title="ERP Korea · AS진행상태 확인">ERP</span>ERP Korea - AS진행상태 확인 ▶ 회사 : 시디즈, 브랜드 : 시디즈, 최종조치일 : 월초~월말 ▶ 조회 ▶ 오른쪽 마우스 - 자료변환(Export File)</dd>
+              <dt>서울경인 AS 데이터</dt><dd><span class="src src-erp lead" title="ERP Korea · AS진행상태 확인">ERP</span>전국 ERP 파일에서 서비스센터 양지·안성, 센터조치 건 추출 (전 기간 · 26.11.11 재계산) <span class="mute">· 이전에는 라스트마일사업팀 김진우님 요청본 사용</span></dd>
+              <dt>AS 신청 페이지</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>Looker Studio 웹 행동 로그 · 주별·일별 단계 집계, 신청 사유·제품</dd>
+              <dt>컨택센터 비용</dt><dd>브랜드 용역료 청구 현황 <span class="mute">(월별 자료)</span> · 자사몰 AS 접수 건수는 <span class="src src-erp" title="ERP 홈페이지 의뢰 건수 (사용자 직접 입력)">ERP</span> 홈페이지 의뢰 건수</dd>
             </dl>
           </div>
         </div>
@@ -3175,6 +3213,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
           <div class="page-eyebrow">Funnel · Weekly</div>
           <h1 class="page-title">AS 신청 페이지</h1>
           <div class="page-sub">메인조회 → AS신청클릭 → 제품선택 → 증상입력 → 고객정보 → 신청완료 · 주별 전환 추이</div>
+          <div class="src-legend"><span>데이터 출처</span><span><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>웹 행동 로그 (Looker Studio) — 이 탭의 모든 수치</span><span><span class="src src-erp lead" title="ERP 홈페이지 의뢰 건수 (사용자 직접 입력)">ERP</span>AS 접수·조치 기록 — 자사몰 AS 접수 건수는 컨택센터 용역료 탭</span></div>
         </div>
         <div style="display:flex;gap:8px;flex-shrink:0">
           <a href="https://datastudio.google.com/u/0/reporting/c1c840c2-3f4c-4574-bc04-e0f171694e62/page/p_wjcqp4l5zd?s=vOvBNV2iETU" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--ink-2);font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap">
@@ -3329,6 +3368,26 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
           </div>
         </div>
 
+      </div>
+
+      <!-- ── AS 신청 단계별 이탈 ── -->
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-head">
+          <div>
+            <div class="card-title">단계별 이탈 — 어디서 빠지나<span class="src src-looker" title="Looker Studio AS Funnel 스코어카드 · 주별(월~일) · AS 현황 시트 3번 탭에 같은 값 기록">Looker</span></div>
+            <div class="card-sub">AS 신청 버튼 클릭 이후 화면별로 남은 수와 빠진 수 · 주별(월~일) 퍼널 · 이탈 = 앞 단계 수 − 다음 단계 수</div>
+          </div>
+          <div class="seg asr-seg" id="fd-mode" role="tablist" aria-label="이탈 기간">
+            <button class="seg-btn active" data-m="last">최근 주</button>
+            <button class="seg-btn" data-m="after">개선 후</button>
+            <button class="seg-btn" data-m="before">개선 전</button>
+          </div>
+        </div>
+        <div class="fd-top" id="fd-top"></div>
+        <div class="fd-head"><div>단계</div><div>남은 수 (버튼 클릭 = 100%) · 빗금 = 그 화면에서 이탈</div><div>이탈률 (앞 단계 대비)</div><div class="fd-h-spark">주별 추이 · 점선 = 10/28 개선</div></div>
+        <div id="fd-funnel"></div>
+        <div class="fd-insight" id="fd-insight"></div>
+        <div class="asr-foot">개선 전 = 10/28 직전 4주(9/28~10/25) 합계 · 개선 후 = 11/2 주부터 합계 · 10/26 주는 개선 전후가 섞여 제외 · 고객 정보 입력과 신청 완료는 6월부터 같은 수로 집계돼 마지막 단계 이탈은 따로 볼 수 없음</div>
       </div>
 
       <!-- ── 브랜드 UX 비교 프레임 ── -->
@@ -3503,7 +3562,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
         <div class="card">
           <div class="card-head">
             <div>
-              <div class="card-title">주별 정품등록 건수</div>
+              <div class="card-title">주별 정품등록 건수<span class="src src-looker" title="Looker Studio 정품등록 완료 · 주별(월~일)">Looker</span></div>
               <div class="card-sub">정품등록 완료 건수</div>
             </div>
             <span class="tag accent">정품등록</span>
@@ -3513,7 +3572,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
         <div class="card">
           <div class="card-head">
             <div>
-              <div class="card-title">AS 신청페이지 일별 전환율</div>
+              <div class="card-title">AS 신청페이지 일별 전환율<span class="src src-looker" title="Looker Studio 일별 표 (메인 조회·버튼 클릭·신청 완료·이지리페어 클릭)">Looker</span></div>
               <div class="card-sub">3/16 개설 이후 일별(옅은 선)·7일 이동평균(굵은 선) · 클릭률·완료율은 메인 조회 대비, 이지리페어는 버튼 클릭 대비 · 개선 전(10/1~10/27) vs 개선 후(10/28~)</div>
             </div>
             <span class="tag up">목표 ↑</span>
@@ -3527,8 +3586,8 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
       <div class="card mt-16">
         <div class="card-head">
           <div>
-            <div class="card-title">AS 신청 사유 — 주별 구성비</div>
-            <div class="card-sub">AS 신청 완료 건 기준 · 월~일 주별 100% 막대 · 상위 6개 항목 + 그 외 · 점선 = 10/28 신청 절차 개선(6→4단계)</div>
+            <div class="card-title">AS 신청 사유 — 주별 구성비<span class="src src-looker" title="Looker Studio 'AS 신청 완료 현황' 표 · 고객이 웹에서 고른 값">Looker</span></div>
+            <div class="card-sub">고객이 웹에서 고른 값 (ERP 실제 조치 내용 아님) · AS 신청 완료 건 기준 · 월~일 주별 100% 막대 · 상위 6개 항목 + 그 외 · 점선 = 10/28 신청 절차 개선(6→4단계)</div>
           </div>
           <div class="seg asr-seg" id="asr-dim" role="tablist" aria-label="신청 사유 기준">
             <button class="seg-btn active" data-dim="part">부위</button>
@@ -3543,7 +3602,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
       <div class="card mt-16">
         <div class="card-head">
           <div>
-            <div class="card-title">월별 신청 사유 구성</div>
+            <div class="card-title">월별 신청 사유 구성<span class="src src-looker" title="Looker Studio 'AS 신청 완료 현황' 표 · 고객이 웹에서 고른 값">Looker</span></div>
             <div class="card-sub" id="asr-tbl-sub">위 그래프와 같은 기준(부위/증상) · 칸 = 그 달 비중, 작은 글씨 = 건수 · 색이 진할수록 비중 높음</div>
           </div>
         </div>
@@ -3554,7 +3613,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
       <div class="card mt-16">
         <div class="card-head">
           <div>
-            <div class="card-title">AS 신청 제품 TOP 10</div>
+            <div class="card-title">AS 신청 제품 TOP 10<span class="src src-looker" title="Looker Studio 'AS 신청 완료 현황' 표 · 고객이 웹에서 고른 값">Looker</span></div>
             <div class="card-sub">제품명을 모델 단위로 묶음 (예: T50_HLDA·T50 HF → T50 / ALL NEW·NEW T500 → T500) · 주요 부위·증상 = 그 모델 안에서 가장 많은 항목</div>
           </div>
           <div class="asr-months" id="asr-month"></div>
@@ -3569,11 +3628,13 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
         <div class="note-body">
           <div class="note-title">데이터 출처 및 산출 방식</div>
           <dl>
-            <dt>유입 데이터</dt><dd>웹 행동 로그 · 주별 단계별 사용자 수 (메인조회 → AS신청클릭 → 제품선택 → 증상입력 → 고객정보 → 신청완료)</dd>
-            <dt>유입률</dt><dd>(다음 단계 수 ÷ 전 단계 수) × 100</dd>
-            <dt>제품등록 수</dt><dd>정품등록 완료 건수 <span class="mute">(주별 기준)</span></dd>
-            <dt>신청 사유</dt><dd>Looker Studio 'AS 신청 완료 현황' 표(제품명·부위·증상)의 모든 행을 기간별로 합산 · 주별(월~일)과 월별을 각각 따로 조회 · 두 합계 모두 전체 신청 완료 6,394건(3/16~11/19)과 일치(항목별 값은 조회 기간에 따라 몇 건 차이 날 수 있음) · '표면 물량' 오타 항목은 '표면 불량'에 합침 · 제품은 모델 단위로 묶음</dd>
-            <dt>일별 전환율</dt><dd>Looker Studio 일별 표(3/16~) · 버튼 클릭률 = 버튼 클릭 ÷ 메인 조회, 신청 완료율 = 신청 완료 ÷ 메인 조회, 이지리페어 클릭률 = 정품등록 리스트 내 이지리페어 클릭 ÷ 버튼 클릭 (Looker Studio 일별) · 개선 전후 값은 기간 합계 기준 (개선 전 10/1~10/27, 개선 후 10/28~)</dd>
+            <dt>유입 데이터</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>Looker Studio AS Funnel 스코어카드(웹 행동 로그) · 주별(월~일) 단계별 수 · AS 현황 시트 3번 탭에 같은 값 기록 (메인조회 → AS신청클릭 → 제품선택 → 증상입력 → 고객정보 → 신청완료)</dd>
+            <dt>유입률</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>(다음 단계 수 ÷ 전 단계 수) × 100</dd>
+            <dt>제품등록 수</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>Looker Studio '정품등록 완료' 건수 <span class="mute">(주별 기준)</span></dd>
+            <dt>신청 사유</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>고객이 웹에서 고른 값 (ERP 실제 조치 내용 아님) · Looker Studio 'AS 신청 완료 현황' 표(제품명·부위·증상)의 모든 행을 기간별로 합산 · 주별(월~일)과 월별을 각각 따로 조회 · 두 합계 모두 전체 신청 완료 6,394건(3/16~11/19)과 일치(항목별 값은 조회 기간에 따라 몇 건 차이 날 수 있음) · '표면 물량' 오타 항목은 '표면 불량'에 합침 · 제품은 모델 단위로 묶음</dd>
+            <dt>단계별 이탈</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>주별 퍼널(월~일)에서 앞 단계 수 − 다음 단계 수 · 이탈률 = 이탈 ÷ 앞 단계 수 · 버튼 클릭 → 제품 선택 사이에는 로그인 화면 포함 · 고객 정보 입력과 신청 완료는 6월부터 같은 수로 집계 · 개선 전 = 9/28~10/25, 개선 후 = 11/2~ (10/26 주 제외)</dd>
+            <dt>참고</dt><dd>같은 'AS 신청'이라도 <span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>웹에서 신청 완료한 수와 <span class="src src-erp lead" title="ERP 홈페이지 의뢰 건수 (사용자 직접 입력)">ERP</span>홈페이지 의뢰로 접수된 수(컨택센터 용역료 탭 '자사몰 AS 접수')는 집계 기준이 달라 숫자가 다를 수 있음</dd>
+            <dt>일별 전환율</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>Looker Studio 일별 표(3/16~) · 버튼 클릭률 = 버튼 클릭 ÷ 메인 조회, 신청 완료율 = 신청 완료 ÷ 메인 조회, 이지리페어 클릭률 = 정품등록 리스트 내 이지리페어 클릭 ÷ 버튼 클릭 (Looker Studio 일별) · 개선 전후 값은 기간 합계 기준 (개선 전 10/1~10/27, 개선 후 10/28~)</dd>
           </dl>
         </div>
       </div>
@@ -3998,7 +4059,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
             <span class="lg-chip"><i style="background:#D4FF00"></i>AS상담 - 모바일 - AI챗봇 (해피톡)</span>
             <span class="lg-chip"><i style="background:#7D9B6A"></i>AS상담 - 외부쇼핑몰 (게시판)</span>
             <span class="lg-chip"><i style="background:#48B47A"></i>접수 (AS) — 자사몰 외</span>
-            <span class="lg-chip"><i style="background:#003EFF"></i>AS접수 - 자사몰</span>
+            <span class="lg-chip"><i style="background:#003EFF"></i>AS접수 - 자사몰<span class="src src-erp" title="ERP 홈페이지 의뢰 건수 (사용자 직접 입력)">ERP</span></span>
           </div>
           <div class="grid-2 mt-8">
             <div class="card">
@@ -4025,7 +4086,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
             <div class="card-head">
               <div><div class="card-title">접수 (AS) 채널별 비율 추이</div><div class="card-sub">AS접수 - 자사몰 vs 그 외 접수 · 26년 3~10월</div></div>
               <div class="lg-row" style="margin:0;gap:16px">
-                <span class="lg-chip"><i style="background:#003EFF"></i>AS접수 - 자사몰</span>
+                <span class="lg-chip"><i style="background:#003EFF"></i>AS접수 - 자사몰<span class="src src-erp" title="ERP 홈페이지 의뢰 건수 (사용자 직접 입력)">ERP</span></span>
                 <span class="lg-chip"><i style="background:#48B47A"></i>그 외 접수</span>
               </div>
             </div>
@@ -6532,6 +6593,84 @@ document.addEventListener('click', e => {
   if (m) { window.__asrMonth = m.dataset.m; renderAsProducts(); }
 });
 
+// ---- AS 신청 단계별 이탈 (주별 퍼널) ----
+function renderFunnelDrop() {
+  const F = DATA.funnel, box = document.getElementById('fd-funnel');
+  if (!F || !box) return;
+  const n = F.periods.length;
+  const md = s => [...String(s).matchAll(/(\d{1,2})\.\s*(\d{1,2})/g)].map(m => `${+m[1]}/${+m[2]}`);
+  const ev = F.periods.findIndex(p => md(p)[0] === '10/26');   // 10/28 개선이 들어간 주 (전후 섞임 → 비교에서 제외)
+  const R = { last: [n - 1, n - 1], after: [ev + 1, n - 1], before: [ev - 4, ev - 1] };
+  const mode = R[window.__fdMode] ? window.__fdMode : 'last';
+  document.querySelectorAll('#fd-mode .seg-btn').forEach(b => b.classList.toggle('active', b.dataset.m === mode));
+  const KEYS = ['main', 'click', 'pick', 'sym', 'info', 'done'];
+  const agg = ([s, e]) => Object.fromEntries(KEYS.map(k => [k, F[k].slice(s, e + 1).reduce((a, b) => a + b, 0)]).concat([['weeks', e - s + 1]]));
+  const cur = agg(R[mode]), base = agg(R.before), aft = agg(R.after);
+  const range = ([s, e]) => `${md(F.periods[s])[0]}~${md(F.periods[e]).slice(-1)[0]}` + (e > s ? ` · ${e - s + 1}주 합계` : '');
+  const fmt = v => Math.round(v).toLocaleString();
+  const STEPS = [
+    { k: 'click', name: 'AS 신청 버튼 클릭', sub: '메인 조회 대비 클릭률', color: '#0033CC' },
+    { k: 'pick',  name: '제품 선택',         sub: '로그인 포함',            color: '#1A4FD8' },
+    { k: 'sym',   name: '증상 입력',         sub: '부위·증상·사진',         color: '#3D72D7' },
+    { k: 'info',  name: '고객 정보 · 신청 완료', sub: '두 값이 같게 집계됨', color: '#6B9FE8' },
+  ];
+  const rateOf = (o, i) => i === 0 ? o.click / o.main * 100 : (o[STEPS[i - 1].k] - o[STEPS[i].k]) / o[STEPS[i - 1].k] * 100;
+  const series = i => F.periods.map((_, w) => {
+    const o = Object.fromEntries(KEYS.map(k => [k, F[k][w]]));
+    const den = i === 0 ? o.main : o[STEPS[i - 1].k];
+    return den ? rateOf(o, i) : null;
+  });
+  const spark = (vals, color, band) => {
+    const W = 220, H = 40, max = 50, step = W / (vals.length - 1);
+    const x = i => i * step, y = v => H - Math.min(v, max) / max * H;
+    const pts = vals.map((v, i) => v == null ? null : [x(i), y(v)]);
+    const d = pts.filter(Boolean).map((p, k) => (k ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+    const last = pts[pts.length - 1];
+    const bx = x(band[0]) - step / 2, bw = (band[1] - band[0] + 1) * step;
+    const hits = pts.map((p, i) => p ? `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4" fill="transparent"><title>${md(F.periods[i])[0]} 주 ${vals[i].toFixed(1)}%</title></circle>` : '').join('');
+    return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="주별 추이">
+      <rect x="${bx.toFixed(1)}" y="0" width="${bw.toFixed(1)}" height="${H}" rx="3" fill="${color}" opacity=".1"/>
+      <line x1="${x(ev).toFixed(1)}" x2="${x(ev).toFixed(1)}" y1="0" y2="${H}" stroke="currentColor" stroke-dasharray="3 3" opacity=".6"/>
+      <path d="${d}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3.2" fill="${color}" stroke="var(--surface)" stroke-width="1.5"/>${hits}</svg>`;
+  };
+  const rates = STEPS.map((_, i) => rateOf(cur, i));
+  const maxI = [1, 2, 3].reduce((m, i) => rates[i] > rates[m] ? i : m, 1);
+  box.innerHTML = STEPS.map((s, i) => {
+    const w = cur[s.k] / cur.click * 100, pw = i ? cur[STEPS[i - 1].k] / cur.click * 100 : 100;
+    const lost = i ? cur[STEPS[i - 1].k] - cur[s.k] : 0, r = rates[i], b = rateOf(base, i), dd = r - b;
+    const good = i === 0 ? dd >= 0 : dd <= 0;
+    const lossW = pw - w, outside = lossW < 9;
+    const loss = i && lost > 0 ? `<div class="fd-loss" style="left:${w}%;width:${lossW}%"></div>
+      <div class="fd-loss-t" style="left:${outside ? pw : w}%;padding-left:${outside ? 6 : 8}px">−${fmt(lost)}</div>` : '';
+    const delta = mode === 'before' ? '<div class="fd-delta">비교 기준 기간</div>'
+      : `<div class="fd-delta"><b style="color:var(${good ? '--pos' : '--neg'})">${dd >= 0 ? '▲' : '▼'}${Math.abs(dd).toFixed(1)}%p</b> · 개선 전 ${b.toFixed(1)}%</div>`;
+    return `<div class="fd-row${i && i === maxI ? ' is-max' : ''}">
+      <div class="fd-lbl"><b>${s.name}</b><small>${s.sub}</small></div>
+      <div class="fd-track"><div class="fd-bar${i ? '' : ' full'}" style="width:${w}%;background:${s.color}">${fmt(cur[s.k])}</div>${loss}</div>
+      <div><div class="fd-rate">${i ? '이탈' : '클릭률'}<b>${r.toFixed(1)}%</b></div>${delta}</div>
+      <div class="fd-spark">${spark(series(i), s.color, R[mode])}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('fd-top').innerHTML = `<span class="fd-period">${range(R[mode])}</span>
+    메인 조회 <b>${fmt(cur.main)}</b><span class="fd-arr">→</span>버튼 클릭 <b>${fmt(cur.click)}</b><span class="fd-arr">→</span>신청 완료 <b>${fmt(cur.done)}</b>
+    <span class="fd-sep"></span>클릭 대비 완료 <b>${(cur.done / cur.click * 100).toFixed(1)}%</b>${mode === 'before' ? '' : ` <span style="color:var(--ink-3)">(개선 전 ${(base.done / base.click * 100).toFixed(1)}%)</span>`}`;
+  // 인사이트 (개선 전 4주 vs 개선 후, 주 평균)
+  const wk = (o, k) => o[k] / o.weeks, g = (a, b) => (a / b - 1) * 100;
+  const sg = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(0) + '%';
+  const cb = wk(base, 'click'), ca = wk(aft, 'click'), pb = wk(base, 'pick'), pa = wk(aft, 'pick');
+  const story = g(ca, cb) >= 10 && g(pa, pb) < g(ca, cb) / 2 ? ' → 늘어난 클릭 대부분이 <b>로그인·제품 선택</b>에서 빠짐' : '';
+  const hi = [1, 2, 3].reduce((m, i) => rateOf(base, i) > rateOf(base, m) ? i : m, 1);
+  const hb = rateOf(base, hi), ha = rateOf(aft, hi);
+  document.getElementById('fd-insight').innerHTML = `
+    <div class="fd-ins"><span class="k">개선 후 클릭은 늘었지만</span>버튼 클릭 주 평균 <b>${fmt(cb)} → ${fmt(ca)}</b> (${sg(g(ca, cb))}) · 제품 선택까지 간 수 <b>${fmt(pb)} → ${fmt(pa)}</b> (${sg(g(pa, pb))})${story}</div>
+    <div class="fd-ins"><span class="k">꾸준히 가장 많이 빠지는 화면</span><b>${STEPS[hi].name}</b> — 개선 전 ${hb.toFixed(1)}% · 개선 후 ${ha.toFixed(1)}%${Math.abs(ha - hb) < 3 ? ' (절차 개선 전후 비슷)' : ''} · 증상 선택지 개선 효과를 볼 기준</div>`;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('#fd-mode .seg-btn');
+  if (b) { window.__fdMode = b.dataset.m; renderFunnelDrop(); }
+});
+
 // ---- Section 2 charts ----
 function renderSec2() {
   const F = DATA.funnel;
@@ -6549,6 +6688,7 @@ function renderSec2() {
   renderAsReason();
   makeBar ('c_product_reg', COLORS.accent, F.productReg, F.periods, false, '등록 수');
   fjInitMetrics();
+  renderFunnelDrop();
   bxInitSlotNums();
   bxTermsInit();
 }
@@ -6565,14 +6705,14 @@ function renderSec3() {
     { ri: 0, name: 'AS상담 - 유선 - 전화통화 (CTI)',   color: CONTACT_PALETTE[1] },
     { ri: 2, name: 'AS상담 - 모바일 - AI챗봇 (해피톡)', color: CONTACT_PALETTE[2] },
     { ri: 4, name: 'AS상담 - 외부쇼핑몰 (게시판)', color: CONTACT_PALETTE[0] },
-    { ri: 6, name: 'AS접수 - 자사몰', color: CONTACT_PALETTE[3] },
+    { ri: 6, name: 'AS접수 - 자사몰', color: CONTACT_PALETTE[3], src: 'erp' },
   ];
   const renderLegend = (elId) => {
     const el = document.getElementById(elId);
     if (!el) return;
     el.innerHTML = '';
     DETAIL_ITEMS.forEach(it => {
-      el.insertAdjacentHTML('beforeend', `<span class="lg-chip"><i style="background:${it.color}"></i>${it.name}</span>`);
+      el.insertAdjacentHTML('beforeend', `<span class="lg-chip"><i style="background:${it.color}"></i>${it.name}${it.src === 'erp' ? '<span class="src src-erp" title="ERP 홈페이지 의뢰 건수 (사용자 직접 입력)">ERP</span>' : ''}</span>`);
     });
   };
   renderLegend('lg-contact-ratio'); // 공용 범례 1개
