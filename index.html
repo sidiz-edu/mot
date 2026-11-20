@@ -476,6 +476,59 @@ html[data-theme="dark"] .src-seg .seg-btn.active[data-s="web"] { background: #7B
 .asr-head-r { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex: none; }
 .asr-head-r .asr-months { justify-content: flex-end; }
 .asr-tbl tr.asr-unk td { color: var(--ink-3); }
+/* 단계별 이탈 — 기간 선택 · 기간별 표 */
+.fd-pick { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: -4px 0 12px; }
+.fd-pick .fd-lab { font-size: 12px; font-weight: 600; color: var(--ink-3); margin-right: 2px; }
+.fd-pick .seg-btn { border: 1px solid var(--border); border-radius: 7px; padding: 4px 10px; font-size: 12px; background: var(--surface); }
+.fd-pick .seg-btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.fd-pick select { font: inherit; font-size: 12.5px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--ink); }
+.fd-pick .fd-nav { width: 28px; height: 28px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--ink-2); font-size: 15px; line-height: 1; }
+.fd-top { display: grid; gap: 6px; }
+.fd-top-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.fd-top .fd-dim { color: var(--ink-3); }
+.fd-tag { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 5px; margin-left: 6px; vertical-align: 1px; white-space: nowrap; }
+.fd-tag.b { background: var(--surface-3); color: var(--ink-2); }
+.fd-tag.a { background: var(--accent-soft); color: var(--accent-ink); }
+.fd-tag.m { background: var(--warn-soft); color: #9A4D00; }
+.fd-track.dual { height: auto; background: none; display: grid; gap: 4px; }
+.fd-sub { position: relative; height: 22px; border-radius: 5px; background: var(--surface-2); }
+.fd-sub .fd-bar { font-size: 11.5px; border-radius: 5px 0 0 5px; }
+.fd-bar em { font-style: normal; font-weight: 600; font-size: 11px; opacity: 0.85; margin-right: auto; padding-left: 8px; }
+.fd-tbl-h { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 18px 0 6px; font-size: 12.5px; font-weight: 700; color: var(--ink-2); }
+.fd-more { border: 1px solid var(--border); background: var(--surface); border-radius: 7px; font-size: 11.5px; padding: 3px 10px; color: var(--ink-2); }
+table.t.fd-tbl thead th, table.t.fd-tbl tbody td { padding: 7px 10px; white-space: nowrap; }
+table.t.fd-tbl tbody tr:last-child td { font-weight: 400; color: var(--ink-2); background: none; }
+.fd-tbl tbody tr[data-k] { cursor: pointer; }
+.fd-tbl tbody tr[data-k]:hover td:first-child { color: var(--accent); }
+table.t.fd-tbl tbody tr.sel td { font-weight: 700; color: var(--ink); }
+.fd-tbl tbody tr.sel td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.fd-tbl tr.fd-ev td { padding: 4px 10px; font-size: 11px; font-weight: 600; color: var(--ink-3); background: var(--surface-2); text-align: left; }
+.fd-tbl .fd-rng { font-size: 10.5px; color: var(--ink-3); font-weight: 400; margin-left: 6px; }
+/* Looker vs ERP 비교 */
+.src-seg .seg-btn.active[data-s="cmp"] { background: linear-gradient(90deg, #5E3D8A 0 50%, var(--accent) 50% 100%); color: #fff; }
+.asr-tbl td.cmp-c { padding: 5px 6px; min-width: 0; }
+.src-seg { flex: none; }
+.src-seg .seg-btn { white-space: nowrap; }
+.cmp-l { display: flex; align-items: center; justify-content: flex-end; gap: 4px; line-height: 1.45; font-size: 11.5px; }
+.cmp-l span { font-size: 10px; font-weight: 600; color: var(--ink-3); margin-right: auto; }
+.cmp-l i { display: inline-block; height: 5px; border-radius: 3px; flex: none; }
+.cmp-l b { font-weight: 600; min-width: 36px; text-align: right; font-variant-numeric: tabular-nums; }
+.cmp-l.w b { color: #5E3D8A; }
+.cmp-l.e b { color: var(--accent-ink); }
+html[data-theme="dark"] .cmp-l.w b { color: #CBB5EE; }
+.asr-prod td.cmp-dv { white-space: nowrap; text-align: center; }
+.cmp-dv .dv { position: relative; display: inline-block; width: 120px; height: 8px; border-radius: 4px; background: var(--surface-2); vertical-align: middle; margin-right: 8px; }
+.cmp-dv .dv::after { content: ''; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--border-strong); }
+.cmp-dv .dv i { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+.cmp-dv .dv i.e { left: 50%; background: var(--accent); }
+.cmp-dv .dv i.w { right: 50%; background: #6A4BA8; }
+.cmp-dv b { display: inline-block; min-width: 56px; text-align: right; font-size: 12px; }
+table.t.cmp-cnt-tbl thead th, table.t.cmp-cnt-tbl tbody td { padding: 7px 10px; white-space: nowrap; }
+table.t.cmp-cnt-tbl tbody tr:last-child td { font-weight: 500; color: var(--ink-2); }
+table.t.cmp-cnt-tbl tbody tr:last-child td:not(.ok):not(.gap) { background: none; }
+table.t.cmp-cnt-tbl td.ok { background: rgba(0, 182, 95, 0.12); color: var(--ink); }
+table.t.cmp-cnt-tbl td.gap { background: rgba(192, 74, 59, 0.12); color: var(--ink); }
+.cc-dot { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
 /* YoY 미니 차트 */
 .chart-inner { background: var(--surface-2); border: 1px solid var(--border-soft); border-radius: 8px; padding: 10px 12px; }
 .chart-inner-title { font-size: 11.5px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
@@ -3383,20 +3436,23 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
       <div class="card" style="margin-bottom:24px">
         <div class="card-head">
           <div>
-            <div class="card-title">단계별 이탈 — 어디서 빠지나<span class="src src-looker" title="Looker Studio AS Funnel 스코어카드 · 주별(월~일) · AS 현황 시트 3번 탭에 같은 값 기록">Looker</span></div>
-            <div class="card-sub">AS 신청 버튼 클릭 이후 화면별로 남은 수와 빠진 수 · 주별(월~일) 퍼널 · 이탈 = 앞 단계 수 − 다음 단계 수</div>
+            <div class="card-title">단계별 이탈 — 어디서 빠지나<span class="src src-looker" title="Looker Studio AS Funnel 스코어카드 · 주별(월~일)은 AS 현황 시트 3번 탭, 월별·10/28 전후는 기간별 조회">Looker</span></div>
+            <div class="card-sub">AS 신청 버튼 클릭 이후 화면별로 남은 수와 빠진 수 · 이탈 = 앞 단계 수 − 다음 단계 수 · 아래 표의 기간을 누르면 위 막대가 바뀜</div>
           </div>
-          <div class="seg asr-seg" id="fd-mode" role="tablist" aria-label="이탈 기간">
-            <button class="seg-btn active" data-m="last">최근 주</button>
-            <button class="seg-btn" data-m="after">개선 후</button>
-            <button class="seg-btn" data-m="before">개선 전</button>
+          <div class="seg asr-seg" id="fd-gran" role="tablist" aria-label="기간 단위">
+            <button class="seg-btn active" data-g="week">주별</button>
+            <button class="seg-btn" data-g="month">월별</button>
+            <button class="seg-btn" data-g="cmp">10/28 전·후</button>
           </div>
         </div>
+        <div class="fd-pick" id="fd-pick"></div>
         <div class="fd-top" id="fd-top"></div>
-        <div class="fd-head"><div>단계</div><div>남은 수 (버튼 클릭 = 100%) · 빗금 = 그 화면에서 이탈</div><div>이탈률 (앞 단계 대비)</div><div class="fd-h-spark">주별 추이 · 점선 = 10/28 개선</div></div>
+        <div class="fd-head"><div>단계</div><div id="fd-h-bar">남은 수 (버튼 클릭 = 100%) · 빗금 = 그 화면에서 이탈</div><div id="fd-h-rate">이탈률 (전주 대비)</div><div class="fd-h-spark" id="fd-h-spark">주별 추이 · 점선 = 10/28 개선 주</div></div>
         <div id="fd-funnel"></div>
+        <div class="fd-tbl-h"><span id="fd-tbl-title">기간별 이탈률</span><button class="fd-more" id="fd-more" type="button"></button></div>
+        <div class="tbl-wrap"><table class="t fd-tbl" id="fd-tbl"></table></div>
         <div class="fd-insight" id="fd-insight"></div>
-        <div class="asr-foot">개선 전 = 10/28 직전 4주(9/28~10/25) 합계 · 개선 후 = 11/2 주부터 합계 · 10/26 주는 개선 전후가 섞여 제외 · 고객 정보 입력과 신청 완료는 6월부터 같은 수로 집계돼 마지막 단계 이탈은 따로 볼 수 없음</div>
+        <div class="asr-foot" id="fd-foot"></div>
       </div>
 
       <!-- ── 브랜드 UX 비교 프레임 ── -->
@@ -3611,10 +3667,23 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
       <div class="card mt-16">
         <div class="card-head">
           <div>
+            <div class="card-title">웹 신청 건수 — Looker vs ERP 월별 비교<span class="src src-looker" title="Looker Studio AS Funnel 스코어카드 · 월별 기간 조회">Looker</span><span class="src src-erp" title="ERP 홈페이지 의뢰 건수 (컨택센터 용역료 탭 'AS접수 (자사몰)', 직접 입력)">ERP</span></div>
+            <div class="card-sub">같은 '웹 AS 신청'을 두 시스템에서 센 값 · Looker = 웹에서 고객 정보 입력·신청 완료까지 간 수 · ERP = 홈페이지 의뢰로 접수된 수(자사몰 AS 접수) · 비율 칸 색 = 100%에서 ±5% 안(초록)·밖(빨강)</div>
+          </div>
+        </div>
+        <div class="lg-row"><span class="lg-chip"><i style="background:#6A4BA8"></i>Looker 신청 완료</span><span class="lg-chip"><i style="background:#B9A6DE"></i>Looker 고객 정보 입력</span><span class="lg-chip"><i style="background:var(--accent)"></i>ERP 홈페이지 의뢰 (자사몰 AS 접수)</span></div>
+        <div class="chart-box h-220"><canvas id="c_cmp_cnt"></canvas></div>
+        <div class="tbl-wrap mt-16"><table class="t cmp-cnt-tbl" id="cmp-cnt-tbl"></table></div>
+        <div class="asr-foot" id="cmp-cnt-foot"></div>
+      </div>
+
+      <div class="card mt-16">
+        <div class="card-head">
+          <div>
             <div class="card-title">월별 신청 사유 구성<span id="asr-tbl-srcb"><span class="src src-looker" title="Looker Studio 'AS 신청 완료 현황' 표 · 고객이 웹에서 고른 값">Looker</span></span></div>
             <div class="card-sub" id="asr-tbl-sub">위 그래프와 같은 기준(부위/증상) · 칸 = 그 달 비중, 작은 글씨 = 건수 · 색이 진할수록 비중 높음</div>
           </div>
-          <div class="seg src-seg" id="asr-src-a" role="tablist" aria-label="데이터 출처"><button class="seg-btn active" data-s="web">웹 신청 · Looker</button><button class="seg-btn" data-s="erp">실제 AS · ERP</button></div>
+          <div class="seg src-seg" id="asr-src-a" role="tablist" aria-label="데이터 출처"><button class="seg-btn active" data-s="web">웹 신청 · Looker</button><button class="seg-btn" data-s="erp">실제 AS · ERP</button><button class="seg-btn" data-s="cmp">웹 vs ERP</button></div>
         </div>
         <div class="tbl-wrap"><table class="t asr-tbl" id="asr-tbl"></table></div>
         <div class="asr-foot" id="asr-tbl-foot">3월은 페이지 개설일(3/16)부터, 11월은 11/19까지 · 월별 값은 주를 더하지 않고 그 달 기간으로 따로 조회</div>
@@ -3626,7 +3695,7 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
             <div class="card-title">AS 신청 제품 TOP 10<span id="asr-prod-srcb"><span class="src src-looker" title="Looker Studio 'AS 신청 완료 현황' 표 · 고객이 웹에서 고른 값">Looker</span></span></div>
             <div class="card-sub" id="asr-prod-sub">제품명을 모델 단위로 묶음 (예: T50_HLDA·T50 HF → T50 / ALL NEW·NEW T500 → T500) · 주요 부위·증상 = 그 모델 안에서 가장 많은 항목</div>
           </div>
-          <div class="asr-head-r"><div class="seg src-seg" id="asr-src-b" role="tablist" aria-label="데이터 출처"><button class="seg-btn active" data-s="web">웹 신청 · Looker</button><button class="seg-btn" data-s="erp">실제 AS · ERP</button></div><div class="asr-months" id="asr-month"></div></div>
+          <div class="asr-head-r"><div class="seg src-seg" id="asr-src-b" role="tablist" aria-label="데이터 출처"><button class="seg-btn active" data-s="web">웹 신청 · Looker</button><button class="seg-btn" data-s="erp">실제 AS · ERP</button><button class="seg-btn" data-s="cmp">웹 vs ERP</button></div><div class="asr-months" id="asr-month"></div></div>
         </div>
         <div class="tbl-wrap"><table class="t asr-prod" id="asr-prod"></table></div>
         <div class="asr-foot" id="asr-prod-foot"></div>
@@ -3643,7 +3712,8 @@ AS 현황 시트(1. 현황_AS, 2. 현황_AS_서울경인)와 MOT 대시보드에
             <dt>제품등록 수</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>Looker Studio '정품등록 완료' 건수 <span class="mute">(주별 기준)</span></dd>
             <dt>신청 사유</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>고객이 웹에서 고른 값 (ERP 실제 조치 내용 아님) · Looker Studio 'AS 신청 완료 현황' 표(제품명·부위·증상)의 모든 행을 기간별로 합산 · 주별(월~일)과 월별을 각각 따로 조회 · 두 합계 모두 전체 신청 완료 6,394건(3/16~11/19)과 일치(항목별 값은 조회 기간에 따라 몇 건 차이 날 수 있음) · '표면 물량' 오타 항목은 '표면 불량'에 합침 · 제품은 모델 단위로 묶음</dd>
             <dt>실제 AS</dt><dd><span class="src src-erp lead" title="ERP AS진행상태 확인 내보내기 · 조치요구내역 키워드 자동 분류">ERP</span>ERP AS진행상태 확인 내보내기 (3월~10월, 최종조치일 기준) · 접수번호당 1건 · 반품·환불·고객취소·택배 발송·바로스·비용정산 건 제외 · 조치요구내역(자유 문장)에서 제품·부위·증상을 키워드로 자동 분류 · 미분류 부위 15%·증상 12% · 전화·게시판·웹 등 모든 채널 포함 (ERP에는 접수 경로 구분이 없음)</dd>
-            <dt>단계별 이탈</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>주별 퍼널(월~일)에서 앞 단계 수 − 다음 단계 수 · 이탈률 = 이탈 ÷ 앞 단계 수 · 버튼 클릭 → 제품 선택 사이에는 로그인 화면 포함 · 고객 정보 입력과 신청 완료는 6월부터 같은 수로 집계 · 개선 전 = 9/28~10/25, 개선 후 = 11/2~ (10/26 주 제외)</dd>
+            <dt>단계별 이탈</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>주별 = AS 현황 시트 3번 탭(월~일), 월별·10/28 전후 = Looker 기간별 조회(11/19까지, 날짜로 정확히 나눔) · 이탈 = 앞 단계 수 − 다음 단계 수 · 이탈률 = 이탈 ÷ 앞 단계 수 · 버튼 클릭 → 제품 선택 사이에는 로그인 화면 포함 · 개선 전 = 직전 10/1~10/27 또는 전체 3/16~10/27, 개선 후 = 10/28~11/19 · 4~5월은 '신청 완료'가 '고객 정보 입력'보다 적게 잡힘</dd>
+            <dt>Looker vs ERP</dt><dd><span class="src src-looker lead" title="Looker Studio AS Funnel 스코어카드">Looker</span>웹 신청 완료·고객 정보 입력(월별 기간 조회)과 <span class="src src-erp lead" title="ERP 홈페이지 의뢰 건수">ERP</span>홈페이지 의뢰 건수(컨택센터 용역료 탭 'AS접수 (자사몰)')를 월별로 비교 · 신청 사유·제품은 같은 뜻끼리 묶어 3~10월 비중 비교 (웹 '기타'·ERP '미분류' 제외)</dd>
             <dt>참고</dt><dd>같은 'AS 신청'이라도 <span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>웹에서 신청 완료한 수와 <span class="src src-erp lead" title="ERP 홈페이지 의뢰 건수 (사용자 직접 입력)">ERP</span>홈페이지 의뢰로 접수된 수(컨택센터 용역료 탭 '자사몰 AS 접수')는 집계 기준이 달라 숫자가 다를 수 있음</dd>
             <dt>일별 전환율</dt><dd><span class="src src-looker lead" title="Looker Studio · SIDIZ Performance Dashboard › WARRANTY &amp; AS &amp; FAQ (웹 행동 로그)">Looker</span>Looker Studio 일별 표(3/16~) · 버튼 클릭률 = 버튼 클릭 ÷ 메인 조회, 신청 완료율 = 신청 완료 ÷ 메인 조회, 이지리페어 클릭률 = 정품등록 리스트 내 이지리페어 클릭 ÷ 버튼 클릭 (Looker Studio 일별) · 개선 전후 값은 기간 합계 기준 (개선 전 10/1~10/27, 개선 후 10/28~)</dd>
           </dl>
@@ -5293,6 +5363,12 @@ const DATA = {
       86.9
     ]
   },
+  "funnelPeriods": {
+    "source": "Looker Studio AS Funnel 스코어카드 · 기간별 조회 (2026-11-20 추출)",
+    "asOf": "11/19",
+    "months": {"keys":["M03","M04","M05","M06","M07","M08","M09","M10","M11"],"labels":["3월*","4월","5월","6월","7월","8월","9월","10월","11월*"],"ranges":["3/16~3/31","4/1~4/30","5/1~5/31","6/1~6/30","7/1~7/31","8/1~8/31","9/1~9/30","10/1~10/31","11/1~11/19"],"phase":["b","b","b","b","b","b","b","m","a"],"main":[2645,6013,6087,7193,8178,8013,6803,6339,3660],"click":[657,1577,1761,1795,2047,1974,1731,1701,1359],"pick":[608,1369,1350,1414,1657,1751,1457,1338,859],"sym":[395,885,843,913,1039,1146,921,818,547],"info":[315,787,779,849,927,1030,833,749,497],"done":[315,687,514,846,925,1030,832,749,496]},
+    "compare": {"before4":{"range":"10/1~10/27","days":27,"main":5659,"click":1470,"pick":1168,"sym":718,"info":655,"done":655},"beforeAll":{"range":"3/16~10/27","days":226,"main":50591,"click":13012,"pick":10774,"sym":6860,"info":6175,"done":5804},"after":{"range":"10/28~11/19","days":23,"main":4340,"click":1590,"pick":1029,"sym":647,"info":591,"done":590}}
+  },
   "yoyMonths": [
     "1월",
     "2월",
@@ -6562,7 +6638,8 @@ const ASR_SRC = {
   web: { color: '#6A4BA8', badge: `<span class="src src-looker" title="Looker Studio 'AS 신청 완료 현황' 표 · 고객이 웹에서 고른 값">Looker</span>` },
   erp: { color: null, badge: `<span class="src src-erp" title="ERP AS진행상태 확인 내보내기 · 조치요구내역 키워드 자동 분류">ERP</span>` },
 };
-function asrSrc() { return window.__asrSrc === 'erp' && DATA.asReason && DATA.asReason.erp ? 'erp' : 'web'; }
+ASR_SRC.cmp = { color: null, badge: ASR_SRC.web.badge + ASR_SRC.erp.badge };
+function asrSrc() { const s = window.__asrSrc; return (s === 'erp' || s === 'cmp') && DATA.asReason && DATA.asReason.erp ? s : 'web'; }
 function asrSrcUI(src) {
   document.querySelectorAll('.src-seg .seg-btn').forEach(b => b.classList.toggle('active', b.dataset.s === src));
   ['asr-tbl-srcb', 'asr-prod-srcb'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ASR_SRC[src].badge; });
@@ -6572,6 +6649,7 @@ function asrKeepWeb(el) { if (el && el.dataset.web == null) el.dataset.web = el.
 function renderAsrTable(dim) {
   const R = DATA.asReason, src = asrSrc(), X = src === 'erp' ? R.erp : R;
   asrSrcUI(src);
+  if (src === 'cmp') return renderAsrCompare(dim);
   const cats = dim === 'part' ? X.parts : X.issues, M = X.months, mm = M[dim];
   const tint = src === 'erp' ? COLORS.accent : ASR_SRC.web.color;
   const tb = document.getElementById('asr-tbl');
@@ -6613,6 +6691,7 @@ function renderAsProducts() {
   if (!R) return;
   const src = asrSrc(), X = src === 'erp' ? R.erp : R;
   asrSrcUI(src);
+  if (src === 'cmp') return renderAsProductsCompare();
   const keys = ['all'].concat(X.months.keys), labels = ['전체'].concat(X.months.labels);
   const key = keys.includes(window.__asrMonth) ? window.__asrMonth : 'all';
   const mb = document.getElementById('asr-month');
@@ -6639,6 +6718,80 @@ function renderAsProducts() {
     : `${lab} 신청 완료 ${P.total.toLocaleString()}건 기준 · 모델로 묶지 못한 소량·특판 제품 ${P.other.toLocaleString()}건(${pc(P.other, P.total)})은 순위에서 제외`;
 }
 
+// ---- 웹 신청(Looker) vs 실제 AS(ERP) — 같은 뜻끼리 묶어 월별 비중 비교 ----
+const ASR_MAP = {
+  part: { web: { '마감재 교체·관리': '마감재', '기타': null }, erp: { '미분류': null },
+    order: ['등판·틸팅', '좌판', '헤드레스트', '베이스·중심봉·레버', '팔걸이·암패드', '바퀴·글라이드', '마감재', '럼버서포트', '부품 구매·누락', '전장(충전·LED)'],
+    note: "부위 묶음: 마감재 교체·관리 → 마감재 · '부품 구매·누락'은 웹 선택지에만, '전장(충전·LED)'은 ERP 분류에만 있음" },
+  issue: { web: { '작동 불량': '작동·고정 불량', '고정 불량': '작동·고정 불량', '흔들림·한 쪽으로 기울어짐': '흔들림·기울어짐', '흔들림·양쪽 높이 다름': '흔들림·기울어짐',
+      '레버 높낮이 조절 불량': '높낮이 불량', '표면 불량(오염·찍힘 등)': '표면·오염', '오염 관리·세척': '표면·오염', '분리·교체': '분리·빠짐',
+      '조립 불량': '조립·누락', '부품 누락': '조립·누락', '(DIY)조립 요청': '조립·누락', '메쉬 교체': '구매·교체 요청', '가죽 교체': '구매·교체 요청',
+      '부품 구매': '구매·교체 요청', '커버 구매': '구매·교체 요청', '기타': null, '오배송': null, '포장 불량': null }, erp: { '미분류': null },
+    order: ['작동·고정 불량', '파손', '구매·교체 요청', '소음', '흔들림·기울어짐', '높낮이 불량', '표면·오염', '분리·빠짐', '조립·누락', '전장(충전·LED)'],
+    note: '증상 묶음: 작동 불량·고정 불량 → 작동·고정 불량 / 레버 높낮이 조절 불량 → 높낮이 불량 / 메쉬·가죽 교체·부품·커버 구매 → 구매·교체 요청 / 조립 불량·부품 누락·DIY 조립 → 조립·누락 / 분리·교체 → 분리·빠짐 / 오염 관리·세척 → 표면·오염' },
+};
+function asrCmp(dim) {
+  const R = DATA.asReason, E = R.erp, mp = ASR_MAP[dim];
+  const fold = (cats, row, m) => { const o = {}; cats.forEach((c, j) => { const k = c in m ? m[c] : c; if (k) o[k] = (o[k] || 0) + row[j]; }); return o; };
+  const wc = dim === 'part' ? R.parts : R.issues, ec = dim === 'part' ? E.parts : E.issues;
+  const keys = E.months.keys;
+  const web = keys.map(k => { const i = R.months.keys.indexOf(k); return i >= 0 ? fold(wc, R.months[dim][i], mp.web) : {}; });
+  const erp = E.months[dim].map(r => fold(ec, r, mp.erp));
+  const add = arr => arr.reduce((s, o) => { Object.entries(o).forEach(([k, v]) => { s[k] = (s[k] || 0) + v; }); return s; }, {});
+  web.push(add(web)); erp.push(add(erp));
+  const cats = mp.order.concat([...new Set([...web, ...erp].flatMap(o => Object.keys(o)))].filter(c => !mp.order.includes(c)));
+  return { labels: E.months.labels.concat(['전체']), cats, web, erp, note: mp.note };
+}
+function renderAsrCompare(dim) {
+  const X = asrCmp(dim), tb = document.getElementById('asr-tbl'), LK = ASR_SRC.web.color;
+  const tot = o => Object.values(o).reduce((a, b) => a + b, 0);
+  const wT = X.web.map(tot), eT = X.erp.map(tot);
+  const share = (o, k, T) => k in o && T ? o[k] / T * 100 : null;
+  const maxS = Math.max(...X.cats.flatMap(c => X.web.map((o, i) => share(o, c, wT[i]) || 0).concat(X.erp.map((o, i) => share(o, c, eT[i]) || 0))));
+  const ln = (cls, lab, v, col) => `<div class="cmp-l ${cls}"><span>${lab}</span><i style="width:${v == null ? 0 : Math.max(2, v / maxS * 22).toFixed(0)}px;background:${col}"></i><b>${v == null ? '—' : v.toFixed(1) + '%'}</b></div>`;
+  const allW = X.web[X.web.length - 1], allE = X.erp[X.erp.length - 1];
+  if (tb) tb.innerHTML = `<thead><tr><th style="text-align:left">${dim === 'part' ? '부위' : '증상'}</th>${X.labels.map(l => `<th>${l}</th>`).join('')}</tr></thead><tbody>`
+    + X.cats.map(c => `<tr><td class="asr-hd">${c}${!(c in allW) ? '<small>웹 선택지에 없음</small>' : !(c in allE) ? '<small>ERP 분류에 없음</small>' : ''}</td>`
+      + X.web.map((o, i) => {
+        const w = share(o, c, wT[i]), e = share(X.erp[i], c, eT[i]), d = w != null && e != null ? e - w : null;
+        const bg = d != null && Math.abs(d) >= 3 ? ` style="background:${hexToRgba(d > 0 ? COLORS.accent : LK, Math.min(0.24, Math.abs(d) / 40).toFixed(3))}"` : '';
+        return `<td class="cmp-c"${bg}${d != null ? ` title="ERP − 웹 ${d >= 0 ? '+' : ''}${d.toFixed(1)}%p"` : ''}>${ln('w', '웹', w, LK)}${ln('e', 'ERP', e, COLORS.accent)}</td>`;
+      }).join('') + '</tr>').join('')
+    + `<tr><td class="asr-hd">비교 대상 건수</td>${wT.map((w, i) => `<td class="cmp-c"><div class="cmp-l w"><span>웹</span><b>${w.toLocaleString()}</b></div><div class="cmp-l e"><span>ERP</span><b>${eT[i].toLocaleString()}</b></div></td>`).join('')}</tr></tbody>`;
+  const sub = document.getElementById('asr-tbl-sub');
+  if (sub) sub.textContent = `${dim === 'part' ? '부위' : '증상'} 기준(위 버튼과 연동) · 같은 뜻끼리 묶어 비중 비교 · 웹 '기타·오배송·포장 불량'과 ERP '미분류'는 빼고 다시 100%로 계산 · 칸 색 = 차이 3%p 이상 (보라 = 웹이 높음, 파랑 = ERP가 높음)`;
+  const foot = asrKeepWeb(document.getElementById('asr-tbl-foot'));
+  if (foot) foot.innerHTML = `${X.labels[0]}~${X.labels[X.labels.length - 2]} 비교 (11월 ERP는 월말 추가) · 웹은 신청일, ERP는 최종조치일 기준 · ERP는 전화·게시판·웹 등 모든 채널 · ${X.note}`;
+}
+function renderAsProductsCompare() {
+  const R = DATA.asReason, E = R.erp, LK = ASR_SRC.web.color;
+  const keys = ['all'].concat(E.months.keys), labels = ['전체'].concat(E.months.labels);
+  const key = keys.includes(window.__asrMonth) ? window.__asrMonth : 'all';
+  const mb = document.getElementById('asr-month');
+  if (mb) mb.innerHTML = keys.map((k, i) => `<button class="seg-btn${k === key ? ' active' : ''}" data-m="${k}">${labels[i]}</button>`).join('');
+  const W = R.products[key], X = E.products[key], tb = document.getElementById('asr-prod');
+  if (!W || !X || !tb) return;
+  const wD = W.total - W.other, eD = X.total - X.other;
+  const wm = new Map(W.top.map((r, i) => [r[0], [r[1], i + 1]])), em = new Map(X.top.map((r, i) => [r[0], [r[1], i + 1]]));
+  const models = X.top.map(r => r[0]).concat(W.top.map(r => r[0]).filter(m => !em.has(m)));
+  const rows = models.map(m => { const w = wm.get(m), e = em.get(m); return { m, w, e, ws: w ? w[0] / wD * 100 : null, es: e ? e[0] / eD * 100 : null }; });
+  const maxD = Math.max(3, ...rows.filter(r => r.ws != null && r.es != null).map(r => Math.abs(r.es - r.ws)));
+  const pc = v => v.toFixed(1) + '%';
+  tb.innerHTML = '<thead><tr><th style="text-align:left">#</th><th style="text-align:left">모델</th><th>웹 신청</th><th>웹 순위</th><th>ERP AS</th><th>ERP 순위</th><th style="text-align:center">비중 차이 (ERP − 웹)</th></tr></thead><tbody>'
+    + rows.map((r, i) => {
+      const d = r.ws != null && r.es != null ? r.es - r.ws : null;
+      const dv = d == null ? '<td class="cmp-dv" style="color:var(--ink-3)">한쪽 TOP 10 밖</td>'
+        : `<td class="cmp-dv"><span class="dv"><i class="${d > 0 ? 'e' : 'w'}" style="width:${(Math.abs(d) / maxD * 50).toFixed(1)}%"></i></span><b style="color:${d > 0 ? 'var(--accent-ink)' : '#5E3D8A'}">${d >= 0 ? '+' : '−'}${Math.abs(d).toFixed(1)}%p</b></td>`;
+      return `<tr><td class="asr-rank">${i + 1}</td><td style="text-align:left">${r.m}</td>`
+        + `<td>${r.w ? `${r.w[0].toLocaleString()}건<span class="asr-sub">${pc(r.ws)}</span>` : '—'}</td><td>${r.w ? r.w[1] + '위' : '—'}</td>`
+        + `<td>${r.e ? `${r.e[0].toLocaleString()}건<span class="asr-sub">${pc(r.es)}</span>` : '—'}</td><td>${r.e ? r.e[1] + '위' : '—'}</td>${dv}</tr>`;
+    }).join('') + `<tr><td></td><td style="text-align:left">모델 확인 건수</td><td>${wD.toLocaleString()}건</td><td></td><td>${eD.toLocaleString()}건</td><td></td><td></td></tr></tbody>`;
+  const sub = asrKeepWeb(document.getElementById('asr-prod-sub'));
+  if (sub) sub.innerHTML = '같은 모델 묶음으로 웹 신청(Looker)과 실제 AS(ERP)의 비중 비교 · 비중 = 모델을 찾은 건 대비 · 막대 = ERP − 웹 차이 (파랑 = ERP가 높음, 보라 = 웹이 높음) · 두 TOP 10을 합친 목록 (ERP 순)';
+  const foot = document.getElementById('asr-prod-foot');
+  if (foot) foot.textContent = `${labels[keys.indexOf(key)]} 비교 · 웹은 신청일, ERP는 최종조치일 기준` + (key === 'all' ? ' · 웹 전체는 11/19까지, ERP 전체는 10월까지' : '') + " · 한쪽 TOP 10에 없으면 '—'";
+}
+
 document.addEventListener('click', e => {
   const s = e.target.closest('.src-seg .seg-btn');
   if (s) { window.__asrSrc = s.dataset.s; renderAsrTable(window.__asrDim || 'part'); renderAsProducts(); return; }
@@ -6648,83 +6801,221 @@ document.addEventListener('click', e => {
   if (m) { window.__asrMonth = m.dataset.m; renderAsProducts(); }
 });
 
-// ---- AS 신청 단계별 이탈 (주별 퍼널) ----
-function renderFunnelDrop() {
-  const F = DATA.funnel, box = document.getElementById('fd-funnel');
-  if (!F || !box) return;
-  const n = F.periods.length;
-  const md = s => [...String(s).matchAll(/(\d{1,2})\.\s*(\d{1,2})/g)].map(m => `${+m[1]}/${+m[2]}`);
-  const ev = F.periods.findIndex(p => md(p)[0] === '10/26');   // 10/28 개선이 들어간 주 (전후 섞임 → 비교에서 제외)
-  const R = { last: [n - 1, n - 1], after: [ev + 1, n - 1], before: [ev - 4, ev - 1] };
-  const mode = R[window.__fdMode] ? window.__fdMode : 'last';
-  document.querySelectorAll('#fd-mode .seg-btn').forEach(b => b.classList.toggle('active', b.dataset.m === mode));
-  const KEYS = ['main', 'click', 'pick', 'sym', 'info', 'done'];
-  const agg = ([s, e]) => Object.fromEntries(KEYS.map(k => [k, F[k].slice(s, e + 1).reduce((a, b) => a + b, 0)]).concat([['weeks', e - s + 1]]));
-  const cur = agg(R[mode]), base = agg(R.before), aft = agg(R.after);
-  const range = ([s, e]) => `${md(F.periods[s])[0]}~${md(F.periods[e]).slice(-1)[0]}` + (e > s ? ` · ${e - s + 1}주 합계` : '');
-  const fmt = v => Math.round(v).toLocaleString();
-  const STEPS = [
-    { k: 'click', name: 'AS 신청 버튼 클릭', sub: '메인 조회 대비 클릭률', color: '#0033CC' },
-    { k: 'pick',  name: '제품 선택',         sub: '로그인 포함',            color: '#1A4FD8' },
-    { k: 'sym',   name: '증상 입력',         sub: '부위·증상·사진',         color: '#3D72D7' },
-    { k: 'info',  name: '고객 정보 · 신청 완료', sub: '두 값이 같게 집계됨', color: '#6B9FE8' },
-  ];
-  const rateOf = (o, i) => i === 0 ? o.click / o.main * 100 : (o[STEPS[i - 1].k] - o[STEPS[i].k]) / o[STEPS[i - 1].k] * 100;
-  const series = i => F.periods.map((_, w) => {
-    const o = Object.fromEntries(KEYS.map(k => [k, F[k][w]]));
-    const den = i === 0 ? o.main : o[STEPS[i - 1].k];
-    return den ? rateOf(o, i) : null;
+// ---- AS 신청 단계별 이탈 (주별·월별·10/28 전후) ----
+const FD_KEYS = ['main', 'click', 'pick', 'sym', 'info', 'done'];
+const FD_STEPS = [
+  { k: 'click', name: 'AS 신청 버튼 클릭', sub: '메인 조회 대비 클릭률', color: '#0033CC' },
+  { k: 'pick',  name: '제품 선택',         sub: '로그인 포함',            color: '#1A4FD8' },
+  { k: 'sym',   name: '증상 입력',         sub: '부위·증상·사진',         color: '#3D72D7' },
+  { k: 'info',  name: '고객 정보 입력',     sub: '이 기간은 완료와 수가 다름', color: '#6B9FE8' },
+  { k: 'done',  name: '신청 완료',         sub: '완료 이벤트가 덜 잡힌 기간', color: '#8FB4F0' },
+];
+const FD_TAG = { b: '<span class="fd-tag b">개선 전</span>', a: '<span class="fd-tag a">개선 후</span>', m: '<span class="fd-tag m">10/28 전후 섞임</span>' };
+function fdLists() {
+  const F = DATA.funnel, M = DATA.funnelPeriods.months;
+  const md = s => [...String(s).matchAll(/(\d{1,2})\.\s*(\d{1,2})/g)].map(m => [+m[1], +m[2]]);
+  const code = d => d[0] * 100 + d[1], EV = 1028;
+  const weeks = F.periods.map((p, i) => {
+    const d = md(p), s = d[0], e = d[d.length - 1];
+    return Object.assign({ key: 'w' + i, label: `${s[0]}/${s[1]}~${e[0]}/${e[1]}`, ph: code(e) < EV ? 'b' : code(s) >= EV ? 'a' : 'm' },
+      Object.fromEntries(FD_KEYS.map(k => [k, F[k][i]])));
   });
-  const spark = (vals, color, band) => {
-    const W = 220, H = 40, max = 50, step = W / (vals.length - 1);
-    const x = i => i * step, y = v => H - Math.min(v, max) / max * H;
+  const months = M.keys.map((k, i) => Object.assign({ key: k, label: M.labels[i], range: M.ranges[i], ph: M.phase[i] },
+    Object.fromEntries(FD_KEYS.map(x => [x, M[x][i]]))));
+  return { weeks, months };
+}
+function renderFunnelDrop() {
+  const P = DATA.funnelPeriods, box = document.getElementById('fd-funnel');
+  if (!DATA.funnel || !P || !box) return;
+  const g = ['week', 'month', 'cmp'].includes(window.__fdG) ? window.__fdG : 'week';
+  document.querySelectorAll('#fd-gran .seg-btn').forEach(b => b.classList.toggle('active', b.dataset.g === g));
+  const { weeks, months } = fdLists();
+  const sel = window.__fdSel || (window.__fdSel = {});
+  const C = P.compare, base = window.__fdBase === 'all' ? 'all' : 'b4';
+  const list = g === 'month' ? months : weeks;
+  let cur, prev, idx = -1;
+  if (g === 'cmp') {
+    cur = Object.assign({ label: '개선 후', ph: 'a' }, C.after);
+    prev = Object.assign({ label: base === 'all' ? '개선 전 전체' : '개선 전 직전', ph: 'b' }, base === 'all' ? C.beforeAll : C.before4);
+  } else {
+    idx = list.findIndex(p => p.key === sel[g]); if (idx < 0) idx = list.length - 1;
+    cur = list[idx]; prev = idx > 0 ? list[idx - 1] : null;
+  }
+  const fmt = v => Math.round(v).toLocaleString();
+  const split = [cur].concat(g === 'cmp' ? [prev] : []).some(o => Math.abs(o.info - o.done) > Math.max(2, o.info * 0.02));
+  const steps = split ? FD_STEPS : FD_STEPS.slice(0, 3).concat([Object.assign({}, FD_STEPS[3], { name: '고객 정보 · 신청 완료', sub: '두 값이 같게 집계됨' })]);
+  const rateOf = (o, i) => i === 0 ? o.click / o.main * 100 : (o[steps[i - 1].k] - o[steps[i].k]) / o[steps[i - 1].k] * 100;
+  const unit = g === 'week' ? '전주' : g === 'month' ? '전월' : '개선 전';
+
+  // 기간 선택
+  const pick = document.getElementById('fd-pick');
+  if (pick) pick.innerHTML = g === 'week'
+    ? `<span class="fd-lab">주 선택</span><button class="fd-nav" type="button" data-nav="-1" aria-label="이전 주">‹</button><select id="fd-week" aria-label="주 선택">${weeks.map(w => `<option value="${w.key}"${w.key === cur.key ? ' selected' : ''}>${w.label}${w.ph === 'm' ? ' · 전후 섞임' : w.ph === 'a' ? ' · 개선 후' : ''}</option>`).join('')}</select><button class="fd-nav" type="button" data-nav="1" aria-label="다음 주">›</button>`
+    : g === 'month'
+      ? `<span class="fd-lab">월 선택</span>${months.map(m => `<button class="seg-btn${m.key === cur.key ? ' active' : ''}" type="button" data-k="${m.key}">${m.label}</button>`).join('')}`
+      : `<span class="fd-lab">개선 전 기준</span><button class="seg-btn${base === 'b4' ? ' active' : ''}" type="button" data-base="b4">직전 ${C.before4.range} · ${C.before4.days}일</button><button class="seg-btn${base === 'all' ? ' active' : ''}" type="button" data-base="all">개선 전 전체 ${C.beforeAll.range} · ${C.beforeAll.days}일</button><span class="fd-lab" style="margin-left:10px">개선 후 ${C.after.range} · ${C.after.days}일</span>`;
+
+  // 요약 줄
+  const line = (o, lab) => `<span class="fd-period">${lab}</span>메인 조회 <b>${fmt(o.main)}</b><span class="fd-arr">→</span>버튼 클릭 <b>${fmt(o.click)}</b> <span class="fd-dim">(${(o.click / o.main * 100).toFixed(1)}%)</span><span class="fd-arr">→</span>신청 완료 <b>${fmt(o.done)}</b><span class="fd-sep"></span>클릭 대비 완료 <b>${(o.done / o.click * 100).toFixed(1)}%</b>`;
+  const top = document.getElementById('fd-top');
+  if (top) top.innerHTML = g === 'cmp'
+    ? `<div class="fd-top-row">${line(prev, `${prev.label} ${prev.range}`)}</div><div class="fd-top-row">${line(cur, `개선 후 ${cur.range}`)}</div>`
+    : `<div class="fd-top-row">${line(cur, cur.label + (cur.range ? ` · ${cur.range}` : ''))}${FD_TAG[cur.ph]}</div>`;
+  const hd = (id, s) => { const el = document.getElementById(id); if (el) el.textContent = s; };
+  hd('fd-h-bar', g === 'cmp' ? '남은 수 (버튼 클릭 = 100%) · 위 = 개선 전, 아래 = 개선 후 · 빗금 = 그 화면에서 이탈' : '남은 수 (버튼 클릭 = 100%) · 빗금 = 그 화면에서 이탈');
+  hd('fd-h-rate', g === 'cmp' ? '이탈률 (개선 후 · 개선 전 대비)' : `이탈률 (${unit} 대비)`);
+  hd('fd-h-spark', g === 'month' ? '월별 추이 · 점선 = 10월(10/28 개선)' : g === 'cmp' ? '주별 추이 · 음영 = 개선 후' : '주별 추이 · 점선 = 10/28 개선 주');
+
+  // 단계 막대 + 추이
+  const sList = g === 'month' ? months : weeks;
+  const evI = sList.findIndex(o => o.ph === 'm');
+  const band = g === 'cmp' ? [evI + 1, sList.length - 1] : [idx, idx];
+  const series = i => sList.map(o => { const den = i === 0 ? o.main : o[steps[i - 1].k]; return den ? rateOf(o, i) : null; });
+  const spark = (vals, color) => {
+    const W = 220, H = 40, max = 50, n = vals.length, step = W / Math.max(1, n - 1);
+    const x = i => i * step, y = v => H - Math.min(Math.max(v, 0), max) / max * H;
     const pts = vals.map((v, i) => v == null ? null : [x(i), y(v)]);
     const d = pts.filter(Boolean).map((p, k) => (k ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
-    const last = pts[pts.length - 1];
-    const bx = x(band[0]) - step / 2, bw = (band[1] - band[0] + 1) * step;
-    const hits = pts.map((p, i) => p ? `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4" fill="transparent"><title>${md(F.periods[i])[0]} 주 ${vals[i].toFixed(1)}%</title></circle>` : '').join('');
-    return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="주별 추이">
-      <rect x="${bx.toFixed(1)}" y="0" width="${bw.toFixed(1)}" height="${H}" rx="3" fill="${color}" opacity=".1"/>
-      <line x1="${x(ev).toFixed(1)}" x2="${x(ev).toFixed(1)}" y1="0" y2="${H}" stroke="currentColor" stroke-dasharray="3 3" opacity=".6"/>
-      <path d="${d}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
-      <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3.2" fill="${color}" stroke="var(--surface)" stroke-width="1.5"/>${hits}</svg>`;
+    const hp = pts[band[1]] || pts[pts.length - 1];
+    const bx = Math.max(0, x(band[0]) - step / 2), bw = Math.min(W, x(band[1]) + step / 2) - bx;
+    const dots = n <= 12 ? pts.map(p => p ? `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="1.8" fill="${color}"/>` : '').join('') : '';
+    const hits = pts.map((p, i) => p ? `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="5" fill="transparent"><title>${sList[i].label} ${vals[i].toFixed(1)}%</title></circle>` : '').join('');
+    return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="추이">`
+      + `<rect x="${bx.toFixed(1)}" y="0" width="${bw.toFixed(1)}" height="${H}" rx="3" fill="${color}" opacity=".1"/>`
+      + (evI >= 0 ? `<line x1="${x(evI).toFixed(1)}" x2="${x(evI).toFixed(1)}" y1="0" y2="${H}" stroke="currentColor" stroke-dasharray="3 3" opacity=".6"/>` : '')
+      + `<path d="${d}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>${dots}`
+      + (hp ? `<circle cx="${hp[0].toFixed(1)}" cy="${hp[1].toFixed(1)}" r="3.4" fill="${color}" stroke="var(--surface)" stroke-width="1.5"/>` : '') + hits + '</svg>';
   };
-  const rates = STEPS.map((_, i) => rateOf(cur, i));
-  const maxI = [1, 2, 3].reduce((m, i) => rates[i] > rates[m] ? i : m, 1);
-  box.innerHTML = STEPS.map((s, i) => {
-    const w = cur[s.k] / cur.click * 100, pw = i ? cur[STEPS[i - 1].k] / cur.click * 100 : 100;
-    const lost = i ? cur[STEPS[i - 1].k] - cur[s.k] : 0, r = rates[i], b = rateOf(base, i), dd = r - b;
+  const track = (o, i, color, tag) => {
+    const w = o[steps[i].k] / o.click * 100, pw = i ? o[steps[i - 1].k] / o.click * 100 : 100;
+    const lost = i ? o[steps[i - 1].k] - o[steps[i].k] : 0, lossW = pw - w, out = lossW < 9;
+    return `<div class="fd-bar${i ? '' : ' full'}" style="width:${Math.min(100, w)}%;background:${color}">${tag ? `<em>${tag}</em>` : ''}${fmt(o[steps[i].k])}</div>`
+      + (i && lost > 0 ? `<div class="fd-loss" style="left:${w}%;width:${lossW}%"></div><div class="fd-loss-t" style="left:${out ? pw : w}%;padding-left:${out ? 6 : 8}px">−${fmt(lost)}</div>` : '');
+  };
+  const rates = steps.map((_, i) => rateOf(cur, i));
+  const maxI = steps.map((_, i) => i).slice(1).reduce((m, i) => rates[i] > rates[m] ? i : m, 1);
+  box.innerHTML = steps.map((s, i) => {
+    const r = rates[i], pr = prev ? rateOf(prev, i) : null, dd = pr == null ? null : r - pr;
     const good = i === 0 ? dd >= 0 : dd <= 0;
-    const lossW = pw - w, outside = lossW < 9;
-    const loss = i && lost > 0 ? `<div class="fd-loss" style="left:${w}%;width:${lossW}%"></div>
-      <div class="fd-loss-t" style="left:${outside ? pw : w}%;padding-left:${outside ? 6 : 8}px">−${fmt(lost)}</div>` : '';
-    const delta = mode === 'before' ? '<div class="fd-delta">비교 기준 기간</div>'
-      : `<div class="fd-delta"><b style="color:var(${good ? '--pos' : '--neg'})">${dd >= 0 ? '▲' : '▼'}${Math.abs(dd).toFixed(1)}%p</b> · 개선 전 ${b.toFixed(1)}%</div>`;
+    const delta = dd == null ? '<div class="fd-delta">비교할 앞 기간 없음</div>'
+      : `<div class="fd-delta"><b style="color:var(${good ? '--pos' : '--neg'})">${dd >= 0 ? '▲' : '▼'}${Math.abs(dd).toFixed(1)}%p</b> · ${unit} ${pr.toFixed(1)}%</div>`;
+    const tr = g === 'cmp' ? `<div class="fd-sub">${track(prev, i, '#9C968A', '전')}</div><div class="fd-sub">${track(cur, i, s.color, '후')}</div>` : track(cur, i, s.color, '');
     return `<div class="fd-row${i && i === maxI ? ' is-max' : ''}">
       <div class="fd-lbl"><b>${s.name}</b><small>${s.sub}</small></div>
-      <div class="fd-track"><div class="fd-bar${i ? '' : ' full'}" style="width:${w}%;background:${s.color}">${fmt(cur[s.k])}</div>${loss}</div>
+      <div class="fd-track${g === 'cmp' ? ' dual' : ''}">${tr}</div>
       <div><div class="fd-rate">${i ? '이탈' : '클릭률'}<b>${r.toFixed(1)}%</b></div>${delta}</div>
-      <div class="fd-spark">${spark(series(i), s.color, R[mode])}</div>
+      <div class="fd-spark">${spark(series(i), s.color)}</div>
     </div>`;
   }).join('');
-  document.getElementById('fd-top').innerHTML = `<span class="fd-period">${range(R[mode])}</span>
-    메인 조회 <b>${fmt(cur.main)}</b><span class="fd-arr">→</span>버튼 클릭 <b>${fmt(cur.click)}</b><span class="fd-arr">→</span>신청 완료 <b>${fmt(cur.done)}</b>
-    <span class="fd-sep"></span>클릭 대비 완료 <b>${(cur.done / cur.click * 100).toFixed(1)}%</b>${mode === 'before' ? '' : ` <span style="color:var(--ink-3)">(개선 전 ${(base.done / base.click * 100).toFixed(1)}%)</span>`}`;
-  // 인사이트 (개선 전 4주 vs 개선 후, 주 평균)
-  const wk = (o, k) => o[k] / o.weeks, g = (a, b) => (a / b - 1) * 100;
-  const sg = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(0) + '%';
-  const cb = wk(base, 'click'), ca = wk(aft, 'click'), pb = wk(base, 'pick'), pa = wk(aft, 'pick');
-  const story = g(ca, cb) >= 10 && g(pa, pb) < g(ca, cb) / 2 ? ' → 늘어난 클릭 대부분이 <b>로그인·제품 선택</b>에서 빠짐' : '';
-  const hi = [1, 2, 3].reduce((m, i) => rateOf(base, i) > rateOf(base, m) ? i : m, 1);
-  const hb = rateOf(base, hi), ha = rateOf(aft, hi);
-  document.getElementById('fd-insight').innerHTML = `
-    <div class="fd-ins"><span class="k">개선 후 클릭은 늘었지만</span>버튼 클릭 주 평균 <b>${fmt(cb)} → ${fmt(ca)}</b> (${sg(g(ca, cb))}) · 제품 선택까지 간 수 <b>${fmt(pb)} → ${fmt(pa)}</b> (${sg(g(pa, pb))})${story}</div>
-    <div class="fd-ins"><span class="k">꾸준히 가장 많이 빠지는 화면</span><b>${STEPS[hi].name}</b> — 개선 전 ${hb.toFixed(1)}% · 개선 후 ${ha.toFixed(1)}%${Math.abs(ha - hb) < 3 ? ' (절차 개선 전후 비슷)' : ''} · 증상 선택지 개선 효과를 볼 기준</div>`;
+
+  // 기간별 표
+  const tbl = document.getElementById('fd-tbl');
+  const rowsAll = g === 'cmp'
+    ? [Object.assign({ label: '개선 전 전체', ph: 'b' }, C.beforeAll), Object.assign({ label: '개선 전 직전', ph: 'b' }, C.before4), Object.assign({ label: '개선 후', ph: 'a' }, C.after)]
+    : list;
+  const rowsT = g === 'week' && !window.__fdAll ? rowsAll.slice(-12) : rowsAll;
+  const COLS = [
+    { h: '메인 조회', v: o => fmt(o.main) },
+    { h: '버튼 클릭률', r: o => o.click / o.main * 100, up: true },
+    { h: '로그인·제품 선택 이탈', r: o => (o.click - o.pick) / o.click * 100 },
+    { h: '증상 입력 이탈', r: o => (o.pick - o.sym) / o.pick * 100 },
+    { h: '고객 정보 이탈', r: o => (o.sym - o.info) / o.sym * 100 },
+    { h: '클릭 대비 완료', r: o => o.done / o.click * 100, up: true },
+  ];
+  const rng = COLS.map(c => c.r ? [Math.min(...rowsAll.map(c.r)), Math.max(...rowsAll.map(c.r))] : null);
+  const cellT = (c, j, o) => {
+    if (!c.r) return `<td>${c.v(o)}</td>`;
+    const v = c.r(o), [lo, hi] = rng[j], s = hi > lo ? (v - lo) / (hi - lo) : 0;
+    return `<td style="background:${hexToRgba(c.up ? COLORS.pos : COLORS.neg, (s * 0.2).toFixed(3))}">${v.toFixed(1)}%</td>`;
+  };
+  let evDone = false;
+  if (tbl) tbl.innerHTML = `<thead><tr><th>${g === 'week' ? '주' : g === 'month' ? '월' : '기간'}</th>${COLS.map(c => `<th>${c.h}</th>`).join('')}</tr></thead><tbody>`
+    + rowsT.map(o => {
+      let pre = '';
+      if (g !== 'cmp' && !evDone && o.ph !== 'b') { evDone = true; pre = `<tr class="fd-ev"><td colspan="${COLS.length + 1}">▼ 10/28 신청 절차 개선 (CTA 상단 추가 · 6→4단계)</td></tr>`; }
+      const lab = o.label + (g === 'month' ? `<span class="fd-rng">${o.range}</span>` : g === 'cmp' ? `<span class="fd-rng">${o.range} · ${o.days}일</span>` : '') + FD_TAG[o.ph];
+      const isSel = g !== 'cmp' && o.key === cur.key;
+      return pre + `<tr${o.key ? ` data-k="${o.key}"` : ''}${isSel ? ' class="sel"' : ''}><td>${lab}</td>${COLS.map((c, j) => cellT(c, j, o)).join('')}</tr>`;
+    }).join('') + '</tbody>';
+  const tt = document.getElementById('fd-tbl-title');
+  if (tt) tt.textContent = g === 'week' ? `기간별 이탈률 — 주별 (${window.__fdAll ? `전체 ${rowsAll.length}주` : '최근 12주'}) · 줄을 누르면 위 막대가 바뀜`
+    : g === 'month' ? '기간별 이탈률 — 월별 · 줄을 누르면 위 막대가 바뀜' : '기간별 이탈률 — 10/28 전·후 (날짜로 정확히 나눔)';
+  const more = document.getElementById('fd-more');
+  if (more) { more.style.display = g === 'week' ? '' : 'none'; more.textContent = window.__fdAll ? '최근 12주만' : `전체 ${rowsAll.length}주 보기`; }
+
+  // 인사이트 (직전 vs 개선 후 하루 평균 · 개선 전 전체 기준 최다 이탈 화면)
+  const B4 = C.before4, AF = C.after, BA = C.beforeAll;
+  const per = (o, k) => o[k] / o.days, gr = (x, y) => (x / y - 1) * 100, sg = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(0) + '%';
+  const cb = per(B4, 'click'), ca = per(AF, 'click'), pb = per(B4, 'pick'), pa = per(AF, 'pick');
+  const story = gr(ca, cb) >= 10 && gr(pa, pb) < gr(ca, cb) / 2 ? ' → 늘어난 클릭 대부분이 <b>로그인·제품 선택</b>에서 빠짐' : '';
+  const S4 = FD_STEPS.slice(0, 4), dr = (o, i) => (o[S4[i - 1].k] - o[S4[i].k]) / o[S4[i - 1].k] * 100;
+  const hi = [1, 2, 3].reduce((m, i) => dr(BA, i) > dr(BA, m) ? i : m, 1);
+  const ins = document.getElementById('fd-insight');
+  if (ins) ins.innerHTML = `
+    <div class="fd-ins"><span class="k">개선 후 클릭은 늘었지만 (하루 평균 · ${B4.range} vs ${AF.range})</span>버튼 클릭 <b>${cb.toFixed(0)} → ${ca.toFixed(0)}건</b> (${sg(gr(ca, cb))}) · 제품 선택까지 간 수 <b>${pb.toFixed(0)} → ${pa.toFixed(0)}건</b> (${sg(gr(pa, pb))})${story}</div>
+    <div class="fd-ins"><span class="k">꾸준히 가장 많이 빠지는 화면</span><b>${S4[hi].name}</b> — 개선 전 전체 ${dr(BA, hi).toFixed(1)}% · 직전 ${dr(B4, hi).toFixed(1)}% · 개선 후 ${dr(AF, hi).toFixed(1)}% · 증상 선택지 개선 효과를 볼 기준</div>`;
+  const ft = document.getElementById('fd-foot');
+  if (ft) ft.textContent = `주별 = AS 현황 시트 3번 탭(월~일) · 월별·10/28 전후 = Looker 기간별 조회(${P.asOf}까지, 날짜로 정확히 나눔) · 3월은 3/16 개설일부터, 11월은 ${P.asOf}까지 · 4~5월은 '신청 완료'가 '고객 정보 입력'보다 적게 잡혀 두 단계를 나눠 보여 줌`;
 }
 document.addEventListener('click', e => {
-  const b = e.target.closest('#fd-mode .seg-btn');
-  if (b) { window.__fdMode = b.dataset.m; renderFunnelDrop(); }
+  const gb = e.target.closest('#fd-gran .seg-btn');
+  if (gb) { window.__fdG = gb.dataset.g; renderFunnelDrop(); return; }
+  const mb = e.target.closest('#fd-pick .seg-btn[data-k]');
+  if (mb) { (window.__fdSel = window.__fdSel || {}).month = mb.dataset.k; renderFunnelDrop(); return; }
+  const bb = e.target.closest('#fd-pick .seg-btn[data-base]');
+  if (bb) { window.__fdBase = bb.dataset.base; renderFunnelDrop(); return; }
+  const nb = e.target.closest('#fd-pick .fd-nav');
+  if (nb) {
+    const n = DATA.funnel.periods.length, s = window.__fdSel = window.__fdSel || {};
+    const i = s.week ? +s.week.slice(1) : n - 1;
+    s.week = 'w' + Math.min(n - 1, Math.max(0, i + +nb.dataset.nav)); renderFunnelDrop(); return;
+  }
+  const tr = e.target.closest('#fd-tbl tr[data-k]');
+  if (tr) { (window.__fdSel = window.__fdSel || {})[window.__fdG === 'month' ? 'month' : 'week'] = tr.dataset.k; renderFunnelDrop(); return; }
+  if (e.target.closest('#fd-more')) { window.__fdAll = !window.__fdAll; renderFunnelDrop(); }
 });
+document.addEventListener('change', e => {
+  if (e.target && e.target.id === 'fd-week') { (window.__fdSel = window.__fdSel || {}).week = e.target.value; renderFunnelDrop(); }
+});
+
+// ---- 웹 신청 건수: Looker vs ERP 홈페이지 의뢰 (월별) ----
+function renderCmpCount() {
+  const P = DATA.funnelPeriods, CD = DATA.contactDetail, tb = document.getElementById('cmp-cnt-tbl');
+  if (!P || !CD || !tb) return;
+  const row = CD.rows.find(r => /자사몰\)/.test(r.name));
+  if (!row) return;
+  const M = P.months, n = M.keys.length, LK = '#6A4BA8', LK2 = '#B9A6DE';
+  const erp = M.keys.map(k => { const i = CD.months.indexOf(`26.${parseInt(k.slice(1), 10)}월`); return i >= 0 && row.counts[i] != null ? row.counts[i] : null; });
+  if (CHARTS.c_cmp_cnt) { try { CHARTS.c_cmp_cnt.destroy(); } catch (e) {} }
+  makeMultiBar('c_cmp_cnt', [
+    { label: 'Looker 신청 완료', data: M.done, color: LK },
+    { label: 'Looker 고객 정보 입력', data: M.info, color: LK2 },
+    { label: 'ERP 홈페이지 의뢰', data: erp, color: COLORS.accent },
+  ], M.labels);
+  const both = erp.map(v => v != null);
+  const sum = arr => arr.reduce((s, v, i) => s + (both[i] ? v : 0), 0);
+  const tot = { done: sum(M.done), info: sum(M.info), erp: sum(erp.map(v => v || 0)) };
+  const pct = (x, y) => y ? x / y * 100 : null;
+  const rc = v => v == null ? '<td>—</td>' : `<td class="${Math.abs(v - 100) <= 5 ? 'ok' : 'gap'}">${v.toFixed(1)}%</td>`;
+  const first = both.indexOf(true), last = both.lastIndexOf(true);
+  const span = `${M.labels[first].replace('*', '')}~${M.labels[last].replace('*', '')}`;
+  const num = arr => arr.map(v => `<td>${v == null ? '—' : v.toLocaleString()}</td>`).join('');
+  tb.innerHTML = `<thead><tr><th>구분</th>${M.labels.map(l => `<th>${l}</th>`).join('')}<th>${span} 합계</th></tr></thead><tbody>`
+    + `<tr><td><i class="cc-dot" style="background:${LK}"></i>Looker 신청 완료</td>${num(M.done)}<td>${tot.done.toLocaleString()}</td></tr>`
+    + `<tr><td><i class="cc-dot" style="background:${LK2}"></i>Looker 고객 정보 입력</td>${num(M.info)}<td>${tot.info.toLocaleString()}</td></tr>`
+    + `<tr><td><i class="cc-dot" style="background:${COLORS.accent}"></i>ERP 홈페이지 의뢰</td>${num(erp)}<td>${tot.erp.toLocaleString()}</td></tr>`
+    + `<tr><td>고객 정보 입력 ÷ ERP</td>${M.info.map((v, i) => rc(pct(v, erp[i]))).join('')}${rc(pct(tot.info, tot.erp))}</tr>`
+    + `<tr><td>신청 완료 ÷ ERP</td>${M.done.map((v, i) => rc(pct(v, erp[i]))).join('')}${rc(pct(tot.done, tot.erp))}</tr></tbody>`;
+  const from = M.keys.indexOf('M06');
+  const ok = erp.map((v, i) => i).filter(i => i >= from && erp[i] != null).map(i => M.info[i] / erp[i] * 100);
+  const early = ['M04', 'M05'].map(k => M.keys.indexOf(k)).filter(i => i >= 0 && erp[i]).map(i => 100 - M.done[i] / erp[i] * 100);
+  const ft = document.getElementById('cmp-cnt-foot');
+  if (ft) ft.innerHTML = `ERP 홈페이지 의뢰 = 컨택센터 용역료 탭 'AS접수 (자사몰)'과 같은 값 (ERP 홈페이지 의뢰 건수, 직접 입력)`
+    + (erp[n - 1] == null ? ` · ${M.labels[n - 1].replace('*', '')} ERP는 월말 집계 후 추가` : '')
+    + (ok.length ? ` · <b>6월부터 Looker 고객 정보 입력이 ERP의 ${Math.min(...ok).toFixed(0)}~${Math.max(...ok).toFixed(0)}%</b>로 거의 맞음` : '')
+    + (early.length ? ` · 4~5월은 Looker '신청 완료'가 ERP보다 ${Math.min(...early).toFixed(0)}~${Math.max(...early).toFixed(0)}% 적음 (완료 이벤트가 덜 잡힌 것으로 보임)` : '');
+}
+
 
 // ---- Section 2 charts ----
 function renderSec2() {
@@ -6744,6 +7035,7 @@ function renderSec2() {
   makeBar ('c_product_reg', COLORS.accent, F.productReg, F.periods, false, '등록 수');
   fjInitMetrics();
   renderFunnelDrop();
+  renderCmpCount();
   bxInitSlotNums();
   bxTermsInit();
 }
